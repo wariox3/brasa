@@ -106,6 +106,9 @@ class RhuLiquidacionRepository extends EntityRepository {
                     }
                     
                 }
+                if($arLiquidacion->getVrSalarioCesantiasPropuesto() > 0) {
+                    $salarioPromedioCesantias = $arLiquidacion->getVrSalarioCesantiasPropuesto();
+                }                
                 $intDiasCesantias = $intDiasCesantias - $intDiasAusentismo;
                 $douCesantias = ($salarioPromedioCesantias * $intDiasCesantias) / 360;          
                 $floPorcentajeIntereses = (($intDiasCesantias * 12) / 360)/100;

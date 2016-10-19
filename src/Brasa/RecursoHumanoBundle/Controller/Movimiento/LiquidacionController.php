@@ -347,6 +347,7 @@ class LiquidacionController extends Controller
             ->add('diasAusentismoAdicional', 'number', array('data' =>$arLiquidacion->getDiasAusentismoAdicional() ,'required' => false))                      
             ->add('vrSalarioVacacionPropuesto', 'number', array('data' =>$arLiquidacion->getVrSalarioVacacionPropuesto() ,'required' => false))                      
             ->add('vrSalarioPrimaPropuesto', 'number', array('data' =>$arLiquidacion->getVrSalarioPrimaPropuesto() ,'required' => false))                                      
+            ->add('vrSalarioCesantiasPropuesto', 'number', array('data' =>$arLiquidacion->getVrSalarioCesantiasPropuesto() ,'required' => false))                                      
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
         $form->handleRequest($request);
@@ -358,12 +359,14 @@ class LiquidacionController extends Controller
             $liquidarSalario = $form->get('liquidarSalario')->getData();
             $vrSalarioVacacionPropuesto = $form->get('vrSalarioVacacionPropuesto')->getData();
             $vrSalarioPrimaPropuesto = $form->get('vrSalarioPrimaPropuesto')->getData();
+            $vrSalarioCesantiasPropuesto = $form->get('vrSalarioCesantiasPropuesto')->getData();
             $arLiquidacion->setPorcentajeIbp($porcentajeIbp);
             $arLiquidacion->setLiquidarSalario($liquidarSalario);
             $arLiquidacion->setVrIndemnizacion($vrIndemnizacion);
             $arLiquidacion->setDiasAusentismoAdicional($diasAusentismoAdicional);
             $arLiquidacion->setVrSalarioVacacionPropuesto($vrSalarioVacacionPropuesto);
             $arLiquidacion->setVrSalarioPrimaPropuesto($vrSalarioPrimaPropuesto);
+            $arLiquidacion->setVrSalarioCesantiasPropuesto($vrSalarioCesantiasPropuesto);
             $em->persist($arLiquidacion);
             $em->flush();
             return $this->redirect($this->generateUrl('brs_rhu_movimiento_liquidacion_detalle', array('codigoLiquidacion' => $codigoLiquidacion)));

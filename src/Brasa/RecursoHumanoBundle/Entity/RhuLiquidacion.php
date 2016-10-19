@@ -301,6 +301,11 @@ class RhuLiquidacion
      * @ORM\Column(name="vr_salario_prima_propuesto", type="float")
      */
     private $VrSalarioPrimaPropuesto = 0; 
+
+    /**
+     * @ORM\Column(name="vr_salario_cesantias_propuesto", type="float")
+     */
+    private $VrSalarioCesantiasPropuesto = 0;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="liquidacionesEmpleadoRel")
@@ -1886,5 +1891,29 @@ class RhuLiquidacion
     public function getVrSalarioPrimaPropuesto()
     {
         return $this->VrSalarioPrimaPropuesto;
+    }
+
+    /**
+     * Set vrSalarioCesantiasPropuesto
+     *
+     * @param float $vrSalarioCesantiasPropuesto
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrSalarioCesantiasPropuesto($vrSalarioCesantiasPropuesto)
+    {
+        $this->VrSalarioCesantiasPropuesto = $vrSalarioCesantiasPropuesto;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalarioCesantiasPropuesto
+     *
+     * @return float
+     */
+    public function getVrSalarioCesantiasPropuesto()
+    {
+        return $this->VrSalarioCesantiasPropuesto;
     }
 }

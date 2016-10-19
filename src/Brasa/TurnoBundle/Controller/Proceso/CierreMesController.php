@@ -26,10 +26,16 @@ class CierreMesController extends Controller
                 $arCierreMes = new \Brasa\TurnoBundle\Entity\TurCierreMes();
                 $arCierreMes = $em->getRepository('BrasaTurnoBundle:TurCierreMes')->find($codigoCierreMes);
                 $strSql = "DELETE FROM tur_cierre_mes_servicio WHERE codigo_cierre_mes_fk = " . $codigoCierreMes;           
-                $em->getConnection()->executeQuery($strSql);                
+                $em->getConnection()->executeQuery($strSql); 
+                $strSql = "DELETE FROM tur_recurso_puesto WHERE anio = " . $arCierreMes->getAnio() . " AND mes = " . $arCierreMes->getMes();           
+                $em->getConnection()->executeQuery($strSql);                                
+                $strSql = "DELETE FROM rhu_empleado_centro_costo WHERE anio = " . $arCierreMes->getAnio() . " AND mes = " . $arCierreMes->getMes();           
+                $em->getConnection()->executeQuery($strSql);                 
+                
                 $strUltimoDiaMes = date("d",(mktime(0,0,0,$arCierreMes->getMes()+1,1,$arCierreMes->getAnio())-1));
                 $strFechaDesde = $arCierreMes->getAnio() . "/" . $arCierreMes->getMes() . "/01";
                 $strFechaHasta = $arCierreMes->getAnio() . "/" . $arCierreMes->getMes() . "/" . $strUltimoDiaMes;
+                /*
                 //Recursos que tuvieron programacion en el periodo de cierre                
                 $arrRecursos = $em->getRepository('BrasaTurnoBundle:TurRecurso')->programacionFecha($arCierreMes->getAnio(), $arCierreMes->getMes());
                 foreach ($arrRecursos as $arrRecurso) {
@@ -43,8 +49,6 @@ class CierreMesController extends Controller
                         $arCostoRecurso->setAnio($arCierreMes->getAnio());
                         $arCostoRecurso->setMes($arCierreMes->getMes());
                         $arCostoRecurso->setVrNomina($arrPagos[0]['vrNeto']); 
-                        //$arCostoRecurso->setVrPrestaciones($arrPagos[0]['vrPrestaciones']);
-                        //$arCostoRecurso->setVrAportesSociales($arrPagos[0]['vrAportes']);
                         $floTotal = $arrPagos[0]['vrNeto'];
                         $arCostoRecurso->setVrCostoTotal($floTotal);
                         $arrProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->detallesRecurso($arRecurso->getCodigoRecursoPk(), $arCierreMes->getAnio(), $arCierreMes->getMes());                                            
@@ -59,10 +63,56 @@ class CierreMesController extends Controller
                         //Actualizar programaciones detalle                        
                         $query = $em->createQuery('update BrasaTurnoBundle:TurProgramacionDetalle pd set pd.vrHoraRecurso = ' . $floVrHora . ' where pd.codigoRecursoFk = ' . $arRecurso->getCodigoRecursoPk() . ' and pd.anio = ' . $arCierreMes->getAnio() . ' and pd.mes =' . $arCierreMes->getMes());
                         $query->execute();                        
-                    }                    
+                    }                                         
                 }
                 $em->flush();
                 
+                //Asignar los centros de costos donde mas trabajo el recurso
+                foreach ($arrRecursos as $arrRecurso) {
+                    $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                    $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arrRecurso['codigo_empleado_fk']);
+                    if($arEmpleado) {
+                        if($arEmpleado->getEmpleadoTipoRel()->getTipo() == 2) {
+                            $arrProgramaciones = $em->getRepository('BrasaTurnoBundle:TurRecurso')->programacionFechaRecurso($arCierreMes->getAnio(), $arCierreMes->getMes(), $arrRecurso['codigo_recurso_fk']);
+                            if($arrProgramaciones) {
+                                $codigoPuesto = $arrProgramaciones[0]['codigo_puesto_fk'];
+                                if($codigoPuesto) {                                    
+                                    $arPuesto = $em->getRepository('BrasaTurnoBundle:TurPuesto')->find($codigoPuesto);
+                                    if($arPuesto) {
+                                        $arEmpleado->setPuestoRel($arPuesto);
+                                        $arEmpleado->setCentroCostoContabilidadRel($arPuesto->getCentroCostoContabilidadRel());
+                                        $em->persist($arEmpleado); 
+                                        
+                                        $arRecursoPuesto = new \Brasa\TurnoBundle\Entity\TurRecursoPuesto();
+                                        $arRecursoPuesto->setAnio($arCierreMes->getAnio());
+                                        $arRecursoPuesto->setMes($arCierreMes->getMes());
+                                        $arRecursoPuesto->setCodigoPuestoFk($codigoPuesto);
+                                        $arRecursoPuesto->setCodigoRecursoFk($arrRecurso['codigo_recurso_fk']);
+                                        $arRecursoPuesto->setCodigoEmpleadoFk($arrRecurso['codigo_empleado_fk']);
+                                        $arRecursoPuesto->setCodigoCentroCostoFk($arPuesto->getCodigoCentroCostoContabilidadFk());
+                                        $em->persist($arRecursoPuesto);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } 
+                $em->flush();                                
+                */
+                //Asignar centro de costo a empleados
+                $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();                                
+                $dql   = "SELECT c.codigoEmpleadoFk FROM BrasaRecursoHumanoBundle:RhuContrato c "
+                        ." WHERE (c.fechaHasta >= '" . $strFechaDesde . "' OR c.indefinido = 1) "
+                        . "AND c.fechaDesde <= '" . $strFechaHasta . "' GROUP BY c.codigoEmpleadoFk";
+                $query = $em->createQuery($dql);        
+                $arContratos = $query->getResult();                        
+                foreach ($arContratos as $arContrato) {
+                    $arEmpleadoCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoCentroCosto();
+                    $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                    $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arContrato['codigo_empleado_fk']);                    
+                    
+                }
+                /*
                 //Creo los servicios (Detalles de pedido)
                 $arPedidosDetalles = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();                
                 $arPedidosDetalles = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->fecha($strFechaDesde, $strFechaHasta);                                
@@ -91,25 +141,12 @@ class CierreMesController extends Controller
                         $arCierreMesServicio->setVrCostoRecurso($arrProgramacionDetalles['vrRecurso']);                        
                     }
                     $em->persist($arCierreMesServicio);  
-                    /*$arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('codigoPedidoDetalleFk' => $arPedidoDetalle->getCodigoPedidoDetallePk()));                                                    
-                    $arCierreMesServicioDetalle = new \Brasa\TurnoBundle\Entity\TurCierreMesServicioDetalle();
-                    $arCierreMesServicioDetalle->setCierreMesRel($arCierreMes);
-                    $arCierreMesServicioDetalle->setCierreMesServicioRel($arCierreMesServicio);                    
-                     * 
-                     */
                 }
                 $em->flush(); 
                 $arCierreMes->setEstadoGenerado(1);
                 $em->persist($arCierreMes);
                 $em->flush();
-                //Creo los soportes de cada servicio (Detalles de programacion)
-                /*$arCierreMesServicios = new \Brasa\TurnoBundle\Entity\TurCierreMesServicio();
-                $arCierreMesServicios = $em->getRepository('BrasaTurnoBundle:TurCierreMesServicio')->findBy(array('codigoCierreMesFk' => $arCierreMes->getCodigoCierreMesPk()));                                
-                foreach ($arCierreMesServicios as $arCierreMesServicio) {
-                    $prueba = $arCierreMesServicio->getPedidoDetalleRel()->getCodigoPedidoDetallePk();
-                    
-                    
-                }*/
+                */
                 return $this->redirect($this->generateUrl('brs_tur_proceso_cierre_mes'));
             }
             if($request->request->get('OpDeshacer')) {                
@@ -123,43 +160,17 @@ class CierreMesController extends Controller
                 $em->getConnection()->executeQuery($strSql); 
                 $strSql = "DELETE FROM tur_cierre_mes_servicio WHERE codigo_cierre_mes_fk = " . $codigoCierreMes;           
                 $em->getConnection()->executeQuery($strSql); 
+                $strSql = "DELETE FROM tur_recurso_puesto WHERE anio = " . $arCierreMes->getAnio() . " AND mes = " . $arCierreMes->getMes();           
+                $em->getConnection()->executeQuery($strSql); 
+                $strSql = "DELETE FROM rhu_empleado_centro_costo WHERE anio = " . $arCierreMes->getAnio() . " AND mes = " . $arCierreMes->getMes();           
+                $em->getConnection()->executeQuery($strSql);                
+                
                 $arCierreMes->setEstadoGenerado(0);
                 $em->persist($arCierreMes);
                 $em->flush();                                                  
                 return $this->redirect($this->generateUrl('brs_tur_proceso_cierre_mes'));                
             }
-            if($request->request->get('OpAsignarPuesto')) { 
-                set_time_limit(0);
-                ini_set("memory_limit", -1);                
-                $codigoCierreMes = $request->request->get('OpAsignarPuesto');
-                $arCierreMes = new \Brasa\TurnoBundle\Entity\TurCierreMes();
-                $arCierreMes = $em->getRepository('BrasaTurnoBundle:TurCierreMes')->find($codigoCierreMes);                                
-                $strUltimoDiaMes = date("d",(mktime(0,0,0,$arCierreMes->getMes()+1,1,$arCierreMes->getAnio())-1));
-                $strFechaDesde = $arCierreMes->getAnio() . "/" . $arCierreMes->getMes() . "/01";
-                $strFechaHasta = $arCierreMes->getAnio() . "/" . $arCierreMes->getMes() . "/" . $strUltimoDiaMes;
-                $arrRecursos = $em->getRepository('BrasaTurnoBundle:TurRecurso')->programacionFecha($arCierreMes->getAnio(), $arCierreMes->getMes());
-                foreach ($arrRecursos as $arrRecurso) {
-                    $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                    $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arrRecurso['codigo_empleado_fk']);
-                    if($arEmpleado) {
-                        if($arEmpleado->getEmpleadoTipoRel()->getTipo() == 2) {
-                            $arrProgramaciones = $em->getRepository('BrasaTurnoBundle:TurRecurso')->programacionFechaRecurso($arCierreMes->getAnio(), $arCierreMes->getMes(), $arrRecurso['codigo_recurso_fk']);
-                            if($arrProgramaciones) {
-                                $codigoPuesto = $arrProgramaciones[0]['codigo_puesto_fk'];
-                                if($codigoPuesto) {                                    
-                                    $arPuesto = $em->getRepository('BrasaTurnoBundle:TurPuesto')->find($codigoPuesto);
-                                    if($arPuesto) {
-                                        $arEmpleado->setPuestoRel($arPuesto);
-                                        $arEmpleado->setCentroCostoContabilidadRel($arPuesto->getCentroCostoContabilidadRel());
-                                        $em->persist($arEmpleado);                                        
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } 
-                $em->flush();
-            }
+
             
             /*
             if($request->request->get('OpCerrar')) {
