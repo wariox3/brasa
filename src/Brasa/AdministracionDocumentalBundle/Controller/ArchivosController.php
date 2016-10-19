@@ -141,8 +141,8 @@ class ArchivosController extends Controller
                         ->setSubject($strAsunto)
                         ->setFrom('aranzatus21@gmail.com', "SogaApp" )
                         ->setTo(strtolower($strMail))
-                        ->setBody($strMensaje,'text/html')                            
-                        ->attach(\Swift_Attachment::fromPath(''));                
+                        ->setBody($strMensaje,'text/html');                            
+                        //->attach(\Swift_Attachment::fromPath($strRuta));                
                     $this->get('mailer')->send($message); 
                     echo "Mensaje enviado con exito";
                     echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
