@@ -42,7 +42,7 @@ class ReciboResumenController extends Controller
                     $objImprimir = new \Brasa\CarteraBundle\Formatos\ReciboResumen1();
                     $objImprimir->Generar($this, $fechaDesde->format('Y/m/d'), $fechaHasta->format('Y/m/d'));                                          
                 }
-                if($codigoFormato == 2) { //formato para empresa horus2
+                if($codigoFormato == 2) { //formato para empresa horus 2
                     $objImprimir = new \Brasa\CarteraBundle\Formatos\ReciboResumen2();
                     $objImprimir->Generar($this, $fechaDesde->format('Y/m/d'), $fechaHasta->format('Y/m/d'));                                          
                 }
