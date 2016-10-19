@@ -144,8 +144,8 @@ class ArchivosController extends Controller
                         ->setBody($strMensaje,'text/html')                            
                         ->attach(\Swift_Attachment::fromPath($strRuta));                
                     $this->get('mailer')->send($message); 
-                    echo "Mensaje enviado con exito";
-                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                    echo "Mensaje enviado con exito".$strMail;
+                    //echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
                                                                                                 
             }
             
