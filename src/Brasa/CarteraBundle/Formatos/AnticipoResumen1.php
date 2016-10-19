@@ -1,6 +1,6 @@
 <?php
 namespace Brasa\CarteraBundle\Formatos;
-class ReciboResumen extends \FPDF_FPDF {
+class AnticipoResumen1 extends \FPDF_FPDF {
     public static $em;
     
     public static $fechaDesde;
@@ -12,13 +12,13 @@ class ReciboResumen extends \FPDF_FPDF {
         self::$em = $em;
         self::$fechaDesde = $fechaDesde;
         self::$fechaHasta = $fechaHasta;
-        $pdf = new ReciboResumen();
-        $pdf->AliasNbPages('P','Letter');
+        $pdf = new AnticipoResumen1();
+        $pdf->AliasNbPages();
         $pdf->AddPage('P','Letter');
         $pdf->SetFont('Times', '', 12);
         $this->Body($pdf);
 
-        $pdf->Output("ReciboResumen.pdf", 'D');        
+        $pdf->Output("AnticipoResumen.pdf", 'D');        
         
     } 
     
@@ -31,7 +31,7 @@ class ReciboResumen extends \FPDF_FPDF {
         $this->SetXY(53, 10);
         $this->Image('imagenes/logos/logo.jpg', 12, 7, 35, 17);
         //INFORMACIÓN EMPRESA
-        $this->Cell(150, 7, utf8_decode("RESUMEN RECIBOS"), 0, 0, 'C', 1);
+        $this->Cell(150, 7, utf8_decode("RESUMEN RECIBOS ANTICIPOS"), 0, 0, 'C', 1);
         $this->SetXY(53, 18);
         $this->SetFont('Arial','B',9);
         $this->Cell(20, 4, "EMPRESA:", 0, 0, 'L', 1);
@@ -45,14 +45,6 @@ class ReciboResumen extends \FPDF_FPDF {
         $this->SetXY(53, 30);
         $this->Cell(20, 4, utf8_decode("TELÉFONO:"), 0, 0, 'L', 1);
         $this->Cell(100, 4, $arConfiguracion->getTelefonoEmpresa(), 0, 0, 'L', 0);        
-        
-        //$arRecibo = new \Brasa\CarteraBundle\Entity\CarRecibo();
-        //$arRecibo = self::$em->getRepository('BrasaCarteraBundle:CarRecibo')->find(self::$codigoRecibo);        
-        
-        //$arReciboDetalles = new \Brasa\CarteraBundle\Entity\CarReciboDetalle();
-        //$arReciboDetalles = self::$em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->findBy(array('codigoReciboFk' => self::$codigoRecibo));
-        $this->SetFillColor(236, 236, 236);        
-        $this->SetFont('Arial','B',10);
         
         //Fecha y hora de impresion
         $this->SetFillColor(272, 272, 272);
@@ -86,7 +78,7 @@ class ReciboResumen extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(14);
-        $header = array('TIPO', 'CUENTA', 'NUMERO', 'TOTAL');
+        $header = array('CUENTA', 'NUMERO', 'TOTAL');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -94,7 +86,7 @@ class ReciboResumen extends \FPDF_FPDF {
         $this->SetFont('', 'B', 7.5);
 
         //creamos la cabecera de la tabla.
-        $w = array(50, 50, 20, 30);
+        $w = array(60, 25, 30);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -110,39 +102,39 @@ class ReciboResumen extends \FPDF_FPDF {
 
     public function Body($pdf) {
         $strSql = "SELECT
-            car_recibo_tipo.nombre AS tipo, 
+            
             gen_cuenta.nombre AS cuenta, 
-            COUNT(car_recibo.codigo_recibo_pk) AS numeroRecibos, 
-            SUM(car_recibo.vr_total) AS vrTotalPago
-            FROM car_recibo  
-            LEFT JOIN car_recibo_tipo ON car_recibo.codigo_recibo_tipo_fk = car_recibo_tipo.codigo_recibo_tipo_pk 
-            LEFT JOIN gen_cuenta ON car_recibo.codigo_cuenta_fk = gen_cuenta.codigo_cuenta_pk 
-            WHERE car_recibo.fecha >= '" . self::$fechaDesde . "' AND car_recibo.fecha <= '" . self::$fechaHasta . "' 
-            GROUP BY car_recibo.codigo_recibo_tipo_fk, car_recibo.codigo_cuenta_fk";
+            COUNT(car_anticipo.codigo_anticipo_pk) AS numeroAnticipos, 
+            SUM(car_anticipo.vr_total_pago) AS vrTotalPago
+            FROM car_anticipo  
+            
+            LEFT JOIN gen_cuenta ON car_anticipo.codigo_cuenta_fk = gen_cuenta.codigo_cuenta_pk 
+            WHERE car_anticipo.fecha >= '" . self::$fechaDesde . "' AND car_anticipo.fecha <= '" . self::$fechaHasta . "' 
+            GROUP BY car_anticipo.codigo_cuenta_fk";
         $connection = self::$em->getConnection();
         $statement = $connection->prepare($strSql);        
         $statement->execute();
-        $arRecibosResumen = $statement->fetchAll();   
+        $arAnticiposResumen = $statement->fetchAll();   
         $pdf->SetX(10);
         $pdf->SetFont('Arial', '', 7); 
         $total = 0;
-        foreach ($arRecibosResumen as $registro) {
-            $pdf->Cell(50, 4, $registro['tipo'], 1, 0, 'L');
-            $pdf->Cell(50, 4, $registro['cuenta'], 1, 0, 'L');
-            $pdf->Cell(20, 4, $registro['numeroRecibos'], 1, 0, 'L');
+        foreach ($arAnticiposResumen as $registro) {
+            //$pdf->Cell(30, 4, $registro['tipo'], 1, 0, 'L');
+            $pdf->Cell(60, 4, $registro['cuenta'], 1, 0, 'L');
+            $pdf->Cell(25, 4, $registro['numeroAnticipos'], 1, 0, 'L');
             $pdf->Cell(30, 4, number_format($registro['vrTotalPago'], 2, '.', ','), 1, 0, 'R');
             $total += $registro['vrTotalPago'];
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
         }
-        $pdf->Cell(50, 4, '', 0, 0, 'L');
-        $pdf->Cell(50, 4, '', 0, 0, 'L');
-        $pdf->Cell(20, 4, '', 0, 0, 'L');
+        $pdf->Cell(30, 4, '', 0, 0, 'L');
+        $pdf->Cell(40, 4, '', 0, 0, 'L');
+        $pdf->Cell(15, 4, '', 0, 0, 'L');
         $pdf->Cell(30, 4, number_format($total, 2, '.', ','), 1, 0, 'R'); 
         $pdf->Ln();
         $pdf->Ln();
 
-        $header = array('COD','TIPO', 'NRO', 'FECHA', 'CUENTA', 'CLIENTE', 'DCTO', 'AJUSTE', 'RTEICA', 'RTEIVA', 'RTEFTE', 'TOTAL');
+        $header = array('COD','NRO', 'FECHA', 'CUENTA', 'NIT','CLIENTE', 'DCTO', 'AJUSTE', 'RTEICA', 'RTEIVA', 'RTEFTE', 'TOTAL', 'T. PAGO');
         $pdf->SetFillColor(236, 236, 236);
         $pdf->SetTextColor(0);
         $pdf->SetDrawColor(0, 0, 0);
@@ -150,7 +142,7 @@ class ReciboResumen extends \FPDF_FPDF {
         $pdf->SetFont('', 'B', 6);
 
         //creamos la cabecera de la tabla.
-        $w = array(8,30, 8, 12, 35, 45, 8, 11, 11, 11, 11, 13);
+        $w = array(8,8, 14, 30, 14,45, 12, 12, 12, 12, 12, 13, 13);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $pdf->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -162,22 +154,24 @@ class ReciboResumen extends \FPDF_FPDF {
         $pdf->SetTextColor(0);
         $pdf->SetFont('');
         $pdf->Ln(4);
-        $dql   = "SELECT r FROM BrasaCarteraBundle:CarRecibo r JOIN r.reciboTipoRel rt WHERE r.fecha >='" . self::$fechaDesde . "' AND r.fecha <='" . self::$fechaHasta . "'";                
+        $dql   = "SELECT r FROM BrasaCarteraBundle:CarAnticipo r WHERE r.fecha >='" . self::$fechaDesde . "' AND r.fecha <='" . self::$fechaHasta . "'";                
         $query = self::$em->createQuery($dql);
-        $arRecibos = $query->getResult();
-        foreach ($arRecibos as $arRecibo) {
-            $pdf->Cell(8, 4, $arRecibo->getCodigoReciboPk(), 1, 0, 'L');
-            $pdf->Cell(30, 4, $arRecibo->getReciboTipoRel()->getNombre(), 1, 0, 'L');                        
-            $pdf->Cell(8, 4, $arRecibo->getNumero(), 1, 0, 'L');                        
-            $pdf->Cell(12, 4, $arRecibo->getFecha()->format('Y/m/d'), 1, 0, 'L');                        
-            $pdf->Cell(35, 4, $arRecibo->getCuentaRel()->getNombre(), 1, 0, 'L');                        
-            $pdf->Cell(45, 4, substr($arRecibo->getClienteRel()->getNombreCorto(),0,33), 1, 0, 'L');                        
-            $pdf->Cell(8, 4, number_format($arRecibo->getVrTotalDescuento(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(11, 4, number_format($arRecibo->getVrTotalAjustePeso(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(11, 4, number_format($arRecibo->getVrTotalReteIca(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(11, 4, number_format($arRecibo->getVrTotalReteIva(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(11, 4, number_format($arRecibo->getVrTotalReteFuente(), 0, '.', ','), 1, 0, 'R');
-            $pdf->Cell(13, 4, number_format($arRecibo->getVrTotal(), 0, '.', ','), 1, 0, 'R');
+        $arAnticipos = $query->getResult();
+        foreach ($arAnticipos as $arAnticipo) {
+            //$pdf->Cell(20, 4, $arAnticipo->getAnticipoTipoRel()->getNombre(), 1, 0, 'L');                        
+            $pdf->Cell(8, 4, $arAnticipo->getCodigoAnticipoPk(), 1, 0, 'L');
+            $pdf->Cell(8, 4, $arAnticipo->getNumero(), 1, 0, 'L');                        
+            $pdf->Cell(14, 4, $arAnticipo->getFecha()->format('Y/m/d'), 1, 0, 'L');                        
+            $pdf->Cell(30, 4, $arAnticipo->getCuentaRel()->getNombre(), 1, 0, 'L');                        
+            $pdf->Cell(14, 4, $arAnticipo->getClienteRel()->getNit(), 1, 0, 'L');
+            $pdf->Cell(45, 4, substr($arAnticipo->getClienteRel()->getNombreCorto(),0,32), 1, 0, 'L');                                                
+            $pdf->Cell(12, 4, number_format($arAnticipo->getVrTotalDescuento(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(12, 4, number_format($arAnticipo->getVrTotalAjustePeso(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(12, 4, number_format($arAnticipo->getVrTotalReteIca(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(12, 4, number_format($arAnticipo->getVrTotalReteIva(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(12, 4, number_format($arAnticipo->getVrTotalReteFuente(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(13, 4, number_format($arAnticipo->getVrTotal(), 0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(13, 4, number_format($arAnticipo->getVrTotalPago(), 0, '.', ','), 1, 0, 'R');
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
         }        

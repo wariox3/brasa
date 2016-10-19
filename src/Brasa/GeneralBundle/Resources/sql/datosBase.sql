@@ -5961,6 +5961,8 @@ insert into `tur_configuracion` (`codigo_configuracion_pk`, `informacion_legal_f
 
 /** Cartera **/
 
+insert into `car_configuracion` (`codigo_configuracion_pk`, `codigo_formato_resumen_recibo`, `codigo_formato_resumen_anticipo`) values('1','0','0');
+
 insert into `car_nota_credito_concepto` (`codigo_nota_credito_concepto_pk`, `nombre`) values('1','ANULACIÓN');
 insert into `car_nota_credito_concepto` (`codigo_nota_credito_concepto_pk`, `nombre`) values('2','BONIFICACIÓN');
 insert into `car_nota_credito_concepto` (`codigo_nota_credito_concepto_pk`, `nombre`) values('3','DESCUENTOS');

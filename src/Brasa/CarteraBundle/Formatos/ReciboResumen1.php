@@ -1,6 +1,7 @@
 <?php
 namespace Brasa\CarteraBundle\Formatos;
-class ReciboResumen extends \FPDF_FPDF {
+
+class ReciboResumen1 extends \FPDF_FPDF {
     public static $em;
     
     public static $fechaDesde;
@@ -12,7 +13,7 @@ class ReciboResumen extends \FPDF_FPDF {
         self::$em = $em;
         self::$fechaDesde = $fechaDesde;
         self::$fechaHasta = $fechaHasta;
-        $pdf = new ReciboResumen();
+        $pdf = new ReciboResumen1();
         $pdf->AliasNbPages('P','Letter');
         $pdf->AddPage('P','Letter');
         $pdf->SetFont('Times', '', 12);
@@ -31,7 +32,7 @@ class ReciboResumen extends \FPDF_FPDF {
         $this->SetXY(53, 10);
         $this->Image('imagenes/logos/logo.jpg', 12, 7, 35, 17);
         //INFORMACIÓN EMPRESA
-        $this->Cell(150, 7, utf8_decode("RESUMEN RECIBOS"), 0, 0, 'C', 1);
+        $this->Cell(150, 7, utf8_decode("RESUMEN RECIBOS CURSOS"), 0, 0, 'C', 1);
         $this->SetXY(53, 18);
         $this->SetFont('Arial','B',9);
         $this->Cell(20, 4, "EMPRESA:", 0, 0, 'L', 1);

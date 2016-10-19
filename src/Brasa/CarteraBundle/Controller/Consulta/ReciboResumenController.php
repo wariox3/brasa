@@ -31,10 +31,21 @@ class ReciboResumenController extends Controller
                 //$form = $this->formularioFiltroLista();
                 $this->lista();
             }
-            if ($form->get('BtnImprimir')->isClicked()) {
-                
-                $objImprimir = new \Brasa\CarteraBundle\Formatos\ReciboResumen();
-                $objImprimir->Generar($this, $fechaDesde->format('Y/m/d'), $fechaHasta->format('Y/m/d'));
+            if ($form->get('BtnImprimir')->isClicked()) {                                                
+                $arConfiguracion = $em->getRepository('BrasaCarteraBundle:CarConfiguracion')->find(1);
+                $codigoFormato = $arConfiguracion->getCodigoFormatoResumenRecibo();
+                if($codigoFormato == 0) { //formato para cualquier empresa
+                    $objImprimir = new \Brasa\CarteraBundle\Formatos\ReciboResumen();
+                    $objImprimir->Generar($this, $fechaDesde->format('Y/m/d'), $fechaHasta->format('Y/m/d'));                                          
+                }
+                if($codigoFormato == 1) { //formato para empresa horus
+                    $objImprimir = new \Brasa\CarteraBundle\Formatos\ReciboResumen1();
+                    $objImprimir->Generar($this, $fechaDesde->format('Y/m/d'), $fechaHasta->format('Y/m/d'));                                          
+                }
+                if($codigoFormato == 2) { //formato para empresa horus2
+                    $objImprimir = new \Brasa\CarteraBundle\Formatos\ReciboResumen2();
+                    $objImprimir->Generar($this, $fechaDesde->format('Y/m/d'), $fechaHasta->format('Y/m/d'));                                          
+                }
             }            
         }    
         $strSql = "SELECT

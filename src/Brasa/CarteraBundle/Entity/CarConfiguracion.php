@@ -15,7 +15,19 @@ class CarConfiguracion
      * @ORM\Column(name="codigo_configuracion_pk", type="integer")
      */
     private $codigoConfiguracionPk;
+    
+    /**
+     * @ORM\Column(name="codigo_formato_resumen_recibo", type="integer")
+     */    
+    private $codigoFormatoResumenRecibo = 0;
+    
+    /**
+     * @ORM\Column(name="codigo_formato_resumen_anticipo", type="integer")
+     */    
+    private $codigoFormatoResumenAnticipo = 0;
         
+    
+
     
 
     /**
@@ -40,5 +52,53 @@ class CarConfiguracion
     public function getCodigoConfiguracionPk()
     {
         return $this->codigoConfiguracionPk;
+    }
+
+    /**
+     * Set codigoFormatoResumenRecibo
+     *
+     * @param integer $codigoFormatoResumenRecibo
+     *
+     * @return CarConfiguracion
+     */
+    public function setCodigoFormatoResumenRecibo($codigoFormatoResumenRecibo)
+    {
+        $this->codigoFormatoResumenRecibo = $codigoFormatoResumenRecibo;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoFormatoResumenRecibo
+     *
+     * @return integer
+     */
+    public function getCodigoFormatoResumenRecibo()
+    {
+        return $this->codigoFormatoResumenRecibo;
+    }
+
+    /**
+     * Set codigoFormatoResumenAnticipo
+     *
+     * @param integer $codigoFormatoResumenAnticipo
+     *
+     * @return CarConfiguracion
+     */
+    public function setCodigoFormatoResumenAnticipo($codigoFormatoResumenAnticipo)
+    {
+        $this->codigoFormatoResumenAnticipo = $codigoFormatoResumenAnticipo;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoFormatoResumenAnticipo
+     *
+     * @return integer
+     */
+    public function getCodigoFormatoResumenAnticipo()
+    {
+        return $this->codigoFormatoResumenAnticipo;
     }
 }
