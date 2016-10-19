@@ -35,7 +35,7 @@ class CierreMesController extends Controller
                 $strUltimoDiaMes = date("d",(mktime(0,0,0,$arCierreMes->getMes()+1,1,$arCierreMes->getAnio())-1));
                 $strFechaDesde = $arCierreMes->getAnio() . "/" . $arCierreMes->getMes() . "/01";
                 $strFechaHasta = $arCierreMes->getAnio() . "/" . $arCierreMes->getMes() . "/" . $strUltimoDiaMes;
-                /*
+                
                 //Recursos que tuvieron programacion en el periodo de cierre                
                 $arrRecursos = $em->getRepository('BrasaTurnoBundle:TurRecurso')->programacionFecha($arCierreMes->getAnio(), $arCierreMes->getMes());
                 foreach ($arrRecursos as $arrRecurso) {
@@ -98,7 +98,7 @@ class CierreMesController extends Controller
                     }
                 } 
                 $em->flush();                                
-                */
+                
                 //Asignar centro de costo a empleados
                 $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();                                
                 $dql   = "SELECT c.codigoEmpleadoFk FROM BrasaRecursoHumanoBundle:RhuContrato c "
@@ -109,10 +109,24 @@ class CierreMesController extends Controller
                 foreach ($arContratos as $arContrato) {
                     $arEmpleadoCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoCentroCosto();
                     $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                    $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arContrato['codigo_empleado_fk']);                    
-                    
+                    $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arContrato['codigoEmpleadoFk']);                    
+                    $arEmpleadoCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoCentroCosto();
+                    $arEmpleadoCentroCosto->setAnio($arCierreMes->getAnio());
+                    $arEmpleadoCentroCosto->setMes($arCierreMes->getMes());
+                    $arEmpleadoCentroCosto->setCodigoEmpleadoFk($arContrato['codigoEmpleadoFk']);
+                    $arRecursoPuesto = new \Brasa\TurnoBundle\Entity\TurRecursoPuesto();
+                    $arRecursoPuesto = $em->getRepository('BrasaTurnoBundle:TurRecursoPuesto')->findOneBy(array('anio' => $arCierreMes->getAnio(), 'mes' => $arCierreMes->getMes(), 'codigoEmpleadoFk' => $arContrato['codigoEmpleadoFk']));
+                    if($arRecursoPuesto) {
+                        $arEmpleadoCentroCosto->setCodigoCentroCostoFk($arRecursoPuesto->getCodigoCentroCostoFk());
+                        $arEmpleadoCentroCosto->setCodigoPuestoFk($arRecursoPuesto->getCodigoPuestoFk());                        
+                    } else {
+                        $arEmpleadoCentroCosto->setCodigoCentroCostoFk($arEmpleado->getCodigoCentroCostoContabilidadFk());
+                        $arEmpleadoCentroCosto->setCodigoPuestoFk(0);                        
+                    }
+                    $em->persist($arEmpleadoCentroCosto);
                 }
-                /*
+                $em->flush();
+                
                 //Creo los servicios (Detalles de pedido)
                 $arPedidosDetalles = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();                
                 $arPedidosDetalles = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->fecha($strFechaDesde, $strFechaHasta);                                
@@ -145,8 +159,7 @@ class CierreMesController extends Controller
                 $em->flush(); 
                 $arCierreMes->setEstadoGenerado(1);
                 $em->persist($arCierreMes);
-                $em->flush();
-                */
+                $em->flush();                
                 return $this->redirect($this->generateUrl('brs_tur_proceso_cierre_mes'));
             }
             if($request->request->get('OpDeshacer')) {                
@@ -172,8 +185,8 @@ class CierreMesController extends Controller
             }
 
             
-            /*
-            if($request->request->get('OpCerrar')) {
+            
+            /*if($request->request->get('OpCerrar')) {
                 $codigoSoportePagoPeriodo = $request->request->get('OpCerrar');
                 $arSoportePagoPeriodo = NEW \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
                 $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);                
@@ -181,13 +194,8 @@ class CierreMesController extends Controller
                 $em->persist($arSoportePagoPeriodo);
                 $em->flush();                                                   
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));                
-            }            
-            if ($form->get('BtnEliminar')->isClicked()) {                
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));                
-                
             }*/            
+            
             
         }
         $dql = $em->getRepository('BrasaTurnoBundle:TurCierreMes')->listaDql();
