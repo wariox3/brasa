@@ -72,6 +72,11 @@ class TurSoportePagoPeriodo
      * @ORM\Column(name="codigo_recurso_grupo_fk", type="integer", nullable=true)
      */    
     private $codigoRecursoGrupoFk;
+
+    /**
+     * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
+     */    
+    private $codigoCentroCostoFk;
     
     /**     
      * @ORM\Column(name="estado_generado", type="boolean")
@@ -124,6 +129,12 @@ class TurSoportePagoPeriodo
      */
     protected $recursoGrupoRel;    
     
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto", inversedBy="turSoportesPagosPeriodosCentroCostoRel")
+     * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
+     */
+    protected $centroCostoRel;     
+    
    /**
      * @ORM\OneToMany(targetEntity="TurSoportePago", mappedBy="soportePagoPeriodoRel")
      */
@@ -139,6 +150,7 @@ class TurSoportePagoPeriodo
      */
     protected $soportesPagosDetallesSoportePagoPeriodoRel;     
     
+
     /**
      * Constructor
      */
@@ -424,6 +436,30 @@ class TurSoportePagoPeriodo
     }
 
     /**
+     * Set codigoCentroCostoFk
+     *
+     * @param integer $codigoCentroCostoFk
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setCodigoCentroCostoFk($codigoCentroCostoFk)
+    {
+        $this->codigoCentroCostoFk = $codigoCentroCostoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCentroCostoFk
+     *
+     * @return integer
+     */
+    public function getCodigoCentroCostoFk()
+    {
+        return $this->codigoCentroCostoFk;
+    }
+
+    /**
      * Set estadoGenerado
      *
      * @param boolean $estadoGenerado
@@ -661,6 +697,30 @@ class TurSoportePagoPeriodo
     public function getRecursoGrupoRel()
     {
         return $this->recursoGrupoRel;
+    }
+
+    /**
+     * Set centroCostoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setCentroCostoRel(\Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto $centroCostoRel = null)
+    {
+        $this->centroCostoRel = $centroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get centroCostoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto
+     */
+    public function getCentroCostoRel()
+    {
+        return $this->centroCostoRel;
     }
 
     /**

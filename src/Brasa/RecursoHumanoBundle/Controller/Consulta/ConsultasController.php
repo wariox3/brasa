@@ -3358,13 +3358,14 @@ class ConsultasController extends Controller
                     ->setCellValue('B1', 'TIPO CONTRATO')
                     ->setCellValue('C1', 'IDENTIFICACIÓN')
                     ->setCellValue('D1', 'EMPLEADO')
-                    ->setCellValue('E1', 'CENTRO COSTO')
+                    ->setCellValue('E1', 'GRUPO PAGO')
                     ->setCellValue('F1', 'DESDE')
-                    ->setCellValue('G1', 'HASTA')                
-                    ->setCellValue('H1', 'TIPO')
-                    ->setCellValue('I1', 'ZONA')
-                    ->setCellValue('J1', 'SUBZONA')
-                    ->setCellValue('K1', 'USUARIO');
+                    ->setCellValue('G1', 'HASTA')
+                    ->setCellValue('H1', 'CARGO')
+                    ->setCellValue('I1', 'TIPO')
+                    ->setCellValue('J1', 'ZONA')
+                    ->setCellValue('K1', 'SUBZONA')
+                    ->setCellValue('L1', 'USUARIO');
         $i = 2;
         $query = $em->createQuery($this->strSqlContratosPeriodoLista);
         $arFechaTerminaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
@@ -3385,7 +3386,11 @@ class ConsultasController extends Controller
             $motivo = "";
             if ($arFechaTerminacion->getCodigoMotivoTerminacionContratoFk() != null){
                 $motivo = $arFechaTerminacion->getTerminacionContratoRel()->getMotivo();
-            }            
+            }
+            $cargo = "";
+            if($arFechaTerminacion->getCodigoCargoFk()) {
+                $cargo = $arFechaTerminacion->getCargoRel()->getNombre();
+            }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arFechaTerminacion->getCodigoContratoPk())
                     ->setCellValue('B' . $i, $arFechaTerminacion->getContratoTipoRel()->getNombreCorto())                    
@@ -3394,10 +3399,11 @@ class ConsultasController extends Controller
                     ->setCellValue('E' . $i, $arFechaTerminacion->getCentroCostoRel()->getNombre())
                     ->setCellValue('F' . $i, $arFechaTerminacion->getFechaDesde()->format('Y/m/d'))
                     ->setCellValue('G' . $i, $arFechaTerminacion->getFechaHasta()->format('Y/m/d'))
-                    ->setCellValue('H' . $i, $tipo)
-                    ->setCellValue('I' . $i, $zona)
-                    ->setCellValue('J' . $i, $subzona)
-                    ->setCellValue('K' . $i, $arFechaTerminacion->getCodigoUsuarioTermina());
+                    ->setCellValue('H' . $i, $cargo)
+                    ->setCellValue('I' . $i, $tipo)
+                    ->setCellValue('J' . $i, $zona)
+                    ->setCellValue('K' . $i, $subzona)
+                    ->setCellValue('L' . $i, $arFechaTerminacion->getCodigoUsuarioTermina());
             $i++;
         }
         $objPHPExcel->getActiveSheet()->setTitle('ContratosPeriodo');

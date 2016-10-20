@@ -66,6 +66,7 @@ class envioComprobanteCorreoController extends Controller
                                 $this->get('mailer')->send($message);                                 
                             }                             
                         }
+                        $objMensaje->Mensaje("error", "Se han enviado los correos exitosamente", $this);
                         /*foreach ($arPagos as $arPago) {
                             $rutaArchivo = $ruta."Pago".$arPago->getCodigoPagoPk().".pdf";
                             unlink($rutaArchivo);

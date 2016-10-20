@@ -268,6 +268,11 @@ class RhuCentroCosto
     protected $soportesPagosHorariosCentroCostoRel;    
     
     /**
+     * @ORM\OneToMany(targetEntity="Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo", mappedBy="centroCostoRel")
+     */
+    protected $turSoportesPagosPeriodosCentroCostoRel;     
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -1678,5 +1683,39 @@ class RhuCentroCosto
     public function getDescansoOrdinario()
     {
         return $this->descansoOrdinario;
+    }
+
+    /**
+     * Add turSoportesPagosPeriodosCentroCostoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo $turSoportesPagosPeriodosCentroCostoRel
+     *
+     * @return RhuCentroCosto
+     */
+    public function addTurSoportesPagosPeriodosCentroCostoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo $turSoportesPagosPeriodosCentroCostoRel)
+    {
+        $this->turSoportesPagosPeriodosCentroCostoRel[] = $turSoportesPagosPeriodosCentroCostoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove turSoportesPagosPeriodosCentroCostoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo $turSoportesPagosPeriodosCentroCostoRel
+     */
+    public function removeTurSoportesPagosPeriodosCentroCostoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo $turSoportesPagosPeriodosCentroCostoRel)
+    {
+        $this->turSoportesPagosPeriodosCentroCostoRel->removeElement($turSoportesPagosPeriodosCentroCostoRel);
+    }
+
+    /**
+     * Get turSoportesPagosPeriodosCentroCostoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTurSoportesPagosPeriodosCentroCostoRel()
+    {
+        return $this->turSoportesPagosPeriodosCentroCostoRel;
     }
 }
