@@ -10,8 +10,19 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class RhuRequisitoRepository extends EntityRepository {
-    public function listaDQL() {        
+    
+    /*public function listaDQL() {        
         $dql   = "SELECT r FROM BrasaRecursoHumanoBundle:RhuRequisito r WHERE r.codigoRequisitoPk <> 0";
         return $dql;
-    }                                
+    }*/
+    
+    public function listaDQL($strIdentificacion = "") {        
+        $dql   = "SELECT r FROM BrasaRecursoHumanoBundle:RhuRequisito r WHERE r.codigoRequisitoPk <> 0";
+        if($strIdentificacion != "" ) {
+            $dql .= " AND r.numeroIdentificacion LIKE '%" . $strIdentificacion . "%'";
+        }
+        
+        $dql .= " ORDER BY r.fecha";
+        return $dql;
+    }
 }

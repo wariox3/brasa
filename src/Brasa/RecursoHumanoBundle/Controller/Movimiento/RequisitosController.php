@@ -5,6 +5,7 @@ namespace Brasa\RecursoHumanoBundle\Controller\Movimiento;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuRequisitoType;
+use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityRepository;
 class RequisitosController extends Controller
 {
@@ -26,7 +27,7 @@ class RequisitosController extends Controller
         $this->listar();
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            if($form->get('BtnFiltrar')->isClicked()) {
+            if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
                 $this->listar();
             }
@@ -285,7 +286,10 @@ class RequisitosController extends Controller
 
     private function listar() {
         $em = $this->getDoctrine()->getManager();
-        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisito')->listaDql();
+        $session = $this->getRequest()->getSession();
+        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuRequisito')->listaDql(
+            $session->get('filtroIdentificacion')    
+        );
     }
 
     private function formularioLista() {
@@ -343,6 +347,7 @@ class RequisitosController extends Controller
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
+        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
     }
 
     private function generarExcel() {
