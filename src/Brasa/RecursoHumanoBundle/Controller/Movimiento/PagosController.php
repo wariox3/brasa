@@ -119,7 +119,11 @@ class PagosController extends Controller
                 if($codigoFormato == 2) {
                     $objFormatoPago = new \Brasa\RecursoHumanoBundle\Formatos\PagoMasivo2();
                     $objFormatoPago->Generar($this, "", "", $codigoPago);                    
-                }                
+                }
+                if($codigoFormato == 3) { //Horus y horus 2
+                    $objFormatoPago = new \Brasa\RecursoHumanoBundle\Formatos\PagoMasivo3();
+                    $objFormatoPago->Generar($this, "", "", $codigoPago);                    
+                }
             }
         }        
         

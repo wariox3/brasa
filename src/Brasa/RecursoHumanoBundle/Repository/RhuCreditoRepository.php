@@ -98,7 +98,7 @@ class RhuCreditoRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuCredito c "
                 . "WHERE c.saldo > 0 "
-                . "AND c.aprobado = 1"
+                . "AND c.aprobado = 1 "
                 . "AND c.codigoEmpleadoFk = " . $codigoEmpleado;
         $query = $em->createQuery($dql);
         $arCreditos = $query->getResult();

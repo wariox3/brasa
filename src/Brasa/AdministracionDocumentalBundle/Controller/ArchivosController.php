@@ -129,23 +129,26 @@ class ArchivosController extends Controller
         $form->handleRequest($request);
         if($form->isValid()) {
             if($form->get('BtnEnviar')->isClicked()) {
-                
-                
-                ///$ruta = 'C:\exportacion\\';
-                //$arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();                
-                //$arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigo));                
-                    $strMail = $form->get('email')->getData();
-                    $strAsunto = $form->get('asunto')->getData();                  
-                    $strMensaje = $form->get('mensaje')->getData();               
+                $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+                $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);                                
+                $strMail = $form->get('email')->getData();
+                $strAsunto = $form->get('asunto')->getData();                  
+                $strMensaje = $form->get('mensaje')->getData();               
+                //$correo = $arPago->getEmpleadoRel()->getCorreo();
+                $correoNomina = $arConfiguracion->getCorreoNomina();
+                if($strMail) {
+                    //$rutaArchivo = $ruta."Pago".$arPago->getCodigoPagoPk().".pdf";
+                    $strMensaje = "Se adjunta comprobante de pago (sogaApp)";                
                     $message = \Swift_Message::newInstance()
                         ->setSubject($strAsunto)
-                        ->setFrom('aranzatus21@gmail.com', "SogaApp" )
+                        ->setFrom($correoNomina, "SogaApp" )
                         ->setTo(strtolower($strMail))
                         ->setBody($strMensaje,'text/html')                            
                         ->attach(\Swift_Attachment::fromPath($strRuta));                
-                    $this->get('mailer')->send($message); 
-                    echo "Mensaje enviado con exito al correo ".$strMail;
-                    //echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                    $this->get('mailer')->send($message);                                 
+                } 
+                echo "Mensaje enviado con exito al correo ".$strMail;
+                //echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
                                                                                                 
             }
             
