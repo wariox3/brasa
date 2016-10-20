@@ -91,16 +91,11 @@ doctrine:
 
 # Swiftmailer Configuration
 swiftmailer:
-    transport: mail 
-    host:      mail.jgefectivo.com
-    username:  analista.desarrollo@jgefectivo.com
-    password:  ADesarrollo2015
+    transport: "%mailer_transport%" 
+    host:      "%mailer_host%"
+    username:  "%mailer_user%"
+    password:  "%mailer_password%"
     spool:     { type: memory }
-    #transport: "%mailer_transport%" 
-    #host:      "%mailer_host%"
-    #username:  "%mailer_user%"
-    #password:  "%mailer_password%"
-    #spool:     { type: memory }
 
 services:
     mensajes_brasa:
