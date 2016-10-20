@@ -1,10 +1,13 @@
 <?php
 
 namespace Brasa\AdministracionDocumentalBundle\Controller;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle;
+use Doctrine\ORM\EntityRepository;
+
 class ArchivosController extends Controller
 {
     
@@ -143,8 +146,8 @@ class ArchivosController extends Controller
                         ->setSubject($strAsunto)
                         ->setFrom($correoNomina, "SogaApp" )
                         ->setTo(strtolower($strMail))
-                        ->setBody($strMensaje,'text/html')                            
-                        ->attach(\Swift_Attachment::fromPath($strRuta));                
+                        ->setBody($strMensaje,'text/html');                            
+                        //->attach(\Swift_Attachment::fromPath($strRuta));                
                     $this->get('mailer')->send($message);                                 
                 } 
                 echo "Mensaje enviado con exito al correo ".$strMail. " - ".$correoNomina;
