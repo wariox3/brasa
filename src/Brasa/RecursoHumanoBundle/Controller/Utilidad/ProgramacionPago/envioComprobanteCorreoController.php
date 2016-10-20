@@ -32,6 +32,8 @@ class envioComprobanteCorreoController extends Controller
                 $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigo);
                 if($arProgramacionPago) {
                     if($arProgramacionPago->getEstadoPagado() == 1) {
+                        set_time_limit(0);
+                        ini_set("memory_limit", -1);                        
                         $arConfiguracionGeneral = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
                         $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
                         $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
@@ -51,17 +53,23 @@ class envioComprobanteCorreoController extends Controller
                             }  
 
                             $correo = $arPago->getEmpleadoRel()->getCorreo();
+                            $correoNomina = $arConfiguracion->getCorreoNomina();
                             if($correo) {
-                                $strMensaje = "Se adjunta comprobante de pago";                
+                                $rutaArchivo = $ruta."Pago".$arPago->getCodigoPagoPk().".pdf";
+                                $strMensaje = "Se adjunta comprobante de pago (sogaApp)";                
                                 $message = \Swift_Message::newInstance()
                                     ->setSubject('Comprobante de pago ')
-                                    ->setFrom('analista.desarrollo@jgefectivo.com', "SogaApp" )
+                                    ->setFrom($correoNomina, "SogaApp" )
                                     ->setTo(strtolower($correo))
                                     ->setBody($strMensaje,'text/html')                            
-                                    ->attach(\Swift_Attachment::fromPath($ruta."Pago".$arPago->getCodigoPagoPk().".pdf"));                
+                                    ->attach(\Swift_Attachment::fromPath($rutaArchivo));                
                                 $this->get('mailer')->send($message);                                 
                             }                             
-                        }                          
+                        }
+                        /*foreach ($arPagos as $arPago) {
+                            $rutaArchivo = $ruta."Pago".$arPago->getCodigoPagoPk().".pdf";
+                            unlink($rutaArchivo);
+                        } */                       
                     } else {
                         $objMensaje->Mensaje("error", "La programacion de pago debe estar pagada", $this);
                     }                   

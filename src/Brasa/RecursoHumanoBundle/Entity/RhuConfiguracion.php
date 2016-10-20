@@ -269,6 +269,11 @@ class RhuConfiguracion
     private $generaPorcetnajeLiquidacion = false;    
     
     /**
+     * @ORM\Column(name="correo_nomina", type="string", length=100, nullable=true)
+     */    
+    private $correoNomina;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadRiesgoProfesional", inversedBy="configuracionEntidadRiesgoProfesionalRel")
      * @ORM\JoinColumn(name="codigo_entidad_riesgo_fk", referencedColumnName="codigo_entidad_riesgo_pk")
      */
@@ -1524,5 +1529,29 @@ class RhuConfiguracion
     public function getGeneraPorcetnajeLiquidacion()
     {
         return $this->generaPorcetnajeLiquidacion;
+    }
+
+    /**
+     * Set correoNomina
+     *
+     * @param string $correoNomina
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCorreoNomina($correoNomina)
+    {
+        $this->correoNomina = $correoNomina;
+
+        return $this;
+    }
+
+    /**
+     * Get correoNomina
+     *
+     * @return string
+     */
+    public function getCorreoNomina()
+    {
+        return $this->correoNomina;
     }
 }
