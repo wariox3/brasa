@@ -141,16 +141,16 @@ class ArchivosController extends Controller
                 $correoNomina = $arConfiguracion->getCorreoNomina();
                 if($strMail) {
                     //$rutaArchivo = $ruta."Pago".$arPago->getCodigoPagoPk().".pdf";
-                    $strMensaje = "Se adjunta comprobante de pago (sogaApp)";                
+                    //$strMensaje = "Se adjunta comprobante de pago (sogaApp)";                
                     $message = \Swift_Message::newInstance()
-                        ->setSubject($strAsunto)
+                        ->setSubject($strAsunto." - ".$strRuta)
                         ->setFrom($correoNomina, "SogaApp" )
                         ->setTo(strtolower($strMail))
                         ->setBody($strMensaje,'text/html')                            
                         ->attach(\Swift_Attachment::fromPath($strRuta));                
                     $this->get('mailer')->send($message);                                 
                 } 
-                echo "Mensaje enviado con exito al correo ".$strMail. " - ".$correoNomina;
+                echo "Mensaje enviado con exito al correo ".$strMail;
                 //echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
                                                                                                 
             }
