@@ -170,24 +170,14 @@ class ArchivosController extends Controller
     public function pruebaAction($codigoDocumento, $numero) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();         
-        $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
-                $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);                                
-                
-                $correoNomina = $arConfiguracion->getCorreoNomina();
-                if($correoNomina) {                                    
-                    $message = \Swift_Message::newInstance()
-                        ->setSubject('Prueba email SogaApp')
-                        ->setFrom($correoNomina, "SogaApp" )
-                        ->setTo(strtolower($correoNomina))
-                        ->setBody('Prueba SogaApp','text/html');
-                    $this->get('mailer')->send($message);
-                    $objMensaje->Mensaje("error", "Mensaje de prueba enviado con exito", $this);
-                } else {
-                    $objMensaje->Mensaje("error", "Mensaje no enviado", $this);
-                }                 
-                
-       
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();                                       
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Prueba email SogaApp')
+            ->setFrom('maestradaz3@gmail.com', "SogaApp" )
+            ->setTo(strtolower('maestradaz3@gmail.com'))
+            ->setBody('Prueba SogaApp','text/html');
+        $this->get('mailer')->send($message);
+        $objMensaje->Mensaje("error", "Mensaje de prueba enviado con exito", $this);                       
         return $this->redirect($this->generateUrl('brs_ad_archivos_lista', array('codigoDocumento' => $codigoDocumento, 'numero' => $numero)));      
     }
     
