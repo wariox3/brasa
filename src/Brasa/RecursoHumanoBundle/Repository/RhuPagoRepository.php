@@ -468,7 +468,7 @@ class RhuPagoRepository extends EntityRepository {
         return $dql;
     }
  
-    public function pagosFecha($strDesde = "", $strHasta = "", $codigoEmpleado = "") {
+    /*public function pagosFecha($strDesde = "", $strHasta = "", $codigoEmpleado = "") {
         $em = $this->getEntityManager();             
         $strSql = "SELECT
                     COUNT(codigo_pago_pk) as numeroPagos,
@@ -482,5 +482,20 @@ class RhuPagoRepository extends EntityRepository {
         $results = $statement->fetchAll();        
         
         return $results;        
-    }
+    }*/
+    public function pagoDevengadoFecha($strDesde = "", $strHasta = "", $codigoEmpleado = "") {
+        $em = $this->getEntityManager();             
+        $strSql = "SELECT
+                    COUNT(codigo_pago_pk) as numeroPagos,
+                    SUM(vr_devengado) as vrDevengado                                        
+                    FROM rhu_pago                                                            
+                    WHERE rhu_pago.codigo_empleado_fk = $codigoEmpleado AND (rhu_pago.fecha_desde_pago >='$strDesde' AND rhu_pago.fecha_desde_pago <='$strHasta')
+                    GROUP BY codigo_empleado_fk"; 
+        $connection = $em->getConnection();
+        $statement = $connection->prepare($strSql);        
+        $statement->execute();
+        $results = $statement->fetchAll();        
+        
+        return $results;        
+    }    
 }

@@ -4,7 +4,7 @@ namespace Brasa\TurnoBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
-class TurCostoRecursoRepository extends EntityRepository {
+class TurCostoRecursoDetalleRepository extends EntityRepository {
 
     public function listaDql($codigoRecurso = "") {
         $dql   = "SELECT cr FROM BrasaTurnoBundle:TurCostoRecurso cr WHERE cr.codigoCostoRecursoPk <> 0";

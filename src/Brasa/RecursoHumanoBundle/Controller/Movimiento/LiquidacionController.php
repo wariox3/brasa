@@ -342,12 +342,13 @@ class LiquidacionController extends Controller
         $form = $this->createFormBuilder()
             ->setAction($this->generateUrl('brs_rhu_movimiento_liquidacion_parametros', array('codigoLiquidacion' => $codigoLiquidacion)))            
             ->add('porcentajeIbp', 'number', array('data' =>$arLiquidacion->getPorcentajeIbp() ,'required' => false))      
-            ->add('liquidarSalario', 'checkbox', array('required'  => false))
+            ->add('liquidarSalario', 'checkbox', array('required'  => false, 'data' =>$arLiquidacion->getLiquidarSalario()))
             ->add('vrIndemnizacion', 'number', array('data' =>$arLiquidacion->getVrIndemnizacion() ,'required' => false))                      
             ->add('diasAusentismoAdicional', 'number', array('data' =>$arLiquidacion->getDiasAusentismoAdicional() ,'required' => false))                      
             ->add('vrSalarioVacacionPropuesto', 'number', array('data' =>$arLiquidacion->getVrSalarioVacacionPropuesto() ,'required' => false))                      
             ->add('vrSalarioPrimaPropuesto', 'number', array('data' =>$arLiquidacion->getVrSalarioPrimaPropuesto() ,'required' => false))                                      
             ->add('vrSalarioCesantiasPropuesto', 'number', array('data' =>$arLiquidacion->getVrSalarioCesantiasPropuesto() ,'required' => false))                                      
+            ->add('eliminarAusentismo', 'checkbox', array('required'  => false, 'data' =>$arLiquidacion->getEliminarAusentismo()))                
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
             ->getForm();
         $form->handleRequest($request);
@@ -360,6 +361,7 @@ class LiquidacionController extends Controller
             $vrSalarioVacacionPropuesto = $form->get('vrSalarioVacacionPropuesto')->getData();
             $vrSalarioPrimaPropuesto = $form->get('vrSalarioPrimaPropuesto')->getData();
             $vrSalarioCesantiasPropuesto = $form->get('vrSalarioCesantiasPropuesto')->getData();
+            $eliminarAusentismo = $form->get('eliminarAusentismo')->getData();
             $arLiquidacion->setPorcentajeIbp($porcentajeIbp);
             $arLiquidacion->setLiquidarSalario($liquidarSalario);
             $arLiquidacion->setVrIndemnizacion($vrIndemnizacion);
@@ -367,6 +369,7 @@ class LiquidacionController extends Controller
             $arLiquidacion->setVrSalarioVacacionPropuesto($vrSalarioVacacionPropuesto);
             $arLiquidacion->setVrSalarioPrimaPropuesto($vrSalarioPrimaPropuesto);
             $arLiquidacion->setVrSalarioCesantiasPropuesto($vrSalarioCesantiasPropuesto);
+            $arLiquidacion->setEliminarAusentismo($eliminarAusentismo);
             $em->persist($arLiquidacion);
             $em->flush();
             return $this->redirect($this->generateUrl('brs_rhu_movimiento_liquidacion_detalle', array('codigoLiquidacion' => $codigoLiquidacion)));

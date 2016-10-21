@@ -42,8 +42,9 @@ class CostoRecursoController extends Controller
     }        
     
     private function lista() {
+        $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();        
-        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurCostoRecurso')->listaDql();                    
+        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurCostoRecurso')->listaDql($session->get('filtroCodigoRecurso'));                    
     }
 
     private function filtrar ($form) {

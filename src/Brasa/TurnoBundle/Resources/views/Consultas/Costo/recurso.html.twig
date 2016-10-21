@@ -44,9 +44,10 @@
         </div>
             <table class="table table-striped table-bordered table-condensed">
             <tr>
-                <th>COD</th>
+                <th>ID</th>
                 <th>AÑO</th>                
                 <th>MES</th>
+                <th>CODIGO</th>
                 <th>RECURSO</th>
                 <th>NOMINA</th>
                 <th>PRESTACIONES</th>
@@ -60,6 +61,7 @@
                     <td>{{ arCostoRecurso.codigoCostoRecursoPk  }}<input type="hidden" name="LblCodigo[]" value="{{ arCostoRecurso.codigoCostoRecursoPk }}"></td>                                        
                     <td>{{ arCostoRecurso.anio }}</td>
                     <td>{{ arCostoRecurso.mes }}</td>
+                    <td>{{ arCostoRecurso.codigoRecursoFk }}</td>
                     <td>{{ arCostoRecurso.recursoRel.nombreCorto }}</td>
                     <td style="text-align: right">{{ arCostoRecurso.vrNomina | number_format(0, '.', ',') }}</td> 
                     <td style="text-align: right">{{ arCostoRecurso.vrPrestaciones | number_format(0, '.', ',') }}</td> 

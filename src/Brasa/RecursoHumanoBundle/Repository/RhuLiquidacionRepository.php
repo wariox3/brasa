@@ -85,6 +85,9 @@ class RhuLiquidacionRepository extends EntityRepository {
                 $ibpCesantias += $ibpCesantiasInicial+$douIBPAdicional;                  
                 $intDiasAusentismo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->diasAusentismo($dateFechaDesde->format('Y-m-d'), $dateFechaHasta->format('Y-m-d'), $arLiquidacion->getCodigoContratoFk());                            
                 $intDiasAusentismo += $arLiquidacion->getDiasAusentismoAdicional();
+                if($arLiquidacion->getEliminarAusentismo() > 0) {
+                    $intDiasAusentismo = 0;
+                }
                 $intDiasCesantias = $this->diasPrestaciones($dateFechaDesde, $dateFechaHasta);                  
                 if($arContrato->getCodigoSalarioTipoFk() == 2) {
                     $salarioPromedioCesantias = ($ibpCesantias / $intDiasCesantias) * 30;                                    
@@ -212,6 +215,9 @@ class RhuLiquidacionRepository extends EntityRepository {
                     }
                     $intDiasAusentismo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->diasAusentismo($dateFechaDesde->format('Y-m-d'), $dateFechaHasta->format('Y-m-d'), $arLiquidacion->getCodigoContratoFk());                                                
                     $intDiasAusentismo += $arLiquidacion->getDiasAusentismoAdicional();
+                    if($arLiquidacion->getEliminarAusentismo() > 0) {
+                        $intDiasAusentismo = 0;
+                    }                    
                     $intDiasVacaciones = $this->diasPrestaciones($dateFechaDesde, $dateFechaHasta);                                
                     $intDiasVacacionesLiquidar = $intDiasVacaciones-$intDiasAusentismo;
                     $douVacaciones = ($salarioVacaciones * $intDiasVacacionesLiquidar) / 720;                                

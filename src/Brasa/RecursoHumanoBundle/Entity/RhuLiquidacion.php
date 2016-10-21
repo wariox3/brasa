@@ -240,7 +240,7 @@ class RhuLiquidacion
     /**     
      * @ORM\Column(name="estado_autorizado", type="boolean")
      */    
-    private $estadoAutorizado = 0;
+    private $estadoAutorizado = false;
     
     /**     
      * @ORM\Column(name="estado_generado", type="boolean")
@@ -285,7 +285,7 @@ class RhuLiquidacion
     /**     
      * @ORM\Column(name="estado_contabilizado", type="boolean")
      */    
-    private $estadoContabilizado = 0;    
+    private $estadoContabilizado = false;    
     
     /**
      * @ORM\Column(name="dias_ausentismo_adicional", type="integer")
@@ -306,6 +306,11 @@ class RhuLiquidacion
      * @ORM\Column(name="vr_salario_cesantias_propuesto", type="float")
      */
     private $VrSalarioCesantiasPropuesto = 0;
+    
+    /**     
+     * @ORM\Column(name="eliminar_ausentismo", type="boolean")
+     */    
+    private $eliminarAusentismo = false;    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="liquidacionesEmpleadoRel")
@@ -1706,6 +1711,78 @@ class RhuLiquidacion
     }
 
     /**
+     * Set vrSalarioPrimaPropuesto
+     *
+     * @param float $vrSalarioPrimaPropuesto
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrSalarioPrimaPropuesto($vrSalarioPrimaPropuesto)
+    {
+        $this->VrSalarioPrimaPropuesto = $vrSalarioPrimaPropuesto;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalarioPrimaPropuesto
+     *
+     * @return float
+     */
+    public function getVrSalarioPrimaPropuesto()
+    {
+        return $this->VrSalarioPrimaPropuesto;
+    }
+
+    /**
+     * Set vrSalarioCesantiasPropuesto
+     *
+     * @param float $vrSalarioCesantiasPropuesto
+     *
+     * @return RhuLiquidacion
+     */
+    public function setVrSalarioCesantiasPropuesto($vrSalarioCesantiasPropuesto)
+    {
+        $this->VrSalarioCesantiasPropuesto = $vrSalarioCesantiasPropuesto;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalarioCesantiasPropuesto
+     *
+     * @return float
+     */
+    public function getVrSalarioCesantiasPropuesto()
+    {
+        return $this->VrSalarioCesantiasPropuesto;
+    }
+
+    /**
+     * Set eliminarAusentismo
+     *
+     * @param boolean $eliminarAusentismo
+     *
+     * @return RhuLiquidacion
+     */
+    public function setEliminarAusentismo($eliminarAusentismo)
+    {
+        $this->eliminarAusentismo = $eliminarAusentismo;
+
+        return $this;
+    }
+
+    /**
+     * Get eliminarAusentismo
+     *
+     * @return boolean
+     */
+    public function getEliminarAusentismo()
+    {
+        return $this->eliminarAusentismo;
+    }
+
+    /**
      * Set empleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
@@ -1867,53 +1944,5 @@ class RhuLiquidacion
     public function getPagosBancosDetallesLiquidacionRel()
     {
         return $this->pagosBancosDetallesLiquidacionRel;
-    }
-
-    /**
-     * Set vrSalarioPrimaPropuesto
-     *
-     * @param float $vrSalarioPrimaPropuesto
-     *
-     * @return RhuLiquidacion
-     */
-    public function setVrSalarioPrimaPropuesto($vrSalarioPrimaPropuesto)
-    {
-        $this->VrSalarioPrimaPropuesto = $vrSalarioPrimaPropuesto;
-
-        return $this;
-    }
-
-    /**
-     * Get vrSalarioPrimaPropuesto
-     *
-     * @return float
-     */
-    public function getVrSalarioPrimaPropuesto()
-    {
-        return $this->VrSalarioPrimaPropuesto;
-    }
-
-    /**
-     * Set vrSalarioCesantiasPropuesto
-     *
-     * @param float $vrSalarioCesantiasPropuesto
-     *
-     * @return RhuLiquidacion
-     */
-    public function setVrSalarioCesantiasPropuesto($vrSalarioCesantiasPropuesto)
-    {
-        $this->VrSalarioCesantiasPropuesto = $vrSalarioCesantiasPropuesto;
-
-        return $this;
-    }
-
-    /**
-     * Get vrSalarioCesantiasPropuesto
-     *
-     * @return float
-     */
-    public function getVrSalarioCesantiasPropuesto()
-    {
-        return $this->VrSalarioCesantiasPropuesto;
     }
 }
