@@ -146,8 +146,8 @@ class ArchivosController extends Controller
                         ->setSubject($strAsunto)
                         ->setFrom($correoNomina, "SogaApp" )
                         ->setTo(strtolower($strMail))
-                        ->setBody($strMensaje,'text/html');                            
-                        //->attach(\Swift_Attachment::fromPath($strRuta));                
+                        ->setBody($strMensaje,'text/html')                            
+                        ->attach(\Swift_Attachment::fromPath($strRuta));                
                     $this->get('mailer')->send($message);                                 
                 } 
                 echo "Mensaje enviado con exito al correo ".$strMail. " - ".$correoNomina;
