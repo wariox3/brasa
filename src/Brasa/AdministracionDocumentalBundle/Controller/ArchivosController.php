@@ -143,7 +143,7 @@ class ArchivosController extends Controller
                     //$rutaArchivo = $ruta."Pago".$arPago->getCodigoPagoPk().".pdf";
                     //$strMensaje = "Se adjunta comprobante de pago (sogaApp)";                
                     $message = \Swift_Message::newInstance()
-                        ->setSubject($strAsunto." - ".$strRuta)
+                        ->setSubject($strAsunto)
                         ->setFrom($correoNomina, "SogaApp" )
                         ->setTo(strtolower($strMail))
                         ->setBody($strMensaje,'text/html')                            
