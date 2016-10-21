@@ -163,4 +163,33 @@ class ArchivosController extends Controller
             ));
               
     }
+    
+    /**
+     * @Route("/ad/archivos/prueba/{codigoDocumento}/{numero}", name="brs_ad_archivos_prueba")
+     */    
+    public function pruebaAction($codigoDocumento, $numero) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();         
+        $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+                $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);                                
+                
+                $correoNomina = $arConfiguracion->getCorreoNomina();
+                if($correoNomina) {                                    
+                    $message = \Swift_Message::newInstance()
+                        ->setSubject('Prueba email SogaApp')
+                        ->setFrom($correoNomina, "SogaApp" )
+                        ->setTo(strtolower($correoNomina))
+                        ->setBody('Prueba SogaApp','text/html');
+                    $this->get('mailer')->send($message);
+                    $objMensaje->Mensaje("error", "Mensaje de prueba enviado con exito", $this);
+                } else {
+                    $objMensaje->Mensaje("error", "Mensaje no enviado", $this);
+                }                 
+                
+       
+        return $this->redirect($this->generateUrl('brs_ad_archivos_lista', array('codigoDocumento' => $codigoDocumento, 'numero' => $numero)));      
+    }
+    
+    
 }
