@@ -142,7 +142,7 @@ class ArchivosController extends Controller
                     if ($correoGeneral){                                            
                     $message = \Swift_Message::newInstance()
                         ->setSubject($strAsunto)
-                        ->setFrom($correoGeneral, "SogaApp" )
+                        ->setFrom($correoGeneral, "SogaApp")
                         ->setTo(strtolower($strMail))
                         ->setBody($strMensaje,'text/html')                            
                         ->attach(\Swift_Attachment::fromPath($strRuta));                
