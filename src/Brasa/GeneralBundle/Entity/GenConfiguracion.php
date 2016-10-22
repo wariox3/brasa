@@ -130,13 +130,20 @@ class GenConfiguracion
     /**
      * @ORM\Column(name="inhabilitado", type="boolean")
      */    
-    private $inhabilitado = false; 
+    private $inhabilitado = false;
+    
+    /**
+     * @ORM\Column(name="correo_general", type="string", length=100, nullable=true)
+     */    
+    private $correoGeneral;
     
     /**
      * @ORM\ManyToOne(targetEntity="GenCiudad", inversedBy="configuracionesRel")
      * @ORM\JoinColumn(name="codigo_ciudad_fk", referencedColumnName="codigo_ciudad_pk")
      */
     protected $ciudadRel;
+    
+
     
 
     /**
@@ -390,6 +397,30 @@ class GenConfiguracion
     }
 
     /**
+     * Set rutaImagenes
+     *
+     * @param string $rutaImagenes
+     *
+     * @return GenConfiguracion
+     */
+    public function setRutaImagenes($rutaImagenes)
+    {
+        $this->rutaImagenes = $rutaImagenes;
+
+        return $this;
+    }
+
+    /**
+     * Get rutaImagenes
+     *
+     * @return string
+     */
+    public function getRutaImagenes()
+    {
+        return $this->rutaImagenes;
+    }
+
+    /**
      * Set nitEmpresa
      *
      * @param string $nitEmpresa
@@ -459,6 +490,54 @@ class GenConfiguracion
     public function getNombreEmpresa()
     {
         return $this->nombreEmpresa;
+    }
+
+    /**
+     * Set identificacionRepresentanteLegal
+     *
+     * @param string $identificacionRepresentanteLegal
+     *
+     * @return GenConfiguracion
+     */
+    public function setIdentificacionRepresentanteLegal($identificacionRepresentanteLegal)
+    {
+        $this->identificacionRepresentanteLegal = $identificacionRepresentanteLegal;
+
+        return $this;
+    }
+
+    /**
+     * Get identificacionRepresentanteLegal
+     *
+     * @return string
+     */
+    public function getIdentificacionRepresentanteLegal()
+    {
+        return $this->identificacionRepresentanteLegal;
+    }
+
+    /**
+     * Set representanteLegal
+     *
+     * @param string $representanteLegal
+     *
+     * @return GenConfiguracion
+     */
+    public function setRepresentanteLegal($representanteLegal)
+    {
+        $this->representanteLegal = $representanteLegal;
+
+        return $this;
+    }
+
+    /**
+     * Get representanteLegal
+     *
+     * @return string
+     */
+    public function getRepresentanteLegal()
+    {
+        return $this->representanteLegal;
     }
 
     /**
@@ -534,6 +613,30 @@ class GenConfiguracion
     }
 
     /**
+     * Set codigoCiudadFk
+     *
+     * @param integer $codigoCiudadFk
+     *
+     * @return GenConfiguracion
+     */
+    public function setCodigoCiudadFk($codigoCiudadFk)
+    {
+        $this->codigoCiudadFk = $codigoCiudadFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoCiudadFk
+     *
+     * @return integer
+     */
+    public function getCodigoCiudadFk()
+    {
+        return $this->codigoCiudadFk;
+    }
+
+    /**
      * Set rutaDirectorio
      *
      * @param string $rutaDirectorio
@@ -582,78 +685,6 @@ class GenConfiguracion
     }
 
     /**
-     * Set codigoCiudadFk
-     *
-     * @param integer $codigoCiudadFk
-     *
-     * @return GenConfiguracion
-     */
-    public function setCodigoCiudadFk($codigoCiudadFk)
-    {
-        $this->codigoCiudadFk = $codigoCiudadFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoCiudadFk
-     *
-     * @return integer
-     */
-    public function getCodigoCiudadFk()
-    {
-        return $this->codigoCiudadFk;
-    }
-
-    /**
-     * Set ciudadRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel
-     *
-     * @return GenConfiguracion
-     */
-    public function setCiudadRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel = null)
-    {
-        $this->ciudadRel = $ciudadRel;
-
-        return $this;
-    }
-
-    /**
-     * Get ciudadRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenCiudad
-     */
-    public function getCiudadRel()
-    {
-        return $this->ciudadRel;
-    }
-
-    /**
-     * Set rutaImagenes
-     *
-     * @param string $rutaImagenes
-     *
-     * @return GenConfiguracion
-     */
-    public function setRutaImagenes($rutaImagenes)
-    {
-        $this->rutaImagenes = $rutaImagenes;
-
-        return $this;
-    }
-
-    /**
-     * Get rutaImagenes
-     *
-     * @return string
-     */
-    public function getRutaImagenes()
-    {
-        return $this->rutaImagenes;
-    }
-
-    /**
      * Set inhabilitado
      *
      * @param boolean $inhabilitado
@@ -678,50 +709,50 @@ class GenConfiguracion
     }
 
     /**
-     * Set identificacionRepresentanteLegal
+     * Set correoGeneral
      *
-     * @param string $identificacionRepresentanteLegal
+     * @param string $correoGeneral
      *
      * @return GenConfiguracion
      */
-    public function setIdentificacionRepresentanteLegal($identificacionRepresentanteLegal)
+    public function setCorreoGeneral($correoGeneral)
     {
-        $this->identificacionRepresentanteLegal = $identificacionRepresentanteLegal;
+        $this->correoGeneral = $correoGeneral;
 
         return $this;
     }
 
     /**
-     * Get identificacionRepresentanteLegal
+     * Get correoGeneral
      *
      * @return string
      */
-    public function getIdentificacionRepresentanteLegal()
+    public function getCorreoGeneral()
     {
-        return $this->identificacionRepresentanteLegal;
+        return $this->correoGeneral;
     }
 
     /**
-     * Set representanteLegal
+     * Set ciudadRel
      *
-     * @param string $representanteLegal
+     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel
      *
      * @return GenConfiguracion
      */
-    public function setRepresentanteLegal($representanteLegal)
+    public function setCiudadRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel = null)
     {
-        $this->representanteLegal = $representanteLegal;
+        $this->ciudadRel = $ciudadRel;
 
         return $this;
     }
 
     /**
-     * Get representanteLegal
+     * Get ciudadRel
      *
-     * @return string
+     * @return \Brasa\GeneralBundle\Entity\GenCiudad
      */
-    public function getRepresentanteLegal()
+    public function getCiudadRel()
     {
-        return $this->representanteLegal;
+        return $this->ciudadRel;
     }
 }

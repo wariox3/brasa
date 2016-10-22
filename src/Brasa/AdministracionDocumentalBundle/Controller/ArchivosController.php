@@ -132,29 +132,29 @@ class ArchivosController extends Controller
         $form->handleRequest($request);
         if($form->isValid()) {
             if($form->get('BtnEnviar')->isClicked()) {
-                $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
-                $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);                                
+                $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+                $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);                                
                 $strMail = $form->get('email')->getData();
                 $strAsunto = $form->get('asunto')->getData();                  
-                $strMensaje = $form->get('mensaje')->getData();               
-                //$correo = $arPago->getEmpleadoRel()->getCorreo();
-                $correoNomina = $arConfiguracion->getCorreoNomina();
+                $strMensaje = $form->get('mensaje')->getData();                               
+                $correoGeneral = $arConfiguracion->getCorreoGeneral();
                 if($strMail) {
-                    //$rutaArchivo = $ruta."Pago".$arPago->getCodigoPagoPk().".pdf";
-                    //$strMensaje = "Se adjunta comprobante de pago (sogaApp)";                
+                    if ($correoGeneral){                                            
                     $message = \Swift_Message::newInstance()
                         ->setSubject($strAsunto)
-                        ->setFrom($correoNomina, "SogaApp" )
+                        ->setFrom($correoGeneral, "SogaApp" )
                         ->setTo(strtolower($strMail))
                         ->setBody($strMensaje,'text/html')                            
                         ->attach(\Swift_Attachment::fromPath($strRuta));                
-                    $this->get('mailer')->send($message);                                 
-                }                 
-                $objMensaje->Mensaje("error", "Mensaje enviado con exito al correo ".$strMail."", $this);
-                //echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-                                                                                                
+                    $this->get('mailer')->send($message);
+                    $objMensaje->Mensaje("error", "Mensaje enviado con exito al correo ".$strMail."", $this);                                                                                
+                    } else {
+                        $objMensaje->Mensaje("error", "EL correo remitente no esta en la configuracion general"."", $this);
+                    }
+                } else {
+                    $objMensaje->Mensaje("error", "No hay correo destino para enviar, por favor verificar", $this);
+                }                                
             }
-            
         }         
         return $this->render('BrasaAdministracionDocumentalBundle:Archivos:enviar.html.twig', array(
             'form' => $form->createView(),
