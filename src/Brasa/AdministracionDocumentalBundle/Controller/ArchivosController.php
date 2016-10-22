@@ -173,8 +173,8 @@ class ArchivosController extends Controller
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();                                       
         $message = \Swift_Message::newInstance()
             ->setSubject('Prueba email SogaApp')
-            ->setFrom('maestradaz3@gmail.com', "SogaApp" )
-            ->setTo(strtolower('maestradaz3@gmail.com'))
+            ->setFrom('sogaimplementacion@gmail.com', "SogaApp" )
+            ->setTo(strtolower('sogaimplementacion@gmail.com'))
             ->setBody('Prueba SogaApp','text/html');
         $this->get('mailer')->send($message);
         $objMensaje->Mensaje("error", "Mensaje de prueba enviado con exito", $this);                       
