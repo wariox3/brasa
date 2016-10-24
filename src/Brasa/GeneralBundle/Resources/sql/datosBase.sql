@@ -5935,7 +5935,7 @@ insert into `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) 
 INSERT INTO `seg_roles` (`codigo_rol_pk`, `nombre`) VALUES('ROLE_ADMIN','ADMINISTRADOR');
 INSERT INTO `seg_roles` (`codigo_rol_pk`, `nombre`) VALUES('ROLE_USER','USUARIO');
 
-INSERT INTO `users` (`id`, `username`, `nombre_corto`, `salt`, `password`, `email`, `is_active`, `empresa`, `roles`) VALUES('1','SOGA','SOGA','9f86f39cd7c299efc10a2cbd375ad2d4','QVMBXCvFHaltPm/ebXycQ7rOvgbgLFfQQvSxZVa/I/FvtsO9Ps9k9B84YP6rC+1aEio86UKY0ZxwsAEV/se7+Q==','sogaimplementacion@gmail.com','1','emp1','ROLE_ADMIN');
+INSERT INTO `users` (`id`, `username`, `nombre_corto`, `salt`, `password`, `email`, `is_active`, `empresa`, `roles`, tareasPendientes) VALUES('1','SOGA','SOGA','9f86f39cd7c299efc10a2cbd375ad2d4','QVMBXCvFHaltPm/ebXycQ7rOvgbgLFfQQvSxZVa/I/FvtsO9Ps9k9B84YP6rC+1aEio86UKY0ZxwsAEV/se7+Q==','sogaimplementacion@gmail.com','1','emp1','ROLE_ADMIN',0);
 
 
 CREATE TABLE `emp_users` (

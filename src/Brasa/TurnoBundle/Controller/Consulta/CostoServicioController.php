@@ -7,23 +7,23 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 class CostoServicioController extends Controller
 {
-    var $strListaDql = "";    
+    var $strListaDql = "";
     /**
      * @Route("/tur/consulta/costo/servicio", name="brs_tur_consulta_costo_servicio")
-     */    
+     */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 49)) {
-            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));
         }
         $paginator  = $this->get('knp_paginator');
         $this->filtrarFecha = TRUE;
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
-        $this->lista();                
-        if ($form->isValid()) {                             
-            if ($form->get('BtnFiltrar')->isClicked()) { 
+        $this->lista();
+        if ($form->isValid()) {
+            if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
                 $form = $this->formularioFiltro();
                 $this->lista();
@@ -38,24 +38,25 @@ class CostoServicioController extends Controller
 
         $arCierreMesServicio = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 200);
         return $this->render('BrasaTurnoBundle:Consultas/Costo:servicio.html.twig', array(
-            'arCierreMesServicio' => $arCierreMesServicio,                        
+            'arCierreMesServicio' => $arCierreMesServicio,
             'form' => $form->createView()));
-    }        
-    
+    }
+
     private function lista() {
         $session = $this->getRequest()->getSession();
-        $em = $this->getDoctrine()->getManager();        
+        $em = $this->getDoctrine()->getManager();
         $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurCierreMesServicio')->listaDql(
-                $session->get('filtroCodigoCliente')
-                );                    
+                $session->get('filtroCodigoCliente'), $session->get('filtroTurMes') 
+                );
     }
 
     private function filtrar ($form) {
-        $session = $this->getRequest()->getSession();        
+        $session = $this->getRequest()->getSession();
         $session->set('filtroNit', $form->get('TxtNit')->getData());
+        $session->set('filtroTurMes', $form->get('TxtMes')->getData());
         //$session->set('filtroCodigoRecurso', $form->get('TxtCodigoRecurso')->getData());
-    }    
-    
+    }
+
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
@@ -68,34 +69,34 @@ class CostoServicioController extends Controller
             }  else {
                 $session->set('filtroCodigoCliente', null);
                 $session->set('filtroNit', null);
-            }          
+            }
         } else {
             $session->set('filtroCodigoCliente', null);
-        }       
+        }
         /*$strNombreRecurso = "";
         if($session->get('filtroCodigoRecurso')) {
             $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($session->get('filtroCodigoRecurso'));
-            if($arRecurso) {                
+            if($arRecurso) {
                 $strNombreRecurso = $arRecurso->getNombreCorto();
             }  else {
                 $session->set('filtroCodigoRecurso', null);
-            }          
+            }
         }*/
 
         $form = $this->createFormBuilder()
             ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
-            ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))                
+            ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))
             //->add('TxtCodigoRecurso', 'text', array('label'  => 'Nit','data' => $session->get('filtroCodigoRecurso')))
-            //->add('TxtNombreRecurso', 'text', array('label'  => 'NombreCliente','data' => $strNombreRecurso))                                                                    
+            ->add('TxtMes', 'text', array('data' => $session->get('filtroTurMes')))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
-    }        
+    }
 
     private function generarExcel() {
         ob_clean();
-        $em = $this->getDoctrine()->getManager();        
+        $em = $this->getDoctrine()->getManager();
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("EMPRESA")
@@ -105,16 +106,16 @@ class CostoServicioController extends Controller
             ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
-        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(9); 
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(9);
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
         for($col = 'A'; $col !== 'AZ'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
-        }        
-        for($col = 'J'; $col !== 'AZ'; $col++) {            
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');
+        }
+        for($col = 'J'; $col !== 'AZ'; $col++) {
             $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
-            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('right');                
-        }         
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('right');
+        }
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'AÑO')
                     ->setCellValue('B1', 'MES')
@@ -131,12 +132,12 @@ class CostoServicioController extends Controller
                     ->setCellValue('M1', 'CANT')
                     ->setCellValue('N1', 'COSTO')
                     ->setCellValue('O1', 'PRECIO');
-        
+
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
         $arCierreMesServicios = new \Brasa\TurnoBundle\Entity\TurCierreMesServicio();
         $arCierreMesServicios = $query->getResult();
-        foreach ($arCierreMesServicios as $arCierreMesServicio) {            
+        foreach ($arCierreMesServicios as $arCierreMesServicio) {
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arCierreMesServicio->getAnio())
                     ->setCellValue('B' . $i, $arCierreMesServicio->getMes())
@@ -153,13 +154,13 @@ class CostoServicioController extends Controller
                     ->setCellValue('M' . $i, $arCierreMesServicio->getCantidad())
                     ->setCellValue('N' . $i, $arCierreMesServicio->getVrCostoRecurso())
                     ->setCellValue('O' . $i, $arCierreMesServicio->getVrTotal())
-;                         
+;
             $i++;
-        }                
-        //$objPHPExcel->getActiveSheet()->getStyle('A1:AL1')->getFont()->setBold(true);        
-        
+        }
+        //$objPHPExcel->getActiveSheet()->getStyle('A1:AL1')->getFont()->setBold(true);
+
         //$objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
-        
+
         $objPHPExcel->getActiveSheet()->setTitle('CostoServicio');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
@@ -176,7 +177,7 @@ class CostoServicioController extends Controller
         $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('php://output');
         exit;
-    }      
+    }
 
 
 }

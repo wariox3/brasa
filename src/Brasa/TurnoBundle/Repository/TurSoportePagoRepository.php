@@ -405,6 +405,7 @@ class TurSoportePagoRepository extends EntityRepository {
             $arSoportePagoDetalle->setHorasFestivasDiurnas(0);
         }
         $arSoportePagoDetalle->setProgramacionDetalleRel($arProgramacionDetalle);
+        $arSoportePagoDetalle->setPedidoDetalleRel($arProgramacionDetalle->getPedidoDetalleRel());
         $em->persist($arSoportePagoDetalle);
 
         if($arrHoras1) {
@@ -441,6 +442,7 @@ class TurSoportePagoRepository extends EntityRepository {
             $arSoportePagoDetalle->setHorasDescanso($arrHoras1['horasDescanso']);
             $arSoportePagoDetalle->setHorasNovedad($arrHoras1['horasNovedad']);
             $arSoportePagoDetalle->setProgramacionDetalleRel($arProgramacionDetalle);
+            $arSoportePagoDetalle->setPedidoDetalleRel($arProgramacionDetalle->getPedidoDetalleRel());
             $em->persist($arSoportePagoDetalle);            
         }       
         
@@ -857,5 +859,143 @@ class TurSoportePagoRepository extends EntityRepository {
             }
         }  
         return $descansosPagados;
-    }    
+    }  
+    
+    public function generarProgramacion($arSoportePago, $strAnio, $strMes) {
+        $em = $this->getEntityManager();
+        $arrProgramacion = array();
+        $dql   = "SELECT pd.dia1, pd.dia2, pd.dia3, pd.dia4, pd.dia5, pd.dia6, pd.dia7, pd.dia8, pd.dia9, pd.dia10, pd.dia11, pd.dia12, pd.dia13, pd.dia14, pd.dia15, pd.dia16, pd.dia17, pd.dia18, pd.dia19, pd.dia20, pd.dia21, pd.dia22, pd.dia23, pd.dia24, pd.dia25, pd.dia26, pd.dia27, pd.dia28, pd.dia29, pd.dia30, pd.dia31 FROM BrasaTurnoBundle:TurProgramacionDetalle pd WHERE pd.anio = " . $strAnio . " AND pd.mes = " . $strMes . " AND pd.codigoRecursoFk = " . $arSoportePago->getRecursoRel()->getCodigoRecursoPk();
+        $query = $em->createQuery($dql);
+        $arResultados = $query->getResult();                                                                        
+        $numeroProgramaciones = count($arResultados);
+        
+        foreach($arResultados as $arResultado) {
+            for($j=1; $j<=31; $j++) {
+                if($arResultado['dia'.$j]) {
+                    if(isset($arrProgramacion[1][$j])){
+                        if(!$arrProgramacion[1][$j]) {
+                            $arrProgramacion[1][$j] = $arResultado['dia'.$j];     
+                        }                                        
+                    } else {
+                         $arrProgramacion[1][$j] = $arResultado['dia'.$j];
+                    }                                  
+                } else {
+                    if(isset($arrProgramacion[1][$j])){
+                        if(!$arrProgramacion[1][$j]) {
+                            $arrProgramacion[1][$j] = null;
+                        }
+                    } else {
+                        $arrProgramacion[1][$j] = null;
+                    }
+
+                }
+            }
+
+        }        
+        
+        foreach ($arrProgramacion as $detalle) {  
+            $arSoportePagoProgramacion = new \Brasa\TurnoBundle\Entity\TurSoportePagoProgramacion();
+            $arSoportePagoProgramacion->setCodigoSoportePagoPeriodoFk($arSoportePago->getSoportePagoPeriodoRel()->getCodigoSoportePagoPeriodoPk());            
+            $arSoportePagoProgramacion->setCodigoSoportePagoFk($arSoportePago->getCodigoSoportePagoPk());
+            $arSoportePagoProgramacion->setCodigoRecursoFk($arSoportePago->getRecursoRel()->getCodigoRecursoPk());
+            $arSoportePagoProgramacion->setAnio($strAnio);
+            $arSoportePagoProgramacion->setMes($strMes);
+            for($j=1; $j<=31; $j++) {
+                if($j == 1) {
+                    $arSoportePagoProgramacion->setDia1($detalle[$j]);
+                }
+                if($j == 2) {
+                    $arSoportePagoProgramacion->setDia2($detalle[$j]);
+                }       
+                if($j == 3) {
+                    $arSoportePagoProgramacion->setDia3($detalle[$j]);
+                }
+                if($j == 4) {
+                    $arSoportePagoProgramacion->setDia4($detalle[$j]);
+                }
+                if($j == 5) {
+                    $arSoportePagoProgramacion->setDia5($detalle[$j]);
+                }
+                if($j == 6) {
+                    $arSoportePagoProgramacion->setDia6($detalle[$j]);
+                }
+                if($j == 7) {
+                    $arSoportePagoProgramacion->setDia7($detalle[$j]);
+                }
+                if($j == 8) {
+                    $arSoportePagoProgramacion->setDia8($detalle[$j]);
+                }
+                if($j == 9) {
+                    $arSoportePagoProgramacion->setDia9($detalle[$j]);
+                }
+                if($j == 10) {
+                    $arSoportePagoProgramacion->setDia10($detalle[$j]);
+                }
+                if($j == 11) {
+                    $arSoportePagoProgramacion->setDia11($detalle[$j]);
+                }
+                if($j == 12) {
+                    $arSoportePagoProgramacion->setDia12($detalle[$j]);
+                }
+                if($j == 13) {
+                    $arSoportePagoProgramacion->setDia13($detalle[$j]);
+                }
+                if($j == 14) {
+                    $arSoportePagoProgramacion->setDia14($detalle[$j]);
+                }
+                if($j == 15) {
+                    $arSoportePagoProgramacion->setDia15($detalle[$j]);
+                }
+                if($j == 16) {
+                    $arSoportePagoProgramacion->setDia16($detalle[$j]);
+                }
+                if($j == 17) {
+                    $arSoportePagoProgramacion->setDia17($detalle[$j]);
+                }
+                if($j == 18) {
+                    $arSoportePagoProgramacion->setDia18($detalle[$j]);
+                }
+                if($j == 19) {
+                    $arSoportePagoProgramacion->setDia19($detalle[$j]);
+                }
+                if($j == 20) {
+                    $arSoportePagoProgramacion->setDia20($detalle[$j]);
+                }
+                if($j == 21) {
+                    $arSoportePagoProgramacion->setDia21($detalle[$j]);
+                }
+                if($j == 22) {
+                    $arSoportePagoProgramacion->setDia22($detalle[$j]);
+                }
+                if($j == 23) {
+                    $arSoportePagoProgramacion->setDia23($detalle[$j]);
+                }
+                if($j == 24) {
+                    $arSoportePagoProgramacion->setDia24($detalle[$j]);
+                }
+                if($j == 25) {
+                    $arSoportePagoProgramacion->setDia25($detalle[$j]);
+                }
+                if($j == 26) {
+                    $arSoportePagoProgramacion->setDia26($detalle[$j]);
+                }
+                if($j == 27) {
+                    $arSoportePagoProgramacion->setDia27($detalle[$j]);
+                }
+                if($j == 28) {
+                    $arSoportePagoProgramacion->setDia28($detalle[$j]);
+                }
+                if($j == 29) {
+                    $arSoportePagoProgramacion->setDia29($detalle[$j]);
+                }
+                if($j == 30) {
+                    $arSoportePagoProgramacion->setDia30($detalle[$j]);
+                }
+                if($j == 31) {
+                    $arSoportePagoProgramacion->setDia31($detalle[$j]);
+                }                
+            }
+            $em->persist($arSoportePagoProgramacion);
+        }                
+    }
 }

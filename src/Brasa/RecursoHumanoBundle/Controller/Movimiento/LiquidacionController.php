@@ -493,12 +493,12 @@ class LiquidacionController extends Controller
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
         for($col = 'A'; $col !== 'AZ'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
-            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+            //$objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
         }
-        for($col = 'J'; $col !== 'R'; $col++) {            
+        for($col = 'J'; $col !== 'S'; $col++) {            
             $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
         }
-        for($col = 'V'; $col !== 'Z'; $col++) {            
+        for($col = 'W'; $col !== 'Z'; $col++) {            
             $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
         }         
         $objPHPExcel->setActiveSheetIndex(0)
@@ -516,16 +516,17 @@ class LiquidacionController extends Controller
                     ->setCellValue('L1', 'PRIMA')
                     ->setCellValue('M1', 'DED.PRIMA')
                     ->setCellValue('N1', 'VACACIONES')
-                    ->setCellValue('O1', 'D.CES')
-                    ->setCellValue('P1', 'D.VAC')
-                    ->setCellValue('Q1', 'D.PRI')
-                    ->setCellValue('R1', 'F.ULT.PAGO')
-                    ->setCellValue('S1', 'F.ULT.PAGO.PRI')
-                    ->setCellValue('T1', 'F.ULT.PAGO.VAC')
-                    ->setCellValue('U1', 'F.ULT.PAGO.CES')
-                    ->setCellValue('V1', 'DEDUCCIONES')
-                    ->setCellValue('W1', 'BONIFICACIONES')
-                    ->setCellValue('X1', 'TOTAL');    
+                    ->setCellValue('O1', 'INDEMNIZACION')
+                    ->setCellValue('P1', 'D.CES')
+                    ->setCellValue('Q1', 'D.VAC')
+                    ->setCellValue('R1', 'D.PRI')
+                    ->setCellValue('S1', 'F.ULT.PAGO')
+                    ->setCellValue('T1', 'F.ULT.PAGO.PRI')
+                    ->setCellValue('U1', 'F.ULT.PAGO.VAC')
+                    ->setCellValue('V1', 'F.ULT.PAGO.CES')
+                    ->setCellValue('W1', 'DEDUCCIONES')
+                    ->setCellValue('X1', 'BONIFICACIONES')                
+                    ->setCellValue('Y1', 'TOTAL');    
         $i = 2;
         $query = $em->createQuery($this->strSqlLista);
         $arLiquidaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
@@ -546,23 +547,24 @@ class LiquidacionController extends Controller
                     ->setCellValue('L' . $i, $arLiquidacion->getVrPrima())
                     ->setCellValue('M' . $i, $arLiquidacion->getVrDeduccionPrima())
                     ->setCellValue('N' . $i, $arLiquidacion->getVrVacaciones())
-                    ->setCellValue('O' . $i, $arLiquidacion->getDiasCesantias())
-                    ->setCellValue('P' . $i, $arLiquidacion->getDiasVacaciones())
-                    ->setCellValue('Q' . $i, $arLiquidacion->getDiasPrimas())                                        
-                    ->setCellValue('V' . $i, $arLiquidacion->getVrDeducciones())
-                    ->setCellValue('W' . $i, $arLiquidacion->getVrBonificaciones())
-                    ->setCellValue('X' . $i, $arLiquidacion->getVrTotal());
+                    ->setCellValue('O' . $i, $arLiquidacion->getVrIndemnizacion())
+                    ->setCellValue('P' . $i, $arLiquidacion->getDiasCesantias())
+                    ->setCellValue('Q' . $i, $arLiquidacion->getDiasVacaciones())
+                    ->setCellValue('R' . $i, $arLiquidacion->getDiasPrimas())                                        
+                    ->setCellValue('W' . $i, $arLiquidacion->getVrDeducciones())
+                    ->setCellValue('X' . $i, $arLiquidacion->getVrBonificaciones())
+                    ->setCellValue('Y' . $i, $arLiquidacion->getVrTotal());
             if($arLiquidacion->getFechaUltimoPago()) {
-                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('R' . $i, $arLiquidacion->getFechaUltimoPago()->format('Y-m-d'));
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('S' . $i, $arLiquidacion->getFechaUltimoPago()->format('Y-m-d'));
             }
             if($arLiquidacion->getFechaUltimoPagoPrimas()) {
-                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('S' . $i, $arLiquidacion->getFechaUltimoPagoPrimas()->format('Y-m-d'));
+                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('T' . $i, $arLiquidacion->getFechaUltimoPagoPrimas()->format('Y-m-d'));
             }
             if($arLiquidacion->getFechaUltimoPagoVacaciones()) {
-                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('T' . $i, $arLiquidacion->getFechaUltimoPagoVacaciones()->format('Y-m-d'));
+                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('U' . $i, $arLiquidacion->getFechaUltimoPagoVacaciones()->format('Y-m-d'));
             }
             if($arLiquidacion->getFechaUltimoPagoCesantias()) {
-                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('U' . $i, $arLiquidacion->getFechaUltimoPagoCesantias()->format('Y-m-d'));
+                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V' . $i, $arLiquidacion->getFechaUltimoPagoCesantias()->format('Y-m-d'));
             }
             $i++;
         }

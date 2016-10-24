@@ -40,6 +40,7 @@ class GenerarSoportePagoController extends Controller
                 $intDiaFinal = $dateFechaHasta->format('j'); 
                 $arFestivos = $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($dateFechaDesde->format('Y-m-').'01', $dateFechaHasta->format('Y-m-').'31');                
                 
+                //Genera los recursos del soporte pago
                 $dql   = "SELECT pd.codigoRecursoFk FROM BrasaTurnoBundle:TurProgramacionDetalle pd JOIN pd.recursoRel r "
                         . "WHERE pd.anio = " . $arSoportePagoPeriodo->getFechaDesde()->format('Y') . " AND pd.mes = " . $arSoportePagoPeriodo->getFechaDesde()->format('m') . " GROUP BY pd.codigoRecursoFk";      
                 $query = $em->createQuery($dql);                
@@ -100,20 +101,29 @@ class GenerarSoportePagoController extends Controller
                                       
                 }                
                 $em->flush();
+                
+                //Generar los detalles del soporte de pago
                 $arSoportesPago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
                 $arSoportesPago = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo));
                 foreach ($arSoportesPago as $arSoportePago) {
-                    $em->getRepository('BrasaTurnoBundle:TurSoportePago')->generar($arSoportePago, $arFestivos);
+                    $em->getRepository('BrasaTurnoBundle:TurSoportePago')->generar($arSoportePago, $arFestivos);                    
                 }                                                
+                $em->flush();
+                
+                //Genera soporte pago "programacion"
+                foreach ($arSoportesPago as $arSoportePago) {
+                    $em->getRepository('BrasaTurnoBundle:TurSoportePago')->generarProgramacion($arSoportePago, $arSoportePagoPeriodo->getFechaDesde()->format('Y'), $arSoportePagoPeriodo->getFechaDesde()->format('m'));
+                }                
+                $em->flush();                
+                
                 $arSoportePagoPeriodo->setEstadoGenerado(1);
                 $em->persist($arSoportePagoPeriodo);
-                $em->flush();                
+                $em->flush();
+                
                 $em->getRepository('BrasaTurnoBundle:TurSoportePago')->resumen($arSoportePagoPeriodo);                
                 $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->analizarInconsistencias($codigoSoportePagoPeriodo);                                                                                                    
                 $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->liquidar($codigoSoportePagoPeriodo);                                                                    
 
-                set_time_limit(60);
-                ini_set('memory_limit', '512m');
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));
             }
             if($request->request->get('OpDeshacer')) {    
@@ -126,6 +136,9 @@ class GenerarSoportePagoController extends Controller
                     $em->getConnection()->executeQuery($strSql);
                     $strSql = "DELETE FROM tur_soporte_pago WHERE codigo_soporte_pago_periodo_fk = " . $codigoSoportePagoPeriodo;           
                     $em->getConnection()->executeQuery($strSql);                    
+                    $strSql = "DELETE FROM tur_soporte_pago_programacion WHERE codigo_soporte_pago_periodo_fk = " . $codigoSoportePagoPeriodo;           
+                    $em->getConnection()->executeQuery($strSql);                    
+                    
                     $arSoportePagoPeriodo->setEstadoGenerado(0);
                     $arSoportePagoPeriodo->setInconsistencias(0);
                     $arSoportePagoPeriodo->setRecursos(0);
