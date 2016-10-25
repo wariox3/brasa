@@ -53,16 +53,22 @@ class TurPeriodo
     protected $cotizacionesDetallesPeriodoRel;    
     
     /**
-     * @ORM\OneToMany(targetEntity="TurCierreMesServicio", mappedBy="periodoRel")
+     * @ORM\OneToMany(targetEntity="TurCostoServicio", mappedBy="periodoRel")
      */
-    protected $cierresMesServiciosPeriodoRel;    
+    protected $costosServiciosPeriodoRel;    
     
+
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->pedidosDetallesPeriodoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pedidosDetallesCompuestosPeriodoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->serviciosDetallesPeriodoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->serviciosDetallesCompuestosPeriodoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cotizacionesDetallesPeriodoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->costosServiciosPeriodoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -158,37 +164,37 @@ class TurPeriodo
     }
 
     /**
-     * Add cotizacionesDetallesPeriodoRel
+     * Add pedidosDetallesCompuestosPeriodoRel
      *
-     * @param \Brasa\TurnoBundle\Entity\TurCotizacionDetalle $cotizacionesDetallesPeriodoRel
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosPeriodoRel
      *
      * @return TurPeriodo
      */
-    public function addCotizacionesDetallesPeriodoRel(\Brasa\TurnoBundle\Entity\TurCotizacionDetalle $cotizacionesDetallesPeriodoRel)
+    public function addPedidosDetallesCompuestosPeriodoRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosPeriodoRel)
     {
-        $this->cotizacionesDetallesPeriodoRel[] = $cotizacionesDetallesPeriodoRel;
+        $this->pedidosDetallesCompuestosPeriodoRel[] = $pedidosDetallesCompuestosPeriodoRel;
 
         return $this;
     }
 
     /**
-     * Remove cotizacionesDetallesPeriodoRel
+     * Remove pedidosDetallesCompuestosPeriodoRel
      *
-     * @param \Brasa\TurnoBundle\Entity\TurCotizacionDetalle $cotizacionesDetallesPeriodoRel
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosPeriodoRel
      */
-    public function removeCotizacionesDetallesPeriodoRel(\Brasa\TurnoBundle\Entity\TurCotizacionDetalle $cotizacionesDetallesPeriodoRel)
+    public function removePedidosDetallesCompuestosPeriodoRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosPeriodoRel)
     {
-        $this->cotizacionesDetallesPeriodoRel->removeElement($cotizacionesDetallesPeriodoRel);
+        $this->pedidosDetallesCompuestosPeriodoRel->removeElement($pedidosDetallesCompuestosPeriodoRel);
     }
 
     /**
-     * Get cotizacionesDetallesPeriodoRel
+     * Get pedidosDetallesCompuestosPeriodoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getCotizacionesDetallesPeriodoRel()
+    public function getPedidosDetallesCompuestosPeriodoRel()
     {
-        return $this->cotizacionesDetallesPeriodoRel;
+        return $this->pedidosDetallesCompuestosPeriodoRel;
     }
 
     /**
@@ -226,40 +232,6 @@ class TurPeriodo
     }
 
     /**
-     * Add cierresMesServiciosPeriodoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurCierreMesServicio $cierresMesServiciosPeriodoRel
-     *
-     * @return TurPeriodo
-     */
-    public function addCierresMesServiciosPeriodoRel(\Brasa\TurnoBundle\Entity\TurCierreMesServicio $cierresMesServiciosPeriodoRel)
-    {
-        $this->cierresMesServiciosPeriodoRel[] = $cierresMesServiciosPeriodoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove cierresMesServiciosPeriodoRel
-     *
-     * @param \Brasa\TurnoBundle\Entity\TurCierreMesServicio $cierresMesServiciosPeriodoRel
-     */
-    public function removeCierresMesServiciosPeriodoRel(\Brasa\TurnoBundle\Entity\TurCierreMesServicio $cierresMesServiciosPeriodoRel)
-    {
-        $this->cierresMesServiciosPeriodoRel->removeElement($cierresMesServiciosPeriodoRel);
-    }
-
-    /**
-     * Get cierresMesServiciosPeriodoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCierresMesServiciosPeriodoRel()
-    {
-        return $this->cierresMesServiciosPeriodoRel;
-    }
-
-    /**
      * Add serviciosDetallesCompuestosPeriodoRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurServicioDetalleCompuesto $serviciosDetallesCompuestosPeriodoRel
@@ -294,36 +266,70 @@ class TurPeriodo
     }
 
     /**
-     * Add pedidosDetallesCompuestosPeriodoRel
+     * Add cotizacionesDetallesPeriodoRel
      *
-     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosPeriodoRel
+     * @param \Brasa\TurnoBundle\Entity\TurCotizacionDetalle $cotizacionesDetallesPeriodoRel
      *
      * @return TurPeriodo
      */
-    public function addPedidosDetallesCompuestosPeriodoRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosPeriodoRel)
+    public function addCotizacionesDetallesPeriodoRel(\Brasa\TurnoBundle\Entity\TurCotizacionDetalle $cotizacionesDetallesPeriodoRel)
     {
-        $this->pedidosDetallesCompuestosPeriodoRel[] = $pedidosDetallesCompuestosPeriodoRel;
+        $this->cotizacionesDetallesPeriodoRel[] = $cotizacionesDetallesPeriodoRel;
 
         return $this;
     }
 
     /**
-     * Remove pedidosDetallesCompuestosPeriodoRel
+     * Remove cotizacionesDetallesPeriodoRel
      *
-     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosPeriodoRel
+     * @param \Brasa\TurnoBundle\Entity\TurCotizacionDetalle $cotizacionesDetallesPeriodoRel
      */
-    public function removePedidosDetallesCompuestosPeriodoRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalleCompuesto $pedidosDetallesCompuestosPeriodoRel)
+    public function removeCotizacionesDetallesPeriodoRel(\Brasa\TurnoBundle\Entity\TurCotizacionDetalle $cotizacionesDetallesPeriodoRel)
     {
-        $this->pedidosDetallesCompuestosPeriodoRel->removeElement($pedidosDetallesCompuestosPeriodoRel);
+        $this->cotizacionesDetallesPeriodoRel->removeElement($cotizacionesDetallesPeriodoRel);
     }
 
     /**
-     * Get pedidosDetallesCompuestosPeriodoRel
+     * Get cotizacionesDetallesPeriodoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getPedidosDetallesCompuestosPeriodoRel()
+    public function getCotizacionesDetallesPeriodoRel()
     {
-        return $this->pedidosDetallesCompuestosPeriodoRel;
+        return $this->cotizacionesDetallesPeriodoRel;
+    }
+
+    /**
+     * Add costosServiciosPeriodoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCostoServicio $costosServiciosPeriodoRel
+     *
+     * @return TurPeriodo
+     */
+    public function addCostosServiciosPeriodoRel(\Brasa\TurnoBundle\Entity\TurCostoServicio $costosServiciosPeriodoRel)
+    {
+        $this->costosServiciosPeriodoRel[] = $costosServiciosPeriodoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove costosServiciosPeriodoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCostoServicio $costosServiciosPeriodoRel
+     */
+    public function removeCostosServiciosPeriodoRel(\Brasa\TurnoBundle\Entity\TurCostoServicio $costosServiciosPeriodoRel)
+    {
+        $this->costosServiciosPeriodoRel->removeElement($costosServiciosPeriodoRel);
+    }
+
+    /**
+     * Get costosServiciosPeriodoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCostosServiciosPeriodoRel()
+    {
+        return $this->costosServiciosPeriodoRel;
     }
 }

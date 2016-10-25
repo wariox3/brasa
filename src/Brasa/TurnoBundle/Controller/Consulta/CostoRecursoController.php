@@ -40,6 +40,27 @@ class CostoRecursoController extends Controller
             'arCostoRecurso' => $arCostoRecurso,                        
             'form' => $form->createView()));
     }        
+
+    /**
+     * @Route("/tur/consulta/costo/recurso/ver/detalle/{codigoCostoRecurso}", name="brs_tur_consulta_costo_recurso_ver_detalle")
+     */    
+    public function verDetalleAction($codigoCostoRecurso) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
+        $form = $this->formularioVerDetalle();
+        $form->handleRequest($request);
+        $arCostoRecurso = new \Brasa\TurnoBundle\Entity\TurCostoRecurso();
+        $arCostoRecurso = $em->getRepository('BrasaTurnoBundle:TurCostoRecurso')->find($codigoCostoRecurso);
+        if ($form->isValid()) {                             
+
+        }
+        $dql = $em->getRepository('BrasaTurnoBundle:TurCostoRecursoDetalle')->listaDql($arCostoRecurso->getCodigoRecursoFk(), $arCostoRecurso->getAnio(), $arCostoRecurso->getMes());
+        $arCostoRecursoDetalle = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 200);
+        return $this->render('BrasaTurnoBundle:Consultas/Costo:verDetalleRecurso.html.twig', array(
+            'arCostoRecursoDetalle' => $arCostoRecursoDetalle,                        
+            'form' => $form->createView()));
+    }
     
     private function lista() {
         $session = $this->getRequest()->getSession();
@@ -74,6 +95,14 @@ class CostoRecursoController extends Controller
         return $form;
     }        
 
+    private function formularioVerDetalle() {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();      
+        $form = $this->createFormBuilder()
+            ->getForm();
+        return $form;
+    }      
+    
     private function generarExcel() {
         ob_clean();
         $em = $this->getDoctrine()->getManager();        
@@ -148,7 +177,8 @@ class CostoRecursoController extends Controller
         $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('php://output');
         exit;
-    }      
+    } 
+    
 
 
 }

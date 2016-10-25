@@ -70,6 +70,8 @@ class GenerarSoportePagoController extends Controller
                                     $arSoportePago->setVrSalario($arContrato->getVrSalario());                            
                                     $arSoportePago->setRecursoRel($arRecurso);
                                     $arSoportePago->setSoportePagoPeriodoRel($arSoportePagoPeriodo);
+                                    $arSoportePago->setAnio($arSoportePagoPeriodo->getAnio());
+                                    $arSoportePago->setMes($arSoportePagoPeriodo->getMes());
                                     $arSoportePago->setDescansoOrdinario($arCentroCosto->getDescansoOrdinario());
                                     if($numeroContratos > 1) {
                                         if($arContrato->getFechaDesde() > $arSoportePagoPeriodo->getFechaDesde()) {
@@ -388,6 +390,8 @@ class GenerarSoportePagoController extends Controller
             $arSoportePagoPeriodo->setDiaDomingoReal($arrDias['domingos']);
             $arSoportePagoPeriodo->setDiaFestivoReal($arrDias['festivos']);
             $arSoportePagoPeriodo->setDiasDescansoFijo($arSoportePagoPeriodo->getRecursoGrupoRel()->getDiasDescansoFijo());
+            $arSoportePagoPeriodo->setAnio($arSoportePagoPeriodo->getFechaDesde()->format('Y'));
+            $arSoportePagoPeriodo->setMes($arSoportePagoPeriodo->getFechaDesde()->format('m'));
             $em->persist($arSoportePagoPeriodo);
             $em->flush();
             return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));                                                                              

@@ -124,6 +124,16 @@ class TurSoportePagoPeriodo
     private $inconsistencias = false;            
     
     /**
+     * @ORM\Column(name="anio", type="integer")
+     */    
+    private $anio = 0;    
+    
+    /**
+     * @ORM\Column(name="mes", type="integer")
+     */    
+    private $mes = 0;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="TurRecursoGrupo", inversedBy="soportesPagosPeriodosRecursoGrupoRel")
      * @ORM\JoinColumn(name="codigo_recurso_grupo_fk", referencedColumnName="codigo_recurso_grupo_pk")
      */
@@ -823,5 +833,53 @@ class TurSoportePagoPeriodo
     public function getSoportesPagosDetallesSoportePagoPeriodoRel()
     {
         return $this->soportesPagosDetallesSoportePagoPeriodoRel;
+    }
+
+    /**
+     * Set anio
+     *
+     * @param integer $anio
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setAnio($anio)
+    {
+        $this->anio = $anio;
+
+        return $this;
+    }
+
+    /**
+     * Get anio
+     *
+     * @return integer
+     */
+    public function getAnio()
+    {
+        return $this->anio;
+    }
+
+    /**
+     * Set mes
+     *
+     * @param integer $mes
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setMes($mes)
+    {
+        $this->mes = $mes;
+
+        return $this;
+    }
+
+    /**
+     * Get mes
+     *
+     * @return integer
+     */
+    public function getMes()
+    {
+        return $this->mes;
     }
 }

@@ -159,9 +159,9 @@ class TurPuesto
     protected $programacionesDetallesPuestoRel;        
 
     /**
-     * @ORM\OneToMany(targetEntity="TurCierreMesServicio", mappedBy="puestoRel")
+     * @ORM\OneToMany(targetEntity="TurCostoServicio", mappedBy="puestoRel")
      */
-    protected $cierresMesServiciosPuestoRel; 
+    protected $costosServiciosPuestoRel; 
     
     /**
      * @ORM\OneToMany(targetEntity="TurPuestoDotacion", mappedBy="puestoRel")
@@ -184,6 +184,12 @@ class TurPuesto
     protected $rhuEmpleadosPuestoRel;     
     
     /**
+     * @ORM\OneToMany(targetEntity="TurCostoRecursoDetalle", mappedBy="puestoRel")
+     */
+    protected $costosRecursosDetallesPuestoRel;    
+    
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -193,10 +199,12 @@ class TurPuesto
         $this->serviciosDetallesPuestoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->serviciosDetallesConceptosPuestoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->programacionesDetallesPuestoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->cierresMesServiciosPuestoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->costosServiciosPuestoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->puestosDotacionesPuestoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->simulacionesDetallesPuestoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->facturasDetallesPuestoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rhuEmpleadosPuestoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->costosRecursosDetallesPuestoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -714,6 +722,30 @@ class TurPuesto
     }
 
     /**
+     * Set centroCostoContabilidadRel
+     *
+     * @param \Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostoContabilidadRel
+     *
+     * @return TurPuesto
+     */
+    public function setCentroCostoContabilidadRel(\Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostoContabilidadRel = null)
+    {
+        $this->centroCostoContabilidadRel = $centroCostoContabilidadRel;
+
+        return $this;
+    }
+
+    /**
+     * Get centroCostoContabilidadRel
+     *
+     * @return \Brasa\ContabilidadBundle\Entity\CtbCentroCosto
+     */
+    public function getCentroCostoContabilidadRel()
+    {
+        return $this->centroCostoContabilidadRel;
+    }
+
+    /**
      * Add pedidosDetallesPuestoRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidosDetallesPuestoRel
@@ -884,37 +916,37 @@ class TurPuesto
     }
 
     /**
-     * Add cierresMesServiciosPuestoRel
+     * Add costosServiciosPuestoRel
      *
-     * @param \Brasa\TurnoBundle\Entity\TurCierreMesServicio $cierresMesServiciosPuestoRel
+     * @param \Brasa\TurnoBundle\Entity\TurCostoServicio $costosServiciosPuestoRel
      *
      * @return TurPuesto
      */
-    public function addCierresMesServiciosPuestoRel(\Brasa\TurnoBundle\Entity\TurCierreMesServicio $cierresMesServiciosPuestoRel)
+    public function addCostosServiciosPuestoRel(\Brasa\TurnoBundle\Entity\TurCostoServicio $costosServiciosPuestoRel)
     {
-        $this->cierresMesServiciosPuestoRel[] = $cierresMesServiciosPuestoRel;
+        $this->costosServiciosPuestoRel[] = $costosServiciosPuestoRel;
 
         return $this;
     }
 
     /**
-     * Remove cierresMesServiciosPuestoRel
+     * Remove costosServiciosPuestoRel
      *
-     * @param \Brasa\TurnoBundle\Entity\TurCierreMesServicio $cierresMesServiciosPuestoRel
+     * @param \Brasa\TurnoBundle\Entity\TurCostoServicio $costosServiciosPuestoRel
      */
-    public function removeCierresMesServiciosPuestoRel(\Brasa\TurnoBundle\Entity\TurCierreMesServicio $cierresMesServiciosPuestoRel)
+    public function removeCostosServiciosPuestoRel(\Brasa\TurnoBundle\Entity\TurCostoServicio $costosServiciosPuestoRel)
     {
-        $this->cierresMesServiciosPuestoRel->removeElement($cierresMesServiciosPuestoRel);
+        $this->costosServiciosPuestoRel->removeElement($costosServiciosPuestoRel);
     }
 
     /**
-     * Get cierresMesServiciosPuestoRel
+     * Get costosServiciosPuestoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getCierresMesServiciosPuestoRel()
+    public function getCostosServiciosPuestoRel()
     {
-        return $this->cierresMesServiciosPuestoRel;
+        return $this->costosServiciosPuestoRel;
     }
 
     /**
@@ -1020,30 +1052,6 @@ class TurPuesto
     }
 
     /**
-     * Set centroCostoContabilidadRel
-     *
-     * @param \Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostoContabilidadRel
-     *
-     * @return TurPuesto
-     */
-    public function setCentroCostoContabilidadRel(\Brasa\ContabilidadBundle\Entity\CtbCentroCosto $centroCostoContabilidadRel = null)
-    {
-        $this->centroCostoContabilidadRel = $centroCostoContabilidadRel;
-
-        return $this;
-    }
-
-    /**
-     * Get centroCostoContabilidadRel
-     *
-     * @return \Brasa\ContabilidadBundle\Entity\CtbCentroCosto
-     */
-    public function getCentroCostoContabilidadRel()
-    {
-        return $this->centroCostoContabilidadRel;
-    }
-
-    /**
      * Add rhuEmpleadosPuestoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $rhuEmpleadosPuestoRel
@@ -1075,5 +1083,39 @@ class TurPuesto
     public function getRhuEmpleadosPuestoRel()
     {
         return $this->rhuEmpleadosPuestoRel;
+    }
+
+    /**
+     * Add costosRecursosDetallesPuestoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCostoRecursoDetalle $costosRecursosDetallesPuestoRel
+     *
+     * @return TurPuesto
+     */
+    public function addCostosRecursosDetallesPuestoRel(\Brasa\TurnoBundle\Entity\TurCostoRecursoDetalle $costosRecursosDetallesPuestoRel)
+    {
+        $this->costosRecursosDetallesPuestoRel[] = $costosRecursosDetallesPuestoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove costosRecursosDetallesPuestoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCostoRecursoDetalle $costosRecursosDetallesPuestoRel
+     */
+    public function removeCostosRecursosDetallesPuestoRel(\Brasa\TurnoBundle\Entity\TurCostoRecursoDetalle $costosRecursosDetallesPuestoRel)
+    {
+        $this->costosRecursosDetallesPuestoRel->removeElement($costosRecursosDetallesPuestoRel);
+    }
+
+    /**
+     * Get costosRecursosDetallesPuestoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCostosRecursosDetallesPuestoRel()
+    {
+        return $this->costosRecursosDetallesPuestoRel;
     }
 }

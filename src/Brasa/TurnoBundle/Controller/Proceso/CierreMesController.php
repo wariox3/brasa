@@ -39,39 +39,108 @@ class CierreMesController extends Controller
                 //Recursos que tuvieron programacion en el periodo de cierre                
                 $arrRecursos = $em->getRepository('BrasaTurnoBundle:TurRecurso')->programacionFecha($arCierreMes->getAnio(), $arCierreMes->getMes(), "2220");
                 foreach ($arrRecursos as $arrRecurso) {
-                    //OJooooooo quitar
-                    if($arrRecurso['codigo_recurso_fk'] == 2220) {
-                        $arrPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->pagoDevengadoFecha($strFechaDesde, $strFechaHasta, $arrRecurso['codigo_empleado_fk']);                    
-                        if($arrPagos) {
-                            //$arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
-                            $devengado = $arrPagos[0]['vrDevengado'];
-                            $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($arrRecurso['codigo_recurso_fk']);
-                            $arCostoRecurso = new \Brasa\TurnoBundle\Entity\TurCostoRecurso();
-                            $arCostoRecurso->setCierreMesRel($arCierreMes);
-                            $arCostoRecurso->setRecursoRel($arRecurso);
-                            $arCostoRecurso->setAnio($arCierreMes->getAnio());
-                            $arCostoRecurso->setMes($arCierreMes->getMes());
-                            $arCostoRecurso->setVrNomina($devengado); 
-                            $floTotal = $devengado;
-                            $arCostoRecurso->setVrCostoTotal($floTotal);
-                            $horas = 0;
-                            $arProgramacionDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
-                            $arProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('codigoRecursoFk' => $arRecurso->getCodigoRecursoPk(), 'anio' => $arCierreMes->getAnio(), 'mes' => $arCierreMes->getMes()));                                            
-                            foreach ($arProgramacionDetalles as $arProgramacionDetalle) {
-                                $horas += $arProgramacionDetalle->getHoras(); 
-                            }                        
-                            $arCostoRecurso->setHoras($horas);
-                            $floVrHora = 0;
-                            if($horas > 0) {
-                                $floVrHora = $floTotal / $horas;
-                            }                 
-                            $arCostoRecurso->setVrHora($floVrHora);
-                            $em->persist($arCostoRecurso);
-                            //Actualizar programaciones detalle                        
-                            $query = $em->createQuery('update BrasaTurnoBundle:TurProgramacionDetalle pd set pd.vrHoraRecurso = ' . $floVrHora . ' where pd.codigoRecursoFk = ' . $arRecurso->getCodigoRecursoPk() . ' and pd.anio = ' . $arCierreMes->getAnio() . ' and pd.mes =' . $arCierreMes->getMes());
-                            $query->execute();                        
-                        }                         
-                    }                                        
+                    $devengado = 0;
+                    $arrPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->pagoDevengadoFecha($strFechaDesde, $strFechaHasta, $arrRecurso['codigo_empleado_fk']);                    
+                    if($arrPagos) {
+                        $devengado = $arrPagos[0]['vrDevengado'];                            
+                    }                        
+
+                    $dql   = "SELECT spd.codigoPedidoDetalleFk, "                                
+                            . "SUM(spd.horasDescanso) as horasDescanso, "                                
+                            . "SUM(spd.horasDiurnas) as horasDiurnas, "
+                            . "SUM(spd.horasNocturnas) as horasNocturnas, "
+                            . "SUM(spd.horasFestivasDiurnas) as horasFestivasDiurnas, "
+                            . "SUM(spd.horasFestivasNocturnas) as horasFestivasNocturnas, "                
+                            . "SUM(spd.horasExtrasOrdinariasDiurnas) as horasExtrasOrdinariasDiurnas, "
+                            . "SUM(spd.horasExtrasOrdinariasNocturnas) as horasExtrasOrdinariasNocturnas, "
+                            . "SUM(spd.horasExtrasFestivasDiurnas) as horasExtrasFestivasDiurnas, "
+                            . "SUM(spd.horasExtrasFestivasNocturnas) as horasExtrasFestivasNocturnas, "
+                            . "SUM(spd.horasRecargoNocturno) as horasRecargoNocturno, "
+                            . "SUM(spd.horasRecargoFestivoDiurno) as horasRecargoFestivoDiurno, "
+                            . "SUM(spd.horasRecargoFestivoNocturno) as horasRecargoFestivoNocturno, "
+                            . "SUM(spd.horasDescanso)*100 as pDS, "                                
+                            . "SUM(spd.horasDiurnas)*100 as pD, "
+                            . "SUM(spd.horasNocturnas)*135 as pN, "
+                            . "SUM(spd.horasFestivasDiurnas)*175 as pFD, "
+                            . "SUM(spd.horasFestivasNocturnas)*210 as pFN, "                
+                            . "SUM(spd.horasExtrasOrdinariasDiurnas)*125 as pEOD, "
+                            . "SUM(spd.horasExtrasOrdinariasNocturnas)*175 as pEON, "
+                            . "SUM(spd.horasExtrasFestivasDiurnas)*200 as pEFD, "
+                            . "SUM(spd.horasExtrasFestivasNocturnas)*250 as pEFN, "
+                            . "SUM(spd.horasRecargoNocturno)*35 as pRN, "
+                            . "SUM(spd.horasRecargoFestivoDiurno)*75 as pRFD, "
+                            . "SUM(spd.horasRecargoFestivoNocturno)*110 as pRFN "                                
+                            . "FROM BrasaTurnoBundle:TurSoportePagoDetalle spd "
+                            . "WHERE spd.anio =  " . $arCierreMes->getAnio() . " AND spd.mes =  " . $arCierreMes->getMes() . " AND spd.codigoRecursoFk = " . $arrRecurso['codigo_recurso_fk'] . " "
+                            . "GROUP BY spd.codigoPedidoDetalleFk" ;
+                    $query = $em->createQuery($dql);
+                    $arrayResultados = $query->getResult(); 
+                    $pesoTotal = 0;
+                    foreach ($arrayResultados as $detalle) {
+                        $peso = $detalle['pDS'] + $detalle['pD'] + $detalle['pN'] + $detalle['pFD'] + $detalle['pFN'] + $detalle['pEOD'] + $detalle['pEON'] + $detalle['pEFD'] + $detalle['pEFN'] + $detalle['pRN'] + $detalle['pRFD'] + $detalle['pRFN']; 
+                        $pesoTotal += $peso;
+                    }
+                    foreach ($arrayResultados as $detalle) {
+                        $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
+                        $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($detalle['codigoPedidoDetalleFk']);
+                        $arCostoRecursoDetalle = new \Brasa\TurnoBundle\Entity\TurCostoRecursoDetalle();
+                        $arCostoRecursoDetalle->setAnio($arCierreMes->getAnio());
+                        $arCostoRecursoDetalle->setMes($arCierreMes->getMes());
+                        $arCostoRecursoDetalle->setCodigoCierreMesFk($arCierreMes->getCodigoCierreMesPk());
+                        $arCostoRecursoDetalle->setCodigoRecursoFk($arrRecurso['codigo_recurso_fk']);
+                        $arCostoRecursoDetalle->setCodigoPedidoDetalleFk($detalle['codigoPedidoDetalleFk']);
+                        $arCostoRecursoDetalle->setPuestoRel($arPedidoDetalle->getPuestoRel());
+                        $arCostoRecursoDetalle->setHorasDescanso($detalle['horasDescanso']);
+                        $arCostoRecursoDetalle->setHorasDiurnas($detalle['horasDiurnas']);
+                        $arCostoRecursoDetalle->setHorasNocturnas($detalle['horasNocturnas']);
+                        $arCostoRecursoDetalle->setHorasFestivasDiurnas($detalle['horasFestivasDiurnas']);
+                        $arCostoRecursoDetalle->setHorasFestivasNocturnas($detalle['horasFestivasNocturnas']);
+                        $arCostoRecursoDetalle->setHorasExtrasOrdinariasDiurnas($detalle['horasExtrasOrdinariasDiurnas']);
+                        $arCostoRecursoDetalle->setHorasExtrasOrdinariasNocturnas($detalle['horasExtrasOrdinariasNocturnas']);
+                        $arCostoRecursoDetalle->setHorasExtrasFestivasDiurnas($detalle['horasExtrasFestivasDiurnas']);
+                        $arCostoRecursoDetalle->setHorasExtrasFestivasNocturnas($detalle['horasExtrasFestivasNocturnas']);
+                        $arCostoRecursoDetalle->setHorasRecargoNocturno($detalle['horasRecargoNocturno']);
+                        $arCostoRecursoDetalle->setHorasRecargoFestivoDiurno($detalle['horasRecargoFestivoDiurno']);
+                        $arCostoRecursoDetalle->setHorasRecargoFestivoNocturno($detalle['horasRecargoFestivoNocturno']);
+                        $peso = $detalle['pDS'] + $detalle['pD'] + $detalle['pN'] + $detalle['pFD'] + $detalle['pFN'] + $detalle['pEOD'] + $detalle['pEON'] + $detalle['pEFD'] + $detalle['pEFN'] + $detalle['pRN'] + $detalle['pRFD'] + $detalle['pRFN']; 
+                        $participacion = 0;
+                        if($peso > 0) {
+                            $participacion = $peso / $pesoTotal;
+                        }
+                        $costo = $participacion * $devengado;
+                        $arCostoRecursoDetalle->setParticipacion($participacion * 100);
+                        $arCostoRecursoDetalle->setPeso($peso);
+                        $arCostoRecursoDetalle->setCosto($costo);
+                        $em->persist($arCostoRecursoDetalle);
+                    }
+                    $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($arrRecurso['codigo_recurso_fk']);
+                    $arCostoRecurso = new \Brasa\TurnoBundle\Entity\TurCostoRecurso();
+                    $arCostoRecurso->setCierreMesRel($arCierreMes);
+                    $arCostoRecurso->setRecursoRel($arRecurso);
+                    $arCostoRecurso->setAnio($arCierreMes->getAnio());
+                    $arCostoRecurso->setMes($arCierreMes->getMes());
+                    $arCostoRecurso->setVrNomina($devengado); 
+
+                    $floTotal = $devengado;
+                    $arCostoRecurso->setVrCostoTotal($floTotal);
+                    /*$horas = 0;
+                    $arProgramacionDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
+                    $arProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('codigoRecursoFk' => $arRecurso->getCodigoRecursoPk(), 'anio' => $arCierreMes->getAnio(), 'mes' => $arCierreMes->getMes()));                                            
+                    foreach ($arProgramacionDetalles as $arProgramacionDetalle) {
+                        $horas += $arProgramacionDetalle->getHoras(); 
+                    }                        
+                    $arCostoRecurso->setHoras($horas);
+                    $floVrHora = 0;
+                    if($horas > 0) {
+                        $floVrHora = $floTotal / $horas;
+                    }                 
+                    $arCostoRecurso->setVrHora($floVrHora);
+                     * 
+                     */
+                    $em->persist($arCostoRecurso);
+                    //Actualizar programaciones detalle                        
+                    //$query = $em->createQuery('update BrasaTurnoBundle:TurProgramacionDetalle pd set pd.vrHoraRecurso = ' . $floVrHora . ' where pd.codigoRecursoFk = ' . $arRecurso->getCodigoRecursoPk() . ' and pd.anio = ' . $arCierreMes->getAnio() . ' and pd.mes =' . $arCierreMes->getMes());
+                    //$query->execute();                                                                                                                                   
                 }
                 $em->flush();
                 
@@ -142,34 +211,40 @@ class CierreMesController extends Controller
                 $arPedidosDetalles = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();                
                 $arPedidosDetalles = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->fecha($strFechaDesde, $strFechaHasta);                                
                 foreach ($arPedidosDetalles as $arPedidoDetalle) {
-                    
-                    //Ojo quitaaaaaar
-                    if($arPedidoDetalle->getPedidoRel()->getCodigoClienteFk() == 27 || $arPedidoDetalle->getPedidoRel()->getCodigoClienteFk() == 47) {
-                        $arCierreMesServicio = new \Brasa\TurnoBundle\Entity\TurCierreMesServicio();
-                        $arCierreMesServicio->setCierreMesRel($arCierreMes);
-                        $arCierreMesServicio->setAnio($arCierreMes->getAnio());
-                        $arCierreMesServicio->setMes($arCierreMes->getMes());
-                        $arCierreMesServicio->setPedidoDetalleRel($arPedidoDetalle);
-                        $arCierreMesServicio->setClienteRel($arPedidoDetalle->getPedidoRel()->getClienteRel());
-                        $arCierreMesServicio->setPuestoRel($arPedidoDetalle->getPuestoRel());
-                        $arCierreMesServicio->setConceptoServicioRel($arPedidoDetalle->getConceptoServicioRel());
-                        $arCierreMesServicio->setModalidadServicioRel($arPedidoDetalle->getModalidadServicioRel());
-                        $arCierreMesServicio->setPeriodoRel($arPedidoDetalle->getPeriodoRel());
-                        $arCierreMesServicio->setDiaDesde($arPedidoDetalle->getDiaDesde());
-                        $arCierreMesServicio->setDiaHasta($arPedidoDetalle->getDiaHasta());
-                        $arCierreMesServicio->setDias($arPedidoDetalle->getDias());
-                        $arCierreMesServicio->setHoras($arPedidoDetalle->getHoras());
-                        $arCierreMesServicio->setHorasDiurnas($arPedidoDetalle->getHorasDiurnas());
-                        $arCierreMesServicio->setHorasNocturnas($arPedidoDetalle->getHorasNocturnas());
-                        $arCierreMesServicio->setCantidad($arPedidoDetalle->getCantidad());
-                        $arCierreMesServicio->setVrTotal($arPedidoDetalle->getVrTotalDetalle());                                                            
-                        $arrProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->detallesPedido($arPedidoDetalle->getCodigoPedidoDetallePk(), $arCierreMes->getAnio(), $arCierreMes->getMes());                    
-                        if($arrProgramacionDetalles['horas'] != NULL) {
-                            $arCierreMesServicio->setHorasProgramadas($arrProgramacionDetalles['horas']);
-                            $arCierreMesServicio->setVrCostoRecurso($arrProgramacionDetalles['vrRecurso']);                        
-                        }
-                        $em->persist($arCierreMesServicio);                         
-                    } 
+                    $dql   = "SELECT SUM(crd.costo) as costo "                                                                
+                            . "FROM BrasaTurnoBundle:TurCostoRecursoDetalle crd "
+                            . "WHERE crd.anio =  " . $arCierreMes->getAnio() . " AND crd.mes =  " . $arCierreMes->getMes() . " AND crd.codigoPedidoDetalleFk = " . $arPedidoDetalle->getCodigoPedidoDetallePk();
+                    $query = $em->createQuery($dql);
+                    $arrayResultados = $query->getResult(); 
+                    $costo = 0;
+                    if($arrayResultados[0]['costo']) {
+                        $costo = $arrayResultados[0]['costo'];
+                    }
+                    $arCierreMesServicio = new \Brasa\TurnoBundle\Entity\TurCierreMesServicio();
+                    $arCierreMesServicio->setCierreMesRel($arCierreMes);
+                    $arCierreMesServicio->setAnio($arCierreMes->getAnio());
+                    $arCierreMesServicio->setMes($arCierreMes->getMes());
+                    $arCierreMesServicio->setPedidoDetalleRel($arPedidoDetalle);
+                    $arCierreMesServicio->setClienteRel($arPedidoDetalle->getPedidoRel()->getClienteRel());
+                    $arCierreMesServicio->setPuestoRel($arPedidoDetalle->getPuestoRel());
+                    $arCierreMesServicio->setConceptoServicioRel($arPedidoDetalle->getConceptoServicioRel());
+                    $arCierreMesServicio->setModalidadServicioRel($arPedidoDetalle->getModalidadServicioRel());
+                    $arCierreMesServicio->setPeriodoRel($arPedidoDetalle->getPeriodoRel());
+                    $arCierreMesServicio->setDiaDesde($arPedidoDetalle->getDiaDesde());
+                    $arCierreMesServicio->setDiaHasta($arPedidoDetalle->getDiaHasta());
+                    $arCierreMesServicio->setDias($arPedidoDetalle->getDias());
+                    $arCierreMesServicio->setHoras($arPedidoDetalle->getHoras());
+                    $arCierreMesServicio->setHorasDiurnas($arPedidoDetalle->getHorasDiurnas());
+                    $arCierreMesServicio->setHorasNocturnas($arPedidoDetalle->getHorasNocturnas());
+                    $arCierreMesServicio->setCantidad($arPedidoDetalle->getCantidad());
+                    $arCierreMesServicio->setVrTotal($arPedidoDetalle->getVrTotalDetalle());
+                    $arCierreMesServicio->setVrCostoRecurso($costo);
+                    //$arrProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->detallesPedido($arPedidoDetalle->getCodigoPedidoDetallePk(), $arCierreMes->getAnio(), $arCierreMes->getMes());                    
+                    //if($arrProgramacionDetalles['horas'] != NULL) {
+                    //    $arCierreMesServicio->setHorasProgramadas($arrProgramacionDetalles['horas']);
+                    //    $arCierreMesServicio->setVrCostoRecurso($arrProgramacionDetalles['vrRecurso']);                        
+                    //}
+                    $em->persist($arCierreMesServicio);                         
                 }
                 $em->flush();                   
                  
@@ -187,6 +262,8 @@ class CierreMesController extends Controller
                 
                 $strSql = "DELETE FROM tur_costo_recurso WHERE codigo_cierre_mes_fk = " . $codigoCierreMes;           
                 $em->getConnection()->executeQuery($strSql);
+                $strSql = "DELETE FROM tur_costo_recurso_detalle WHERE codigo_cierre_mes_fk = " . $codigoCierreMes;           
+                $em->getConnection()->executeQuery($strSql);                
                 $strSql = "DELETE FROM tur_cierre_mes_servicio_detalle WHERE codigo_cierre_mes_fk = " . $codigoCierreMes;           
                 $em->getConnection()->executeQuery($strSql); 
                 $strSql = "DELETE FROM tur_cierre_mes_servicio WHERE codigo_cierre_mes_fk = " . $codigoCierreMes;           

@@ -88,6 +88,7 @@
                     <td style="text-align: right">{{ arCierreMesServicio.cantidad | number_format(0, '.', ',') }}</td>                     
                     <td style="text-align: right">{{ arCierreMesServicio.vrCostoRecurso | number_format(0, '.', ',') }}</td>                     
                     <td style="text-align: right">{{ arCierreMesServicio.vrTotal | number_format(0, '.', ',') }}</td>                     
+                    <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_tur_consulta_costo_servicio_ver_detalle', {'codigoCostoServicio': arCierreMesServicio.codigoCierreMesServicioPk }) }}', 'VerCostoRecursoDetalle', 600, 1200)"><img src="{{ asset('imagenes/bootstrap/glyphicons_090_table.png') }}" width=20 height=20 title="Ver"></a></td>                    
                 </tr>
             {% endfor %}
         </table>

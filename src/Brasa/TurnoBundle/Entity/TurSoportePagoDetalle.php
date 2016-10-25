@@ -178,6 +178,16 @@ class TurSoportePagoDetalle
     private $codigoPedidoDetalleFk;       
     
     /**
+     * @ORM\Column(name="anio", type="integer")
+     */    
+    private $anio = 0;    
+    
+    /**
+     * @ORM\Column(name="mes", type="integer")
+     */    
+    private $mes = 0;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="TurSoportePago", inversedBy="soportesPagosDetallesSoportePagoRel")
      * @ORM\JoinColumn(name="codigo_soporte_pago_fk", referencedColumnName="codigo_soporte_pago_pk")
      */
@@ -1134,5 +1144,53 @@ class TurSoportePagoDetalle
     public function getInduccion()
     {
         return $this->induccion;
+    }
+
+    /**
+     * Set anio
+     *
+     * @param integer $anio
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setAnio($anio)
+    {
+        $this->anio = $anio;
+
+        return $this;
+    }
+
+    /**
+     * Get anio
+     *
+     * @return integer
+     */
+    public function getAnio()
+    {
+        return $this->anio;
+    }
+
+    /**
+     * Set mes
+     *
+     * @param integer $mes
+     *
+     * @return TurSoportePagoDetalle
+     */
+    public function setMes($mes)
+    {
+        $this->mes = $mes;
+
+        return $this;
+    }
+
+    /**
+     * Get mes
+     *
+     * @return integer
+     */
+    public function getMes()
+    {
+        return $this->mes;
     }
 }

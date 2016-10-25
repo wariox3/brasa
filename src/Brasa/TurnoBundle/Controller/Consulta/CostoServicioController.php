@@ -42,6 +42,27 @@ class CostoServicioController extends Controller
             'form' => $form->createView()));
     }
 
+    /**
+     * @Route("/tur/consulta/costo/servicio/ver/detalle/{codigoCostoServicio}", name="brs_tur_consulta_costo_servicio_ver_detalle")
+     */    
+    public function verDetalleAction($codigoCostoRecurso) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
+        $form = $this->formularioVerDetalle();
+        $form->handleRequest($request);
+        $arCostoRecurso = new \Brasa\TurnoBundle\Entity\TurCostoRecurso();
+        $arCostoRecurso = $em->getRepository('BrasaTurnoBundle:TurCostoRecurso')->find($codigoCostoRecurso);
+        if ($form->isValid()) {                             
+
+        }
+        $dql = $em->getRepository('BrasaTurnoBundle:TurCostoRecursoDetalle')->listaDql($arCostoRecurso->getCodigoRecursoFk(), $arCostoRecurso->getAnio(), $arCostoRecurso->getMes());
+        $arCostoRecursoDetalle = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 200);
+        return $this->render('BrasaTurnoBundle:Consultas/Costo:verDetalleRecurso.html.twig', array(
+            'arCostoRecursoDetalle' => $arCostoRecursoDetalle,                        
+            'form' => $form->createView()));
+    }    
+    
     private function lista() {
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();

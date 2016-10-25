@@ -363,6 +363,8 @@ class TurSoportePagoRepository extends EntityRepository {
         $arSoportePagoDetalle = new \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle();
         $arSoportePagoDetalle->setSoportePagoPeriodoRel($arSoportePagoPeriodo);
         $arSoportePagoDetalle->setSoportePagoRel($arSoportePago);  
+        $arSoportePagoDetalle->setAnio($arSoportePago->getAnio());
+        $arSoportePagoDetalle->setMes($arSoportePago->getMes());
         $arSoportePagoDetalle->setRecursoRel($arSoportePago->getRecursoRel());  
         $arSoportePagoDetalle->setFecha($dateFecha);
         $arSoportePagoDetalle->setTurnoRel($arTurno);
@@ -412,6 +414,8 @@ class TurSoportePagoRepository extends EntityRepository {
             $arSoportePagoDetalle = new \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle();
             $arSoportePagoDetalle->setSoportePagoPeriodoRel($arSoportePagoPeriodo);
             $arSoportePagoDetalle->setSoportePagoRel($arSoportePago);
+            $arSoportePagoDetalle->setAnio($arSoportePago->getAnio());
+            $arSoportePagoDetalle->setMes($arSoportePago->getMes());            
             $arSoportePagoDetalle->setRecursoRel($arSoportePago->getRecursoRel());  
             $arSoportePagoDetalle->setFecha($dateFecha2);
             $arSoportePagoDetalle->setTurnoRel($arTurno);

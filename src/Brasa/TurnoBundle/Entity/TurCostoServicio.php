@@ -5,17 +5,17 @@ namespace Brasa\TurnoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="tur_cierre_mes_servicio")
- * @ORM\Entity(repositoryClass="Brasa\TurnoBundle\Repository\TurCierreMesServicioRepository")
+ * @ORM\Table(name="tur_costo_servicio")
+ * @ORM\Entity(repositoryClass="Brasa\TurnoBundle\Repository\TurCostoServicioRepository")
  */
-class TurCierreMesServicio
+class TurCostoServicio
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="codigo_cierre_mes_servicio_pk", type="integer")
+     * @ORM\Column(name="codigo_costo_servicio_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoCierreMesServicioPk;             
+    private $codigoCostoServicioPk;             
     
     /**
      * @ORM\Column(name="codigo_cierre_mes_fk", type="integer")
@@ -120,18 +120,59 @@ class TurCierreMesServicio
     /**
      * @ORM\Column(name="vr_total", type="float")
      */
-    private $vrTotal = 0;     
-             
+    private $vrTotal = 0;             
     
+    /**
+     * @ORM\ManyToOne(targetEntity="TurCierreMes", inversedBy="costosServiciosCierreMesRel")
+     * @ORM\JoinColumn(name="codigo_cierre_mes_fk", referencedColumnName="codigo_cierre_mes_pk")
+     */
+    protected $cierreMesRel;  
 
     /**
-     * Get codigoCierreMesServicioPk
+     * @ORM\ManyToOne(targetEntity="TurPedidoDetalle", inversedBy="costosServiciosPedidoDetalleRel")
+     * @ORM\JoinColumn(name="codigo_pedido_detalle_fk", referencedColumnName="codigo_pedido_detalle_pk")
+     */
+    protected $pedidoDetalleRel;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="TurCliente", inversedBy="costosServiciosClienteRel")
+     * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
+     */
+    protected $clienteRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurPuesto", inversedBy="costosServiciosPuestoRel")
+     * @ORM\JoinColumn(name="codigo_puesto_fk", referencedColumnName="codigo_puesto_pk")
+     */
+    protected $puestoRel;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurConceptoServicio", inversedBy="costosServiciosConceptoServicioRel")
+     * @ORM\JoinColumn(name="codigo_concepto_servicio_fk", referencedColumnName="codigo_concepto_servicio_pk")
+     */
+    protected $conceptoServicioRel;      
+
+    /**
+     * @ORM\ManyToOne(targetEntity="TurModalidadServicio", inversedBy="costosServiciosModalidadServicioRel")
+     * @ORM\JoinColumn(name="codigo_modalidad_servicio_fk", referencedColumnName="codigo_modalidad_servicio_pk")
+     */
+    protected $modalidadServicioRel;            
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurPeriodo", inversedBy="costosServiciosPeriodoRel")
+     * @ORM\JoinColumn(name="codigo_periodo_fk", referencedColumnName="codigo_periodo_pk")
+     */
+    protected $periodoRel;        
+
+
+    /**
+     * Get codigoCostoServicioPk
      *
      * @return integer
      */
-    public function getCodigoCierreMesServicioPk()
+    public function getCodigoCostoServicioPk()
     {
-        return $this->codigoCierreMesServicioPk;
+        return $this->codigoCostoServicioPk;
     }
 
     /**
@@ -139,7 +180,7 @@ class TurCierreMesServicio
      *
      * @param integer $codigoCierreMesFk
      *
-     * @return TurCierreMesServicio
+     * @return TurCostoServicio
      */
     public function setCodigoCierreMesFk($codigoCierreMesFk)
     {
@@ -163,7 +204,7 @@ class TurCierreMesServicio
      *
      * @param integer $anio
      *
-     * @return TurCierreMesServicio
+     * @return TurCostoServicio
      */
     public function setAnio($anio)
     {
@@ -187,7 +228,7 @@ class TurCierreMesServicio
      *
      * @param integer $mes
      *
-     * @return TurCierreMesServicio
+     * @return TurCostoServicio
      */
     public function setMes($mes)
     {
@@ -211,7 +252,7 @@ class TurCierreMesServicio
      *
      * @param integer $codigoPedidoDetalleFk
      *
-     * @return TurCierreMesServicio
+     * @return TurCostoServicio
      */
     public function setCodigoPedidoDetalleFk($codigoPedidoDetalleFk)
     {
@@ -235,7 +276,7 @@ class TurCierreMesServicio
      *
      * @param integer $codigoClienteFk
      *
-     * @return TurCierreMesServicio
+     * @return TurCostoServicio
      */
     public function setCodigoClienteFk($codigoClienteFk)
     {
@@ -259,7 +300,7 @@ class TurCierreMesServicio
      *
      * @param integer $codigoPuestoFk
      *
-     * @return TurCierreMesServicio
+     * @return TurCostoServicio
      */
     public function setCodigoPuestoFk($codigoPuestoFk)
     {
@@ -283,7 +324,7 @@ class TurCierreMesServicio
      *
      * @param integer $codigoConceptoServicioFk
      *
-     * @return TurCierreMesServicio
+     * @return TurCostoServicio
      */
     public function setCodigoConceptoServicioFk($codigoConceptoServicioFk)
     {
@@ -307,7 +348,7 @@ class TurCierreMesServicio
      *
      * @param integer $codigoModalidadServicioFk
      *
-     * @return TurCierreMesServicio
+     * @return TurCostoServicio
      */
     public function setCodigoModalidadServicioFk($codigoModalidadServicioFk)
     {
@@ -331,7 +372,7 @@ class TurCierreMesServicio
      *
      * @param integer $codigoPeriodoFk
      *
-     * @return TurCierreMesServicio
+     * @return TurCostoServicio
      */
     public function setCodigoPeriodoFk($codigoPeriodoFk)
     {
@@ -355,7 +396,7 @@ class TurCierreMesServicio
      *
      * @param integer $diaDesde
      *
-     * @return TurCierreMesServicio
+     * @return TurCostoServicio
      */
     public function setDiaDesde($diaDesde)
     {
@@ -379,7 +420,7 @@ class TurCierreMesServicio
      *
      * @param integer $diaHasta
      *
-     * @return TurCierreMesServicio
+     * @return TurCostoServicio
      */
     public function setDiaHasta($diaHasta)
     {
@@ -403,7 +444,7 @@ class TurCierreMesServicio
      *
      * @param integer $dias
      *
-     * @return TurCierreMesServicio
+     * @return TurCostoServicio
      */
     public function setDias($dias)
     {
@@ -427,7 +468,7 @@ class TurCierreMesServicio
      *
      * @param integer $horas
      *
-     * @return TurCierreMesServicio
+     * @return TurCostoServicio
      */
     public function setHoras($horas)
     {
@@ -451,7 +492,7 @@ class TurCierreMesServicio
      *
      * @param integer $horasDiurnas
      *
-     * @return TurCierreMesServicio
+     * @return TurCostoServicio
      */
     public function setHorasDiurnas($horasDiurnas)
     {
@@ -475,7 +516,7 @@ class TurCierreMesServicio
      *
      * @param integer $horasNocturnas
      *
-     * @return TurCierreMesServicio
+     * @return TurCostoServicio
      */
     public function setHorasNocturnas($horasNocturnas)
     {
@@ -499,7 +540,7 @@ class TurCierreMesServicio
      *
      * @param integer $horasProgramadas
      *
-     * @return TurCierreMesServicio
+     * @return TurCostoServicio
      */
     public function setHorasProgramadas($horasProgramadas)
     {
@@ -523,7 +564,7 @@ class TurCierreMesServicio
      *
      * @param integer $horasDiurnasProgramadas
      *
-     * @return TurCierreMesServicio
+     * @return TurCostoServicio
      */
     public function setHorasDiurnasProgramadas($horasDiurnasProgramadas)
     {
@@ -547,7 +588,7 @@ class TurCierreMesServicio
      *
      * @param integer $horasNocturnasProgramadas
      *
-     * @return TurCierreMesServicio
+     * @return TurCostoServicio
      */
     public function setHorasNocturnasProgramadas($horasNocturnasProgramadas)
     {
@@ -571,7 +612,7 @@ class TurCierreMesServicio
      *
      * @param integer $cantidad
      *
-     * @return TurCierreMesServicio
+     * @return TurCostoServicio
      */
     public function setCantidad($cantidad)
     {
@@ -595,7 +636,7 @@ class TurCierreMesServicio
      *
      * @param float $vrCostoRecurso
      *
-     * @return TurCierreMesServicio
+     * @return TurCostoServicio
      */
     public function setVrCostoRecurso($vrCostoRecurso)
     {
@@ -619,7 +660,7 @@ class TurCierreMesServicio
      *
      * @param float $vrTotal
      *
-     * @return TurCierreMesServicio
+     * @return TurCostoServicio
      */
     public function setVrTotal($vrTotal)
     {
@@ -636,5 +677,173 @@ class TurCierreMesServicio
     public function getVrTotal()
     {
         return $this->vrTotal;
+    }
+
+    /**
+     * Set cierreMesRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCierreMes $cierreMesRel
+     *
+     * @return TurCostoServicio
+     */
+    public function setCierreMesRel(\Brasa\TurnoBundle\Entity\TurCierreMes $cierreMesRel = null)
+    {
+        $this->cierreMesRel = $cierreMesRel;
+
+        return $this;
+    }
+
+    /**
+     * Get cierreMesRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurCierreMes
+     */
+    public function getCierreMesRel()
+    {
+        return $this->cierreMesRel;
+    }
+
+    /**
+     * Set pedidoDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidoDetalleRel
+     *
+     * @return TurCostoServicio
+     */
+    public function setPedidoDetalleRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidoDetalleRel = null)
+    {
+        $this->pedidoDetalleRel = $pedidoDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Get pedidoDetalleRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurPedidoDetalle
+     */
+    public function getPedidoDetalleRel()
+    {
+        return $this->pedidoDetalleRel;
+    }
+
+    /**
+     * Set clienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCliente $clienteRel
+     *
+     * @return TurCostoServicio
+     */
+    public function setClienteRel(\Brasa\TurnoBundle\Entity\TurCliente $clienteRel = null)
+    {
+        $this->clienteRel = $clienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Get clienteRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurCliente
+     */
+    public function getClienteRel()
+    {
+        return $this->clienteRel;
+    }
+
+    /**
+     * Set puestoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPuesto $puestoRel
+     *
+     * @return TurCostoServicio
+     */
+    public function setPuestoRel(\Brasa\TurnoBundle\Entity\TurPuesto $puestoRel = null)
+    {
+        $this->puestoRel = $puestoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get puestoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurPuesto
+     */
+    public function getPuestoRel()
+    {
+        return $this->puestoRel;
+    }
+
+    /**
+     * Set conceptoServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurConceptoServicio $conceptoServicioRel
+     *
+     * @return TurCostoServicio
+     */
+    public function setConceptoServicioRel(\Brasa\TurnoBundle\Entity\TurConceptoServicio $conceptoServicioRel = null)
+    {
+        $this->conceptoServicioRel = $conceptoServicioRel;
+
+        return $this;
+    }
+
+    /**
+     * Get conceptoServicioRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurConceptoServicio
+     */
+    public function getConceptoServicioRel()
+    {
+        return $this->conceptoServicioRel;
+    }
+
+    /**
+     * Set modalidadServicioRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurModalidadServicio $modalidadServicioRel
+     *
+     * @return TurCostoServicio
+     */
+    public function setModalidadServicioRel(\Brasa\TurnoBundle\Entity\TurModalidadServicio $modalidadServicioRel = null)
+    {
+        $this->modalidadServicioRel = $modalidadServicioRel;
+
+        return $this;
+    }
+
+    /**
+     * Get modalidadServicioRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurModalidadServicio
+     */
+    public function getModalidadServicioRel()
+    {
+        return $this->modalidadServicioRel;
+    }
+
+    /**
+     * Set periodoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPeriodo $periodoRel
+     *
+     * @return TurCostoServicio
+     */
+    public function setPeriodoRel(\Brasa\TurnoBundle\Entity\TurPeriodo $periodoRel = null)
+    {
+        $this->periodoRel = $periodoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get periodoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurPeriodo
+     */
+    public function getPeriodoRel()
+    {
+        return $this->periodoRel;
     }
 }

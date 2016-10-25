@@ -329,9 +329,9 @@ class TurCliente
     protected $clientesDireccionesClienteRel; 
     
     /**
-     * @ORM\OneToMany(targetEntity="TurCierreMesServicio", mappedBy="clienteRel")
+     * @ORM\OneToMany(targetEntity="TurCostoServicio", mappedBy="clienteRel")
      */
-    protected $cierresMesServiciosClienteRel;     
+    protected $costosServiciosClienteRel;     
 
     /**
      * @ORM\OneToMany(targetEntity="TurPuestoDotacion", mappedBy="clienteRel")
@@ -355,7 +355,7 @@ class TurCliente
         $this->gruposFacturacionesClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->contratosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->clientesDireccionesClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->cierresMesServiciosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->costosServiciosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->puestosDotacionesClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -1920,37 +1920,37 @@ class TurCliente
     }
 
     /**
-     * Add cierresMesServiciosClienteRel
+     * Add costosServiciosClienteRel
      *
-     * @param \Brasa\TurnoBundle\Entity\TurCierreMesServicio $cierresMesServiciosClienteRel
+     * @param \Brasa\TurnoBundle\Entity\TurCostoServicio $costosServiciosClienteRel
      *
      * @return TurCliente
      */
-    public function addCierresMesServiciosClienteRel(\Brasa\TurnoBundle\Entity\TurCierreMesServicio $cierresMesServiciosClienteRel)
+    public function addCostosServiciosClienteRel(\Brasa\TurnoBundle\Entity\TurCostoServicio $costosServiciosClienteRel)
     {
-        $this->cierresMesServiciosClienteRel[] = $cierresMesServiciosClienteRel;
+        $this->costosServiciosClienteRel[] = $costosServiciosClienteRel;
 
         return $this;
     }
 
     /**
-     * Remove cierresMesServiciosClienteRel
+     * Remove costosServiciosClienteRel
      *
-     * @param \Brasa\TurnoBundle\Entity\TurCierreMesServicio $cierresMesServiciosClienteRel
+     * @param \Brasa\TurnoBundle\Entity\TurCostoServicio $costosServiciosClienteRel
      */
-    public function removeCierresMesServiciosClienteRel(\Brasa\TurnoBundle\Entity\TurCierreMesServicio $cierresMesServiciosClienteRel)
+    public function removeCostosServiciosClienteRel(\Brasa\TurnoBundle\Entity\TurCostoServicio $costosServiciosClienteRel)
     {
-        $this->cierresMesServiciosClienteRel->removeElement($cierresMesServiciosClienteRel);
+        $this->costosServiciosClienteRel->removeElement($costosServiciosClienteRel);
     }
 
     /**
-     * Get cierresMesServiciosClienteRel
+     * Get costosServiciosClienteRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getCierresMesServiciosClienteRel()
+    public function getCostosServiciosClienteRel()
     {
-        return $this->cierresMesServiciosClienteRel;
+        return $this->costosServiciosClienteRel;
     }
 
     /**

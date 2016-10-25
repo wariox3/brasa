@@ -273,6 +273,16 @@ class TurSoportePago
     private $usuario;         
     
     /**
+     * @ORM\Column(name="anio", type="integer")
+     */    
+    private $anio = 0;    
+    
+    /**
+     * @ORM\Column(name="mes", type="integer")
+     */    
+    private $mes = 0;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="TurSoportePagoPeriodo", inversedBy="soportesPagosSoportePagoPeriodoRel")
      * @ORM\JoinColumn(name="codigo_soporte_pago_periodo_fk", referencedColumnName="codigo_soporte_pago_periodo_pk")
      */
@@ -1733,5 +1743,53 @@ class TurSoportePago
     public function getDescansoOrdinario()
     {
         return $this->descansoOrdinario;
+    }
+
+    /**
+     * Set anio
+     *
+     * @param integer $anio
+     *
+     * @return TurSoportePago
+     */
+    public function setAnio($anio)
+    {
+        $this->anio = $anio;
+
+        return $this;
+    }
+
+    /**
+     * Get anio
+     *
+     * @return integer
+     */
+    public function getAnio()
+    {
+        return $this->anio;
+    }
+
+    /**
+     * Set mes
+     *
+     * @param integer $mes
+     *
+     * @return TurSoportePago
+     */
+    public function setMes($mes)
+    {
+        $this->mes = $mes;
+
+        return $this;
+    }
+
+    /**
+     * Get mes
+     *
+     * @return integer
+     */
+    public function getMes()
+    {
+        return $this->mes;
     }
 }
