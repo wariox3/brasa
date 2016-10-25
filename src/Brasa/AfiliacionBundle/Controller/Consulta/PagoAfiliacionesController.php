@@ -47,7 +47,7 @@ class PagoAfiliacionesController extends Controller
                 $session->get('filtroNumero'),
                 $session->get('filtroEmpleadoIdentificacion'),
                 $session->get('filtroEmpleadoNombre'),                
-                $session->get('filtroCodigoCliente'),                
+                $session->get('filtroNit'),                
                 $session->get('filtroAsesor'),                                                
                 $session->get('filtroCuenta'),
                 $session->get('filtroDesde'),
