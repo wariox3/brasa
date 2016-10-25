@@ -164,13 +164,19 @@ class EmpleadoController extends Controller
             $arUsuario = $this->get('security.context')->getToken()->getUser();
             if($codigoContrato == 0) {
                 $arContrato->setCodigoUsuario($arUsuario->getUserName());
+                $nroContratos = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->historialContratos($codigoEmpleado);
+                if ($nroContratos == 0){
+                    $arContrato->setEstadoHistorialContrato(0);
+                } else {
+                    $arContrato->setEstadoHistorialContrato(1);
+                }
             }
             $em->persist($arContrato);
             $em->flush();
             if($codigoContrato == 0 || $codigoContrato == '') {
                 $arEmpleado = new \Brasa\AfiliacionBundle\Entity\AfiEmpleado();
                 $arEmpleado = $em->getRepository('BrasaAfiliacionBundle:AfiEmpleado')->find($codigoEmpleado);                            
-                $arEmpleado->setCodigoContratoActivo($arContrato->getCodigoContratoPk());
+                $arEmpleado->setCodigoContratoActivo($arContrato->getCodigoContratoPk());                
                 $em->persist($arEmpleado);
                 $em->flush();
             }                                    

@@ -168,6 +168,11 @@ class AfiContrato
      */    
     private $estadoGeneradoCtaCobrar = false;
     
+    /**     
+     * @ORM\Column(name="estado_historial_contrato", type="boolean")
+     */    
+    private $estadoHistorialContrato = false;
+    
     /**
      * @ORM\ManyToOne(targetEntity="AfiEmpleado", inversedBy="contratosEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
@@ -250,7 +255,7 @@ class AfiContrato
     
     
     
-    
+        
     /**
      * Constructor
      */
@@ -990,6 +995,30 @@ class AfiContrato
     public function getEstadoGeneradoCtaCobrar()
     {
         return $this->estadoGeneradoCtaCobrar;
+    }
+
+    /**
+     * Set estadoHistorialContrato
+     *
+     * @param boolean $estadoHistorialContrato
+     *
+     * @return AfiContrato
+     */
+    public function setEstadoHistorialContrato($estadoHistorialContrato)
+    {
+        $this->estadoHistorialContrato = $estadoHistorialContrato;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoHistorialContrato
+     *
+     * @return boolean
+     */
+    public function getEstadoHistorialContrato()
+    {
+        return $this->estadoHistorialContrato;
     }
 
     /**

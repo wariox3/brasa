@@ -172,5 +172,20 @@ class AfiContratoRepository extends EntityRepository {
         $query = $em->createQuery($dql);        
         $arContratos = $query->getResult();        
         return $arContratos;
-    }    
+    }
+    
+    public function historialContratos($codigoEmpleado = '') {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT c FROM BrasaAfiliacionBundle:AfiContrato c "
+                ." WHERE c.codigoEmpleadoFk=" . $codigoEmpleado;
+        $query = $em->createQuery($dql);        
+        $arContratos = $query->getResult();
+        $nro = count($arContratos);
+        if ($nro == 0){
+            $estado = 0;
+        } else {
+            $estado = 1;
+        }
+        return $estado;
+    }
 }

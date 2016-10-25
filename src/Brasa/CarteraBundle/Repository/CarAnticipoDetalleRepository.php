@@ -102,5 +102,71 @@ class CarAnticipoDetalleRepository extends EntityRepository {
         }
         return $boolValidar;
     }
+    
+    public function listaConsultaPagoAfiliacionesDql($strCodigo = '', $strNumero = '', $strIdentificacion = '',$strEmpleado = '', $codigoCliente = '', $strCliente = '', $strAsesor = '', $strCuenta = '', $strDesde = "", $strHasta = "") {
+        $em = $this->getEntityManager();        
+        $strSql = "SELECT
+        car_anticipo.codigo_anticipo_pk AS codigo,
+        car_anticipo.numero AS numero,
+        car_anticipo.fecha_pago AS fechaPago,
+        afi_cliente.nit AS nit,
+        afi_cliente.nombre_corto AS cliente,
+        gen_asesor.numero_identificacion AS ccAsesor,
+        gen_asesor.nombre AS asesor,
+        afi_empleado.numero_identificacion AS ccEmpleado,
+        afi_empleado.nombre_corto AS empleado,
+        afi_factura_detalle_afiliacion.codigo_contrato_fk AS contrato,
+        car_anticipo.codigo_cuenta_fk AS codigoCuenta,
+        gen_cuenta.nombre AS cuenta,
+        afi_cliente.afiliacion AS afiliacion,
+        afi_cliente.administracion AS administracion,
+        afi_factura_detalle_afiliacion.total AS pago,
+        afi_contrato.estado_historial_contrato AS tipo
+        FROM
+        afi_cliente
+        INNER JOIN afi_factura ON afi_factura.codigo_cliente_fk = afi_cliente.codigo_cliente_pk
+        INNER JOIN afi_factura_detalle_afiliacion ON afi_factura_detalle_afiliacion.codigo_factura_fk = afi_factura.codigo_factura_pk
+        INNER JOIN car_anticipo_detalle ON afi_factura.numero = car_anticipo_detalle.numero_factura
+        INNER JOIN car_anticipo ON car_anticipo_detalle.codigo_anticipo_fk = car_anticipo.codigo_anticipo_pk
+        INNER JOIN gen_asesor ON gen_asesor.codigo_asesor_pk = afi_cliente.codigo_asesor_fk
+        INNER JOIN afi_contrato ON afi_contrato.codigo_cliente_fk = afi_cliente.codigo_cliente_pk AND afi_contrato.codigo_contrato_pk = afi_factura_detalle_afiliacion.codigo_contrato_fk
+        INNER JOIN afi_empleado ON afi_empleado.codigo_cliente_fk = afi_cliente.codigo_cliente_pk AND afi_contrato.codigo_empleado_fk = afi_empleado.codigo_empleado_pk
+        INNER JOIN gen_cuenta ON gen_cuenta.codigo_cuenta_pk = car_anticipo.codigo_cuenta_fk
+        WHERE car_anticipo.codigo_anticipo_pk <> 0 AND car_anticipo.estado_anulado = 0 AND car_anticipo.numero > 0 ";
+        if($strCodigo != '') {
+            $strSql .= " AND codigo =" . $strCodigo ;
+        }
+        if($strNumero != '') {
+            $strSql .= " AND numero =" . $strNumero ;
+        }
+        if($strIdentificacion != '') {
+            $strSql .= " AND ccEmpleado = " . $strIdentificacion;
+        }
+        if($strEmpleado != '') {
+            $strSql .= " AND empleado LIKE '%" . $strEmpleado . "%'";
+        }
+        if($codigoCliente != '') {
+            $strSql .= " AND nit = " . $codigoCliente;
+        }
+        if($strAsesor != '') {
+            $strSql .= " AND ccAsesor =" . $strAsesor ;
+        }
+        if($strCuenta != '') {
+            $strSql .= " AND codigoCuenta =" . $strAsesor ;
+        }
+        if($strDesde != "") {
+            $strSql .= " AND fechaPago >='" . $strDesde . "'";
+        }
+        if($strHasta != "") {
+            $strSql .= " AND fechaPago <='" . $strHasta . "'";
+        }
+        
+        $connection = $em->getConnection();
+        $statement = $connection->prepare($strSql);        
+        $statement->execute();
+        $strSql = $statement->fetchAll();
+        return $strSql;
+    }
+        
 
 }
