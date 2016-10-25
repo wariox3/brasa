@@ -142,7 +142,6 @@ class PagoAfiliacionesController extends Controller
     }            
 
     private function generarExcel() {
-        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
         set_time_limit(0);
         ini_set("memory_limit", -1);
@@ -159,125 +158,62 @@ class PagoAfiliacionesController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        for($col = 'A'; $col !== 'R'; $col++) {
+        for($col = 'A'; $col !== 'J'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
-        }      
-        for($col = 'I'; $col !== 'R'; $col++) {            
-            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
-        } 
+        }
+        for($col = 'K'; $col !== 'N'; $col++) {
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+                    $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'COD')
-                    ->setCellValue('B1', 'DESDE')
-                    ->setCellValue('C1', 'HASTA')
-                    ->setCellValue('D1', 'IDENTIFICACION')
-                    ->setCellValue('E1', 'NOMBRE')
-                    ->setCellValue('F1', 'ING')
-                    ->setCellValue('G1', 'DIAS')
-                    ->setCellValue('H1', 'SALARIO')
-                    ->setCellValue('I1', 'PENSION')
-                    ->setCellValue('J1', 'SALUD')
-                    ->setCellValue('K1', 'CAJA')
-                    ->setCellValue('L1', 'RIESGO')
-                    ->setCellValue('M1', 'ADMON')
-                    ->setCellValue('N1', 'TOTAL');
-
+                    ->setCellValue('A1', 'CODIGO')
+                    ->setCellValue('B1', 'NUMERO')
+                    ->setCellValue('C1', 'FECHA PAGO')
+                    ->setCellValue('D1', 'NIT')
+                    ->setCellValue('E1', 'CLIENTE')
+                    ->setCellValue('F1', 'ASESOR')
+                    ->setCellValue('G1', 'DOCUMENTO')
+                    ->setCellValue('H1', 'EMPLEADO')
+                    ->setCellValue('I1', 'CONTRATO')
+                    ->setCellValue('J1', 'CUENTA')
+                    ->setCellValue('K1', 'AFILIACION')
+                    ->setCellValue('L1', 'ADMINISTRACION')
+                    ->setCellValue('M1', 'PAGO')
+                    ->setCellValue('N1', 'TIPO');
         $i = 2;
+                        
+        $arDetalles = $this->strDqlLista;
         
-        $query = $em->createQuery($this->strDqlLista);
-                 
-        //$arPeriodoDetalles = new \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetalle();
-        $arPeriodoDetalles = $query->getResult();
-        
-        $cliente = '';
-        $cliente2 = '';
-        $douTotal = 0;
-        $douTotalGeneral = 0;
-        $contador = 0; 
-        $contador2 = 0; 
-        foreach ($arPeriodoDetalles as $arPeriodoDetalle) {
-            $contador2 = $contador2 + 1;
-            if ($contador == 0){
-               $cliente = $arPeriodoDetalle->getPeriodoRel()->getCodigoClienteFk();  
-               $cliente2 = $arPeriodoDetalle->getPeriodoRel()->getCodigoClienteFk();
+        foreach ($arDetalles as $arDetalle) {
+
+            if ($arDetalle['tipo'] == 1){
+                $tipo = "REINGRESO";
+            } else {
+                $tipo = "NUEVO";
             }
-            if ($cliente2 !=  $arPeriodoDetalle->getPeriodoRel()->getCodigoClienteFk()){
-                $objPHPExcel->getActiveSheet()->getStyle($i)->getFont()->setBold(true);
-                $objPHPExcel->getActiveSheet()->getStyle($i)->getAlignment()->setHorizontal('right');
-                $objPHPExcel->getActiveSheet()->getStyle($i)->getNumberFormat()->setFormatCode('#,##0');
-                $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('M'. $i, 'TOTAL:')
-                ->setCellValue('N'. $i, $douTotal);
-                $i = $i+1;
-                $cliente2 =  $arPeriodoDetalle->getPeriodoRel()->getCodigoClienteFk();
-                $douTotal = 0;
-                //$contador2 = $contador2 + 1;
-            }
-            if ($cliente != $arPeriodoDetalle->getPeriodoRel()->getCodigoClienteFk() || $contador == 0 ){
-                $objPHPExcel->getActiveSheet()->getStyle($i)->getFont()->setBold(true);
-                $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arPeriodoDetalle->getPeriodoRel()->getClienteRel()->getNombreCorto())
-                    ->setCellValue('B' . $i, $arPeriodoDetalle->getPeriodoRel()->getClienteRel()->getTelefono(). ' - ' .$arPeriodoDetalle->getPeriodoRel()->getClienteRel()->getCelular())
-                    ->setCellValue('C' . $i, $arPeriodoDetalle->getPeriodoRel()->getClienteRel()->getEmail())
-                    ->setCellValue('D' . $i, "ASESOR: ".$arPeriodoDetalle->getPeriodoRel()->getClienteRel()->getAsesorRel()->getNombre());
-                $i = $i+1;
-                $cliente = $arPeriodoDetalle->getPeriodoRel()->getCodigoClienteFk();
-                //$contador2 = $contador2 + 1;
-                
-            }
-                     
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arPeriodoDetalle->getCodigoPeriodoDetallePk())
-                    ->setCellValue('B' . $i, $arPeriodoDetalle->getFechaDesde()->format('Y/m/d'))
-                    ->setCellValue('C' . $i, $arPeriodoDetalle->getFechaHasta()->format('Y/m/d'))
-                    ->setCellValue('D' . $i, $arPeriodoDetalle->getEmpleadoRel()->getNumeroIdentificacion())
-                    ->setCellValue('E' . $i, $arPeriodoDetalle->getEmpleadoRel()->getNombreCorto())
-                    ->setCellValue('F' . $i, $objFunciones->devuelveBoolean($arPeriodoDetalle->getIngreso()))
-                    ->setCellValue('G' . $i, $arPeriodoDetalle->getDias())
-                    ->setCellValue('H' . $i, $arPeriodoDetalle->getSalario())
-                    ->setCellValue('I' . $i, $arPeriodoDetalle->getContratoRel()->getEntidadPensionRel()->getNombre())
-                    ->setCellValue('J' . $i, $arPeriodoDetalle->getContratoRel()->getEntidadSaludRel()->getNombre())
-                    ->setCellValue('K' . $i, $arPeriodoDetalle->getContratoRel()->getEntidadCajaRel()->getNombre())
-                    ->setCellValue('L' . $i, $arPeriodoDetalle->getContratoRel()->getClasificacionRiesgoRel()->getNombre())
-                    ->setCellValue('M' . $i, $arPeriodoDetalle->getAdministracion())
-                    ->setCellValue('N' . $i, $arPeriodoDetalle->getTotal());
-            $douTotalGeneral = $douTotalGeneral + $arPeriodoDetalle->getTotal();
-            $douTotal = $douTotal + $arPeriodoDetalle->getTotal();
-            $contador++;
-            $contador2++;
+                    ->setCellValue('A' . $i, $arDetalle['codigo'])
+                    ->setCellValue('B' . $i, $arDetalle['numero'])
+                    ->setCellValue('C' . $i, $arDetalle['fechaPago'])
+                    ->setCellValue('D' . $i, $arDetalle['nit'])
+                    ->setCellValue('E' . $i, $arDetalle['cliente'])
+                    ->setCellValue('F' . $i, $arDetalle['asesor'])
+                    ->setCellValue('G' . $i, $arDetalle['ccEmpleado'])
+                    ->setCellValue('H' . $i, $arDetalle['empleado'])
+                    ->setCellValue('I' . $i, $arDetalle['contrato'])
+                    ->setCellValue('J' . $i, $arDetalle['cuenta'])
+                    ->setCellValue('K' . $i, $arDetalle['afiliacion'])
+                    ->setCellValue('L' . $i, $arDetalle['administracion'])
+                    ->setCellValue('M' . $i, $arDetalle['pago'])
+                    ->setCellValue('N' . $i, $tipo)                    ;
             $i++;
         }
         
-        if ($i == ($contador + 3)){
-                $objPHPExcel->getActiveSheet()->getStyle($i)->getFont()->setBold(true);
-                $objPHPExcel->getActiveSheet()->getStyle($i)->getAlignment()->setHorizontal('right');
-                $objPHPExcel->getActiveSheet()->getStyle($i)->getNumberFormat()->setFormatCode('#,##0');
-                $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('M'. $i, 'TOTAL:')
-                ->setCellValue('N'. $i, $douTotal);
-                
-        }
-        if ($contador2 == ($contador * 2)){
-                $objPHPExcel->getActiveSheet()->getStyle($i)->getFont()->setBold(true);
-                $objPHPExcel->getActiveSheet()->getStyle($i)->getAlignment()->setHorizontal('right');
-                $objPHPExcel->getActiveSheet()->getStyle($i)->getNumberFormat()->setFormatCode('#,##0');
-                $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('M'. $i, 'TOTAL:')
-                ->setCellValue('N'. $i, $douTotal);
-                
-        }
-        $i = $i + 1;
-        $objPHPExcel->getActiveSheet()->getStyle($i)->getFont()->setBold(true);
-        $objPHPExcel->getActiveSheet()->getStyle($i)->getAlignment()->setHorizontal('right');
-        $objPHPExcel->getActiveSheet()->getStyle($i)->getNumberFormat()->setFormatCode('#,##0');
-        $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('M'. $i, 'TOTAL GENERAL:')
-                ->setCellValue('N'. $i, $douTotalGeneral);
-        
-        $objPHPExcel->getActiveSheet()->setTitle('Periodo');
+        $objPHPExcel->getActiveSheet()->setTitle('PagoAfiliacionesAnticipos');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Periodos.xlsx"');
+        header('Content-Disposition: attachment;filename="PagoAfiliacionesAnticipos.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');

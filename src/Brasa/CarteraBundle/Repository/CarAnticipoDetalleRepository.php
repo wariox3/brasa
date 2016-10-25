@@ -103,7 +103,7 @@ class CarAnticipoDetalleRepository extends EntityRepository {
         return $boolValidar;
     }
     
-    public function listaConsultaPagoAfiliacionesDql($strCodigo = '', $strNumero = '', $strIdentificacion = '',$strEmpleado = '', $codigoCliente = '', $strCliente = '', $strAsesor = '', $strCuenta = '', $strDesde = "", $strHasta = "") {
+    public function listaConsultaPagoAfiliacionesDql($strCodigo = '', $strNumero = '', $strIdentificacion = '',$strEmpleado = '', $codigoCliente = '', $strAsesor = '', $strCuenta = '', $strDesde = "", $strHasta = "") {
         $em = $this->getEntityManager();        
         $strSql = "SELECT
         car_anticipo.codigo_anticipo_pk AS codigo,
@@ -111,7 +111,7 @@ class CarAnticipoDetalleRepository extends EntityRepository {
         car_anticipo.fecha_pago AS fechaPago,
         afi_cliente.nit AS nit,
         afi_cliente.nombre_corto AS cliente,
-        gen_asesor.numero_identificacion AS ccAsesor,
+        gen_asesor.codigo_asesor_pk AS ccAsesor,
         gen_asesor.nombre AS asesor,
         afi_empleado.numero_identificacion AS ccEmpleado,
         afi_empleado.nombre_corto AS empleado,
@@ -134,31 +134,31 @@ class CarAnticipoDetalleRepository extends EntityRepository {
         INNER JOIN gen_cuenta ON gen_cuenta.codigo_cuenta_pk = car_anticipo.codigo_cuenta_fk
         WHERE car_anticipo.codigo_anticipo_pk <> 0 AND car_anticipo.estado_anulado = 0 AND car_anticipo.numero > 0 ";
         if($strCodigo != '') {
-            $strSql .= " AND codigo =" . $strCodigo ;
+            $strSql .= " AND car_anticipo.codigo_anticipo_pk =" . $strCodigo ;
         }
         if($strNumero != '') {
-            $strSql .= " AND numero =" . $strNumero ;
+            $strSql .= " AND car_anticipo.numero =" . $strNumero ;
         }
         if($strIdentificacion != '') {
-            $strSql .= " AND ccEmpleado = " . $strIdentificacion;
+            $strSql .= " AND afi_empleado.numero_identificacion = " . $strIdentificacion;
         }
         if($strEmpleado != '') {
-            $strSql .= " AND empleado LIKE '%" . $strEmpleado . "%'";
+            $strSql .= " AND afi_empleado.nombre_corto LIKE '%" . $strEmpleado . "%'";
         }
         if($codigoCliente != '') {
             $strSql .= " AND nit = " . $codigoCliente;
         }
         if($strAsesor != '') {
-            $strSql .= " AND ccAsesor =" . $strAsesor ;
+            $strSql .= " AND gen_asesor.codigo_asesor_pk =" . $strAsesor ;
         }
         if($strCuenta != '') {
-            $strSql .= " AND codigoCuenta =" . $strAsesor ;
+            $strSql .= " AND car_anticipo.codigo_cuenta_fk =" . $strCuenta ;
         }
         if($strDesde != "") {
-            $strSql .= " AND fechaPago >='" . $strDesde . "'";
+            $strSql .= " AND car_anticipo.fecha_pago >='" . $strDesde . "'";
         }
         if($strHasta != "") {
-            $strSql .= " AND fechaPago <='" . $strHasta . "'";
+            $strSql .= " AND car_anticipo.fecha_pago <='" . $strHasta . "'";
         }
         
         $connection = $em->getConnection();
