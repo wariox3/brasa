@@ -6,10 +6,13 @@ use Doctrine\ORM\EntityRepository;
 
 class TurCostoRecursoDetalleRepository extends EntityRepository {
 
-    public function listaDql($codigoRecurso = "", $anio = "", $mes = "") {
+    public function listaDql($codigoRecurso = "", $anio = "", $mes = "", $codigoPedidoDetalle = "") {
         $dql   = "SELECT crd FROM BrasaTurnoBundle:TurCostoRecursoDetalle crd WHERE crd.codigoCostoRecursoDetallePk <> 0";
         if($codigoRecurso != "") {
             $dql .= " AND crd.codigoRecursoFk = " . $codigoRecurso;  
+        }  
+        if($codigoPedidoDetalle != "") {
+            $dql .= " AND crd.codigoPedidoDetalleFk = " . $codigoPedidoDetalle;  
         }         
         if($anio != "") {
             $dql .= " AND crd.anio = " . $anio;  

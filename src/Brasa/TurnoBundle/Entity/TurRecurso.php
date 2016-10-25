@@ -183,6 +183,11 @@ class TurRecurso
     protected $costosRecursosRecursoRel;    
 
     /**
+     * @ORM\OneToMany(targetEntity="TurCostoRecursoDetalle", mappedBy="recursoRel")
+     */
+    protected $costosRecursosDetallesRecursoRel;     
+    
+    /**
      * @ORM\OneToMany(targetEntity="TurNovedad", mappedBy="recursoRel")
      */
     protected $novedadesRecursoRel;    
@@ -1165,5 +1170,39 @@ class TurRecurso
     public function getSimulacionesDetallesRecursoRel()
     {
         return $this->simulacionesDetallesRecursoRel;
+    }
+
+    /**
+     * Add costosRecursosDetallesRecursoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCostoRecursoDetalle $costosRecursosDetallesRecursoRel
+     *
+     * @return TurRecurso
+     */
+    public function addCostosRecursosDetallesRecursoRel(\Brasa\TurnoBundle\Entity\TurCostoRecursoDetalle $costosRecursosDetallesRecursoRel)
+    {
+        $this->costosRecursosDetallesRecursoRel[] = $costosRecursosDetallesRecursoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove costosRecursosDetallesRecursoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCostoRecursoDetalle $costosRecursosDetallesRecursoRel
+     */
+    public function removeCostosRecursosDetallesRecursoRel(\Brasa\TurnoBundle\Entity\TurCostoRecursoDetalle $costosRecursosDetallesRecursoRel)
+    {
+        $this->costosRecursosDetallesRecursoRel->removeElement($costosRecursosDetallesRecursoRel);
+    }
+
+    /**
+     * Get costosRecursosDetallesRecursoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCostosRecursosDetallesRecursoRel()
+    {
+        return $this->costosRecursosDetallesRecursoRel;
     }
 }

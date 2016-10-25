@@ -7,12 +7,12 @@ use Doctrine\ORM\EntityRepository;
 class TurCostoServicioRepository extends EntityRepository {
 
     public function listaDql($codigoCliente = "", $mes = "") {
-        $dql   = "SELECT cms FROM BrasaTurnoBundle:TurCierreMesServicio cms WHERE cms.codigoCierreMesServicioPk <> 0 ";
+        $dql   = "SELECT cs FROM BrasaTurnoBundle:TurCostoServicio cs WHERE cs.codigoCostoServicioPk <> 0 ";
         if($codigoCliente != "") {
-            $dql .= " AND cms.codigoClienteFk = " . $codigoCliente;  
+            $dql .= " AND cs.codigoClienteFk = " . $codigoCliente;  
         }
         if($mes != "") {
-            $dql .= " AND cms.mes = " . $mes;  
+            $dql .= " AND cs.mes = " . $mes;  
         }        
         return $dql;
     }

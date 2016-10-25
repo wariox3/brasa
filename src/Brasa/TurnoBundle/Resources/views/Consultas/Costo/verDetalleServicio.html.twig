@@ -15,7 +15,8 @@
         <table  class="table table-striped table-bordered table-condensed table-hover">
             <tr>
                 <th>PD</th>
-                <th>PUESTO</th>
+                <th>COD</th>
+                <th>RECURSO</th>
                 <th>HDS</th>
                 <th>HD</th>
                 <th>HN</th>
@@ -34,7 +35,8 @@
             {% for arCostoRecursoDetalle in arCostoRecursoDetalle %}
             <tr>
                 <td>{{ arCostoRecursoDetalle.codigoPedidoDetalleFk }}</td>                               
-                <td>{{ arCostoRecursoDetalle.puestoRel.nombre | default('')  }}</td>                               
+                <td>{{ arCostoRecursoDetalle.codigoRecursoFk }}</td>                               
+                <td>{{ arCostoRecursoDetalle.recursoRel.nombreCorto | default('')  }}</td>                               
                 <td style="text-align: right">{{ arCostoRecursoDetalle.horasDescanso | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arCostoRecursoDetalle.horasDiurnas | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arCostoRecursoDetalle.horasNocturnas | number_format(2, '.', ',') }}</td>

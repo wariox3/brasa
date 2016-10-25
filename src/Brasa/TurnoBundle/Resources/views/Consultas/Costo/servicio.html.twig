@@ -53,7 +53,8 @@
         </div>
             <table class="table table-striped table-bordered table-condensed">
             <tr>
-                <th>COD</th>
+                <th>PED</th>
+                <th>P.D</th>
                 <th>AÑO</th>                
                 <th>MES</th>
                 <th>CLIENTE</th>
@@ -69,36 +70,38 @@
                 <th>CANT</th>
                 <th>COSTO</th>
                 <th>PRECIO</th>
+                <th></th>
             </tr>            
-            {% for arCierreMesServicio in arCierreMesServicio %}
+            {% for arCostoServicio in arCostoServicio %}
                 <tr>
-                    <td>{{ arCierreMesServicio.codigoCierreMesServicioPk  }}<input type="hidden" name="LblCodigo[]" value="{{ arCierreMesServicio.codigoCierreMesServicioPk }}"></td>                                        
-                    <td>{{ arCierreMesServicio.anio }}</td>
-                    <td>{{ arCierreMesServicio.mes }}</td>
-                    <td>{{ arCierreMesServicio.clienteRel.nombreCorto |default('') }}</td>
-                    <td>{{ arCierreMesServicio.puestoRel.nombre |default('') }}</td>
-                    <td>{{ arCierreMesServicio.conceptoServicioRel.nombre |default('') }}</td>
-                    <td>{{ arCierreMesServicio.modalidadServicioRel.nombre |default('') }}</td>
-                    <td>{{ arCierreMesServicio.periodoRel.nombre |default('') }}</td>
-                    <td>{{ arCierreMesServicio.diaDesde }}</td>
-                    <td>{{ arCierreMesServicio.diaHasta }}</td>
-                    <td style="text-align: right">{{ arCierreMesServicio.dias | number_format(0, '.', ',') }}</td> 
-                    <td style="text-align: right">{{ arCierreMesServicio.horas | number_format(1, '.', ',') }}</td> 
-                    <td style="text-align: right">{{ arCierreMesServicio.horasProgramadas | number_format(1, '.', ',') }}</td> 
-                    <td style="text-align: right">{{ arCierreMesServicio.cantidad | number_format(0, '.', ',') }}</td>                     
-                    <td style="text-align: right">{{ arCierreMesServicio.vrCostoRecurso | number_format(0, '.', ',') }}</td>                     
-                    <td style="text-align: right">{{ arCierreMesServicio.vrTotal | number_format(0, '.', ',') }}</td>                     
-                    <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_tur_consulta_costo_servicio_ver_detalle', {'codigoCostoServicio': arCierreMesServicio.codigoCierreMesServicioPk }) }}', 'VerCostoRecursoDetalle', 600, 1200)"><img src="{{ asset('imagenes/bootstrap/glyphicons_090_table.png') }}" width=20 height=20 title="Ver"></a></td>                    
+                    <td>{{ arCostoServicio.pedidoDetalleRel.pedidoRel.numero | default('')  }}</td>
+                    <td>{{ arCostoServicio.codigoPedidoDetalleFk  }}</td>                                        
+                    <td>{{ arCostoServicio.anio }}</td>
+                    <td>{{ arCostoServicio.mes }}</td>
+                    <td>{{ arCostoServicio.clienteRel.nombreCorto |default('') }}</td>
+                    <td>{{ arCostoServicio.puestoRel.nombre |default('') }}</td>
+                    <td>{{ arCostoServicio.conceptoServicioRel.nombre |default('') }}</td>
+                    <td>{{ arCostoServicio.modalidadServicioRel.nombre |default('') }}</td>
+                    <td>{{ arCostoServicio.periodoRel.nombre |default('') }}</td>
+                    <td>{{ arCostoServicio.diaDesde }}</td>
+                    <td>{{ arCostoServicio.diaHasta }}</td>
+                    <td style="text-align: right">{{ arCostoServicio.dias | number_format(0, '.', ',') }}</td> 
+                    <td style="text-align: right">{{ arCostoServicio.horas | number_format(1, '.', ',') }}</td> 
+                    <td style="text-align: right">{{ arCostoServicio.horasProgramadas | number_format(1, '.', ',') }}</td> 
+                    <td style="text-align: right">{{ arCostoServicio.cantidad | number_format(0, '.', ',') }}</td>                     
+                    <td style="text-align: right">{{ arCostoServicio.vrCostoRecurso | number_format(0, '.', ',') }}</td>                     
+                    <td style="text-align: right">{{ arCostoServicio.vrTotal | number_format(0, '.', ',') }}</td>                     
+                    <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_tur_consulta_costo_servicio_ver_detalle', {'codigoCostoServicio': arCostoServicio.codigoCostoServicioPk }) }}', 'VerCostoRecursoDetalle', 600, 1200)"><img src="{{ asset('imagenes/bootstrap/glyphicons_090_table.png') }}" width=20 height=20 title="Ver"></a></td>                    
                 </tr>
             {% endfor %}
         </table>
 
         <!-- Botones Menu Items -->
         <div class="btn-group" style="float: left">
-                <div class="btn btn-default btn-sm">Registros <span class="badge">{{ arCierreMesServicio.getTotalItemCount }}</span></div>                        
+                <div class="btn btn-default btn-sm">Registros <span class="badge">{{ arCostoServicio.getTotalItemCount }}</span></div>                        
         </div>
         <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
-                {{ knp_pagination_render(arCierreMesServicio) }}       
+                {{ knp_pagination_render(arCostoServicio) }}       
         </div>
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">                                

@@ -33,6 +33,16 @@ class RhuProvision
     private $codigoContratoFk;    
     
     /**
+     * @ORM\Column(name="anio", type="integer", nullable=true)
+     */    
+    private $anio;    
+    
+    /**
+     * @ORM\Column(name="mes", type="integer", nullable=true)
+     */    
+    private $mes;    
+    
+    /**
      * @ORM\Column(name="vr_pension", type="float")
      */
     private $vrPension = 0;        
@@ -638,5 +648,53 @@ class RhuProvision
     public function getVrSalario()
     {
         return $this->vrSalario;
+    }
+
+    /**
+     * Set anio
+     *
+     * @param integer $anio
+     *
+     * @return RhuProvision
+     */
+    public function setAnio($anio)
+    {
+        $this->anio = $anio;
+
+        return $this;
+    }
+
+    /**
+     * Get anio
+     *
+     * @return integer
+     */
+    public function getAnio()
+    {
+        return $this->anio;
+    }
+
+    /**
+     * Set mes
+     *
+     * @param integer $mes
+     *
+     * @return RhuProvision
+     */
+    public function setMes($mes)
+    {
+        $this->mes = $mes;
+
+        return $this;
+    }
+
+    /**
+     * Get mes
+     *
+     * @return integer
+     */
+    public function getMes()
+    {
+        return $this->mes;
     }
 }

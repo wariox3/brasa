@@ -144,6 +144,8 @@ class ProvisionController extends Controller
                     $arProvision = new \Brasa\RecursoHumanoBundle\Entity\RhuProvision();
                     $arProvision->setEmpleadoRel($arEmpleadoAct);
                     $arProvision->setContratoRel($arContrato);
+                    $arProvision->setAnio($arProvisionPeriodo->getAnio());
+                    $arProvision->setMes($arProvisionPeriodo->getMes());
                     $arProvision->setProvisionPeriodoRel($arProvisionPeriodo);
                     $arProvision->setVrSalario($arContrato->getVrSalarioPago());
                     $arProvision->setVrIngresoBasePrestacion($ingresoBasePrestacion);
@@ -258,6 +260,8 @@ class ProvisionController extends Controller
                 $arProvisionPeriodo = new \Brasa\RecursoHumanoBundle\Entity\RhuProvisionPeriodo();
                 $arProvisionPeriodo->setFechaDesde($form->get('fechaDesde')->getData());
                 $arProvisionPeriodo->setFechaHasta($form->get('fechaHasta')->getData());
+                $arProvisionPeriodo->setAnio($arProvisionPeriodo->getFechaDesde()->format('Y'));
+                $arProvisionPeriodo->setMes($arProvisionPeriodo->getFechaDesde()->format('m'));
                 $em->persist($arProvisionPeriodo); 
                 $em->flush();
 

@@ -128,10 +128,16 @@ class TurCostoRecursoDetalle
     private $costo = 0;     
     
     /**
+     * @ORM\ManyToOne(targetEntity="TurRecurso", inversedBy="costosRecursosDetallesRecursoRel")
+     * @ORM\JoinColumn(name="codigo_recurso_fk", referencedColumnName="codigo_recurso_pk")
+     */
+    protected $recursoRel;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="TurPuesto", inversedBy="costosRecursosDetallesPuestoRel")
      * @ORM\JoinColumn(name="codigo_puesto_fk", referencedColumnName="codigo_puesto_pk")
      */
-    protected $puestoRel;     
+    protected $puestoRel;             
     
     /**
      * Get codigoCostoRecursoDetallePk
@@ -693,5 +699,29 @@ class TurCostoRecursoDetalle
     public function getPuestoRel()
     {
         return $this->puestoRel;
+    }
+
+    /**
+     * Set recursoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurRecurso $recursoRel
+     *
+     * @return TurCostoRecursoDetalle
+     */
+    public function setRecursoRel(\Brasa\TurnoBundle\Entity\TurRecurso $recursoRel = null)
+    {
+        $this->recursoRel = $recursoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get recursoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurRecurso
+     */
+    public function getRecursoRel()
+    {
+        return $this->recursoRel;
     }
 }

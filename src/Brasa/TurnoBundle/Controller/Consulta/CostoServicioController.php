@@ -36,29 +36,29 @@ class CostoServicioController extends Controller
             }
         }
 
-        $arCierreMesServicio = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 200);
+        $arCostoServicio = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 200);
         return $this->render('BrasaTurnoBundle:Consultas/Costo:servicio.html.twig', array(
-            'arCierreMesServicio' => $arCierreMesServicio,
+            'arCostoServicio' => $arCostoServicio,
             'form' => $form->createView()));
     }
 
     /**
      * @Route("/tur/consulta/costo/servicio/ver/detalle/{codigoCostoServicio}", name="brs_tur_consulta_costo_servicio_ver_detalle")
      */    
-    public function verDetalleAction($codigoCostoRecurso) {
+    public function verDetalleAction($codigoCostoServicio) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioVerDetalle();
         $form->handleRequest($request);
-        $arCostoRecurso = new \Brasa\TurnoBundle\Entity\TurCostoRecurso();
-        $arCostoRecurso = $em->getRepository('BrasaTurnoBundle:TurCostoRecurso')->find($codigoCostoRecurso);
+        $arCostoServicio = new \Brasa\TurnoBundle\Entity\TurCostoServicio();
+        $arCostoServicio = $em->getRepository('BrasaTurnoBundle:TurCostoServicio')->find($codigoCostoServicio);
         if ($form->isValid()) {                             
 
         }
-        $dql = $em->getRepository('BrasaTurnoBundle:TurCostoRecursoDetalle')->listaDql($arCostoRecurso->getCodigoRecursoFk(), $arCostoRecurso->getAnio(), $arCostoRecurso->getMes());
+        $dql = $em->getRepository('BrasaTurnoBundle:TurCostoRecursoDetalle')->listaDql("", $arCostoServicio->getAnio(), $arCostoServicio->getMes(), $arCostoServicio->getCodigoPedidoDetalleFk());
         $arCostoRecursoDetalle = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 200);
-        return $this->render('BrasaTurnoBundle:Consultas/Costo:verDetalleRecurso.html.twig', array(
+        return $this->render('BrasaTurnoBundle:Consultas/Costo:verDetalleServicio.html.twig', array(
             'arCostoRecursoDetalle' => $arCostoRecursoDetalle,                        
             'form' => $form->createView()));
     }    
@@ -66,7 +66,7 @@ class CostoServicioController extends Controller
     private function lista() {
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
-        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurCierreMesServicio')->listaDql(
+        $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurCostoServicio')->listaDql(
                 $session->get('filtroCodigoCliente'), $session->get('filtroTurMes') 
                 );
     }
@@ -115,6 +115,14 @@ class CostoServicioController extends Controller
         return $form;
     }
 
+    private function formularioVerDetalle() {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();      
+        $form = $this->createFormBuilder()
+            ->getForm();
+        return $form;
+    }     
+    
     private function generarExcel() {
         ob_clean();
         $em = $this->getDoctrine()->getManager();
@@ -156,25 +164,25 @@ class CostoServicioController extends Controller
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
-        $arCierreMesServicios = new \Brasa\TurnoBundle\Entity\TurCierreMesServicio();
-        $arCierreMesServicios = $query->getResult();
-        foreach ($arCierreMesServicios as $arCierreMesServicio) {
+        $arCostoServicios = new \Brasa\TurnoBundle\Entity\TurCostoServicio();
+        $arCostoServicios = $query->getResult();
+        foreach ($arCostoServicios as $arCostoServicio) {
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arCierreMesServicio->getAnio())
-                    ->setCellValue('B' . $i, $arCierreMesServicio->getMes())
-                    ->setCellValue('C' . $i, $arCierreMesServicio->getClienteRel()->getNombreCorto())
-                    ->setCellValue('D' . $i, $arCierreMesServicio->getPuestoRel()->getNombre())
-                    ->setCellValue('E' . $i, $arCierreMesServicio->getConceptoServicioRel()->getNombre())
-                    ->setCellValue('F' . $i, $arCierreMesServicio->getModalidadServicioRel()->getNombre())
-                    ->setCellValue('G' . $i, $arCierreMesServicio->getPeriodoRel()->getNombre())
-                    ->setCellValue('H' . $i, $arCierreMesServicio->getDiaDesde())
-                    ->setCellValue('I' . $i, $arCierreMesServicio->getDiaHasta())
-                    ->setCellValue('J' . $i, $arCierreMesServicio->getDias())
-                    ->setCellValue('K' . $i, $arCierreMesServicio->getHoras())
-                    ->setCellValue('L' . $i, $arCierreMesServicio->getHorasProgramadas())
-                    ->setCellValue('M' . $i, $arCierreMesServicio->getCantidad())
-                    ->setCellValue('N' . $i, $arCierreMesServicio->getVrCostoRecurso())
-                    ->setCellValue('O' . $i, $arCierreMesServicio->getVrTotal())
+                    ->setCellValue('A' . $i, $arCostoServicio->getAnio())
+                    ->setCellValue('B' . $i, $arCostoServicio->getMes())
+                    ->setCellValue('C' . $i, $arCostoServicio->getClienteRel()->getNombreCorto())
+                    ->setCellValue('D' . $i, $arCostoServicio->getPuestoRel()->getNombre())
+                    ->setCellValue('E' . $i, $arCostoServicio->getConceptoServicioRel()->getNombre())
+                    ->setCellValue('F' . $i, $arCostoServicio->getModalidadServicioRel()->getNombre())
+                    ->setCellValue('G' . $i, $arCostoServicio->getPeriodoRel()->getNombre())
+                    ->setCellValue('H' . $i, $arCostoServicio->getDiaDesde())
+                    ->setCellValue('I' . $i, $arCostoServicio->getDiaHasta())
+                    ->setCellValue('J' . $i, $arCostoServicio->getDias())
+                    ->setCellValue('K' . $i, $arCostoServicio->getHoras())
+                    ->setCellValue('L' . $i, $arCostoServicio->getHorasProgramadas())
+                    ->setCellValue('M' . $i, $arCostoServicio->getCantidad())
+                    ->setCellValue('N' . $i, $arCostoServicio->getVrCostoRecurso())
+                    ->setCellValue('O' . $i, $arCostoServicio->getVrTotal())
 ;
             $i++;
         }

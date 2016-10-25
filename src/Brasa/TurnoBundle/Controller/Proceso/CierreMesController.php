@@ -39,12 +39,22 @@ class CierreMesController extends Controller
                 //Recursos que tuvieron programacion en el periodo de cierre                
                 $arrRecursos = $em->getRepository('BrasaTurnoBundle:TurRecurso')->programacionFecha($arCierreMes->getAnio(), $arCierreMes->getMes(), "2220");
                 foreach ($arrRecursos as $arrRecurso) {
+                    $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
+                    $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($arrRecurso['codigo_recurso_fk']);
                     $devengado = 0;
                     $arrPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->pagoDevengadoFecha($strFechaDesde, $strFechaHasta, $arrRecurso['codigo_empleado_fk']);                    
                     if($arrPagos) {
                         $devengado = $arrPagos[0]['vrDevengado'];                            
                     }                        
-
+                    $arProvision = new \Brasa\RecursoHumanoBundle\Entity\RhuProvision();
+                    $arProvision = $em->getRepository('BrasaRecursoHumanoBundle:RhuProvision')->findOneBy(array('codigoEmpleadoFk' => $arRecurso->getCodigoEmpleadoFk(), 'anio' => $arCierreMes->getAnio(), 'mes' => $arCierreMes->getMes()));
+                    $prestaciones = 0;
+                    $seguridadSocial = 0;
+                    if($arProvision) {
+                        $prestaciones = $arProvision->getVrCesantias() + $arProvision->getVrInteresesCesantias() + $arProvision->getVrPrimas() + $arProvision->getVrVacaciones() + $arProvision->getVrIndemnizacion();
+                        $seguridadSocial = $arProvision->getVrPension() + $arProvision->getVrSalud() + $arProvision->getVrCaja() + $arProvision->getVrRiesgos() + $arProvision->getVrSena() + $arProvision->getVrIcbf();
+                    }
+                    $costoRecurso = $devengado + $prestaciones + $seguridadSocial;
                     $dql   = "SELECT spd.codigoPedidoDetalleFk, "                                
                             . "SUM(spd.horasDescanso) as horasDescanso, "                                
                             . "SUM(spd.horasDiurnas) as horasDiurnas, "
@@ -87,7 +97,7 @@ class CierreMesController extends Controller
                         $arCostoRecursoDetalle->setAnio($arCierreMes->getAnio());
                         $arCostoRecursoDetalle->setMes($arCierreMes->getMes());
                         $arCostoRecursoDetalle->setCodigoCierreMesFk($arCierreMes->getCodigoCierreMesPk());
-                        $arCostoRecursoDetalle->setCodigoRecursoFk($arrRecurso['codigo_recurso_fk']);
+                        $arCostoRecursoDetalle->setRecursoRel($arRecurso);
                         $arCostoRecursoDetalle->setCodigoPedidoDetalleFk($detalle['codigoPedidoDetalleFk']);
                         $arCostoRecursoDetalle->setPuestoRel($arPedidoDetalle->getPuestoRel());
                         $arCostoRecursoDetalle->setHorasDescanso($detalle['horasDescanso']);
@@ -107,7 +117,7 @@ class CierreMesController extends Controller
                         if($peso > 0) {
                             $participacion = $peso / $pesoTotal;
                         }
-                        $costo = $participacion * $devengado;
+                        $costo = $participacion * $costoRecurso;
                         $arCostoRecursoDetalle->setParticipacion($participacion * 100);
                         $arCostoRecursoDetalle->setPeso($peso);
                         $arCostoRecursoDetalle->setCosto($costo);
@@ -120,9 +130,9 @@ class CierreMesController extends Controller
                     $arCostoRecurso->setAnio($arCierreMes->getAnio());
                     $arCostoRecurso->setMes($arCierreMes->getMes());
                     $arCostoRecurso->setVrNomina($devengado); 
-
-                    $floTotal = $devengado;
-                    $arCostoRecurso->setVrCostoTotal($floTotal);
+                    $arCostoRecurso->setVrPrestaciones($prestaciones);
+                    $arCostoRecurso->setVrAportesSociales($seguridadSocial);                    
+                    $arCostoRecurso->setVrCostoTotal($costoRecurso);
                     /*$horas = 0;
                     $arProgramacionDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
                     $arProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('codigoRecursoFk' => $arRecurso->getCodigoRecursoPk(), 'anio' => $arCierreMes->getAnio(), 'mes' => $arCierreMes->getMes()));                                            
@@ -145,7 +155,7 @@ class CierreMesController extends Controller
                 $em->flush();
                 
                 //Asignar los centros de costos donde mas trabajo el recurso
-                /*
+                
                 foreach ($arrRecursos as $arrRecurso) {
                     $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                     $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arrRecurso['codigo_empleado_fk']);
@@ -176,8 +186,8 @@ class CierreMesController extends Controller
                     }
                 } 
                 $em->flush();                                
-                */
-                /*
+                
+                
                 //Asignar centro de costo a empleados
                 $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();                                
                 $dql   = "SELECT c.codigoEmpleadoFk FROM BrasaRecursoHumanoBundle:RhuContrato c "
@@ -205,7 +215,7 @@ class CierreMesController extends Controller
                     $em->persist($arEmpleadoCentroCosto);
                 }
                 $em->flush();
-                */
+                
             
                 //Creo los servicios (Detalles de pedido)
                 $arPedidosDetalles = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();                
@@ -220,31 +230,31 @@ class CierreMesController extends Controller
                     if($arrayResultados[0]['costo']) {
                         $costo = $arrayResultados[0]['costo'];
                     }
-                    $arCierreMesServicio = new \Brasa\TurnoBundle\Entity\TurCierreMesServicio();
-                    $arCierreMesServicio->setCierreMesRel($arCierreMes);
-                    $arCierreMesServicio->setAnio($arCierreMes->getAnio());
-                    $arCierreMesServicio->setMes($arCierreMes->getMes());
-                    $arCierreMesServicio->setPedidoDetalleRel($arPedidoDetalle);
-                    $arCierreMesServicio->setClienteRel($arPedidoDetalle->getPedidoRel()->getClienteRel());
-                    $arCierreMesServicio->setPuestoRel($arPedidoDetalle->getPuestoRel());
-                    $arCierreMesServicio->setConceptoServicioRel($arPedidoDetalle->getConceptoServicioRel());
-                    $arCierreMesServicio->setModalidadServicioRel($arPedidoDetalle->getModalidadServicioRel());
-                    $arCierreMesServicio->setPeriodoRel($arPedidoDetalle->getPeriodoRel());
-                    $arCierreMesServicio->setDiaDesde($arPedidoDetalle->getDiaDesde());
-                    $arCierreMesServicio->setDiaHasta($arPedidoDetalle->getDiaHasta());
-                    $arCierreMesServicio->setDias($arPedidoDetalle->getDias());
-                    $arCierreMesServicio->setHoras($arPedidoDetalle->getHoras());
-                    $arCierreMesServicio->setHorasDiurnas($arPedidoDetalle->getHorasDiurnas());
-                    $arCierreMesServicio->setHorasNocturnas($arPedidoDetalle->getHorasNocturnas());
-                    $arCierreMesServicio->setCantidad($arPedidoDetalle->getCantidad());
-                    $arCierreMesServicio->setVrTotal($arPedidoDetalle->getVrTotalDetalle());
-                    $arCierreMesServicio->setVrCostoRecurso($costo);
+                    $arCostoServicio = new \Brasa\TurnoBundle\Entity\TurCostoServicio();
+                    $arCostoServicio->setCierreMesRel($arCierreMes);
+                    $arCostoServicio->setAnio($arCierreMes->getAnio());
+                    $arCostoServicio->setMes($arCierreMes->getMes());
+                    $arCostoServicio->setPedidoDetalleRel($arPedidoDetalle);
+                    $arCostoServicio->setClienteRel($arPedidoDetalle->getPedidoRel()->getClienteRel());
+                    $arCostoServicio->setPuestoRel($arPedidoDetalle->getPuestoRel());
+                    $arCostoServicio->setConceptoServicioRel($arPedidoDetalle->getConceptoServicioRel());
+                    $arCostoServicio->setModalidadServicioRel($arPedidoDetalle->getModalidadServicioRel());
+                    $arCostoServicio->setPeriodoRel($arPedidoDetalle->getPeriodoRel());
+                    $arCostoServicio->setDiaDesde($arPedidoDetalle->getDiaDesde());
+                    $arCostoServicio->setDiaHasta($arPedidoDetalle->getDiaHasta());
+                    $arCostoServicio->setDias($arPedidoDetalle->getDias());
+                    $arCostoServicio->setHoras($arPedidoDetalle->getHoras());
+                    $arCostoServicio->setHorasDiurnas($arPedidoDetalle->getHorasDiurnas());
+                    $arCostoServicio->setHorasNocturnas($arPedidoDetalle->getHorasNocturnas());
+                    $arCostoServicio->setCantidad($arPedidoDetalle->getCantidad());
+                    $arCostoServicio->setVrTotal($arPedidoDetalle->getVrTotalDetalle());
+                    $arCostoServicio->setVrCostoRecurso($costo);
                     //$arrProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->detallesPedido($arPedidoDetalle->getCodigoPedidoDetallePk(), $arCierreMes->getAnio(), $arCierreMes->getMes());                    
                     //if($arrProgramacionDetalles['horas'] != NULL) {
                     //    $arCierreMesServicio->setHorasProgramadas($arrProgramacionDetalles['horas']);
                     //    $arCierreMesServicio->setVrCostoRecurso($arrProgramacionDetalles['vrRecurso']);                        
                     //}
-                    $em->persist($arCierreMesServicio);                         
+                    $em->persist($arCostoServicio);                         
                 }
                 $em->flush();                   
                  
