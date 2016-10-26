@@ -1,6 +1,6 @@
 <?php
 namespace Brasa\RecursoHumanoBundle\Formatos;
-class FormatoCarta extends \FPDF_FPDF {
+class FormatoCarta1teg extends \FPDF_FPDF {
     public static $em;
     
     public static $codigoTipoCarta;
@@ -16,7 +16,7 @@ class FormatoCarta extends \FPDF_FPDF {
         self::$fechaProceso = $fechaProceso;
         self::$fechaOpcional = $fechaOpcional;
         self::$codigoContrato = $codigoContrato;
-        $pdf = new FormatoCarta();
+        $pdf = new FormatoCarta1teg();
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Arial', '', 12);

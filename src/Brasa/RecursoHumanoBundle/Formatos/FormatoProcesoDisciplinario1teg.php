@@ -1,6 +1,6 @@
 <?php
 namespace Brasa\RecursoHumanoBundle\Formatos;
-class FormatoProcesoDisciplinario extends \FPDF_FPDF {
+class FormatoProcesoDisciplinario1teg extends \FPDF_FPDF {
     
     public static $em;
     
@@ -13,7 +13,7 @@ class FormatoProcesoDisciplinario extends \FPDF_FPDF {
         self::$em = $em;
         self::$codigoProcesoDisciplinarioTipo = $codigoProcesoDisciplinarioTipo;
         self::$codigoProcesoDisciplinario = $codigoProcesoDisciplinario;
-        $pdf = new FormatoProcesoDisciplinario();
+        $pdf = new FormatoProcesoDisciplinario1teg();
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Arial', '', 12);
