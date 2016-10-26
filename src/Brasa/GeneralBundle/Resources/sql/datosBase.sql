@@ -5726,7 +5726,7 @@ INSERT INTO `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tip
 INSERT INTO `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) VALUES('11','TERMINAR CONTRATO DESPUES DE PAGADO EL PERIODO','PROCESO','RECURSO HUMANO');
 INSERT INTO `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) VALUES('12','ADICIONALES AL PAGO','CONSULTA','RECURSO HUMANO');
 INSERT INTO `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) VALUES('13','COSTOS','CONSULTA','RECURSO HUMANO');
-INSERT INTO `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) VALUES('14','EMPLEADO','CONSULTA','RECURSO HUMANO');
+INSERT INTO `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) VALUES('14','EMPLEADO COMPLETO','CONSULTA','RECURSO HUMANO');
 INSERT INTO `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) VALUES('15','EMPLEADO INGRESOS','CONSULTA','RECURSO HUMANO');
 INSERT INTO `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) VALUES('16','EMPLEADO PAGOS Y DEDUCCIONES','CONSULTA','RECURSO HUMANO');
 INSERT INTO `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) VALUES('17','EMPLEADO ESTUDIOS VENCIMIENTO','CONSULTA','RECURSO HUMANO');
@@ -5809,6 +5809,8 @@ insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tip
 insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('94','CONCEPTO PAGO CONSOLIDADO (NOM,PRIM,VAC)','CONSULTA','RECURSO HUMANO');
 insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('95','EDITAR FACTURA','UTILIDAD','TURNOS');
 insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('96','VISITA FECHA VENCIMIENTO','CONSULTA','RECURSO HUMANO');
+insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('97','EMPLEADO GENERAL','CONSULTA','RECURSO HUMANO');
+insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) values('98','EDITAR PROGRAMACION EN CONSULTA','CONSULTA','TURNO');
 
 insert into `rhu_visita_tipo` (`codigo_visita_tipo_pk`, `nombre`) values('1','PERIODICO');
 insert into `rhu_visita_tipo` (`codigo_visita_tipo_pk`, `nombre`) values('2','INGRESO');

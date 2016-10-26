@@ -159,7 +159,11 @@
                 <tr>
                     <td>{{ arProgramacionDetalle.codigoRecursoFk }}</td>
                     <td>{{ arProgramacionDetalle.recursoRel.numeroIdentificacion | default('') }}</td>
-                    <td><a href="javascript:abrirVentana3('{{ path('brs_tur_utilidad_recurso_programacion_masiva', { 'anio': arProgramacionDetalle.anio, 'mes': arProgramacionDetalle.mes, 'codigoRecurso': arProgramacionDetalle.codigoRecursoFk }) }}', 'VerProgramaciones', 600, 1200)">{{ arProgramacionDetalle.recursoRel.nombreCorto | default('') }}</a></td>
+                    {% if editarProgramacion == 1 %}
+                        <td><a href="javascript:abrirVentana3('{{ path('brs_tur_utilidad_recurso_programacion_masiva', { 'anio': arProgramacionDetalle.anio, 'mes': arProgramacionDetalle.mes, 'codigoRecurso': arProgramacionDetalle.codigoRecursoFk }) }}', 'VerProgramaciones', 600, 1200)">{{ arProgramacionDetalle.recursoRel.nombreCorto | default('') }}</a></td>
+                    {% else %}
+                        <td>{{ arProgramacionDetalle.recursoRel.nombreCorto | default('') }}</td>                    
+                    {% endif %}                        
                     <td>{{ arProgramacionDetalle.dia1  }}</td>
                     <td>{{ arProgramacionDetalle.dia2  }}</td>
                     <td>{{ arProgramacionDetalle.dia3  }}</td>
@@ -193,7 +197,11 @@
                     <td>{{ arProgramacionDetalle.dia31  }}</td>
                     <td style="text-align: right">{{ arProgramacionDetalle.horas | number_format(0, '.', ',') }}</td>
                     <td>{{ arProgramacionDetalle.codigoPedidoDetalleFk }}</td>
-                    <td style="text-align: center"><a href="{{ path('brs_tur_movimiento_programacion_detalle', { 'codigoProgramacion': arProgramacionDetalle.codigoProgramacionFk }) }}" target="_blanck"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=20 height=20></a></td>
+                    {% if editarProgramacion == 1 %}
+                        <td style="text-align: center"><a href="{{ path('brs_tur_movimiento_programacion_detalle', { 'codigoProgramacion': arProgramacionDetalle.codigoProgramacionFk }) }}" target="_blanck"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=20 height=20></a></td>
+                    {% else %}
+                        <td></td>                    
+                    {% endif %}                                         
                 </tr>
             {% endfor %}
         </table>

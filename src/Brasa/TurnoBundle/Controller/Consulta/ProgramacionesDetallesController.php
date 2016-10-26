@@ -36,10 +36,11 @@ class ProgramacionesDetallesController extends Controller
                 $this->generarExcel();
             }
         }
-
+        $editarProgramacion = $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 98);
         $arProgramacionDetalle = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 200);
         return $this->render('BrasaTurnoBundle:Consultas/Programacion:detalle.html.twig', array(
-            'arProgramacionDetalle' => $arProgramacionDetalle,                        
+            'arProgramacionDetalle' => $arProgramacionDetalle,  
+            'editarProgramacion' => $editarProgramacion,
             'form' => $form->createView()));
     }        
     
