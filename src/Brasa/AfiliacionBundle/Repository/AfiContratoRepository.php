@@ -174,18 +174,39 @@ class AfiContratoRepository extends EntityRepository {
         return $arContratos;
     }
     
-    public function historialContratos($codigoEmpleado = '') {        
+    public function historialContratos($codigoEmpleado = '', $fechaNuevoContrato = '') {        
         $em = $this->getEntityManager();
-        $dql   = "SELECT c FROM BrasaAfiliacionBundle:AfiContrato c "
-                ." WHERE c.codigoEmpleadoFk=" . $codigoEmpleado;
-        $query = $em->createQuery($dql);        
-        $arContratos = $query->getResult();
-        $nro = count($arContratos);
-        if ($nro == 0){
-            $estado = 0;
-        } else {
-            $estado = 1;
-        }
+        $dql   = "SELECT
+            count(afi_contrato.codigo_empleado_fk) as total,
+            Max(afi_contrato.codigo_contrato_pk) AS ultimocontrato            
+            FROM afi_contrato
+            WHERE
+            afi_contrato.codigo_empleado_fk = " .$codigoEmpleado;
+        
+        $connection = $em->getConnection();
+        $statement = $connection->prepare($dql);        
+        $statement->execute();
+        $dql = $statement->fetchAll();
+        foreach ($dql as $dql) {            
+            $ncontratos = $dql['total'];
+            $ultimoContrato = $dql['ultimocontrato'];
+            $arUltimoContrato = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->find($ultimoContrato);
+            $estadoContrato = $arUltimoContrato->getIndefinido();
+            if ($ncontratos == 0){
+                $estado = 0;
+            } else {
+                if ($estadoContrato == FALSE){
+                    $fechaUltimoContrato = $arUltimoContrato->getFechaHasta()->format('Y-m-d');
+                    $fechaPlazo = date('Y-m-d', strtotime("$fechaUltimoContrato +6 month"));
+                    $fechaPlazo = new \DateTime($fechaPlazo);
+                    if ($fechaPlazo > $fechaNuevoContrato){
+                        $estado = 1;
+                    } else {
+                        $estado = 0;
+                    }                    
+                }                
+            }
+        }        
         return $estado;
     }
 }
