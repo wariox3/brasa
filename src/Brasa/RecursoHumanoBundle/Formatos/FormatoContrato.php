@@ -63,7 +63,7 @@ class FormatoContrato extends \FPDF_FPDF {
         $pdf->SetXY(50, 36);
         $pdf->SetFont('Arial','B',12);
         //$pdf->Cell(110, 6, utf8_decode($arContenidoFormato->getTitulo()) , 0, 0, 'C');
-        $pdf->MultiCell(110, 6, $arConfiguracionTurno->getInformacionResolucionDianFactura(), 0, 'C');
+        $pdf->MultiCell(110, 6, $arContenidoFormato->getTitulo(), 0, 'C');
         $pdf->SetXY(50, 44);
         $pdf->Cell(110, 6, utf8_decode($arConfiguracion->getNombreEmpresa()) , 0, 0, 'C');
         //$pdf->SetXY(50, 50);
