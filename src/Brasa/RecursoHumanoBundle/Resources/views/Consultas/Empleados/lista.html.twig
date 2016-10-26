@@ -52,11 +52,11 @@
                 <th>{{ knp_pagination_sortable(arEmpleados, 'CÓDIGO', 'e.codigoEmpleadoPk') }}</th>
                 <th>IDENTIFICACIÓN</th>
                 <th>{{ knp_pagination_sortable(arEmpleados, 'NOMBRE', 'e.nombreCorto') }}</th>                                                
-                <th>GRUPO PAGO</th>
-                <th>SUCURSAL SSO</th>
+                <th>GRUPO PAGO</th>                
                 <th>CONTRATO</th>
                 <th>TELÉFONO</th>                                
-                <th>FECHA INICIO</th>
+                <th>INICIO</th>
+                <th>C.COSTO</th>
                 <th>ACT</th>
                 <th style="text-align: center"></th>
             </tr>
@@ -65,11 +65,11 @@
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arEmpleados.codigoEmpleadoPk }}">{{ arEmpleados.codigoEmpleadoPk }} </td>
                 <td>{{ arEmpleados.numeroIdentificacion  }}</td>
                 <td>{{ arEmpleados.nombreCorto }}</td>
-                <td>{% if arEmpleados.centroCostoRel.nombre is defined %} {{ arEmpleados.centroCostoRel.nombre  }} {% endif %}</td>
-                <td>{% if arEmpleados.centroCostoRel.sucursalRel.nombre is defined %} {{ arEmpleados.centroCostoRel.sucursalRel.nombre  }} {% endif %}</td>
+                <td>{% if arEmpleados.centroCostoRel.nombre is defined %} {{ arEmpleados.centroCostoRel.nombre  }} {% endif %}</td>                
                 <td>{{ arEmpleados.codigoContratoActivoFk  }}</td>
                 <td>{{ arEmpleados.telefono }}</td>                                
                 <td>{% if arEmpleados.fechaContrato != "" %} {{ arEmpleados.fechaContrato|date('Y/m/d')  }} {% else %} SIN DEFINIR {% endif %}</td>                                
+                <td>{{ arEmpleados.codigoCentroCostoContabilidadFk }}</td>                                
                 <td>{% if arEmpleados.estadoActivo == 1 %} SI {% else %} NO {% endif %}</td>                                
                 <td style="text-align: center"><a href="{{ path('brs_rhu_consultas_empleado_detalle', { 'codigoEmpleado': arEmpleados.codigoEmpleadoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalle del registro"></a></td>                
             </tr>
