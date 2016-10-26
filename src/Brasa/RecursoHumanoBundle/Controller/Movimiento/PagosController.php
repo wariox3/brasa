@@ -153,12 +153,14 @@ class PagosController extends Controller
        
         $arSoportePago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
         $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
+        $arSoportePagoProgramacion = new \Brasa\TurnoBundle\Entity\TurSoportePagoProgramacion();
         if($arPago->getCodigoSoportePagoFk()) {
             $arSoportePago =  $em->getRepository('BrasaTurnoBundle:TurSoportePago')->find($arPago->getCodigoSoportePagoFk());                                
             if($arSoportePago) {
                 $strAnio = $arSoportePago->getFechaDesde()->format('Y');
                 $strMes = $arSoportePago->getFechaDesde()->format('m');        
                 $arProgramacionDetalle =  $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('anio' => $strAnio, 'mes' => $strMes, 'codigoRecursoFk' => $arSoportePago->getCodigoRecursoFk()));                                                    
+                $arSoportePagoProgramacion =  $em->getRepository('BrasaTurnoBundle:TurSoportePagoProgramacion')->findBy(array('codigoSoportePagoFk' => $arPago->getCodigoSoportePagoFk()));                                                                                    
             }
         }        
         $strAnioMes = $arPago->getFechaDesde()->format('Y/m');
@@ -168,12 +170,14 @@ class PagosController extends Controller
             $dateFecha = date_create($strFecha);
             $diaSemana = $objFunciones->devuelveDiaSemanaEspaniol($dateFecha);
             $arrDiaSemana[$i] = array('dia' => $i, 'diaSemana' => $diaSemana);
-        }        
+        }
+        
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Pagos:verResumenTurno.html.twig', array(                                    
             'arProgramacionDetalle' => $arProgramacionDetalle,  
             'arSoportePago' => $arSoportePago,
             'arPago' => $arPago,
             'arrDiaSemana' => $arrDiaSemana,
+            'arSoportePagoProgramacion' => $arSoportePagoProgramacion,
             'form' => $form->createView()));
     }    
     

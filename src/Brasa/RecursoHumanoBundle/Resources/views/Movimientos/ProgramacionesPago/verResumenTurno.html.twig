@@ -98,11 +98,56 @@
         </div>
         <br/><br/>                        
         <table class="table table-striped table-bordered table-condensed">
+            <caption>Programacion pago</caption>
             <tr>
                 {% for arrDiaSemana in arrDiaSemana %}
                     <th {% if arrDiaSemana.festivo == 1  %} style="background-color:  #6b9311" {% endif %}>{{ arrDiaSemana.dia }}{{ arrDiaSemana.diaSemana }}</th>
-                    {% endfor %}                
-                <th>H</th>
+                {% endfor %}                                
+            </tr>
+            {% for arSoportePagoProgramacion in arSoportePagoProgramacion %}
+                <tr>
+                    <td>{{ arSoportePagoProgramacion.dia1  }}</td>
+                    <td>{{ arSoportePagoProgramacion.dia2  }}</td>
+                    <td>{{ arSoportePagoProgramacion.dia3  }}</td>
+                    <td>{{ arSoportePagoProgramacion.dia4  }}</td>
+                    <td>{{ arSoportePagoProgramacion.dia5  }}</td>
+                    <td>{{ arSoportePagoProgramacion.dia6  }}</td>
+                    <td>{{ arSoportePagoProgramacion.dia7  }}</td>
+                    <td>{{ arSoportePagoProgramacion.dia8  }}</td>
+                    <td>{{ arSoportePagoProgramacion.dia9  }}</td>
+                    <td>{{ arSoportePagoProgramacion.dia10  }}</td>
+                    <td>{{ arSoportePagoProgramacion.dia11  }}</td>
+                    <td>{{ arSoportePagoProgramacion.dia12  }}</td>
+                    <td>{{ arSoportePagoProgramacion.dia13  }}</td>
+                    <td>{{ arSoportePagoProgramacion.dia14  }}</td>
+                    <td>{{ arSoportePagoProgramacion.dia15  }}</td>
+                    <td>{{ arSoportePagoProgramacion.dia16  }}</td>
+                    <td>{{ arSoportePagoProgramacion.dia17  }}</td>
+                    <td>{{ arSoportePagoProgramacion.dia18  }}</td>
+                    <td>{{ arSoportePagoProgramacion.dia19  }}</td>
+                    <td>{{ arSoportePagoProgramacion.dia20  }}</td>
+                    <td>{{ arSoportePagoProgramacion.dia21  }}</td>
+                    <td>{{ arSoportePagoProgramacion.dia22  }}</td>
+                    <td>{{ arSoportePagoProgramacion.dia23  }}</td>
+                    <td>{{ arSoportePagoProgramacion.dia24  }}</td>
+                    <td>{{ arSoportePagoProgramacion.dia25  }}</td>
+                    <td>{{ arSoportePagoProgramacion.dia26  }}</td>
+                    <td>{{ arSoportePagoProgramacion.dia27  }}</td>
+                    <td>{{ arSoportePagoProgramacion.dia28  }}</td>
+                    <td>{{ arSoportePagoProgramacion.dia29  }}</td>
+                    <td>{{ arSoportePagoProgramacion.dia30  }}</td>
+                    <td>{{ arSoportePagoProgramacion.dia31  }}</td>                    
+                </tr>
+            {% endfor %}
+        </table>            
+                              
+        <table class="table table-striped table-bordered table-condensed">
+            <caption>Programacion real</caption>
+            <tr>
+                {% for arrDiaSemana in arrDiaSemana %}
+                    <th {% if arrDiaSemana.festivo == 1  %} style="background-color:  #6b9311" {% endif %}>{{ arrDiaSemana.dia }}{{ arrDiaSemana.diaSemana }}</th>
+                {% endfor %}                
+                
             </tr>
             {% set intPuesto = '' %}
             {% for arProgramacionDetalle in arProgramacionDetalle %}
@@ -144,8 +189,7 @@
                     <td>{{ arProgramacionDetalle.dia28  }}</td>
                     <td>{{ arProgramacionDetalle.dia29  }}</td>
                     <td>{{ arProgramacionDetalle.dia30  }}</td>
-                    <td>{{ arProgramacionDetalle.dia31  }}</td>
-                    <td style="text-align: right">{{ arProgramacionDetalle.horas | number_format(0, '.', ',') }}</td>
+                    <td>{{ arProgramacionDetalle.dia31  }}</td>                    
                 </tr>
             {% endfor %}
         </table>

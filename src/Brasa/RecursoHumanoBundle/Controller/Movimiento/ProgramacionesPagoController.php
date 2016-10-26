@@ -529,6 +529,7 @@ class ProgramacionesPagoController extends Controller
         }
         $arSoportePago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
         $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
+        $arSoportePagoProgramacion = new \Brasa\TurnoBundle\Entity\TurSoportePagoProgramacion();
         $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
         $arProgramacionPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->find($codigoProgramacionPagoDetalle);
         if($arProgramacionPagoDetalle->getCodigoSoportePagoFk()) {
@@ -537,6 +538,7 @@ class ProgramacionesPagoController extends Controller
                 $strAnio = $arSoportePago->getFechaDesde()->format('Y');
                 $strMes = $arSoportePago->getFechaDesde()->format('m');        
                 $arProgramacionDetalle =  $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('anio' => $strAnio, 'mes' => $strMes, 'codigoRecursoFk' => $arSoportePago->getCodigoRecursoFk()));                                                    
+                $arSoportePagoProgramacion =  $em->getRepository('BrasaTurnoBundle:TurSoportePagoProgramacion')->findBy(array('codigoSoportePagoFk' => $arProgramacionPagoDetalle->getCodigoSoportePagoFk()));                                                                    
             }
         }        
  
@@ -553,6 +555,7 @@ class ProgramacionesPagoController extends Controller
             'arPago' => $arPago,
             'arrDiaSemana' => $arrDiaSemana,
             'arPagosAdicionales' => $arPagosAdicionales,
+            'arSoportePagoProgramacion' => $arSoportePagoProgramacion,
             'form' => $form->createView()));
     }
     
