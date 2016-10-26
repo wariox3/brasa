@@ -59,9 +59,8 @@ class FormatoCarta extends \FPDF_FPDF {
             $this->Cell(50, 5, $arContenidoFormatoA->getFechaVersion()->format('Y-m-d'), 1, 0, 'C', 1); //cuadro derecho abajo 2
         } else {            
             $this->Image('imagenes/logos/logo.jpg' , 10 ,5, 50 , 30,'JPG');
-            //$this->Image('imagenes/logos/encabezado.jpg' , 115 ,5, 90 , 40,'JPG');
-            //$this->Image('imagenes/logos/piedepagina.jpg' , 10 ,260, 190 , 40,'JPG'); //x,y,largo,ancho
-            //$this->Image('imagenes/logos/firma.jpg' , 10 ,175, 50 , 30,'JPG');
+            $this->Image('imagenes/logos/encabezado.jpg' , 115 ,5, 90 , 40,'JPG');
+            $this->Image('imagenes/logos/firma.jpg' , 10 ,175, 50 , 30,'JPG');
         }
         
         $this->EncabezadoDetalles();        
@@ -195,7 +194,7 @@ class FormatoCarta extends \FPDF_FPDF {
 
     public function Footer() {
         //$this->Cell(0,10,'Página '.$this->PageNo(),0,0,'C');
-        
+        $this->Image('imagenes/logos/piedepagina.jpg' , 10 ,260, 190 , 40,'JPG'); //x,y,largo,ancho
     }  
     
     public static function MesesEspañol($mes) {

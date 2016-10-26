@@ -222,6 +222,11 @@ class DisciplinarioController extends Controller
                     $objMensaje = "Debe estar autorizado";
                 }    
             }
+            if($request->request->get('OpImprimir')) {
+                $codigoDescargo = $request->request->get('OpImprimir');
+                $objFormatoDescargo = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDescargo();
+                $objFormatoDescargo->Generar($this, $codigoDescargo);                
+            }
         }
         $arDisciplinario = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinario')->find($codigoDisciplinario);
         $arDescargos = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinarioDescargo')->findBy(array('codigoDisciplinarioFk' => $codigoDisciplinario));

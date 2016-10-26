@@ -33,8 +33,16 @@ class CartaLaboralController extends Controller
                 } else {
                     $codigoCartaTipo = 6; //retirado
                 }
-                $objFormatoCarta = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCarta();
-                $objFormatoCarta->Generar($this, $codigoCartaTipo, date('Y-m-d'), "", $codigoContrato);
+                $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+                $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
+                if ($arConfiguracion->getCodigoFormatoCarta() == 0){
+                    $objFormatoCarta = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCarta();
+                    $objFormatoCarta->Generar($this, $codigoCartaTipo, date('Y-m-d'), "", $codigoContrato);
+                }
+                if ($arConfiguracion->getCodigoFormatoCarta() == 1){
+                    $objFormatoCarta = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCarta1teg();
+                    $objFormatoCarta->Generar($this, $codigoCartaTipo, date('Y-m-d'), "", $codigoContrato);
+                }
             }
             if($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrarLista($form, $request);

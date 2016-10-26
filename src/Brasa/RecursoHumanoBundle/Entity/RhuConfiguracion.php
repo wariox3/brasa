@@ -254,7 +254,17 @@ class RhuConfiguracion
     /**
      * @ORM\Column(name="codigo_formato_liquidacion", type="integer")
      */    
-    private $codigoFormatoLiquidacion = 0;     
+    private $codigoFormatoLiquidacion = 0;
+    
+    /**
+     * @ORM\Column(name="codigo_formato_carta", type="integer")
+     */    
+    private $codigoFormatoCarta = 0;
+    
+    /**
+     * @ORM\Column(name="codigo_formato_disciplinario", type="integer")
+     */    
+    private $codigoFormatoDisciplinario = 0;
     
     /**
      * Tipo de base para la liquidacion de vacaciones 1-salario 2-salario+prestaciones 3-salario+recargos
@@ -279,7 +289,7 @@ class RhuConfiguracion
      */
     protected $entidadRiesgoProfesionalRel;
 
-
+        
 
     
 
@@ -740,6 +750,78 @@ class RhuConfiguracion
     }
 
     /**
+     * Set codigoComprobanteProvision
+     *
+     * @param integer $codigoComprobanteProvision
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoComprobanteProvision($codigoComprobanteProvision)
+    {
+        $this->codigoComprobanteProvision = $codigoComprobanteProvision;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoComprobanteProvision
+     *
+     * @return integer
+     */
+    public function getCodigoComprobanteProvision()
+    {
+        return $this->codigoComprobanteProvision;
+    }
+
+    /**
+     * Set codigoComprobanteLiquidacion
+     *
+     * @param integer $codigoComprobanteLiquidacion
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoComprobanteLiquidacion($codigoComprobanteLiquidacion)
+    {
+        $this->codigoComprobanteLiquidacion = $codigoComprobanteLiquidacion;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoComprobanteLiquidacion
+     *
+     * @return integer
+     */
+    public function getCodigoComprobanteLiquidacion()
+    {
+        return $this->codigoComprobanteLiquidacion;
+    }
+
+    /**
+     * Set codigoComprobanteVacacion
+     *
+     * @param integer $codigoComprobanteVacacion
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoComprobanteVacacion($codigoComprobanteVacacion)
+    {
+        $this->codigoComprobanteVacacion = $codigoComprobanteVacacion;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoComprobanteVacacion
+     *
+     * @return integer
+     */
+    public function getCodigoComprobanteVacacion()
+    {
+        return $this->codigoComprobanteVacacion;
+    }
+
+    /**
      * Set codigoComprobantePagoBanco
      *
      * @param integer $codigoComprobantePagoBanco
@@ -905,6 +987,30 @@ class RhuConfiguracion
     public function getPrestacionesPorcentajeAporteVacaciones()
     {
         return $this->prestacionesPorcentajeAporteVacaciones;
+    }
+
+    /**
+     * Set prestacionesPorcentajeIndemnizacion
+     *
+     * @param float $prestacionesPorcentajeIndemnizacion
+     *
+     * @return RhuConfiguracion
+     */
+    public function setPrestacionesPorcentajeIndemnizacion($prestacionesPorcentajeIndemnizacion)
+    {
+        $this->prestacionesPorcentajeIndemnizacion = $prestacionesPorcentajeIndemnizacion;
+
+        return $this;
+    }
+
+    /**
+     * Get prestacionesPorcentajeIndemnizacion
+     *
+     * @return float
+     */
+    public function getPrestacionesPorcentajeIndemnizacion()
+    {
+        return $this->prestacionesPorcentajeIndemnizacion;
     }
 
     /**
@@ -1316,150 +1422,6 @@ class RhuConfiguracion
     }
 
     /**
-     * Set tipoBasePagoVacaciones
-     *
-     * @param integer $tipoBasePagoVacaciones
-     *
-     * @return RhuConfiguracion
-     */
-    public function setTipoBasePagoVacaciones($tipoBasePagoVacaciones)
-    {
-        $this->tipoBasePagoVacaciones = $tipoBasePagoVacaciones;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoBasePagoVacaciones
-     *
-     * @return integer
-     */
-    public function getTipoBasePagoVacaciones()
-    {
-        return $this->tipoBasePagoVacaciones;
-    }
-
-    /**
-     * Set entidadRiesgoProfesionalRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel
-     *
-     * @return RhuConfiguracion
-     */
-    public function setEntidadRiesgoProfesionalRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel = null)
-    {
-        $this->entidadRiesgoProfesionalRel = $entidadRiesgoProfesionalRel;
-
-        return $this;
-    }
-
-    /**
-     * Get entidadRiesgoProfesionalRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional
-     */
-    public function getEntidadRiesgoProfesionalRel()
-    {
-        return $this->entidadRiesgoProfesionalRel;
-    }
-
-    /**
-     * Set codigoComprobanteLiquidacion
-     *
-     * @param integer $codigoComprobanteLiquidacion
-     *
-     * @return RhuConfiguracion
-     */
-    public function setCodigoComprobanteLiquidacion($codigoComprobanteLiquidacion)
-    {
-        $this->codigoComprobanteLiquidacion = $codigoComprobanteLiquidacion;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoComprobanteLiquidacion
-     *
-     * @return integer
-     */
-    public function getCodigoComprobanteLiquidacion()
-    {
-        return $this->codigoComprobanteLiquidacion;
-    }
-
-    /**
-     * Set codigoComprobanteProvision
-     *
-     * @param integer $codigoComprobanteProvision
-     *
-     * @return RhuConfiguracion
-     */
-    public function setCodigoComprobanteProvision($codigoComprobanteProvision)
-    {
-        $this->codigoComprobanteProvision = $codigoComprobanteProvision;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoComprobanteProvision
-     *
-     * @return integer
-     */
-    public function getCodigoComprobanteProvision()
-    {
-        return $this->codigoComprobanteProvision;
-    }
-
-    /**
-     * Set prestacionesPorcentajeIndemnizacion
-     *
-     * @param float $prestacionesPorcentajeIndemnizacion
-     *
-     * @return RhuConfiguracion
-     */
-    public function setPrestacionesPorcentajeIndemnizacion($prestacionesPorcentajeIndemnizacion)
-    {
-        $this->prestacionesPorcentajeIndemnizacion = $prestacionesPorcentajeIndemnizacion;
-
-        return $this;
-    }
-
-    /**
-     * Get prestacionesPorcentajeIndemnizacion
-     *
-     * @return float
-     */
-    public function getPrestacionesPorcentajeIndemnizacion()
-    {
-        return $this->prestacionesPorcentajeIndemnizacion;
-    }
-
-    /**
-     * Set codigoComprobanteVacacion
-     *
-     * @param integer $codigoComprobanteVacacion
-     *
-     * @return RhuConfiguracion
-     */
-    public function setCodigoComprobanteVacacion($codigoComprobanteVacacion)
-    {
-        $this->codigoComprobanteVacacion = $codigoComprobanteVacacion;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoComprobanteVacacion
-     *
-     * @return integer
-     */
-    public function getCodigoComprobanteVacacion()
-    {
-        return $this->codigoComprobanteVacacion;
-    }
-
-    /**
      * Set codigoFormatoPago
      *
      * @param integer $codigoFormatoPago
@@ -1508,6 +1470,78 @@ class RhuConfiguracion
     }
 
     /**
+     * Set codigoFormatoCarta
+     *
+     * @param integer $codigoFormatoCarta
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoFormatoCarta($codigoFormatoCarta)
+    {
+        $this->codigoFormatoCarta = $codigoFormatoCarta;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoFormatoCarta
+     *
+     * @return integer
+     */
+    public function getCodigoFormatoCarta()
+    {
+        return $this->codigoFormatoCarta;
+    }
+
+    /**
+     * Set codigoFormatoDisciplinario
+     *
+     * @param integer $codigoFormatoDisciplinario
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoFormatoDisciplinario($codigoFormatoDisciplinario)
+    {
+        $this->codigoFormatoDisciplinario = $codigoFormatoDisciplinario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoFormatoDisciplinario
+     *
+     * @return integer
+     */
+    public function getCodigoFormatoDisciplinario()
+    {
+        return $this->codigoFormatoDisciplinario;
+    }
+
+    /**
+     * Set tipoBasePagoVacaciones
+     *
+     * @param integer $tipoBasePagoVacaciones
+     *
+     * @return RhuConfiguracion
+     */
+    public function setTipoBasePagoVacaciones($tipoBasePagoVacaciones)
+    {
+        $this->tipoBasePagoVacaciones = $tipoBasePagoVacaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoBasePagoVacaciones
+     *
+     * @return integer
+     */
+    public function getTipoBasePagoVacaciones()
+    {
+        return $this->tipoBasePagoVacaciones;
+    }
+
+    /**
      * Set generaPorcetnajeLiquidacion
      *
      * @param boolean $generaPorcetnajeLiquidacion
@@ -1553,5 +1587,29 @@ class RhuConfiguracion
     public function getCorreoNomina()
     {
         return $this->correoNomina;
+    }
+
+    /**
+     * Set entidadRiesgoProfesionalRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel
+     *
+     * @return RhuConfiguracion
+     */
+    public function setEntidadRiesgoProfesionalRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel = null)
+    {
+        $this->entidadRiesgoProfesionalRel = $entidadRiesgoProfesionalRel;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadRiesgoProfesionalRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional
+     */
+    public function getEntidadRiesgoProfesionalRel()
+    {
+        return $this->entidadRiesgoProfesionalRel;
     }
 }
