@@ -55,12 +55,16 @@ class RecursosDisponiblesController extends Controller
                         $strRutaFoto = "";
                         if($arRecurso->getEmpleadoRel()->getRutaFoto()) { 
                             $strRutaFoto = $strRutaImagen . $arRecurso->getEmpleadoRel()->getRutaFoto();
+                        }    
+                        $strRecursoTipo = "";
+                        if($arRecurso->getCodigoRecursoTipoFk()) {
+                            $strRecursoTipo = $arRecurso->getRecursoTipoRel()->getNombre();
                         }                        
                         $arrDisponibles[] = array(
                             'codigoRecursoPk' => $arRecurso->getCodigoRecursoPk(),
                             'numeroIdentificacion' => $arRecurso->getNumeroIdentificacion(),
                             'nombreCorto' => $arRecurso->getNombreCorto(),
-                            'tipo' => $arRecurso->getRecursoTipoRel()->getNombre(),
+                            'tipo' => $strRecursoTipo,
                             'telefono' => $arRecurso->getTelefono(),
                             'celular' => $arRecurso->getCelular(),
                             'rutaFoto' => $strRutaFoto,
@@ -81,11 +85,15 @@ class RecursosDisponiblesController extends Controller
                             if($arRecurso->getEmpleadoRel()->getRutaFoto()) { 
                                 $strRutaFoto = $strRutaImagen . $arRecurso->getEmpleadoRel()->getRutaFoto();
                             }
+                            $strRecursoTipo = "";
+                            if($arRecurso->getCodigoRecursoTipoFk()) {
+                                $strRecursoTipo = $arRecurso->getRecursoTipoRel()->getNombre();
+                            }
                             $arrDisponibles[] = array(
                                 'codigoRecursoPk' => $arRecurso->getCodigoRecursoPk(),
                                 'numeroIdentificacion' => $arRecurso->getNumeroIdentificacion(),
                                 'nombreCorto' => $arRecurso->getNombreCorto(),
-                                'tipo' => $arRecurso->getRecursoTipoRel()->getNombre(),
+                                'tipo' => $strRecursoTipo,
                                 'telefono' => $arRecurso->getTelefono(),
                                 'celular' => $arRecurso->getCelular(),
                                 'rutaFoto' => $strRutaFoto,
