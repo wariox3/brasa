@@ -53,37 +53,37 @@
         </div> 
         <table  class="table table-striped table-bordered table-condensed table-hover">
             <tr>
-                <th>CÓDIGO</th>
-                <th>TIPO</th>
-                <th>DIAGNÓSTICO</th>
+                <th>NUMERO</th>
+                <th>TIPO</th>                
                 <th>EPS</th>
                 <th>IDENTIFICACION</th>                
                 <th>EMPLEADO</th>                
-                <th>GRUPO PAGO</th>
                 <th>DESDE</th>
                 <th>HASTA</th>
                 <th>DÍAS</th>
-                <th>PRÓRROGA</th>
-                <th>TRANSCRIPCIÓN</th>
-                <th style="text-align: right">VALOR INCAPACIDAD</th>
-                <th style="text-align: right">VALOR PAGADO</th>
-                <th style="text-align: right">VALOR SALDO</th>
+                <th>COB</th>
+                <th>PRO</th>
+                <th>TRA</th>
+                <th>LEG</th>
+                <th style="text-align: right">VALOR</th>
+                <th style="text-align: right">PAGADO</th>
+                <th style="text-align: right">SALDO</th>
                 
             </tr>
             {% for arIncapacidadesCobrar in arIncapacidadesCobrar %}
             <tr>
-                <td><input type="hidden" name="LblCodigo[]" value="{{ arIncapacidadesCobrar.codigoIncapacidadPk }}">{{ arIncapacidadesCobrar.codigoIncapacidadPk }} </td>
-                <td>{{ arIncapacidadesCobrar.incapacidadTipoRel.nombre  }}</td>
-                <td>{{ arIncapacidadesCobrar.incapacidadDiagnosticoRel.nombre  }}</td>
+                <td>{{ arIncapacidadesCobrar.numeroEps }} </td>
+                <td>{{ arIncapacidadesCobrar.incapacidadTipoRel.nombre  }}</td>                
                 <td>{{ arIncapacidadesCobrar.entidadSaludRel.nombre  }}</td>
                 <td>{{ arIncapacidadesCobrar.empleadoRel.numeroIdentificacion  }}</td>
-                <td>{{ arIncapacidadesCobrar.empleadoRel.nombreCorto  }}</td>
-                <td>{{ arIncapacidadesCobrar.centroCostoRel.nombre  }}</td>                
+                <td>{{ arIncapacidadesCobrar.empleadoRel.nombreCorto  }}</td>                
                 <td>{{ arIncapacidadesCobrar.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arIncapacidadesCobrar.fechaHasta |date("Y/m/d")  }}</td>
                 <td>{{ arIncapacidadesCobrar.cantidad  }}</td>
+                <td>{% if arIncapacidadesCobrar.estadoCobrar == 1  %}SI{%else%}NO{% endif %}</td>
                 <td>{% if arIncapacidadesCobrar.estadoProrroga == 1  %}SI{%else%}NO{% endif %}</td>
                 <td>{% if arIncapacidadesCobrar.estadoTranscripcion == 1  %}SI{%else%}NO{% endif %}</td>
+                <td>{% if arIncapacidadesCobrar.estadoLegalizado == 1  %}SI{%else%}NO{% endif %}</td>
                 <td style="text-align: right">{{ arIncapacidadesCobrar.vrIncapacidad | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arIncapacidadesCobrar.vrPagado | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arIncapacidadesCobrar.vrSaldo | number_format(2, '.', ',') }}</td>

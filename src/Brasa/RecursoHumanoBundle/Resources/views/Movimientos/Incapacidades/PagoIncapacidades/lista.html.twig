@@ -55,7 +55,7 @@
         
         <!-- Botones Menu Items -->
         <div class="btn-group" style="float: left">
-                <div class="btn btn-default btn-sm">Incapacidad Pagos <span class="badge">{{ arIncapacidadPagos.getTotalItemCount }}</span></div>                        
+                <div class="btn btn-default btn-sm">Registros <span class="badge">{{ arIncapacidadPagos.getTotalItemCount }}</span></div>                        
         </div>
         <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
                 {{ knp_pagination_render(arIncapacidadPagos) }}       
@@ -65,7 +65,7 @@
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>
             <div class="btn-group">                                
-                <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_incapacidades_pagos_nuevo', { 'codigoIncapacidadPago': 0}) }}', 'PagoIncapacidad', 600, 900)"  style="float:left">Nuevo</a>
+                <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_incapacidades_pagos_nuevo', {'codigoIncapacidadPago': 0}) }}">Nuevo</a>                
             </div>
             <div class="btn-group">
                 

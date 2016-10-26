@@ -23,6 +23,7 @@ class RhuIncapacidadType extends AbstractType
             ->add('estadoTranscripcion', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))
             ->add('estadoCobrar', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))
             ->add('estadoProrroga', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))                
+            ->add('diasCobro', 'text', array('required' => true))                               
             ->add('comentarios', 'textarea', array('required' => false))                
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));        

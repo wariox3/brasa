@@ -23,6 +23,11 @@ class RhuIncapacidadTipo
     private $nombre;      
     
     /**
+     * @ORM\Column(name="abreviatura", type="string", length=20, nullable=true)
+     */    
+    private $abreviatura;    
+    
+    /**
      * @ORM\Column(name="tipo", type="integer")
      */
     private $tipo = 0;      
@@ -248,5 +253,29 @@ class RhuIncapacidadTipo
     public function getIncapacidadesIncapacidadTipoRel()
     {
         return $this->incapacidadesIncapacidadTipoRel;
+    }
+
+    /**
+     * Set abreviatura
+     *
+     * @param string $abreviatura
+     *
+     * @return RhuIncapacidadTipo
+     */
+    public function setAbreviatura($abreviatura)
+    {
+        $this->abreviatura = $abreviatura;
+
+        return $this;
+    }
+
+    /**
+     * Get abreviatura
+     *
+     * @return string
+     */
+    public function getAbreviatura()
+    {
+        return $this->abreviatura;
     }
 }

@@ -61,7 +61,12 @@ class RhuIncapacidad
      * @ORM\Column(name="cantidad", type="integer")
      */
     private $cantidad = 0;                       
-          
+
+    /**
+     * @ORM\Column(name="dias_cobro", type="integer")
+     */
+    private $diasCobro = 0;    
+    
     /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
      */    
@@ -925,5 +930,53 @@ class RhuIncapacidad
     public function getEstadoLegalizado()
     {
         return $this->estadoLegalizado;
+    }
+
+    /**
+     * Set diasCobrados
+     *
+     * @param integer $diasCobrados
+     *
+     * @return RhuIncapacidad
+     */
+    public function setDiasCobrados($diasCobrados)
+    {
+        $this->diasCobrados = $diasCobrados;
+
+        return $this;
+    }
+
+    /**
+     * Get diasCobrados
+     *
+     * @return integer
+     */
+    public function getDiasCobrados()
+    {
+        return $this->diasCobrados;
+    }
+
+    /**
+     * Set diasCobro
+     *
+     * @param integer $diasCobro
+     *
+     * @return RhuIncapacidad
+     */
+    public function setDiasCobro($diasCobro)
+    {
+        $this->diasCobro = $diasCobro;
+
+        return $this;
+    }
+
+    /**
+     * Get diasCobro
+     *
+     * @return integer
+     */
+    public function getDiasCobro()
+    {
+        return $this->diasCobro;
     }
 }

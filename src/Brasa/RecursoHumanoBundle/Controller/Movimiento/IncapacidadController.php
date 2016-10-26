@@ -123,6 +123,7 @@ class IncapacidadController extends Controller
                                                 $intDias = $arIncapacidad->getFechaDesde()->diff($arIncapacidad->getFechaHasta());
                                                 $intDias = $intDias->format('%a');
                                                 $intDias = $intDias + 1;
+                                                $intDiasCobro = $arIncapacidad->getDiasCobro();
                                                 $arIncapacidad->setCantidad($intDias);                                                                                                                                    
                                                 $arIncapacidad->setEntidadSaludRel($arEmpleado->getEntidadSaludRel());
                                                 $floVrIncapacidad = 0;
@@ -132,17 +133,17 @@ class IncapacidadController extends Controller
                                                 $arIncapacidad->setPorcentajePago($douPorcentajePago);
                                                 if($arIncapacidad->getIncapacidadTipoRel()->getCodigoIncapacidadTipoPk() == 1) {
                                                     if($arEmpleado->getVrSalario() <= $arConfiguracion->getVrSalario()) {
-                                                        $floVrIncapacidad = $intDias * $douVrDia;                    
+                                                        $floVrIncapacidad = $intDiasCobro * $douVrDia;                    
                                                     }
                                                     if($arEmpleado->getVrSalario() > $arConfiguracion->getVrSalario() && $arEmpleado->getVrSalario() <= $arConfiguracion->getVrSalario() * 1.5) {
-                                                        $floVrIncapacidad = $intDias * $douVrDiaSalarioMinimo;                    
+                                                        $floVrIncapacidad = $intDiasCobro * $douVrDiaSalarioMinimo;                    
                                                     }
                                                     if($arEmpleado->getVrSalario() > ($arConfiguracion->getVrSalario() * 1.5)) {
-                                                        $floVrIncapacidad = $intDias * $douVrDia;
+                                                        $floVrIncapacidad = $intDiasCobro * $douVrDia;
                                                         $floVrIncapacidad = ($floVrIncapacidad * $douPorcentajePago)/100;                    
                                                     }
                                                 } else {
-                                                    $floVrIncapacidad = $intDias * $douVrDia;
+                                                    $floVrIncapacidad = $intDiasCobro * $douVrDia;
                                                     $floVrIncapacidad = ($floVrIncapacidad * $douPorcentajePago)/100;                
                                                 }     
                                                 $arIncapacidad->setVrIncapacidad($floVrIncapacidad);

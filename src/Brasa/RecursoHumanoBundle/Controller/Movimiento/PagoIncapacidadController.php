@@ -62,11 +62,11 @@ class PagoIncapacidadController extends Controller
             
             $em->persist($arIncapacidadPagos);
             $em->flush();
-            if($form->get('guardarnuevo')->isClicked()) {
+            if($form->get('guardarnuevo')->isClicked()) {                                                        
                 return $this->redirect($this->generateUrl('brs_rhu_incapacidades_pagos_nuevo', array('codigoIncacidadPago' => 0)));
             } else {
-                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
-            }
+                return $this->redirect($this->generateUrl('brs_rhu_incapacidades_pagos_detalle', array('codigoIncapacidadPago' => $arIncapacidadPagos->getCodigoIncapacidadPagoPk())));
+            }                          
         }
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Incapacidades/PagoIncapacidades:nuevo.html.twig', array(
             'arIncapacidadPagos' => $arIncapacidadPagos,
@@ -79,8 +79,10 @@ class PagoIncapacidadController extends Controller
     public function detalleAction($codigoIncapacidadPago) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();    
-        $objMensaje = $this->get('mensajes_brasa');                     
-        $form = $this->formularioDetalle();
+        $objMensaje = $this->get('mensajes_brasa');  
+        $arIncapacidadPago = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadPago();
+        $arIncapacidadPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPago')->find($codigoIncapacidadPago);        
+        $form = $this->formularioDetalle($arIncapacidadPago);
         $form->handleRequest($request);
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');                                                   
@@ -88,13 +90,12 @@ class PagoIncapacidadController extends Controller
                 $objFormatoIncapacidadPagoDetalle = new \Brasa\RecursoHumanoBundle\Formatos\FormatoIncapacidadPagoDetalle();
                 $objFormatoIncapacidadPagoDetalle->Generar($this, $codigoIncapacidadPago);
             }
-            if($form->get('BtnEliminar')->isClicked()) {                
+            if($form->get('BtnDetalleEliminar')->isClicked()) {                
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPagoDetalle')->eliminarDetallesSeleccionados($arrSeleccionados,$codigoIncapacidadPago);
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPago')->liquidar($codigoIncapacidadPago);
                 return $this->redirect($this->generateUrl('brs_rhu_incapacidades_pagos_detalle', array('codigoIncapacidadPago' => $codigoIncapacidadPago)));           
             }
-            if($form->get('BtnAutorizar')->isClicked()) {
-                
+            if($form->get('BtnAutorizar')->isClicked()) {                
                 $arIncapacidadPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadPagoDetalle();
                 $arIncapacidadPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPagoDetalle')->findBy(array('codigoIncapacidadPagoFk' => $codigoIncapacidadPago));
                 if (count($arIncapacidadPagoDetalles) > 0){
@@ -110,12 +111,21 @@ class PagoIncapacidadController extends Controller
                     $arIncapacidadPago->setEstadoAutorizado(1);
                     $em->persist($arIncapacidadPago);
                     $em->flush();
-                    $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPago')->liquidar($codigoIncapacidadPago);
-                }
-                
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPago')->liquidar($codigoIncapacidadPago);                    
+                }                
+                return $this->redirect($this->generateUrl('brs_rhu_incapacidades_pagos_detalle', array('codigoIncapacidadPago' => $codigoIncapacidadPago)));           
             }
-            if ($form->get('BtnActualizar')->isClicked()) {
-                $arrControles = $request->request->All();
+            if($form->get('BtnDesAutorizar')->isClicked()) {                
+                $arIncapacidadPago = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadPago();
+                $arIncapacidadPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPago')->find($codigoIncapacidadPago);
+                $arIncapacidadPago->setEstadoAutorizado(0);
+                $em->persist($arIncapacidadPago);
+                $em->flush();
+                return $this->redirect($this->generateUrl('brs_rhu_incapacidades_pagos_detalle', array('codigoIncapacidadPago' => $codigoIncapacidadPago)));           
+            }            
+            
+            if ($form->get('BtnDetalleActualizar')->isClicked()) {
+                /*$arrControles = $request->request->All();
                 $intIndice = 0;
                 $arIncapacidadPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadPagoDetalle();
                 $arIncapacidadPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPagoDetalle')->findBy(array('codigoIncapacidadPagoFk' => $codigoIncapacidadPago));
@@ -128,11 +138,11 @@ class PagoIncapacidadController extends Controller
                 }
                 $em->flush();
                 $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPago')->liquidar($codigoIncapacidadPago);
+                 * 
+                 */
+                return $this->redirect($this->generateUrl('brs_rhu_incapacidades_pagos_detalle', array('codigoIncapacidadPago' => $codigoIncapacidadPago)));                           
             }
-        }        
-        
-        $arIncapacidadPago = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadPago();
-        $arIncapacidadPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPago')->find($codigoIncapacidadPago);
+        }                
         $arIncapacidadPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuIncapacidadPagoDetalle();
         $arIncapacidadPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidadPagoDetalle')->findBy(array ('codigoIncapacidadPagoFk' => $codigoIncapacidadPago));
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Incapacidades/PagoIncapacidades:detalle.html.twig', array(
@@ -283,12 +293,27 @@ class PagoIncapacidadController extends Controller
         return $form;
     }   
     
-    private function formularioDetalle() {        
+    private function formularioDetalle($ar) {
+        $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);                
+        $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
+        $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
+        $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
+        $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);  
+        if($ar->getEstadoAutorizado() == 1) {            
+            $arrBotonAutorizar['disabled'] = true;                        
+            $arrBotonDetalleEliminar['disabled'] = true;            
+            $arrBotonDetalleActualizar['disabled'] = true;            
+        } else {
+            $arrBotonDesAutorizar['disabled'] = true;            
+            $arrBotonImprimir['disabled'] = true;
+        }
+        
         $form = $this->createFormBuilder()
-            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnAutorizar', 'submit', array('label'  => 'Autorizar',))
-            ->add('BtnActualizar', 'submit', array('label'  => 'Actualizar',))    
+            ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
+            ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)                             
+            ->add('BtnImprimir', 'submit', $arrBotonImprimir)
+            ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
+            ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)                  
             ->getForm();        
         return $form;
     }    
