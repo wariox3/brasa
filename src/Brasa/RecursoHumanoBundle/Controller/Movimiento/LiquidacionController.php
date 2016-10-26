@@ -198,89 +198,66 @@ class LiquidacionController extends Controller
     }    
 
     /**
-     * @Route("/rhu/movimiento/liquidacion/detalle/descuento/{codigoLiquidacion}", name="brs_rhu_movimiento_liquidacion_detalle_descuento")
+     * @Route("/rhu/movimiento/liquidacion/adicional/{codigoLiquidacion}/{codigoLiquidacionAdicional}/{tipo}/", name="brs_rhu_movimiento_liquidacion_adicional")
      */     
-    public function detalleDescuentoAction($codigoLiquidacion) {
+    public function detalleAdicionalAction($codigoLiquidacion, $codigoLiquidacionAdicional, $tipo) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();        
         $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
         $arLiquidacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->find($codigoLiquidacion);
-        $form = $this->createFormBuilder()
-            ->add('pagoConceptoRel', 'entity', array(
+        $arLiquidacionAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales();
+        $valor = 0;
+        $arrayPropiedadesPagoConcepto = array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuPagoConcepto',
-                'query_builder' => function (EntityRepository $er) {
+                'query_builder' => function (EntityRepository $er) use($tipo) {
                     return $er->createQueryBuilder('pc')
                     ->where('pc.tipoAdicional = :tipoAdicional')
-                    ->setParameter('tipoAdicional', 2)
+                    ->setParameter('tipoAdicional', $tipo)
                     ->orderBy('pc.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))  
-            ->add('TxtValor', 'number', array('required' => true))                             
+                'required' => true,
+                'data' => ""
+            );
+        if($codigoLiquidacionAdicional != 0) {            
+            $arLiquidacionAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionAdicionales')->find($codigoLiquidacionAdicional);
+            if($tipo == 1) {
+                $valor = $arLiquidacionAdicional->getVrBonificacion();
+            }
+            if($tipo == 2) {
+                $valor = $arLiquidacionAdicional->getVrDeduccion();
+            }        
+            $arrayPropiedadesPagoConcepto['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuPagoConcepto", $arLiquidacionAdicional->getCodigoPagoConceptoFk());            
+        }
+        
+        $form = $this->createFormBuilder()
+            ->add('pagoConceptoRel', 'entity', $arrayPropiedadesPagoConcepto) 
+            ->add('TxtValor', 'number', array('required' => true, 'data' => $valor))                             
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
             ->getForm();
         $form->handleRequest($request); 
         if ($form->isValid()) { 
             if ($form->get('BtnGuardar')->isClicked()) {
-                    $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
-                    $arPagoConcepto = $form->get('pagoConceptoRel')->getData();
-                    $arLiquidacionAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales();
-                    $arLiquidacionAdicional->setLiquidacionRel($arLiquidacion); 
-                    $arLiquidacionAdicional->setPagoConceptoRel($arPagoConcepto);
+                $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
+                $arPagoConcepto = $form->get('pagoConceptoRel')->getData();                                
+                $arLiquidacionAdicional->setLiquidacionRel($arLiquidacion); 
+                $arLiquidacionAdicional->setPagoConceptoRel($arPagoConcepto);
+                if($tipo == 1) {
+                    $arLiquidacionAdicional->setVrBonificacion($form->get('TxtValor')->getData());  
+                } 
+                if($tipo == 2) {
                     $arLiquidacionAdicional->setVrDeduccion($form->get('TxtValor')->getData());  
-                    $em->persist($arLiquidacionAdicional);                
-                    $em->flush();                        
-                    $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidar($codigoLiquidacion);                    
+                }                                        
+                $em->persist($arLiquidacionAdicional);                
+                $em->flush();                        
+                $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidar($codigoLiquidacion);   
+                $em->flush();
                 echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                                
             }                        
         }
-        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Liquidaciones:detalleDescuentoNuevo.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Liquidaciones:detalleAdicionalNuevo.html.twig', array(
             'arLiquidacion' => $arLiquidacion,
             'form' => $form->createView()));
-    }      
-    
-    /**
-     * @Route("/rhu/movimiento/liquidacion/detalle/bonificacion/{codigoLiquidacion}", name="brs_rhu_movimiento_liquidacion_detalle_bonificacion")
-     */     
-    public function detalleBonificacionAction($codigoLiquidacion) {
-        $request = $this->getRequest();
-        $em = $this->getDoctrine()->getManager();        
-        $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
-        $arLiquidacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->find($codigoLiquidacion);
-        $arPagoConceptos = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
-        $arPagoConceptos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->findBy(array('tipoAdicional' => 1));
-        $form = $this->createFormBuilder()
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
-            ->getForm();
-        $form->handleRequest($request); 
-        if ($form->isValid()) { 
-            if ($form->get('BtnGuardar')->isClicked()) {
-                $arrControles = $request->request->All();
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigo) {                    
-                        $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
-                        $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($codigo);
-                        $valor = 0;
-                        if($arrControles['TxtValor'.$codigo] != '') {
-                            $valor = $arrControles['TxtValor'.$codigo];                
-                        }
-                        $arLiquidacionAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales();
-                        $arLiquidacionAdicional->setLiquidacionRel($arLiquidacion);
-                        $arLiquidacionAdicional->setVrBonificacion($valor);
-                        $arLiquidacionAdicional->setPagoConceptoRel($arPagoConcepto);                                               
-                        $em->persist($arLiquidacionAdicional);            
-                    }                                                       
-                    $em->flush();                        
-                    $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->liquidar($codigoLiquidacion);                    
-                }                
-            }            
-            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
-        }
-        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Liquidaciones:detalleBonificacionNuevo.html.twig', array(
-            'arPagoConceptos' => $arPagoConceptos,
-            'arLiquidacion' => $arLiquidacion,
-            'form' => $form->createView()));
-    }    
+    }           
     
     /**
      * @Route("/rhu/movimiento/liquidacion/detalle/credito/{codigoLiquidacion}", name="brs_rhu_movimiento_liquidacion_detalle_credito")

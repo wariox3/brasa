@@ -219,7 +219,8 @@
                         <th>CREDITO</th>
                         <th>CONCEPTO</th>
                         <th>BONIFICACION</th>
-                        <th>DESCUENTO</th>                        
+                        <th>DESCUENTO</th>
+                        <th></th>                        
                         <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
                     </tr>
                     {% for arLiquidacionAdicionales in arLiquidacionAdicionales %}
@@ -231,7 +232,12 @@
                         <td>{{ arLiquidacionAdicionales.codigoCreditoFk |default('') }}</td>                                                                            
                         <td>{{ arLiquidacionAdicionales.pagoConceptoRel.nombre | default('')}}</td>                        
                         <td style="text-align: right">{{ arLiquidacionAdicionales.vrBonificacion | number_format(0, '.', ',') }}</td>                        
-                        <td style="text-align: right">{{ arLiquidacionAdicionales. vrDeduccion | number_format(0, '.', ',') }}</td>                        
+                        <td style="text-align: right">{{ arLiquidacionAdicionales. vrDeduccion | number_format(0, '.', ',') }}</td>  
+                        {% if arLiquidacionAdicionales.vrBonificacion > 0 %}
+                            <td><a href="javascript:abrirVentana3('{{ path('brs_rhu_movimiento_liquidacion_adicional', {'codigoLiquidacion': arLiquidacionAdicionales.codigoLiquidacionFk, 'codigoLiquidacionAdicional': arLiquidacionAdicionales.codigoLiquidacionAdicionalPk, 'tipo': 1 }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                                                                    
+                        {% else %}
+                            <td><a href="javascript:abrirVentana3('{{ path('brs_rhu_movimiento_liquidacion_adicional', {'codigoLiquidacion': arLiquidacionAdicionales.codigoLiquidacionFk, 'codigoLiquidacionAdicional': arLiquidacionAdicionales.codigoLiquidacionAdicionalPk, 'tipo': 2 }) }}', 'AgregarNuevoDetalle', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                                                                    
+                        {% endif %}                        
                         <td align="center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arLiquidacionAdicionales.codigoLiquidacionAdicionalPk }}" /></td>
                     </tr>
                     {% endfor %}
@@ -246,12 +252,12 @@
                 <!-- Fin Botones Menu Items -->
                 <div class="btn-toolbar" style="float: right">
                     {% if arLiquidacion.estadoAutorizado == 0 %}
-                        <div class="btn-group">                                                                        
-                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_movimiento_liquidacion_detalle_bonificacion', {'codigoLiquidacion': arLiquidacion.codigoLiquidacionPk}) }}', 'AgregarNuevo', 600, 900)">Nueva bonificacion</a>                                                    
+                        <div class="btn-group">                                                                                                    
+                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_movimiento_liquidacion_adicional', {'codigoLiquidacion': arLiquidacion.codigoLiquidacionPk, 'codigoLiquidacionAdicional': 0, 'tipo': 1}) }}', 'AgregarNuevo', 600, 900)">Nueva bonificacion</a>                                                                                    
                         </div>
                         <div class="btn-group">                            
-                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_movimiento_liquidacion_detalle_credito', {'codigoLiquidacion': arLiquidacion.codigoLiquidacionPk}) }}', 'AgregarNuevo', 600, 900)">Nuevo credito</a>                        
-                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_movimiento_liquidacion_detalle_descuento', {'codigoLiquidacion': arLiquidacion.codigoLiquidacionPk}) }}', 'AgregarNuevo', 600, 900)">Nueva decuento</a>                            
+                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_movimiento_liquidacion_detalle_credito', {'codigoLiquidacion': arLiquidacion.codigoLiquidacionPk}) }}', 'AgregarNuevo', 600, 900)">Nuevo credito</a>                                                                                                            
+                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_movimiento_liquidacion_adicional', {'codigoLiquidacion': arLiquidacion.codigoLiquidacionPk, 'codigoLiquidacionAdicional': 0, 'tipo': 2}) }}', 'AgregarNuevo', 600, 900)">Nuevo descuento</a>                                                        
                         </div>
                     {% endif %}
                     <div class="btn-group">
