@@ -9,7 +9,11 @@ class RhuContratoTipoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder                                                                                    
-            ->add('nombre', 'text', array('required' => true))  
+            ->add('nombre', 'text', array('required' => true))
+            ->add('contratoClaseRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuContratoClase',
+                'property' => 'nombre',
+                'required' => true))    
             ->add('contenidoFormatoRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenContenidoFormato',
                 'property' => 'titulo',
