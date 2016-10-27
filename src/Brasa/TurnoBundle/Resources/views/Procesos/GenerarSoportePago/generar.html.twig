@@ -49,7 +49,6 @@
                 <th></th>
                 <th></th>
                 <th></th>
-                <th></th>
             </tr>
             {% for arSoportePagoPeriodos in arSoportePagoPeriodos %}
             <tr>
@@ -61,8 +60,7 @@
                 <td style="text-align: right">{{ arSoportePagoPeriodos.diasPeriodo | number_format(0, '.', ',') }}</td>                
                 <td style="text-align: right">{{ arSoportePagoPeriodos.festivos | number_format(0, '.', ',') }}</td>                
                 <td style="text-align: right">{{ arSoportePagoPeriodos.diasAdicionales | number_format(0, '.', ',') }}</td>                
-                <td>{% if arSoportePagoPeriodos.estadoProgramacionPago == 1 %} SI {% else %} NO {% endif %}</td>                
-                <td><button class="btn btn-default btn-xs" type="submit" name="OpGenerarProgramacion" value="{{ arSoportePagoPeriodos.codigoSoportePagoPeriodoPk }}">Generar programacion</button></td>                
+                <td>{% if arSoportePagoPeriodos.estadoProgramacionPago == 1 %} SI {% else %} NO {% endif %}</td>                                
                 {% if arSoportePagoPeriodos.estadoGenerado == 0 %}
                     <td><button class="btn btn-default btn-xs" type="submit" name="OpGenerar" value="{{ arSoportePagoPeriodos.codigoSoportePagoPeriodoPk }}">Generar</button></td>
                     <td></td>
