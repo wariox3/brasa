@@ -33,6 +33,11 @@ class RhuContratoTipo
     private $codigoContenidoFormatoFk;
     
     /**
+     * @ORM\Column(name="codigo_contrato_clase_fk", type="integer", nullable=true)
+     */    
+    private $codigoContratoClaseFk;
+    
+    /**
      * @ORM\OneToMany(targetEntity="RhuContrato", mappedBy="contratoTipoRel")
      */
     protected $contratosContratoTipoRel;
@@ -42,6 +47,12 @@ class RhuContratoTipo
      * @ORM\JoinColumn(name="codigo_contenido_formato_fk", referencedColumnName="codigo_contenido_formato_pk")
      */
     protected $contenidoFormatoRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuContratoClase", inversedBy="contratosTiposContratoClaseRel")
+     * @ORM\JoinColumn(name="codigo_contrato_clase_fk", referencedColumnName="codigo_contrato_clase_pk")
+     */
+    protected $contratoClaseRel;
 
     /**
      * @ORM\OneToMany(targetEntity="RhuCambioTipoContrato", mappedBy="contratoTipoAnteriorRel")
@@ -54,6 +65,8 @@ class RhuContratoTipo
     protected $cambiosTiposContratosNuevosContratoTipoRel;
    
     
+    
+        
     
     
     /**
@@ -101,6 +114,30 @@ class RhuContratoTipo
     }
 
     /**
+     * Set nombreCorto
+     *
+     * @param string $nombreCorto
+     *
+     * @return RhuContratoTipo
+     */
+    public function setNombreCorto($nombreCorto)
+    {
+        $this->nombreCorto = $nombreCorto;
+
+        return $this;
+    }
+
+    /**
+     * Get nombreCorto
+     *
+     * @return string
+     */
+    public function getNombreCorto()
+    {
+        return $this->nombreCorto;
+    }
+
+    /**
      * Set codigoContenidoFormatoFk
      *
      * @param integer $codigoContenidoFormatoFk
@@ -122,6 +159,30 @@ class RhuContratoTipo
     public function getCodigoContenidoFormatoFk()
     {
         return $this->codigoContenidoFormatoFk;
+    }
+
+    /**
+     * Set codigoContratoClaseFk
+     *
+     * @param integer $codigoContratoClaseFk
+     *
+     * @return RhuContratoTipo
+     */
+    public function setCodigoContratoClaseFk($codigoContratoClaseFk)
+    {
+        $this->codigoContratoClaseFk = $codigoContratoClaseFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoContratoClaseFk
+     *
+     * @return integer
+     */
+    public function getCodigoContratoClaseFk()
+    {
+        return $this->codigoContratoClaseFk;
     }
 
     /**
@@ -180,6 +241,30 @@ class RhuContratoTipo
     public function getContenidoFormatoRel()
     {
         return $this->contenidoFormatoRel;
+    }
+
+    /**
+     * Set contratoClaseRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContratoClase $contratoClaseRel
+     *
+     * @return RhuContratoTipo
+     */
+    public function setContratoClaseRel(\Brasa\RecursoHumanoBundle\Entity\RhuContratoClase $contratoClaseRel = null)
+    {
+        $this->contratoClaseRel = $contratoClaseRel;
+
+        return $this;
+    }
+
+    /**
+     * Get contratoClaseRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuContratoClase
+     */
+    public function getContratoClaseRel()
+    {
+        return $this->contratoClaseRel;
     }
 
     /**
@@ -248,29 +333,5 @@ class RhuContratoTipo
     public function getCambiosTiposContratosNuevosContratoTipoRel()
     {
         return $this->cambiosTiposContratosNuevosContratoTipoRel;
-    }
-
-    /**
-     * Set nombreCorto
-     *
-     * @param string $nombreCorto
-     *
-     * @return RhuContratoTipo
-     */
-    public function setNombreCorto($nombreCorto)
-    {
-        $this->nombreCorto = $nombreCorto;
-
-        return $this;
-    }
-
-    /**
-     * Get nombreCorto
-     *
-     * @return string
-     */
-    public function getNombreCorto()
-    {
-        return $this->nombreCorto;
     }
 }
