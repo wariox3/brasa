@@ -52,9 +52,7 @@ class FormatoProcesoDisciplinarioEstelar extends \FPDF_FPDF {
             $this->SetXY(60, 31);
             $this->SetFont('Arial','B',8);
             $this->Cell(140, 19, utf8_decode("FORMATO PARA COMUNICACIÓN INTERNA Y EXTERNA"), 1, 0, 'C', 1); //cuardo mitad abajo
-            //$this->SetXY(150, 10);
-            //$this->Cell(50, 10, utf8_decode('Página ') . $this->PageNo() . ' de {nb}', 1, 0, 'C', 1); //cuadro derecho arriba
-            //$this->SetXY(150, 20);
+            
             //$this->Cell(50, 20, utf8_decode($arContenidoFormatoA->getCodigoFormatoIso()), 1, 0, 'C', 1); //cuadro derecho mitad 1
             //$this->SetXY(150, 40);
             //$this->Cell(50, 5, utf8_decode("Versión ". $arContenidoFormatoA->getVersion() .""), 1, 0, 'C', 1); //cuadro derecho abajo 1
