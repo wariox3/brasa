@@ -27,6 +27,7 @@ class RhuContratoClase
      * @ORM\OneToMany(targetEntity="RhuContratoTipo", mappedBy="contratoClaseRel")
      */
     protected $contratosTiposContratoClaseRel;
+    
     /**
      * Constructor
      */
