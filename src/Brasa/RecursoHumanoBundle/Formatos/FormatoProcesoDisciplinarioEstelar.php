@@ -33,22 +33,24 @@ class FormatoProcesoDisciplinarioEstelar extends \FPDF_FPDF {
         $arContenidoFormatoA = self::$em->getRepository('BrasaGeneralBundle:GenContenidoFormato')->find($arProcesoDisciplinarioTipo->getCodigoContenidoFormatoFk());
         if ($arContenidoFormatoA->getRequiereFormatoIso() == 1){
             $this->SetFillColor(272, 272, 272);
-            $this->SetFont('Arial','B',10);
+            $this->SetFont('Arial','B',12);
             $this->SetXY(10, 10);
             $this->Line(10, 10, 60, 10);
             $this->Line(10, 10, 10, 50);
             $this->Line(10, 50, 60, 50);
             $this->Cell(0, 0, $this->Image('imagenes/logos/logo.jpg' , 15 ,20, 40 , 20,'JPG'), 0, 0, 'C', 0); //cuadro para el logo
             $this->SetXY(60, 10);
-            $this->Cell(110, 10, utf8_decode("PROCESO GESTIÓN HUMANA"), 0, 0, 'C', 1); //cuadro mitad arriba
-            $this->SetXY(60, 20);
-            $this->SetFillColor(236, 236, 236);
-            $this->Cell(110, 10, "aaaaaaaaaaa", 0, 0, 'C', 1); //cuardo mitad medio
-            $this->SetFillColor(272, 272, 272);
+            $this->Cell(150, 10, utf8_decode("SEGURIDAD ESTELAR LTDA"), 0, 0, 'C', 1); //cuadro mitad arriba
+            $this->SetXY(60, 20);            
+            $this->Cell(150, 10, utf8_decode("SISTEMA DE GESTIÓN INTEGRAL"), 0, 0, 'C', 1); //cuardo mitad medio
+            $this->SetFont('Arial','B',10);
             $this->SetXY(60, 30);
-            $this->Cell(90, 10, utf8_decode("a"), 1, 0, 'C', 1); //cuardo mitad abajo
+            $this->Cell(50, 10, utf8_decode("CODIGO: FO.GH .023.00"), 1, 0, 'C', 1); //cuardo mitad abajo
+            $this->Cell(50, 10, utf8_decode('PAGINA ') . $this->PageNo() . ' de {nb}', 1, 0, 'C', 1); //cuardo mitad abajo
+            $this->Cell(50, 10, utf8_decode("FECHA: 12/11/2013"), 1, 0, 'C', 1); //cuardo mitad abajo
             $this->SetXY(60, 40);
-            $this->Cell(90, 10, utf8_decode("av"), 1, 0, 'C', 1); //cuardo mitad abajo
+            $this->SetFont('Arial','B',8);
+            $this->Cell(150, 10, utf8_decode("FORMATO PARA COMUNICACIÓN INTERNA Y EXTERNA"), 1, 0, 'C', 1); //cuardo mitad abajo
             //$this->SetXY(150, 10);
             //$this->Cell(50, 10, utf8_decode('Página ') . $this->PageNo() . ' de {nb}', 1, 0, 'C', 1); //cuadro derecho arriba
             //$this->SetXY(150, 20);
