@@ -50,8 +50,8 @@
             <tr>               
                     {% for arrDiaSemana in arrDiaSemana %}
                     <th>{{ arrDiaSemana.dia }}{{ arrDiaSemana.diaSemana }}</th>
-                    {% endfor %}
-                <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
+                    {% endfor %} 
+                    <th>PD</th>
             </tr>            
             {% set intCodigoCliente = '' %}
             {% set deshabilitar15 = '' %}
@@ -76,7 +76,7 @@
                 {% endif %} 
                 {% if intCodigoPuesto != arProgramacionDetalle.codigoPuestoFk %}
                     <tr> 
-                        <td colspan="2"></td>
+                        <td colspan="2">{{ arProgramacionDetalle.codigoProgramacionDetallePk }}</td>
                         <td id="suptipo" colspan="30">{{ arProgramacionDetalle.puestoRel.nombre | default('') }}</td>
                     </tr>                    
                     {% set intCodigoPuesto = arProgramacionDetalle.codigoPuestoFk %}
@@ -147,8 +147,8 @@
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia29D{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia29  }}" size="5" style="text-transform: uppercase; width:25px" onkeyup="javascript:this.value = this.value.toUpperCase();" onBlur="validarTurno(this)" readonly/></td>
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia30D{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia30  }}" size="5" style="text-transform: uppercase; width:25px" onkeyup="javascript:this.value = this.value.toUpperCase();" onBlur="validarTurno(this)" readonly/></td>
                         <td style="text-align: right"><input class="input-grid" type="text" name="TxtDia31D{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" value="{{ arProgramacionDetalle.dia31  }}" size="5" style="text-transform: uppercase; width:25px" onkeyup="javascript:this.value = this.value.toUpperCase();" onBlur="validarTurno(this)" readonly/></td>
-                    {% endif %}
-                    <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" /></td>
+                    {% endif %} 
+                    <td>{{ arProgramacionDetalle.codigoPedidoDetalleFk  }}</td>
                 </tr>
             {% endfor %}
         </table>
