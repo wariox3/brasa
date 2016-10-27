@@ -131,7 +131,7 @@ class PlantillaController extends Controller {
                 return $this->redirect($this->generateUrl('brs_tur_base_plantilla_detalle', array('codigoPlantilla' => $codigoPlantilla)));
             }
             if ($form->get('BtnDetalleNuevo')->isClicked()) {
-                $this->actualizarDetalle($arrControles);
+                //$this->actualizarDetalle($arrControles);
                 $arPlantillaDetalleNuevo = new \Brasa\TurnoBundle\Entity\TurPlantillaDetalle();
                 $arPlantillaDetalleNuevo->setPlantillaRel($arPlantilla);
                 $em->persist($arPlantillaDetalleNuevo);
@@ -215,7 +215,7 @@ class PlantillaController extends Controller {
         $arrBotonDesAutorizar = array('label' => 'Des-autorizar', 'disabled' => false);
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
         $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
-        $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
+        $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => true);
         $arrBotonDetalleNuevo = array('label' => 'Nuevo', 'disabled' => false);
         if ($ar->getEstadoAutorizado() == 1) {
             $arrBotonAutorizar['disabled'] = true;
