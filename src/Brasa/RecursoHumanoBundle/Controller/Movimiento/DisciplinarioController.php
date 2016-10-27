@@ -179,8 +179,22 @@ class DisciplinarioController extends Controller
                 if($arProcesoDisciplinario->getEstadoAutorizado() == 1) {
                     $codigoProcesoDisciplinarioTipo = $arProcesoDisciplinario->getCodigoDisciplinarioTipoFk();
                     $codigoProcesoDisciplinario = $arProcesoDisciplinario->getCodigoDisciplinarioPk();
-                    $objFormatoCarta = new \Brasa\RecursoHumanoBundle\Formatos\FormatoProcesoDisciplinario();
-                    $objFormatoCarta->Generar($this, $codigoProcesoDisciplinarioTipo, $codigoProcesoDisciplinario);
+                    
+                    $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+                    $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
+                    if ($arConfiguracion->getCodigoFormatoDisciplinario() == 0){
+                        $objFormatoProceso = new \Brasa\RecursoHumanoBundle\Formatos\FormatoProcesoDisciplinario();
+                        $objFormatoProceso->Generar($this, $codigoProcesoDisciplinarioTipo, $codigoProcesoDisciplinario);
+                    }
+                    if ($arConfiguracion->getCodigoFormatoDisciplinario() == 1){
+                        $objFormatoProceso = new \Brasa\RecursoHumanoBundle\Formatos\FormatoProcesoDisciplinario1teg();
+                        $objFormatoProceso->Generar($this, $codigoProcesoDisciplinarioTipo, $codigoProcesoDisciplinario);
+                    }
+                    if ($arConfiguracion->getCodigoFormatoDisciplinario() == 2){
+                        $objFormatoProceso = new \Brasa\RecursoHumanoBundle\Formatos\FormatoProcesoDisciplinarioEstelar();
+                        $objFormatoProceso->Generar($this, $codigoProcesoDisciplinarioTipo, $codigoProcesoDisciplinario);
+                    }
+                                                                               
                 }    
             }
             if($form->get('BtnEliminarDescargo')->isClicked()) {
