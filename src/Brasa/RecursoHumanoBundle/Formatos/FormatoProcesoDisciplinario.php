@@ -191,7 +191,7 @@ class FormatoProcesoDisciplinario extends \FPDF_FPDF {
         $cadenaCambiada = preg_replace($patron17, $sustitucion17, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron18, $sustitucion18, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron19, $sustitucion19, $cadenaCambiada);
-        
+       
         $pdf->MultiCell(0,5, $cadenaCambiada);
     }
 
