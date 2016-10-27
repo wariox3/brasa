@@ -151,6 +151,7 @@ class FormatoProcesoDisciplinario1teg extends \FPDF_FPDF {
             $sustitucion18 = $arProcesoDisciplinario->getFechaNotificacion();
         }
         $sustitucion18 = strftime("%d de ". $this->MesesEspañol($sustitucion18->format('m')) ." de %Y", strtotime($sustitucion18->format('Y/m/d')));
+        $sustitucion19 = $arProcesoDisciplinario->getCodigoDisciplinarioPk();
         //$cadena = $arContenidoFormato->getContenido();
         $patron1 = '/#1/';
         $patron2 = '/#2/';
@@ -170,6 +171,7 @@ class FormatoProcesoDisciplinario1teg extends \FPDF_FPDF {
         $patron16 = '/#g/';
         $patron17 = '/#h/';
         $patron18 = '/#i/';
+        $patron19 = '/#j/';
         $cadenaCambiada = preg_replace($patron1, $sustitucion1, $cadena);
         $cadenaCambiada = preg_replace($patron2, $sustitucion2, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron3, $sustitucion3, $cadenaCambiada);
@@ -188,6 +190,7 @@ class FormatoProcesoDisciplinario1teg extends \FPDF_FPDF {
         $cadenaCambiada = preg_replace($patron16, $sustitucion16, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron17, $sustitucion17, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron18, $sustitucion18, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron19, $sustitucion19, $cadenaCambiada);
         
         $pdf->MultiCell(0,5, $cadenaCambiada);
     }
