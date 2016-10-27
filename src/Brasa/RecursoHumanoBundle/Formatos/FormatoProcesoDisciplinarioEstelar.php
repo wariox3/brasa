@@ -35,9 +35,10 @@ class FormatoProcesoDisciplinarioEstelar extends \FPDF_FPDF {
             $this->SetFillColor(272, 272, 272);
             $this->SetFont('Arial','B',12);
             $this->SetXY(10, 10);
-            $this->Line(10, 10, 60, 10);
+            $this->Line(10, 10, 90, 10);
             $this->Line(10, 10, 10, 50);
             $this->Line(10, 50, 60, 50);
+            //$this->Line(10, 10, 60, 10);
             $this->Cell(0, 0, $this->Image('imagenes/logos/logo.jpg' , 15 ,20, 40 , 20,'JPG'), 0, 0, 'C', 0); //cuadro para el logo
             $this->SetXY(60, 10);
             $this->Cell(140, 7, utf8_decode("SEGURIDAD ESTELAR LTDA"), 0, 0, 'C', 1); //cuadro mitad arriba
@@ -50,7 +51,7 @@ class FormatoProcesoDisciplinarioEstelar extends \FPDF_FPDF {
             $this->Cell(46, 7, utf8_decode("FECHA: 12/11/2013"), 1, 0, 'C', 1); //cuardo mitad abajo
             $this->SetXY(60, 31);
             $this->SetFont('Arial','B',8);
-            $this->Cell(140, 18, utf8_decode("FORMATO PARA COMUNICACIÓN INTERNA Y EXTERNA"), 1, 0, 'C', 1); //cuardo mitad abajo
+            $this->Cell(140, 19, utf8_decode("FORMATO PARA COMUNICACIÓN INTERNA Y EXTERNA"), 1, 0, 'C', 1); //cuardo mitad abajo
             //$this->SetXY(150, 10);
             //$this->Cell(50, 10, utf8_decode('Página ') . $this->PageNo() . ' de {nb}', 1, 0, 'C', 1); //cuadro derecho arriba
             //$this->SetXY(150, 20);
