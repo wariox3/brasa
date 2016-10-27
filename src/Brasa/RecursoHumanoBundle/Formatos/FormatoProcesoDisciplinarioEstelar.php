@@ -198,13 +198,13 @@ class FormatoProcesoDisciplinarioEstelar extends \FPDF_FPDF {
     public function Footer() {
         //$this->Cell(0,10,'Página '.$this->PageNo(),0,0,'C');
         //$this->Image('imagenes/logos/piedepagina.jpg' , 65 ,208, 150 , 90,'JPG');
-        $this->SetXY(10,250);
-        $this->SetFont('Arial','',10);
-        $this->Cell(45,7, 'ELABORADO POR: SG',1,0,'C');
-        $this->Cell(45,7, 'REVISADO POR: GG',1,0,'C');
-        $this->Cell(45,7, 'APROBADO POR: GG',1,0,'C');
-        $this->Cell(45,7, 'FECHA: 12/11/2013',1,0,'C');
         $this->SetXY(10,260);
+        $this->SetFont('Arial','',10);
+        $this->Cell(48,7, 'ELABORADO POR: SG',1,0,'C');
+        $this->Cell(48,7, 'REVISADO POR: GG',1,0,'C');
+        $this->Cell(48,7, 'APROBADO POR: GG',1,0,'C');
+        $this->Cell(48,7, 'FECHA: 12/11/2013',1,0,'C');
+        $this->SetXY(10,270);
         $this->SetFont('Arial','B',14);
         $this->Cell(0,5, 'PROPIEDAD PARA USO EXCLUSIVO DE SEGURIDAD ESTELAR LTDA',0,0,'C');
     } 
