@@ -190,8 +190,13 @@ class AfiContratoRepository extends EntityRepository {
         foreach ($dql as $dql) {            
             $ncontratos = $dql['total'];
             $ultimoContrato = $dql['ultimocontrato'];
-            $arUltimoContrato = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->find($ultimoContrato);
-            $estadoContrato = $arUltimoContrato->getIndefinido();
+            if ($ultimoContrato == null){
+                $estadoContrato = false;
+            } else {
+                $arUltimoContrato = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->find($ultimoContrato);
+                $estadoContrato = $arUltimoContrato->getIndefinido();
+            }
+            
             if ($ncontratos == 0){
                 $estado = 0;
             } else {
