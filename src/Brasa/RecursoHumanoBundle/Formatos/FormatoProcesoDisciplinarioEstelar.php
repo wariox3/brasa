@@ -198,7 +198,7 @@ class FormatoProcesoDisciplinarioEstelar extends \FPDF_FPDF {
     public function Footer() {
         //$this->Cell(0,10,'Página '.$this->PageNo(),0,0,'C');
         //$this->Image('imagenes/logos/piedepagina.jpg' , 65 ,208, 150 , 90,'JPG');
-        $this->Cell(0,10, 'USO EXCLUSIVO',0,0,'C');
+        $this->Cell(0,5, 'PROPIEDAD PARA USO EXCLUSIVO DE SEGURIDAD ESTELAR LTDA',0,0,'C');
     } 
     
     public static function MesesEspañol($mes) {
