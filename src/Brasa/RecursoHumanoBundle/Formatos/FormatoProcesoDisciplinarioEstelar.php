@@ -35,7 +35,7 @@ class FormatoProcesoDisciplinarioEstelar extends \FPDF_FPDF {
             $this->SetFillColor(272, 272, 272);
             $this->SetFont('Arial','B',12);
             $this->SetXY(10, 10);
-            $this->Line(10, 10, 100, 10);
+            $this->Line(10, 10, 120, 10);
             $this->Line(10, 10, 10, 50);
             $this->Line(10, 50, 60, 50);
             //$this->Line(10, 10, 60, 10); 
