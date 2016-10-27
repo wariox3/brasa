@@ -63,10 +63,7 @@ class RhuContratoTipo
      * @ORM\OneToMany(targetEntity="RhuCambioTipoContrato", mappedBy="contratoTipoNuevoRel")
      */
     protected $cambiosTiposContratosNuevosContratoTipoRel;
-   
-    
-    
-        
+                   
     
     
     /**
