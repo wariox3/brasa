@@ -267,6 +267,11 @@ class RhuConfiguracion
     private $codigoFormatoDisciplinario = 0;
     
     /**
+     * @ORM\Column(name="codigo_formato_descargo", type="integer")
+     */    
+    private $codigoFormatoDescargo = 0;
+    
+    /**
      * Tipo de base para la liquidacion de vacaciones 1-salario 2-salario+prestaciones 3-salario+recargos
      * @ORM\Column(name="tipo_base_pago_vacaciones", type="integer")
      */
@@ -291,7 +296,7 @@ class RhuConfiguracion
 
         
 
-    
+        
 
     /**
      * Set codigoConfiguracionPk
@@ -1515,6 +1520,30 @@ class RhuConfiguracion
     public function getCodigoFormatoDisciplinario()
     {
         return $this->codigoFormatoDisciplinario;
+    }
+
+    /**
+     * Set codigoFormatoDescargo
+     *
+     * @param integer $codigoFormatoDescargo
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoFormatoDescargo($codigoFormatoDescargo)
+    {
+        $this->codigoFormatoDescargo = $codigoFormatoDescargo;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoFormatoDescargo
+     *
+     * @return integer
+     */
+    public function getCodigoFormatoDescargo()
+    {
+        return $this->codigoFormatoDescargo;
     }
 
     /**

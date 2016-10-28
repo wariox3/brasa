@@ -1,8 +1,10 @@
 <?php
 namespace Brasa\RecursoHumanoBundle\Formatos;
+
 class FormatoCarta extends \FPDF_FPDF {
     public static $em;
-    
+    public static $arUsuario;
+    public static $request;
     public static $codigoTipoCarta;
     public static $fechaProceso;
     public static $fechaOpcional;
@@ -11,6 +13,9 @@ class FormatoCarta extends \FPDF_FPDF {
     public function Generar($miThis, $codigoTipoCarta,$fechaProceso,$fechaOpcional,$codigoContrato) {        
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
+        $request = $miThis->getRequest();
+        $arUsuario = $miThis->get('security.context')->getToken()->getUser();
+        self::$arUsuario = $arUsuario;
         self::$em = $em;
         self::$codigoTipoCarta = $codigoTipoCarta;
         self::$fechaProceso = $fechaProceso;
@@ -79,7 +84,9 @@ class FormatoCarta extends \FPDF_FPDF {
         $pdf->SetXY(10, 65);
         $pdf->SetFont('Arial', '', 10);
         $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
-        $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);        
+        $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+        $arConfiguracionNomina = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+        $arConfiguracionNomina = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);        
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContrato = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find(self::$codigoContrato);        
         
@@ -165,6 +172,11 @@ class FormatoCarta extends \FPDF_FPDF {
         $sustitucion13 = $floNoPrestacionalLetras." $(";
         $sustitucion13 .= number_format($floNoPrestacional, 2,'.',',');
         $sustitucion13 .= ")";
+        $sustitucion14 = $arContrato->getEntidadSaludRel()->getNombre();
+        $sustitucion15 = $arContrato->getEntidadPensionRel()->getNombre();        
+        $sustitucion16 = $arConfiguracionNomina->getEntidadRiesgoProfesionalRel()->getNombre();
+        $sustitucion17 = $arContrato->getEntidadCajaRel()->getNombre();         
+        $sustitucion18 = self::$arUsuario->getUserName();
         $cadena = $arContenidoFormato->getContenido();
         $patron1 = '/#1/';
         $patron2 = '/#2/';
@@ -178,6 +190,12 @@ class FormatoCarta extends \FPDF_FPDF {
         $patron10 = '/#a/';
         $patron11 = '/#b/';
         $patron13 = '/#d/';
+        $patron14 = '/#e/';
+        $patron15 = '/#f/';
+        $patron16 = '/#g/';
+        $patron17 = '/#h/';
+        $patron18 = '/#i/';
+        
         $cadenaCambiada = preg_replace($patron1, $sustitucion1, $cadena);
         $cadenaCambiada = preg_replace($patron2, $sustitucion2, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron3, $sustitucion3, $cadenaCambiada);
@@ -190,6 +208,11 @@ class FormatoCarta extends \FPDF_FPDF {
         $cadenaCambiada = preg_replace($patron10, $sustitucion10, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron11, $sustitucion11, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron13, $sustitucion13, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron14, $sustitucion14, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron15, $sustitucion15, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron16, $sustitucion16, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron17, $sustitucion17, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron18, $sustitucion18, $cadenaCambiada);
         $pdf->MultiCell(0,5, $cadenaCambiada);
     }
 

@@ -155,6 +155,7 @@ class FormatoProcesoDisciplinarioEstelar extends \FPDF_FPDF {
         }
         $sustitucion18 = strftime("%d de ". $this->MesesEspañol($sustitucion18->format('m')) ." de %Y", strtotime($sustitucion18->format('Y/m/d')));
         $sustitucion19 = $arProcesoDisciplinario->getCodigoDisciplinarioPk();
+        $sustitucion20 = $arProcesoDisciplinario->getEmpleadoRel()->getCiudadExpedicionRel()->getNombre();
         //$cadena = $arContenidoFormato->getContenido();
         $patron1 = '/#1/';
         $patron2 = '/#2/';
@@ -175,6 +176,7 @@ class FormatoProcesoDisciplinarioEstelar extends \FPDF_FPDF {
         $patron17 = '/#h/';
         $patron18 = '/#i/';
         $patron19 = '/#j/';
+        $patron20 = '/#k/';
         $cadenaCambiada = preg_replace($patron1, $sustitucion1, $cadena);
         $cadenaCambiada = preg_replace($patron2, $sustitucion2, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron3, $sustitucion3, $cadenaCambiada);
@@ -194,20 +196,20 @@ class FormatoProcesoDisciplinarioEstelar extends \FPDF_FPDF {
         $cadenaCambiada = preg_replace($patron17, $sustitucion17, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron18, $sustitucion18, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron19, $sustitucion19, $cadenaCambiada);
-        
+        $cadenaCambiada = preg_replace($patron20, $sustitucion20, $cadenaCambiada);
         $pdf->MultiCell(0,5, $cadenaCambiada);
     }
 
     public function Footer() {
         //$this->Cell(0,10,'Página '.$this->PageNo(),0,0,'C');
         //$this->Image('imagenes/logos/piedepagina.jpg' , 65 ,208, 150 , 90,'JPG');
-        $this->SetXY(10,270);
+        $this->SetXY(10,276);
         $this->SetFont('Arial','',10);
         $this->Cell(47,7, 'ELABORADO POR: SG',1,0,'C');
         $this->Cell(47,7, 'REVISADO POR: GG',1,0,'C');
         $this->Cell(47,7, 'APROBADO POR: GG',1,0,'C');
         $this->Cell(47,7, 'FECHA: 12/11/2013',1,0,'C');
-        $this->SetXY(10,280);
+        $this->SetXY(10,285);
         $this->SetFont('Arial','B',14);
         $this->Cell(0,5, 'PROPIEDAD PARA USO EXCLUSIVO DE SEGURIDAD ESTELAR LTDA',0,0,'C');
     } 
