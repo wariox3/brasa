@@ -23,4 +23,15 @@ class TurCostoRecursoDetalleRepository extends EntityRepository {
         return $dql;
     }    
 
+    public function listaConsultaDql($codigoCliente = "", $mes = "") {
+        $dql   = "SELECT crd FROM BrasaTurnoBundle:TurCostoRecursoDetalle crd WHERE crd.codigoCostoRecursoDetallePk <> 0 ";
+        if($codigoCliente != "") {
+            $dql .= " AND crd.codigoClienteFk = " . $codigoCliente;  
+        }
+        if($mes != "") {
+            $dql .= " AND crd.mes = " . $mes;  
+        }        
+        return $dql;
+    }    
+    
 }

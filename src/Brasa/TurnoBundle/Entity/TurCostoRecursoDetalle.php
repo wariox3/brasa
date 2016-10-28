@@ -48,6 +48,11 @@ class TurCostoRecursoDetalle
     private $codigoPuestoFk;         
 
     /**
+     * @ORM\Column(name="codigo_cliente_fk", type="integer", nullable=true)
+     */    
+    private $codigoClienteFk;     
+    
+    /**
      * @ORM\Column(name="horas", type="float")
      */    
     private $horas = 0;    
@@ -198,6 +203,18 @@ class TurCostoRecursoDetalle
      * @ORM\JoinColumn(name="codigo_puesto_fk", referencedColumnName="codigo_puesto_pk")
      */
     protected $puestoRel;             
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurPedidoDetalle", inversedBy="costosRecursosDetallesPedidoDetalleRel")
+     * @ORM\JoinColumn(name="codigo_pedido_detalle_fk", referencedColumnName="codigo_pedido_detalle_pk")
+     */
+    protected $pedidoDetalleRel;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurCliente", inversedBy="costosRecursosDetallesClienteRel")
+     * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
+     */
+    protected $clienteRel;    
     
     /**
      * Get codigoCostoRecursoDetallePk
@@ -1071,5 +1088,77 @@ class TurCostoRecursoDetalle
     public function getHorasDescansoCosto()
     {
         return $this->horasDescansoCosto;
+    }
+
+    /**
+     * Set pedidoDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidoDetalleRel
+     *
+     * @return TurCostoRecursoDetalle
+     */
+    public function setPedidoDetalleRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidoDetalleRel = null)
+    {
+        $this->pedidoDetalleRel = $pedidoDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Get pedidoDetalleRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurPedidoDetalle
+     */
+    public function getPedidoDetalleRel()
+    {
+        return $this->pedidoDetalleRel;
+    }
+
+    /**
+     * Set codigoClienteFk
+     *
+     * @param integer $codigoClienteFk
+     *
+     * @return TurCostoRecursoDetalle
+     */
+    public function setCodigoClienteFk($codigoClienteFk)
+    {
+        $this->codigoClienteFk = $codigoClienteFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoClienteFk
+     *
+     * @return integer
+     */
+    public function getCodigoClienteFk()
+    {
+        return $this->codigoClienteFk;
+    }
+
+    /**
+     * Set clienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCliente $clienteRel
+     *
+     * @return TurCostoRecursoDetalle
+     */
+    public function setClienteRel(\Brasa\TurnoBundle\Entity\TurCliente $clienteRel = null)
+    {
+        $this->clienteRel = $clienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Get clienteRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurCliente
+     */
+    public function getClienteRel()
+    {
+        return $this->clienteRel;
     }
 }

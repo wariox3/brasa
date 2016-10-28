@@ -55,6 +55,47 @@
 
             {% endfor %}
         </table>
+        
+        <table  class="table table-striped table-bordered table-condensed table-hover">
+            <tr>
+                <th>PD</th>
+                <th>COD</th>
+                <th>RECURSO</th>
+                <th>HDS</th>
+                <th>HD</th>
+                <th>HN</th>
+                <th>HFD</th>
+                <th>HFN</th>
+                <th>HEOD</th>
+                <th>HEON</th>
+                <th>HEFD</th>
+                <th>HEFN</th>
+                <th>RD</th>
+                <th>RFD</th>
+                <th>RFN</th>
+            </tr>
+            {% for arCostoRecursoDetalle in arCostoRecursoDetalle %}
+            <tr>
+                <td>{{ arCostoRecursoDetalle.codigoPedidoDetalleFk }}</td>                               
+                <td>{{ arCostoRecursoDetalle.codigoRecursoFk }}</td>                               
+                <td>{{ arCostoRecursoDetalle.recursoRel.nombreCorto | default('')  }}</td>                               
+                <td style="text-align: right">{{ arCostoRecursoDetalle.horasDescansoCosto | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arCostoRecursoDetalle.horasDiurnasCosto | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arCostoRecursoDetalle.horasNocturnasCosto | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arCostoRecursoDetalle.horasFestivasDiurnasCosto | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arCostoRecursoDetalle.horasFestivasNocturnasCosto | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arCostoRecursoDetalle.horasExtrasOrdinariasDiurnasCosto | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arCostoRecursoDetalle.horasExtrasOrdinariasNocturnasCosto | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arCostoRecursoDetalle.horasExtrasFestivasDiurnasCosto | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arCostoRecursoDetalle.horasExtrasFestivasNocturnasCosto | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arCostoRecursoDetalle.horasRecargoNocturnoCosto | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arCostoRecursoDetalle.horasRecargoFestivoDiurnoCosto | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arCostoRecursoDetalle.horasRecargoFestivoNocturnoCosto | number_format(2, '.', ',') }}</td>
+            </tr>
+
+            {% endfor %}
+        </table>        
+        
         <div class="btn-group" style="float: left">                
                 <div class="btn btn-default btn-sm">Registros <span class="badge">{{ arCostoRecursoDetalle.getTotalItemCount }}</span></div>
         </div>

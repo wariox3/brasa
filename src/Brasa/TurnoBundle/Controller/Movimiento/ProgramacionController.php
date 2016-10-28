@@ -741,11 +741,11 @@ class ProgramacionController extends Controller
                         $em->persist($arProgramacionDetalle);        
                     } else {
                         $error = true;
-                        $objMensaje->Mensaje("error", "Horas nocturnas superan las horas del pedido desponibles para programar detalle " . $intCodigo, $this);
+                        $objMensaje->Mensaje("error", "Horas nocturnas superan las horas del pedido disponibles para programar detalle " . $intCodigo, $this);
                     }
                 } else {
                     $error = true;
-                    $objMensaje->Mensaje("error", "Horas diurnas superan las horas del pedido desponibles para programar detalle " . $intCodigo, $this);                
+                    $objMensaje->Mensaje("error", "Horas diurnas superan las horas del pedido disponibles para programar detalle " . $intCodigo, $this);                
                 }                
             } else {
                 $error = true;

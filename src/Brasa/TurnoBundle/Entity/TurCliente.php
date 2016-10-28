@@ -338,6 +338,11 @@ class TurCliente
      */
     protected $puestosDotacionesClienteRel;    
     
+    /**
+     * @ORM\OneToMany(targetEntity="TurCostoRecursoDetalle", mappedBy="clienteRel")
+     */
+    protected $costosRecursosDetallesClienteRel;    
+    
 
     /**
      * Constructor
@@ -357,6 +362,7 @@ class TurCliente
         $this->clientesDireccionesClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->costosServiciosClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->puestosDotacionesClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->costosRecursosDetallesClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1985,5 +1991,39 @@ class TurCliente
     public function getPuestosDotacionesClienteRel()
     {
         return $this->puestosDotacionesClienteRel;
+    }
+
+    /**
+     * Add costosRecursosDetallesClienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCostoRecursoDetalle $costosRecursosDetallesClienteRel
+     *
+     * @return TurCliente
+     */
+    public function addCostosRecursosDetallesClienteRel(\Brasa\TurnoBundle\Entity\TurCostoRecursoDetalle $costosRecursosDetallesClienteRel)
+    {
+        $this->costosRecursosDetallesClienteRel[] = $costosRecursosDetallesClienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove costosRecursosDetallesClienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCostoRecursoDetalle $costosRecursosDetallesClienteRel
+     */
+    public function removeCostosRecursosDetallesClienteRel(\Brasa\TurnoBundle\Entity\TurCostoRecursoDetalle $costosRecursosDetallesClienteRel)
+    {
+        $this->costosRecursosDetallesClienteRel->removeElement($costosRecursosDetallesClienteRel);
+    }
+
+    /**
+     * Get costosRecursosDetallesClienteRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCostosRecursosDetallesClienteRel()
+    {
+        return $this->costosRecursosDetallesClienteRel;
     }
 }

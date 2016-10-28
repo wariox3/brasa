@@ -98,8 +98,9 @@ class CierreMesController extends Controller
                         $arCostoRecursoDetalle->setMes($arCierreMes->getMes());
                         $arCostoRecursoDetalle->setCodigoCierreMesFk($arCierreMes->getCodigoCierreMesPk());
                         $arCostoRecursoDetalle->setRecursoRel($arRecurso);
-                        $arCostoRecursoDetalle->setCodigoPedidoDetalleFk($detalle['codigoPedidoDetalleFk']);
+                        $arCostoRecursoDetalle->setPedidoDetalleRel($arPedidoDetalle);                        
                         $arCostoRecursoDetalle->setPuestoRel($arPedidoDetalle->getPuestoRel());
+                        $arCostoRecursoDetalle->setClienteRel($arPedidoDetalle->getPedidoRel()->getClienteRel());
                         $arCostoRecursoDetalle->setHorasDescanso($detalle['horasDescanso']);
                         $arCostoRecursoDetalle->setHorasDiurnas($detalle['horasDiurnas']);
                         $arCostoRecursoDetalle->setHorasNocturnas($detalle['horasNocturnas']);
