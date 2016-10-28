@@ -353,6 +353,11 @@ class TurPedidoDetalle
     
 
     /**
+     * @ORM\OneToMany(targetEntity="TurCostoRecursoDetalle", mappedBy="pedidoDetalleRel")
+     */
+    protected $costosRecursosDetallesPedidoDetalleRel;     
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -1993,5 +1998,39 @@ class TurPedidoDetalle
     public function getCostosServiciosPedidoDetalleRel()
     {
         return $this->costosServiciosPedidoDetalleRel;
+    }
+
+    /**
+     * Add costosRecursosDetallesPedidoDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCostoRecursoDetalle $costosRecursosDetallesPedidoDetalleRel
+     *
+     * @return TurPedidoDetalle
+     */
+    public function addCostosRecursosDetallesPedidoDetalleRel(\Brasa\TurnoBundle\Entity\TurCostoRecursoDetalle $costosRecursosDetallesPedidoDetalleRel)
+    {
+        $this->costosRecursosDetallesPedidoDetalleRel[] = $costosRecursosDetallesPedidoDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove costosRecursosDetallesPedidoDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCostoRecursoDetalle $costosRecursosDetallesPedidoDetalleRel
+     */
+    public function removeCostosRecursosDetallesPedidoDetalleRel(\Brasa\TurnoBundle\Entity\TurCostoRecursoDetalle $costosRecursosDetallesPedidoDetalleRel)
+    {
+        $this->costosRecursosDetallesPedidoDetalleRel->removeElement($costosRecursosDetallesPedidoDetalleRel);
+    }
+
+    /**
+     * Get costosRecursosDetallesPedidoDetalleRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCostosRecursosDetallesPedidoDetalleRel()
+    {
+        return $this->costosRecursosDetallesPedidoDetalleRel;
     }
 }

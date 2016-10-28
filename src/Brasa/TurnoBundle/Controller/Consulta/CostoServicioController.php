@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 class CostoServicioController extends Controller
 {
     var $strListaDql = "";
+    var $strListaDetalleDql = "";
     /**
      * @Route("/tur/consulta/costo/servicio", name="brs_tur_consulta_costo_servicio")
      */
@@ -67,8 +68,13 @@ class CostoServicioController extends Controller
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
         $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurCostoServicio')->listaDql(
-                $session->get('filtroCodigoCliente'), $session->get('filtroTurMes') 
+                $session->get('filtroCodigoCliente'), 
+                $session->get('filtroTurMes') 
                 );
+        $this->strListaDetalleDql =  $em->getRepository('BrasaTurnoBundle:TurCostoRecursoDetalle')->listaConsultaDql(
+                $session->get('filtroCodigoCliente'), 
+                $session->get('filtroTurMes') 
+                );        
     }
 
     private function filtrar ($form) {
@@ -125,6 +131,8 @@ class CostoServicioController extends Controller
     
     private function generarExcel() {
         ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);        
         $em = $this->getDoctrine()->getManager();
         $objPHPExcel = new \PHPExcel();
         // Set document properties
@@ -182,15 +190,104 @@ class CostoServicioController extends Controller
                     ->setCellValue('L' . $i, $arCostoServicio->getHorasProgramadas())
                     ->setCellValue('M' . $i, $arCostoServicio->getCantidad())
                     ->setCellValue('N' . $i, $arCostoServicio->getVrCostoRecurso())
-                    ->setCellValue('O' . $i, $arCostoServicio->getVrTotal())
-;
+                    ->setCellValue('O' . $i, $arCostoServicio->getVrTotal());
             $i++;
-        }
-        //$objPHPExcel->getActiveSheet()->getStyle('A1:AL1')->getFont()->setBold(true);
-
-        //$objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+        }        
 
         $objPHPExcel->getActiveSheet()->setTitle('CostoServicio');
+        
+        $objPHPExcel->createSheet(1)->setTitle('CostoServicioDetalle')
+                ->setCellValue('A1', 'COD')
+                ->setCellValue('B1', 'CLIENTE')
+                ->setCellValue('C1', 'COD')
+                ->setCellValue('D1', 'PUESTO')
+                ->setCellValue('E1', 'C.COSTO')
+                ->setCellValue('F1', 'MODALIDAD')
+                ->setCellValue('G1', 'IDENTIFICACION')
+                ->setCellValue('H1', 'NOMBRE')
+                ->setCellValue('I1', 'C.COSTO')
+                ->setCellValue('J1', 'COSTO')
+                ->setCellValue('K1', 'DS')
+                ->setCellValue('L1', 'D')
+                ->setCellValue('M1', 'N')
+                ->setCellValue('N1', 'FD')
+                ->setCellValue('O1', 'FN')
+                ->setCellValue('P1', 'EOD')
+                ->setCellValue('Q1', 'EON')
+                ->setCellValue('R1', 'EFD')
+                ->setCellValue('S1', 'EFN')
+                ->setCellValue('T1', 'RN')
+                ->setCellValue('U1', 'RFD')
+                ->setCellValue('V1', 'RFN')
+                ->setCellValue('W1', 'C.DS')
+                ->setCellValue('X1', 'C.D')
+                ->setCellValue('Y1', 'C.N')
+                ->setCellValue('Z1', 'C.FD')
+                ->setCellValue('AA1', 'C.FN')
+                ->setCellValue('AB1', 'C.EOD')
+                ->setCellValue('AC1', 'C.EON')
+                ->setCellValue('AD1', 'C.EFD')
+                ->setCellValue('AE1', 'C.EFN')
+                ->setCellValue('AF1', 'C.RN')
+                ->setCellValue('AG1', 'C.RFD')
+                ->setCellValue('AH1', 'C.RFN');
+
+        $objPHPExcel->setActiveSheetIndex(1); 
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(9); 
+        $objPHPExcel->getActiveSheet(1)->getStyle('1')->getFont()->setBold(true);     
+        for($col = 'A'; $col !== 'AI'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                  
+        }            
+        for($col = 'J'; $col !== 'AI'; $col++) { 
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('right');                 
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }             
+
+        $i = 2;
+            
+        $query = $em->createQuery($this->strListaDetalleDql);
+        $arCostoRecursoDetalles = new \Brasa\TurnoBundle\Entity\TurCostoRecursoDetalle();
+        $arCostoRecursoDetalles = $query->getResult();
+        foreach ($arCostoRecursoDetalles as $arCostoRecursoDetalle) {
+            $objPHPExcel->setActiveSheetIndex(1)
+                    ->setCellValue('A' . $i, $arCostoRecursoDetalle->getCodigoClienteFk())
+                    ->setCellValue('B' . $i, $arCostoRecursoDetalle->getClienteRel()->getNombreCorto())
+                    ->setCellValue('C' . $i, $arCostoRecursoDetalle->getCodigoPuestoFk())
+                    ->setCellValue('D' . $i, $arCostoRecursoDetalle->getPuestoRel()->getNombre())
+                    ->setCellValue('E' . $i, $arCostoRecursoDetalle->getPuestoRel()->getCodigoCentroCostoContabilidadFk())
+                    ->setCellValue('F' . $i, $arCostoRecursoDetalle->getPedidoDetalleRel()->getModalidadServicioRel()->getNombre())
+                    ->setCellValue('G' . $i, $arCostoRecursoDetalle->getRecursoRel()->getNumeroIdentificacion())
+                    ->setCellValue('H' . $i, $arCostoRecursoDetalle->getRecursoRel()->getNombreCorto())
+                    ->setCellValue('I' . $i, $arCostoRecursoDetalle->getRecursoRel()->getEmpleadoRel()->getCodigoCentroCostoContabilidadFk())
+                    ->setCellValue('J' . $i, $arCostoRecursoDetalle->getCosto())
+                    ->setCellValue('K' . $i, $arCostoRecursoDetalle->getHorasDescanso())
+                    ->setCellValue('L' . $i, $arCostoRecursoDetalle->getHorasDiurnas())
+                    ->setCellValue('M' . $i, $arCostoRecursoDetalle->getHorasNocturnas())
+                    ->setCellValue('N' . $i, $arCostoRecursoDetalle->getHorasFestivasDiurnas())
+                    ->setCellValue('O' . $i, $arCostoRecursoDetalle->getHorasFestivasNocturnas())
+                    ->setCellValue('P' . $i, $arCostoRecursoDetalle->getHorasExtrasOrdinariasDiurnas())
+                    ->setCellValue('Q' . $i, $arCostoRecursoDetalle->getHorasExtrasOrdinariasNocturnas())
+                    ->setCellValue('R' . $i, $arCostoRecursoDetalle->getHorasExtrasFestivasDiurnas())
+                    ->setCellValue('S' . $i, $arCostoRecursoDetalle->getHorasExtrasFestivasNocturnas())
+                    ->setCellValue('T' . $i, $arCostoRecursoDetalle->getHorasRecargoNocturno())
+                    ->setCellValue('U' . $i, $arCostoRecursoDetalle->getHorasRecargoFestivoDiurno())
+                    ->setCellValue('V' . $i, $arCostoRecursoDetalle->getHorasRecargoFestivoNocturno())
+                    ->setCellValue('W' . $i, $arCostoRecursoDetalle->getHorasDescansoCosto())
+                    ->setCellValue('X' . $i, $arCostoRecursoDetalle->getHorasDiurnasCosto())
+                    ->setCellValue('Y' . $i, $arCostoRecursoDetalle->getHorasNocturnasCosto())
+                    ->setCellValue('Z' . $i, $arCostoRecursoDetalle->getHorasFestivasDiurnasCosto())
+                    ->setCellValue('AA' . $i, $arCostoRecursoDetalle->getHorasFestivasNocturnasCosto())
+                    ->setCellValue('AB' . $i, $arCostoRecursoDetalle->getHorasExtrasOrdinariasDiurnasCosto())
+                    ->setCellValue('AC' . $i, $arCostoRecursoDetalle->getHorasExtrasOrdinariasNocturnasCosto())
+                    ->setCellValue('AD' . $i, $arCostoRecursoDetalle->getHorasExtrasFestivasDiurnasCosto())
+                    ->setCellValue('AE' . $i, $arCostoRecursoDetalle->getHorasExtrasFestivasNocturnasCosto())
+                    ->setCellValue('AF' . $i, $arCostoRecursoDetalle->getHorasRecargoNocturnoCosto())
+                    ->setCellValue('AG' . $i, $arCostoRecursoDetalle->getHorasRecargoFestivoDiurnoCosto())
+                    ->setCellValue('AH' . $i, $arCostoRecursoDetalle->getHorasRecargoFestivoNocturnoCosto());
+            $i++;
+        }           
+        
+        
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');

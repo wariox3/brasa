@@ -551,6 +551,9 @@ class ProgramacionController extends Controller
         $intIndice = 0;
         $boolTurnosSobrepasados = false;
         foreach ($arrControles['LblCodigo'] as $intCodigo) {
+            /*if($intCodigo == 16173) {
+                echo "hola";
+            }*/
             $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
             $arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->find($intCodigo);
             $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
@@ -558,7 +561,7 @@ class ProgramacionController extends Controller
             $validar = $this->validarHoras($intCodigo, $arrControles);             
             if($validar['validado']) {
                 $horasDiurnasPendientes = $arPedidoDetalle->getHorasDiurnas() - ($arPedidoDetalle->getHorasDiurnasProgramadas() - $arProgramacionDetalle->getHorasDiurnas());
-                $horasNocturnasPendientes = $arPedidoDetalle->getHorasNocturnasProgramadas() - ($arPedidoDetalle->getHorasNocturnasProgramadas() - $arProgramacionDetalle->getHorasNocturnas());
+                $horasNocturnasPendientes = $arPedidoDetalle->getHorasNocturnas() - ($arPedidoDetalle->getHorasNocturnasProgramadas() - $arProgramacionDetalle->getHorasNocturnas());
                 if($horasDiurnasPendientes >= $validar['horasDiurnas'] || $validarHoras == false ) {
                     if($horasNocturnasPendientes >= $validar['horasNocturnas'] || $validarHoras == false) {
                         $horasDiurnasProgramadas = ($arPedidoDetalle->getHorasDiurnasProgramadas() - $arProgramacionDetalle->getHorasDiurnas()) + $validar['horasDiurnas'];                
@@ -741,11 +744,11 @@ class ProgramacionController extends Controller
                         $em->persist($arProgramacionDetalle);        
                     } else {
                         $error = true;
-                        $objMensaje->Mensaje("error", "Horas nocturnas superan las horas del pedido desponibles para programar detalle " . $intCodigo, $this);
+                        $objMensaje->Mensaje("error", "Horas nocturnas superan las horas del pedido disponibles para programar detalle " . $intCodigo, $this);
                     }
                 } else {
                     $error = true;
-                    $objMensaje->Mensaje("error", "Horas diurnas superan las horas del pedido desponibles para programar detalle " . $intCodigo, $this);                
+                    $objMensaje->Mensaje("error", "Horas diurnas superan las horas del pedido disponibles para programar detalle " . $intCodigo, $this);                
                 }                
             } else {
                 $error = true;

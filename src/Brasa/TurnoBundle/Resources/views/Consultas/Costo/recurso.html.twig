@@ -50,12 +50,11 @@
                 <th>COD</th>
                 <th>DOCUMENTO</th>
                 <th>RECURSO</th>
+                <th>C.COSTO</th>
                 <th>NOMINA</th>
                 <th>PRESTACIONES</th>
                 <th>APORTES</th>
                 <th>TOTAL</th>
-                <th>HORAS</th>
-                <th>VR.HORA</th>
                 <th></th>
             </tr>            
             {% for arCostoRecurso in arCostoRecurso %}
@@ -66,12 +65,11 @@
                     <td>{{ arCostoRecurso.codigoRecursoFk }}</td>
                     <td>{{ arCostoRecurso.recursoRel.numeroIdentificacion }}</td>
                     <td>{{ arCostoRecurso.recursoRel.nombreCorto }}</td>
+                    <td>{{ arCostoRecurso.recursoRel.empleadoRel.codigoCentroCostoContabilidadFk }}</td>
                     <td style="text-align: right">{{ arCostoRecurso.vrNomina | number_format(0, '.', ',') }}</td> 
                     <td style="text-align: right">{{ arCostoRecurso.vrPrestaciones | number_format(0, '.', ',') }}</td> 
                     <td style="text-align: right">{{ arCostoRecurso.vrAportesSociales | number_format(0, '.', ',') }}</td> 
                     <td style="text-align: right">{{ arCostoRecurso.vrCostoTotal | number_format(0, '.', ',') }}</td> 
-                    <td style="text-align: right">{{ arCostoRecurso.horas | number_format(0, '.', ',') }}</td> 
-                    <td style="text-align: right">{{ arCostoRecurso.vrHora | number_format(0, '.', ',') }}</td> 
                     <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_tur_consulta_costo_recurso_ver_detalle', {'codigoCostoRecurso': arCostoRecurso.codigoCostoRecursoPk }) }}', 'VerCostoRecursoDetalle', 600, 1200)"><img src="{{ asset('imagenes/bootstrap/glyphicons_090_table.png') }}" width=20 height=20 title="Ver"></a></td>
                 </tr>
             {% endfor %}

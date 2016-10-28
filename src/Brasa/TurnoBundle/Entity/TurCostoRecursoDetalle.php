@@ -48,6 +48,11 @@ class TurCostoRecursoDetalle
     private $codigoPuestoFk;         
 
     /**
+     * @ORM\Column(name="codigo_cliente_fk", type="integer", nullable=true)
+     */    
+    private $codigoClienteFk;     
+    
+    /**
      * @ORM\Column(name="horas", type="float")
      */    
     private $horas = 0;    
@@ -113,6 +118,66 @@ class TurCostoRecursoDetalle
     private $horasDescanso = 0;     
     
     /**
+     * @ORM\Column(name="horas_diurnas_costo", type="float")
+     */    
+    private $horasDiurnasCosto = 0;     
+
+    /**
+     * @ORM\Column(name="horas_nocturnas_costo", type="float")
+     */    
+    private $horasNocturnasCosto = 0;    
+    
+    /**
+     * @ORM\Column(name="horas_festivas_diurnas_costo", type="float")
+     */    
+    private $horasFestivasDiurnasCosto = 0;     
+
+    /**
+     * @ORM\Column(name="horas_festivas_nocturnas_costo", type="float")
+     */    
+    private $horasFestivasNocturnasCosto = 0;    
+    
+    /**
+     * @ORM\Column(name="horas_extras_ordinarias_diurnas_costo", type="float")
+     */    
+    private $horasExtrasOrdinariasDiurnasCosto = 0;    
+
+    /**
+     * @ORM\Column(name="horas_extras_ordinarias_nocturnas_costo", type="float")
+     */    
+    private $horasExtrasOrdinariasNocturnasCosto = 0;        
+
+    /**
+     * @ORM\Column(name="horas_extras_festivas_diurnas_costo", type="float")
+     */    
+    private $horasExtrasFestivasDiurnasCosto = 0;    
+
+    /**
+     * @ORM\Column(name="horas_extras_festivas_nocturnas_costo", type="float")
+     */    
+    private $horasExtrasFestivasNocturnasCosto = 0;    
+
+    /**
+     * @ORM\Column(name="horas_recargo_nocturno_costo", type="float")
+     */    
+    private $horasRecargoNocturnoCosto = 0;    
+    
+    /**
+     * @ORM\Column(name="horas_recargo_festivo_diurno_costo", type="float")
+     */    
+    private $horasRecargoFestivoDiurnoCosto = 0;    
+    
+    /**
+     * @ORM\Column(name="horas_recargo_festivo_nocturno_costo", type="float")
+     */    
+    private $horasRecargoFestivoNocturnoCosto = 0;    
+    
+    /**
+     * @ORM\Column(name="horas_descanso_costo", type="float")
+     */    
+    private $horasDescansoCosto = 0;    
+    
+    /**
      * @ORM\Column(name="peso", type="float")
      */    
     private $peso = 0;     
@@ -138,6 +203,18 @@ class TurCostoRecursoDetalle
      * @ORM\JoinColumn(name="codigo_puesto_fk", referencedColumnName="codigo_puesto_pk")
      */
     protected $puestoRel;             
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurPedidoDetalle", inversedBy="costosRecursosDetallesPedidoDetalleRel")
+     * @ORM\JoinColumn(name="codigo_pedido_detalle_fk", referencedColumnName="codigo_pedido_detalle_pk")
+     */
+    protected $pedidoDetalleRel;    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurCliente", inversedBy="costosRecursosDetallesClienteRel")
+     * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
+     */
+    protected $clienteRel;    
     
     /**
      * Get codigoCostoRecursoDetallePk
@@ -723,5 +800,365 @@ class TurCostoRecursoDetalle
     public function getRecursoRel()
     {
         return $this->recursoRel;
+    }
+
+    /**
+     * Set horasDiurnasCosto
+     *
+     * @param float $horasDiurnasCosto
+     *
+     * @return TurCostoRecursoDetalle
+     */
+    public function setHorasDiurnasCosto($horasDiurnasCosto)
+    {
+        $this->horasDiurnasCosto = $horasDiurnasCosto;
+
+        return $this;
+    }
+
+    /**
+     * Get horasDiurnasCosto
+     *
+     * @return float
+     */
+    public function getHorasDiurnasCosto()
+    {
+        return $this->horasDiurnasCosto;
+    }
+
+    /**
+     * Set horasNocturnasCosto
+     *
+     * @param float $horasNocturnasCosto
+     *
+     * @return TurCostoRecursoDetalle
+     */
+    public function setHorasNocturnasCosto($horasNocturnasCosto)
+    {
+        $this->horasNocturnasCosto = $horasNocturnasCosto;
+
+        return $this;
+    }
+
+    /**
+     * Get horasNocturnasCosto
+     *
+     * @return float
+     */
+    public function getHorasNocturnasCosto()
+    {
+        return $this->horasNocturnasCosto;
+    }
+
+    /**
+     * Set horasFestivasDiurnasCosto
+     *
+     * @param float $horasFestivasDiurnasCosto
+     *
+     * @return TurCostoRecursoDetalle
+     */
+    public function setHorasFestivasDiurnasCosto($horasFestivasDiurnasCosto)
+    {
+        $this->horasFestivasDiurnasCosto = $horasFestivasDiurnasCosto;
+
+        return $this;
+    }
+
+    /**
+     * Get horasFestivasDiurnasCosto
+     *
+     * @return float
+     */
+    public function getHorasFestivasDiurnasCosto()
+    {
+        return $this->horasFestivasDiurnasCosto;
+    }
+
+    /**
+     * Set horasFestivasNocturnasCosto
+     *
+     * @param float $horasFestivasNocturnasCosto
+     *
+     * @return TurCostoRecursoDetalle
+     */
+    public function setHorasFestivasNocturnasCosto($horasFestivasNocturnasCosto)
+    {
+        $this->horasFestivasNocturnasCosto = $horasFestivasNocturnasCosto;
+
+        return $this;
+    }
+
+    /**
+     * Get horasFestivasNocturnasCosto
+     *
+     * @return float
+     */
+    public function getHorasFestivasNocturnasCosto()
+    {
+        return $this->horasFestivasNocturnasCosto;
+    }
+
+    /**
+     * Set horasExtrasOrdinariasDiurnasCosto
+     *
+     * @param float $horasExtrasOrdinariasDiurnasCosto
+     *
+     * @return TurCostoRecursoDetalle
+     */
+    public function setHorasExtrasOrdinariasDiurnasCosto($horasExtrasOrdinariasDiurnasCosto)
+    {
+        $this->horasExtrasOrdinariasDiurnasCosto = $horasExtrasOrdinariasDiurnasCosto;
+
+        return $this;
+    }
+
+    /**
+     * Get horasExtrasOrdinariasDiurnasCosto
+     *
+     * @return float
+     */
+    public function getHorasExtrasOrdinariasDiurnasCosto()
+    {
+        return $this->horasExtrasOrdinariasDiurnasCosto;
+    }
+
+    /**
+     * Set horasExtrasOrdinariasNocturnasCosto
+     *
+     * @param float $horasExtrasOrdinariasNocturnasCosto
+     *
+     * @return TurCostoRecursoDetalle
+     */
+    public function setHorasExtrasOrdinariasNocturnasCosto($horasExtrasOrdinariasNocturnasCosto)
+    {
+        $this->horasExtrasOrdinariasNocturnasCosto = $horasExtrasOrdinariasNocturnasCosto;
+
+        return $this;
+    }
+
+    /**
+     * Get horasExtrasOrdinariasNocturnasCosto
+     *
+     * @return float
+     */
+    public function getHorasExtrasOrdinariasNocturnasCosto()
+    {
+        return $this->horasExtrasOrdinariasNocturnasCosto;
+    }
+
+    /**
+     * Set horasExtrasFestivasDiurnasCosto
+     *
+     * @param float $horasExtrasFestivasDiurnasCosto
+     *
+     * @return TurCostoRecursoDetalle
+     */
+    public function setHorasExtrasFestivasDiurnasCosto($horasExtrasFestivasDiurnasCosto)
+    {
+        $this->horasExtrasFestivasDiurnasCosto = $horasExtrasFestivasDiurnasCosto;
+
+        return $this;
+    }
+
+    /**
+     * Get horasExtrasFestivasDiurnasCosto
+     *
+     * @return float
+     */
+    public function getHorasExtrasFestivasDiurnasCosto()
+    {
+        return $this->horasExtrasFestivasDiurnasCosto;
+    }
+
+    /**
+     * Set horasExtrasFestivasNocturnasCosto
+     *
+     * @param float $horasExtrasFestivasNocturnasCosto
+     *
+     * @return TurCostoRecursoDetalle
+     */
+    public function setHorasExtrasFestivasNocturnasCosto($horasExtrasFestivasNocturnasCosto)
+    {
+        $this->horasExtrasFestivasNocturnasCosto = $horasExtrasFestivasNocturnasCosto;
+
+        return $this;
+    }
+
+    /**
+     * Get horasExtrasFestivasNocturnasCosto
+     *
+     * @return float
+     */
+    public function getHorasExtrasFestivasNocturnasCosto()
+    {
+        return $this->horasExtrasFestivasNocturnasCosto;
+    }
+
+    /**
+     * Set horasRecargoNocturnoCosto
+     *
+     * @param float $horasRecargoNocturnoCosto
+     *
+     * @return TurCostoRecursoDetalle
+     */
+    public function setHorasRecargoNocturnoCosto($horasRecargoNocturnoCosto)
+    {
+        $this->horasRecargoNocturnoCosto = $horasRecargoNocturnoCosto;
+
+        return $this;
+    }
+
+    /**
+     * Get horasRecargoNocturnoCosto
+     *
+     * @return float
+     */
+    public function getHorasRecargoNocturnoCosto()
+    {
+        return $this->horasRecargoNocturnoCosto;
+    }
+
+    /**
+     * Set horasRecargoFestivoDiurnoCosto
+     *
+     * @param float $horasRecargoFestivoDiurnoCosto
+     *
+     * @return TurCostoRecursoDetalle
+     */
+    public function setHorasRecargoFestivoDiurnoCosto($horasRecargoFestivoDiurnoCosto)
+    {
+        $this->horasRecargoFestivoDiurnoCosto = $horasRecargoFestivoDiurnoCosto;
+
+        return $this;
+    }
+
+    /**
+     * Get horasRecargoFestivoDiurnoCosto
+     *
+     * @return float
+     */
+    public function getHorasRecargoFestivoDiurnoCosto()
+    {
+        return $this->horasRecargoFestivoDiurnoCosto;
+    }
+
+    /**
+     * Set horasRecargoFestivoNocturnoCosto
+     *
+     * @param float $horasRecargoFestivoNocturnoCosto
+     *
+     * @return TurCostoRecursoDetalle
+     */
+    public function setHorasRecargoFestivoNocturnoCosto($horasRecargoFestivoNocturnoCosto)
+    {
+        $this->horasRecargoFestivoNocturnoCosto = $horasRecargoFestivoNocturnoCosto;
+
+        return $this;
+    }
+
+    /**
+     * Get horasRecargoFestivoNocturnoCosto
+     *
+     * @return float
+     */
+    public function getHorasRecargoFestivoNocturnoCosto()
+    {
+        return $this->horasRecargoFestivoNocturnoCosto;
+    }
+
+    /**
+     * Set horasDescansoCosto
+     *
+     * @param float $horasDescansoCosto
+     *
+     * @return TurCostoRecursoDetalle
+     */
+    public function setHorasDescansoCosto($horasDescansoCosto)
+    {
+        $this->horasDescansoCosto = $horasDescansoCosto;
+
+        return $this;
+    }
+
+    /**
+     * Get horasDescansoCosto
+     *
+     * @return float
+     */
+    public function getHorasDescansoCosto()
+    {
+        return $this->horasDescansoCosto;
+    }
+
+    /**
+     * Set pedidoDetalleRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidoDetalleRel
+     *
+     * @return TurCostoRecursoDetalle
+     */
+    public function setPedidoDetalleRel(\Brasa\TurnoBundle\Entity\TurPedidoDetalle $pedidoDetalleRel = null)
+    {
+        $this->pedidoDetalleRel = $pedidoDetalleRel;
+
+        return $this;
+    }
+
+    /**
+     * Get pedidoDetalleRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurPedidoDetalle
+     */
+    public function getPedidoDetalleRel()
+    {
+        return $this->pedidoDetalleRel;
+    }
+
+    /**
+     * Set codigoClienteFk
+     *
+     * @param integer $codigoClienteFk
+     *
+     * @return TurCostoRecursoDetalle
+     */
+    public function setCodigoClienteFk($codigoClienteFk)
+    {
+        $this->codigoClienteFk = $codigoClienteFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoClienteFk
+     *
+     * @return integer
+     */
+    public function getCodigoClienteFk()
+    {
+        return $this->codigoClienteFk;
+    }
+
+    /**
+     * Set clienteRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCliente $clienteRel
+     *
+     * @return TurCostoRecursoDetalle
+     */
+    public function setClienteRel(\Brasa\TurnoBundle\Entity\TurCliente $clienteRel = null)
+    {
+        $this->clienteRel = $clienteRel;
+
+        return $this;
+    }
+
+    /**
+     * Get clienteRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurCliente
+     */
+    public function getClienteRel()
+    {
+        return $this->clienteRel;
     }
 }

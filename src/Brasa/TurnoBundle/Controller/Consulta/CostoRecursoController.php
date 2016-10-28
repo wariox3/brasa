@@ -131,12 +131,11 @@ class CostoRecursoController extends Controller
                     ->setCellValue('C1', 'CODIGO')
                     ->setCellValue('D1', 'IDENTIFICACION')
                     ->setCellValue('E1', 'NOMBRE')
-                    ->setCellValue('F1', 'C.NOMINA')
-                    ->setCellValue('G1', 'C.PRESTACIONES')
-                    ->setCellValue('H1', 'C.APORTES')
-                    ->setCellValue('I1', 'TOTAL')
-                    ->setCellValue('J1', 'HORAS')
-                    ->setCellValue('K1', 'VR.HORA');
+                    ->setCellValue('F1', 'C.COSTO')
+                    ->setCellValue('G1', 'C.NOMINA')
+                    ->setCellValue('H1', 'C.PRESTACIONES')
+                    ->setCellValue('I1', 'C.APORTES')
+                    ->setCellValue('J1', 'TOTAL');
         
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -149,12 +148,11 @@ class CostoRecursoController extends Controller
                     ->setCellValue('C' . $i, $arCostoRecurso->getCodigoRecursoFk())
                     ->setCellValue('D' . $i, $arCostoRecurso->getRecursoRel()->getNumeroIdentificacion())
                     ->setCellValue('E' . $i, $arCostoRecurso->getRecursoRel()->getNombreCorto())
-                    ->setCellValue('F' . $i, $arCostoRecurso->getVrNomina())
-                    ->setCellValue('G' . $i, $arCostoRecurso->getVrPrestaciones())
-                    ->setCellValue('H' . $i, $arCostoRecurso->getVrAportesSociales())
-                    ->setCellValue('I' . $i, $arCostoRecurso->getVrCostoTotal())
-                    ->setCellValue('J' . $i, $arCostoRecurso->getHoras())
-                    ->setCellValue('K' . $i, $arCostoRecurso->getVrHora());                         
+                    ->setCellValue('F' . $i, $arCostoRecurso->getRecursoRel()->getEmpleadoRel()->getCodigoCentroCostoContabilidadFk())
+                    ->setCellValue('G' . $i, $arCostoRecurso->getVrNomina())
+                    ->setCellValue('H' . $i, $arCostoRecurso->getVrPrestaciones())
+                    ->setCellValue('I' . $i, $arCostoRecurso->getVrAportesSociales())
+                    ->setCellValue('J' . $i, $arCostoRecurso->getVrCostoTotal());                         
             $i++;
         }                
         //$objPHPExcel->getActiveSheet()->getStyle('A1:AL1')->getFont()->setBold(true);        

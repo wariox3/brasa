@@ -98,8 +98,9 @@ class CierreMesController extends Controller
                         $arCostoRecursoDetalle->setMes($arCierreMes->getMes());
                         $arCostoRecursoDetalle->setCodigoCierreMesFk($arCierreMes->getCodigoCierreMesPk());
                         $arCostoRecursoDetalle->setRecursoRel($arRecurso);
-                        $arCostoRecursoDetalle->setCodigoPedidoDetalleFk($detalle['codigoPedidoDetalleFk']);
+                        $arCostoRecursoDetalle->setPedidoDetalleRel($arPedidoDetalle);                        
                         $arCostoRecursoDetalle->setPuestoRel($arPedidoDetalle->getPuestoRel());
+                        $arCostoRecursoDetalle->setClienteRel($arPedidoDetalle->getPedidoRel()->getClienteRel());
                         $arCostoRecursoDetalle->setHorasDescanso($detalle['horasDescanso']);
                         $arCostoRecursoDetalle->setHorasDiurnas($detalle['horasDiurnas']);
                         $arCostoRecursoDetalle->setHorasNocturnas($detalle['horasNocturnas']);
@@ -112,15 +113,101 @@ class CierreMesController extends Controller
                         $arCostoRecursoDetalle->setHorasRecargoNocturno($detalle['horasRecargoNocturno']);
                         $arCostoRecursoDetalle->setHorasRecargoFestivoDiurno($detalle['horasRecargoFestivoDiurno']);
                         $arCostoRecursoDetalle->setHorasRecargoFestivoNocturno($detalle['horasRecargoFestivoNocturno']);
+                        
                         $peso = $detalle['pDS'] + $detalle['pD'] + $detalle['pN'] + $detalle['pFD'] + $detalle['pFN'] + $detalle['pEOD'] + $detalle['pEON'] + $detalle['pEFD'] + $detalle['pEFN'] + $detalle['pRN'] + $detalle['pRFD'] + $detalle['pRFN']; 
-                        $participacion = 0;
+                        $participacionRecurso = 0;
                         if($peso > 0) {
-                            $participacion = $peso / $pesoTotal;
+                            $participacionRecurso = $peso / $pesoTotal;
                         }
-                        $costo = $participacion * $costoRecurso;
-                        $arCostoRecursoDetalle->setParticipacion($participacion * 100);
+                        $costoDetalle = $participacionRecurso * $costoRecurso;                        
+                                                
+                        $participacion = 0;
+                        if($detalle['pDS'] > 0) {
+                            $participacion = $detalle['pDS'] / $peso;
+                        }
+                        $costo = $participacion * $costoDetalle;
+                        $arCostoRecursoDetalle->setHorasDescansoCosto($costo);
+                        
+                        $participacion = 0;
+                        if($detalle['pD'] > 0) {
+                            $participacion = $detalle['pD'] / $peso;
+                        }
+                        $costo = $participacion * $costoDetalle;
+                        $arCostoRecursoDetalle->setHorasDiurnasCosto($costo);
+                        
+                        $participacion = 0;
+                        if($detalle['pN'] > 0) {
+                            $participacion = $detalle['pN'] / $peso;
+                        }
+                        $costo = $participacion * $costoDetalle;                        
+                        $arCostoRecursoDetalle->setHorasNocturnasCosto($costo);
+                        
+                        $participacion = 0;
+                        if($detalle['pFD'] > 0) {
+                            $participacion = $detalle['pFD'] / $peso;
+                        }
+                        $costo = $participacion * $costoDetalle;                        
+                        $arCostoRecursoDetalle->setHorasFestivasDiurnasCosto($costo);
+                        
+                        $participacion = 0;
+                        if($detalle['pFN'] > 0) {
+                            $participacion = $detalle['pFN'] / $peso;
+                        }
+                        $costo = $participacion * $costoDetalle;                        
+                        $arCostoRecursoDetalle->setHorasFestivasNocturnasCosto($costo);
+                        
+                        $participacion = 0;
+                        if($detalle['pEOD'] > 0) {
+                            $participacion = $detalle['pEOD'] / $peso;
+                        }
+                        $costo = $participacion * $costoDetalle;                        
+                        $arCostoRecursoDetalle->setHorasExtrasOrdinariasDiurnasCosto($costo);
+                        
+                        $participacion = 0;
+                        if($detalle['pEON'] > 0) {
+                            $participacion = $detalle['pEON'] / $peso;
+                        }
+                        $costo = $participacion * $costoDetalle;                        
+                        $arCostoRecursoDetalle->setHorasExtrasOrdinariasNocturnasCosto($costo);
+                        
+                        $participacion = 0;
+                        if($detalle['pEFD'] > 0) {
+                            $participacion = $detalle['pEFD'] / $peso;
+                        }
+                        $costo = $participacion * $costoDetalle;                        
+                        $arCostoRecursoDetalle->setHorasExtrasFestivasDiurnasCosto($costo);
+                        
+                        $participacion = 0;
+                        if($detalle['pEFN'] > 0) {
+                            $participacion = $detalle['pEFN'] / $peso;
+                        }
+                        $costo = $participacion * $costoDetalle;                        
+                        $arCostoRecursoDetalle->setHorasExtrasFestivasNocturnasCosto($costo);
+                        
+                        $participacion = 0;
+                        if($detalle['pRN'] > 0) {
+                            $participacion = $detalle['pRN'] / $peso;
+                        }
+                        $costo = $participacion * $costoDetalle;                        
+                        $arCostoRecursoDetalle->setHorasRecargoNocturnoCosto($costo);
+                        
+                        $participacion = 0;
+                        if($detalle['pRFD'] > 0) {
+                            $participacion = $detalle['pRFD'] / $peso;
+                        }
+                        $costo = $participacion * $costoDetalle;                        
+                        $arCostoRecursoDetalle->setHorasRecargoFestivoDiurnoCosto($costo);
+
+                        $participacion = 0;
+                        if($detalle['pRFN'] > 0) {
+                            $participacion = $detalle['pRFN'] / $peso;
+                        }
+                        $costo = $participacion * $costoDetalle;
+                        $arCostoRecursoDetalle->setHorasRecargoFestivoNocturnoCosto($costo);                                                
+
+                        $arCostoRecursoDetalle->setParticipacion($participacionRecurso * 100);
                         $arCostoRecursoDetalle->setPeso($peso);
-                        $arCostoRecursoDetalle->setCosto($costo);
+                        $arCostoRecursoDetalle->setCosto($costoDetalle);
                         $em->persist($arCostoRecursoDetalle);
                     }
                     $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($arrRecurso['codigo_recurso_fk']);
@@ -274,9 +361,7 @@ class CierreMesController extends Controller
                 $em->getConnection()->executeQuery($strSql);
                 $strSql = "DELETE FROM tur_costo_recurso_detalle WHERE codigo_cierre_mes_fk = " . $codigoCierreMes;           
                 $em->getConnection()->executeQuery($strSql);                
-                $strSql = "DELETE FROM tur_cierre_mes_servicio_detalle WHERE codigo_cierre_mes_fk = " . $codigoCierreMes;           
-                $em->getConnection()->executeQuery($strSql); 
-                $strSql = "DELETE FROM tur_cierre_mes_servicio WHERE codigo_cierre_mes_fk = " . $codigoCierreMes;           
+                $strSql = "DELETE FROM tur_costo_servicio WHERE codigo_cierre_mes_fk = " . $codigoCierreMes;           
                 $em->getConnection()->executeQuery($strSql); 
                 $strSql = "DELETE FROM tur_recurso_puesto WHERE anio = " . $arCierreMes->getAnio() . " AND mes = " . $arCierreMes->getMes();           
                 $em->getConnection()->executeQuery($strSql); 
