@@ -199,11 +199,11 @@ class ContratosController extends Controller
             $boolValidarTipoContratoSalud = TRUE;
             $boolValidarContratoFijo = TRUE;
             $boolValidarSalarioIntegral = TRUE;
-            if($arContrato->getContratoTipoRel()->getCodigoContratoTipoPk() == 4 && ($arContrato->getSsoTipoCotizanteRel()->getCodigoTipoCotizantePk() != 12 && $arContrato->getSsoTipoCotizanteRel()->getCodigoTipoCotizantePk() != 19 || $arContrato->getSsoSubtipoCotizanteRel()->getCodigoSubtipoCotizantePk() != 0)) {
+            if($arContrato->getContratoTipoRel()->getCodigoContratoClaseFk() == 4 && ($arContrato->getSsoTipoCotizanteRel()->getCodigoTipoCotizantePk() != 12 && $arContrato->getSsoTipoCotizanteRel()->getCodigoTipoCotizantePk() != 19 || $arContrato->getSsoSubtipoCotizanteRel()->getCodigoSubtipoCotizantePk() != 0)) {
                 $boolValidarTipoContrato = FALSE;
             } 
                 
-            if($arContrato->getContratoTipoRel()->getCodigoContratoTipoPk() == 5 && ($arContrato->getSsoTipoCotizanteRel()->getCodigoTipoCotizantePk() != 23 || $arContrato->getSsoSubtipoCotizanteRel()->getCodigoSubtipoCotizantePk() != 0)) {
+            if($arContrato->getContratoTipoRel()->getCodigoContratoClaseFk() == 5 && ($arContrato->getSsoTipoCotizanteRel()->getCodigoTipoCotizantePk() != 23 || $arContrato->getSsoSubtipoCotizanteRel()->getCodigoSubtipoCotizantePk() != 0)) {
                 $boolValidarTipoContrato = FALSE;
             }
             if($arContrato->getSalarioIntegral() == true) {
@@ -211,7 +211,7 @@ class ContratosController extends Controller
                     $boolValidarSalarioIntegral = FALSE;
                 }
             }
-            if($arContrato->getContratoTipoRel()->getCodigoContratoTipoPk() == 4 || $arContrato->getContratoTipoRel()->getCodigoContratoTipoPk() == 5) {
+            if($arContrato->getContratoTipoRel()->getCodigoContratoClaseFk() == 4 || $arContrato->getContratoTipoRel()->getCodigoContratoClaseFk() == 5) {
                 if($arContrato->getTipoSaludRel()->getCodigoTipoSaludPk() != 2) {
                     $boolValidarTipoContratoSalud = FALSE;
                 }
@@ -451,7 +451,7 @@ class ContratosController extends Controller
                                 $em->persist($arEmpleado);
 
                                 //Generar liquidacion
-                                if($arContrato->getCodigoContratoTipoFk() != 4 && $arContrato->getCodigoContratoTipoFk() != 5) {
+                                if($arContrato->getContratoTipoRel()->getCodigoContratoClaseFk() != 4 && $arContrato->getContratoTipoRel()->getCodigoContratoClaseFk() != 5) {
                                     $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
                                     $arLiquidacion->setFecha(new \DateTime('now'));
                                     $arLiquidacion->setCentroCostoRel($arContrato->getCentroCostoRel());

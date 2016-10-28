@@ -400,7 +400,7 @@ class ProgramacionesPagoController extends Controller
                     $arProgramacionPagoDetalle->setVrSalario($arContrato->getVrSalarioPago());
                     $arProgramacionPagoDetalle->setIndefinido($arContrato->getIndefinido());
                     $arProgramacionPagoDetalle->setSalarioIntegral($arContrato->getSalarioIntegral());
-                    if($arContrato->getCodigoContratoTipoFk() == 4 || $arContrato->getCodigoContratoTipoFk() == 5) {
+                    if($arContrato->getContratoTipoRel()->getCodigoContratoClaseFk() == 4 || $arContrato->getContratoTipoRel()->getCodigoContratoClaseFk() == 5) {
                         $arProgramacionPagoDetalle->setDescuentoPension(0);
                         $arProgramacionPagoDetalle->setDescuentoSalud(0);
                         $arProgramacionPagoDetalle->setPagoAuxilioTransporte(0);
