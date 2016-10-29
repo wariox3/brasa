@@ -208,17 +208,17 @@ class TurProgramacionDetalle
     private $dia31;    
     
     /**
-     * @ORM\Column(name="horas", type="integer")
+     * @ORM\Column(name="horas", type="float")
      */    
     private $horas = 0;    
 
     /**
-     * @ORM\Column(name="horas_diurnas", type="integer")
+     * @ORM\Column(name="horas_diurnas", type="float")
      */    
     private $horasDiurnas = 0; 
 
     /**
-     * @ORM\Column(name="horas_nocturnas", type="integer")
+     * @ORM\Column(name="horas_nocturnas", type="float")
      */    
     private $horasNocturnas = 0; 
     
@@ -276,7 +276,6 @@ class TurProgramacionDetalle
      * @ORM\OneToMany(targetEntity="TurSoportePagoDetalle", mappedBy="programacionDetalleRel")
      */
     protected $soportesPagosDetallesProgramacionDetalleRel; 
-
 
 
     /**
@@ -1212,7 +1211,7 @@ class TurProgramacionDetalle
     /**
      * Set horas
      *
-     * @param integer $horas
+     * @param float $horas
      *
      * @return TurProgramacionDetalle
      */
@@ -1226,7 +1225,7 @@ class TurProgramacionDetalle
     /**
      * Get horas
      *
-     * @return integer
+     * @return float
      */
     public function getHoras()
     {
@@ -1236,7 +1235,7 @@ class TurProgramacionDetalle
     /**
      * Set horasDiurnas
      *
-     * @param integer $horasDiurnas
+     * @param float $horasDiurnas
      *
      * @return TurProgramacionDetalle
      */
@@ -1250,7 +1249,7 @@ class TurProgramacionDetalle
     /**
      * Get horasDiurnas
      *
-     * @return integer
+     * @return float
      */
     public function getHorasDiurnas()
     {
@@ -1260,7 +1259,7 @@ class TurProgramacionDetalle
     /**
      * Set horasNocturnas
      *
-     * @param integer $horasNocturnas
+     * @param float $horasNocturnas
      *
      * @return TurProgramacionDetalle
      */
@@ -1274,7 +1273,7 @@ class TurProgramacionDetalle
     /**
      * Get horasNocturnas
      *
-     * @return integer
+     * @return float
      */
     public function getHorasNocturnas()
     {
@@ -1303,6 +1302,78 @@ class TurProgramacionDetalle
     public function getVrHoraRecurso()
     {
         return $this->vrHoraRecurso;
+    }
+
+    /**
+     * Set marca
+     *
+     * @param boolean $marca
+     *
+     * @return TurProgramacionDetalle
+     */
+    public function setMarca($marca)
+    {
+        $this->marca = $marca;
+
+        return $this;
+    }
+
+    /**
+     * Get marca
+     *
+     * @return boolean
+     */
+    public function getMarca()
+    {
+        return $this->marca;
+    }
+
+    /**
+     * Set ajusteProgramacion
+     *
+     * @param boolean $ajusteProgramacion
+     *
+     * @return TurProgramacionDetalle
+     */
+    public function setAjusteProgramacion($ajusteProgramacion)
+    {
+        $this->ajusteProgramacion = $ajusteProgramacion;
+
+        return $this;
+    }
+
+    /**
+     * Get ajusteProgramacion
+     *
+     * @return boolean
+     */
+    public function getAjusteProgramacion()
+    {
+        return $this->ajusteProgramacion;
+    }
+
+    /**
+     * Set periodoBloqueo
+     *
+     * @param integer $periodoBloqueo
+     *
+     * @return TurProgramacionDetalle
+     */
+    public function setPeriodoBloqueo($periodoBloqueo)
+    {
+        $this->periodoBloqueo = $periodoBloqueo;
+
+        return $this;
+    }
+
+    /**
+     * Get periodoBloqueo
+     *
+     * @return integer
+     */
+    public function getPeriodoBloqueo()
+    {
+        return $this->periodoBloqueo;
     }
 
     /**
@@ -1457,77 +1528,5 @@ class TurProgramacionDetalle
     public function getSoportesPagosDetallesProgramacionDetalleRel()
     {
         return $this->soportesPagosDetallesProgramacionDetalleRel;
-    }
-
-    /**
-     * Set marca
-     *
-     * @param boolean $marca
-     *
-     * @return TurProgramacionDetalle
-     */
-    public function setMarca($marca)
-    {
-        $this->marca = $marca;
-
-        return $this;
-    }
-
-    /**
-     * Get marca
-     *
-     * @return boolean
-     */
-    public function getMarca()
-    {
-        return $this->marca;
-    }
-
-    /**
-     * Set ajusteProgramacion
-     *
-     * @param boolean $ajusteProgramacion
-     *
-     * @return TurProgramacionDetalle
-     */
-    public function setAjusteProgramacion($ajusteProgramacion)
-    {
-        $this->ajusteProgramacion = $ajusteProgramacion;
-
-        return $this;
-    }
-
-    /**
-     * Get ajusteProgramacion
-     *
-     * @return boolean
-     */
-    public function getAjusteProgramacion()
-    {
-        return $this->ajusteProgramacion;
-    }
-
-    /**
-     * Set periodoBloqueo
-     *
-     * @param integer $periodoBloqueo
-     *
-     * @return TurProgramacionDetalle
-     */
-    public function setPeriodoBloqueo($periodoBloqueo)
-    {
-        $this->periodoBloqueo = $periodoBloqueo;
-
-        return $this;
-    }
-
-    /**
-     * Get periodoBloqueo
-     *
-     * @return integer
-     */
-    public function getPeriodoBloqueo()
-    {
-        return $this->periodoBloqueo;
     }
 }
