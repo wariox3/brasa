@@ -299,6 +299,10 @@ class TurSoportePago
      */
     protected $soportesPagosDetallesSoportePagoRel;     
 
+   /**
+     * @ORM\OneToMany(targetEntity="TurProgramacionAlterna", mappedBy="soportePagoRel")
+     */
+    protected $programacionesAlternasSoportePagoRel;       
 
 
     /**
@@ -307,6 +311,7 @@ class TurSoportePago
     public function __construct()
     {
         $this->soportesPagosDetallesSoportePagoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->programacionesAlternasSoportePagoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -584,6 +589,30 @@ class TurSoportePago
     }
 
     /**
+     * Set descansoOrdinario
+     *
+     * @param boolean $descansoOrdinario
+     *
+     * @return TurSoportePago
+     */
+    public function setDescansoOrdinario($descansoOrdinario)
+    {
+        $this->descansoOrdinario = $descansoOrdinario;
+
+        return $this;
+    }
+
+    /**
+     * Get descansoOrdinario
+     *
+     * @return boolean
+     */
+    public function getDescansoOrdinario()
+    {
+        return $this->descansoOrdinario;
+    }
+
+    /**
      * Set descanso
      *
      * @param float $descanso
@@ -773,6 +802,30 @@ class TurSoportePago
     public function getRetiro()
     {
         return $this->retiro;
+    }
+
+    /**
+     * Set induccion
+     *
+     * @param integer $induccion
+     *
+     * @return TurSoportePago
+     */
+    public function setInduccion($induccion)
+    {
+        $this->induccion = $induccion;
+
+        return $this;
+    }
+
+    /**
+     * Get induccion
+     *
+     * @return integer
+     */
+    public function getInduccion()
+    {
+        return $this->induccion;
     }
 
     /**
@@ -1112,6 +1165,78 @@ class TurSoportePago
     }
 
     /**
+     * Set horasRecargoNocturno
+     *
+     * @param float $horasRecargoNocturno
+     *
+     * @return TurSoportePago
+     */
+    public function setHorasRecargoNocturno($horasRecargoNocturno)
+    {
+        $this->horasRecargoNocturno = $horasRecargoNocturno;
+
+        return $this;
+    }
+
+    /**
+     * Get horasRecargoNocturno
+     *
+     * @return float
+     */
+    public function getHorasRecargoNocturno()
+    {
+        return $this->horasRecargoNocturno;
+    }
+
+    /**
+     * Set horasRecargoFestivoDiurno
+     *
+     * @param float $horasRecargoFestivoDiurno
+     *
+     * @return TurSoportePago
+     */
+    public function setHorasRecargoFestivoDiurno($horasRecargoFestivoDiurno)
+    {
+        $this->horasRecargoFestivoDiurno = $horasRecargoFestivoDiurno;
+
+        return $this;
+    }
+
+    /**
+     * Get horasRecargoFestivoDiurno
+     *
+     * @return float
+     */
+    public function getHorasRecargoFestivoDiurno()
+    {
+        return $this->horasRecargoFestivoDiurno;
+    }
+
+    /**
+     * Set horasRecargoFestivoNocturno
+     *
+     * @param float $horasRecargoFestivoNocturno
+     *
+     * @return TurSoportePago
+     */
+    public function setHorasRecargoFestivoNocturno($horasRecargoFestivoNocturno)
+    {
+        $this->horasRecargoFestivoNocturno = $horasRecargoFestivoNocturno;
+
+        return $this;
+    }
+
+    /**
+     * Get horasRecargoFestivoNocturno
+     *
+     * @return float
+     */
+    public function getHorasRecargoFestivoNocturno()
+    {
+        return $this->horasRecargoFestivoNocturno;
+    }
+
+    /**
      * Set horasDescansoReales
      *
      * @param float $horasDescansoReales
@@ -1352,6 +1477,54 @@ class TurSoportePago
     }
 
     /**
+     * Set diasPeriodoCompensar
+     *
+     * @param float $diasPeriodoCompensar
+     *
+     * @return TurSoportePago
+     */
+    public function setDiasPeriodoCompensar($diasPeriodoCompensar)
+    {
+        $this->diasPeriodoCompensar = $diasPeriodoCompensar;
+
+        return $this;
+    }
+
+    /**
+     * Get diasPeriodoCompensar
+     *
+     * @return float
+     */
+    public function getDiasPeriodoCompensar()
+    {
+        return $this->diasPeriodoCompensar;
+    }
+
+    /**
+     * Set diasPeriodoDescansoCompensar
+     *
+     * @param float $diasPeriodoDescansoCompensar
+     *
+     * @return TurSoportePago
+     */
+    public function setDiasPeriodoDescansoCompensar($diasPeriodoDescansoCompensar)
+    {
+        $this->diasPeriodoDescansoCompensar = $diasPeriodoDescansoCompensar;
+
+        return $this;
+    }
+
+    /**
+     * Get diasPeriodoDescansoCompensar
+     *
+     * @return float
+     */
+    public function getDiasPeriodoDescansoCompensar()
+    {
+        return $this->diasPeriodoDescansoCompensar;
+    }
+
+    /**
      * Set usuario
      *
      * @param string $usuario
@@ -1373,6 +1546,54 @@ class TurSoportePago
     public function getUsuario()
     {
         return $this->usuario;
+    }
+
+    /**
+     * Set anio
+     *
+     * @param integer $anio
+     *
+     * @return TurSoportePago
+     */
+    public function setAnio($anio)
+    {
+        $this->anio = $anio;
+
+        return $this;
+    }
+
+    /**
+     * Get anio
+     *
+     * @return integer
+     */
+    public function getAnio()
+    {
+        return $this->anio;
+    }
+
+    /**
+     * Set mes
+     *
+     * @param integer $mes
+     *
+     * @return TurSoportePago
+     */
+    public function setMes($mes)
+    {
+        $this->mes = $mes;
+
+        return $this;
+    }
+
+    /**
+     * Get mes
+     *
+     * @return integer
+     */
+    public function getMes()
+    {
+        return $this->mes;
     }
 
     /**
@@ -1458,338 +1679,36 @@ class TurSoportePago
     }
 
     /**
-     * Set horasRecargoNocturno
+     * Add programacionesAlternasSoportePagoRel
      *
-     * @param float $horasRecargoNocturno
+     * @param \Brasa\TurnoBundle\Entity\TurProgramacionAlterna $programacionesAlternasSoportePagoRel
      *
      * @return TurSoportePago
      */
-    public function setHorasRecargoNocturno($horasRecargoNocturno)
+    public function addProgramacionesAlternasSoportePagoRel(\Brasa\TurnoBundle\Entity\TurProgramacionAlterna $programacionesAlternasSoportePagoRel)
     {
-        $this->horasRecargoNocturno = $horasRecargoNocturno;
+        $this->programacionesAlternasSoportePagoRel[] = $programacionesAlternasSoportePagoRel;
 
         return $this;
     }
 
     /**
-     * Get horasRecargoNocturno
+     * Remove programacionesAlternasSoportePagoRel
      *
-     * @return float
+     * @param \Brasa\TurnoBundle\Entity\TurProgramacionAlterna $programacionesAlternasSoportePagoRel
      */
-    public function getHorasRecargoNocturno()
+    public function removeProgramacionesAlternasSoportePagoRel(\Brasa\TurnoBundle\Entity\TurProgramacionAlterna $programacionesAlternasSoportePagoRel)
     {
-        return $this->horasRecargoNocturno;
+        $this->programacionesAlternasSoportePagoRel->removeElement($programacionesAlternasSoportePagoRel);
     }
 
     /**
-     * Set horasRecargoNocturnoReales
+     * Get programacionesAlternasSoportePagoRel
      *
-     * @param float $horasRecargoNocturnoReales
-     *
-     * @return TurSoportePago
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function setHorasRecargoNocturnoReales($horasRecargoNocturnoReales)
+    public function getProgramacionesAlternasSoportePagoRel()
     {
-        $this->horasRecargoNocturnoReales = $horasRecargoNocturnoReales;
-
-        return $this;
-    }
-
-    /**
-     * Get horasRecargoNocturnoReales
-     *
-     * @return float
-     */
-    public function getHorasRecargoNocturnoReales()
-    {
-        return $this->horasRecargoNocturnoReales;
-    }
-
-    /**
-     * Set horasRecargoFestivoDiurno
-     *
-     * @param float $horasRecargoFestivoDiurno
-     *
-     * @return TurSoportePago
-     */
-    public function setHorasRecargoFestivoDiurno($horasRecargoFestivoDiurno)
-    {
-        $this->horasRecargoFestivoDiurno = $horasRecargoFestivoDiurno;
-
-        return $this;
-    }
-
-    /**
-     * Get horasRecargoFestivoDiurno
-     *
-     * @return float
-     */
-    public function getHorasRecargoFestivoDiurno()
-    {
-        return $this->horasRecargoFestivoDiurno;
-    }
-
-    /**
-     * Set horasRecargoFestivoNocturno
-     *
-     * @param float $horasRecargoFestivoNocturno
-     *
-     * @return TurSoportePago
-     */
-    public function setHorasRecargoFestivoNocturno($horasRecargoFestivoNocturno)
-    {
-        $this->horasRecargoFestivoNocturno = $horasRecargoFestivoNocturno;
-
-        return $this;
-    }
-
-    /**
-     * Get horasRecargoFestivoNocturno
-     *
-     * @return float
-     */
-    public function getHorasRecargoFestivoNocturno()
-    {
-        return $this->horasRecargoFestivoNocturno;
-    }
-
-    /**
-     * Set horasTope
-     *
-     * @param float $horasTope
-     *
-     * @return TurSoportePago
-     */
-    public function setHorasTope($horasTope)
-    {
-        $this->horasTope = $horasTope;
-
-        return $this;
-    }
-
-    /**
-     * Get horasTope
-     *
-     * @return float
-     */
-    public function getHorasTope()
-    {
-        return $this->horasTope;
-    }
-
-    /**
-     * Set horasDescansoCompensar
-     *
-     * @param float $horasDescansoCompensar
-     *
-     * @return TurSoportePago
-     */
-    public function setHorasDescansoCompensar($horasDescansoCompensar)
-    {
-        $this->horasDescansoCompensar = $horasDescansoCompensar;
-
-        return $this;
-    }
-
-    /**
-     * Get horasDescansoCompensar
-     *
-     * @return float
-     */
-    public function getHorasDescansoCompensar()
-    {
-        return $this->horasDescansoCompensar;
-    }
-
-    /**
-     * Set diasPeriodo
-     *
-     * @param float $diasPeriodo
-     *
-     * @return TurSoportePago
-     */
-    public function setDiasPeriodo($diasPeriodo)
-    {
-        $this->diasPeriodo = $diasPeriodo;
-
-        return $this;
-    }
-
-    /**
-     * Get diasPeriodo
-     *
-     * @return float
-     */
-    public function getDiasPeriodo()
-    {
-        return $this->diasPeriodo;
-    }
-
-    /**
-     * Set diasPeriodoDescanso
-     *
-     * @param float $diasPeriodoDescanso
-     *
-     * @return TurSoportePago
-     */
-    public function setDiasPeriodoDescanso($diasPeriodoDescanso)
-    {
-        $this->diasPeriodoDescanso = $diasPeriodoDescanso;
-
-        return $this;
-    }
-
-    /**
-     * Get diasPeriodoDescanso
-     *
-     * @return float
-     */
-    public function getDiasPeriodoDescanso()
-    {
-        return $this->diasPeriodoDescanso;
-    }
-
-    /**
-     * Set diasPeriodoCompensar
-     *
-     * @param float $diasPeriodoCompensar
-     *
-     * @return TurSoportePago
-     */
-    public function setDiasPeriodoCompensar($diasPeriodoCompensar)
-    {
-        $this->diasPeriodoCompensar = $diasPeriodoCompensar;
-
-        return $this;
-    }
-
-    /**
-     * Get diasPeriodoCompensar
-     *
-     * @return float
-     */
-    public function getDiasPeriodoCompensar()
-    {
-        return $this->diasPeriodoCompensar;
-    }
-
-    /**
-     * Set diasPeriodoDescansoCompensar
-     *
-     * @param float $diasPeriodoDescansoCompensar
-     *
-     * @return TurSoportePago
-     */
-    public function setDiasPeriodoDescansoCompensar($diasPeriodoDescansoCompensar)
-    {
-        $this->diasPeriodoDescansoCompensar = $diasPeriodoDescansoCompensar;
-
-        return $this;
-    }
-
-    /**
-     * Get diasPeriodoDescansoCompensar
-     *
-     * @return float
-     */
-    public function getDiasPeriodoDescansoCompensar()
-    {
-        return $this->diasPeriodoDescansoCompensar;
-    }
-
-    /**
-     * Set induccion
-     *
-     * @param integer $induccion
-     *
-     * @return TurSoportePago
-     */
-    public function setInduccion($induccion)
-    {
-        $this->induccion = $induccion;
-
-        return $this;
-    }
-
-    /**
-     * Get induccion
-     *
-     * @return integer
-     */
-    public function getInduccion()
-    {
-        return $this->induccion;
-    }
-
-    /**
-     * Set descansoOrdinario
-     *
-     * @param boolean $descansoOrdinario
-     *
-     * @return TurSoportePago
-     */
-    public function setDescansoOrdinario($descansoOrdinario)
-    {
-        $this->descansoOrdinario = $descansoOrdinario;
-
-        return $this;
-    }
-
-    /**
-     * Get descansoOrdinario
-     *
-     * @return boolean
-     */
-    public function getDescansoOrdinario()
-    {
-        return $this->descansoOrdinario;
-    }
-
-    /**
-     * Set anio
-     *
-     * @param integer $anio
-     *
-     * @return TurSoportePago
-     */
-    public function setAnio($anio)
-    {
-        $this->anio = $anio;
-
-        return $this;
-    }
-
-    /**
-     * Get anio
-     *
-     * @return integer
-     */
-    public function getAnio()
-    {
-        return $this->anio;
-    }
-
-    /**
-     * Set mes
-     *
-     * @param integer $mes
-     *
-     * @return TurSoportePago
-     */
-    public function setMes($mes)
-    {
-        $this->mes = $mes;
-
-        return $this;
-    }
-
-    /**
-     * Get mes
-     *
-     * @return integer
-     */
-    public function getMes()
-    {
-        return $this->mes;
+        return $this->programacionesAlternasSoportePagoRel;
     }
 }

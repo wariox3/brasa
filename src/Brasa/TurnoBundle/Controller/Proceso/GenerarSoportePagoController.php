@@ -290,6 +290,10 @@ class GenerarSoportePagoController extends Controller
                 $em->getRepository('BrasaTurnoBundle:TurSoportePago')->ajustarDevengado($codigoSoportePagoPeriodo);
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago_detalle', array('codigoSoportePagoPeriodo' => $codigoSoportePagoPeriodo)));                                
             }            
+            if ($form->get('BtnGenerarProgramacionAlterna')->isClicked()) { 
+                $em->getRepository('BrasaTurnoBundle:TurSoportePago')->generarProgramacionAlterna($codigoSoportePagoPeriodo);
+                return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago_detalle', array('codigoSoportePagoPeriodo' => $codigoSoportePagoPeriodo)));                                
+            }             
         }
         $arSoportesPago = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 1500);        
         return $this->render('BrasaTurnoBundle:Procesos/GenerarSoportePago:detalle.html.twig', array(            
@@ -507,6 +511,7 @@ class GenerarSoportePagoController extends Controller
         $arConfiguracion = $em->getRepository('BrasaTurnoBundle:TurConfiguracion')->find(1);
         $arrBotonLiquidarCompensacion = array('label' => 'Compensacion', 'disabled' => true);
         $arrBotonAjustarDevengado = array('label' => 'Ajustar devengado', 'disabled' => false);
+        $arrBotonGenerarProgramacionAlterna = array('label' => 'Generar programacion alterna', 'disabled' => false);
         if($arConfiguracion->getHabilitarCompesacion()) {
             $arrBotonLiquidarCompensacion['disabled'] = false;
         }
@@ -515,6 +520,7 @@ class GenerarSoportePagoController extends Controller
             ->add('BtnLiquidar', 'submit', array('label'  => 'Liquidar'))                                                    
             ->add('BtnLiquidarCompensacion2', 'submit', $arrBotonLiquidarCompensacion)                        
             ->add('BtnAjustarDevengado', 'submit', $arrBotonAjustarDevengado)                        
+            ->add('BtnGenerarProgramacionAlterna', 'submit', $arrBotonGenerarProgramacionAlterna)                        
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar')) 
             ->getForm();
         return $form;

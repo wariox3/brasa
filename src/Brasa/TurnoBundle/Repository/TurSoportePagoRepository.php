@@ -1007,10 +1007,62 @@ class TurSoportePagoRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
         $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);                
+        $arSoportePagos = new \Brasa\TurnoBundle\Entity\TurSoportePago();
         $arSoportePagos = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo));                                                     
         foreach ($arSoportePagos as $arSoportePago) {
-            
-        }            
-            
+            $arContrado = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+            $arContrado = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arSoportePago->getCodigoContratoFk());                
+            $devengadoPactado = $arContrado->getVrDevengadoPactado();
+            $dias = $arSoportePago->getDiasTransporte();
+            $valorDia = $arContrado->getVrSalario() / 30;
+            $arSoportePagoAct = new \Brasa\TurnoBundle\Entity\TurSoportePago();            
+            $arSoportePagoAct = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->find($arSoportePago->getCodigoSoportePagoPk());                                                        
+            $arSoportePagoAct->setHoras(0);
+            $arSoportePagoAct->setHorasDescanso(0);
+            $arSoportePagoAct->setHorasDiurnas($dias * 8);
+            $arSoportePagoAct->setHorasNocturnas(0);
+            $arSoportePagoAct->setHorasFestivasDiurnas(0);
+            $arSoportePagoAct->setHorasFestivasNocturnas(0);
+            $arSoportePagoAct->setHorasExtrasOrdinariasDiurnas(0);
+            $arSoportePagoAct->setHorasExtrasOrdinariasNocturnas(0);
+            $arSoportePagoAct->setHorasExtrasFestivasDiurnas(0);
+            $arSoportePagoAct->setHorasExtrasFestivasNocturnas(0);
+            $arSoportePagoAct->setHorasRecargoNocturno(0);
+            $arSoportePagoAct->setHorasRecargoFestivoDiurno(0);
+            $arSoportePagoAct->setHorasRecargoFestivoNocturno(0);
+            $em->persist($arSoportePagoAct);
+        }    
+        $em->flush();
     }
+    
+    public function generarProgramacionAlterna($codigoSoportePagoPeriodo = "") {
+        $em = $this->getEntityManager();
+        $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
+        $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);                
+        $arSoportePagos = new \Brasa\TurnoBundle\Entity\TurSoportePago();
+        $arSoportePagos = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo));                                                     
+        foreach ($arSoportePagos as $arSoportePago) {
+            $arSoportePagoAct = new \Brasa\TurnoBundle\Entity\TurSoportePago();            
+            $arSoportePagoAct = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->find($arSoportePago->getCodigoSoportePagoPk());                                                        
+            $arSoportePagoAct->setHoras(0);
+            $arSoportePagoAct->setHorasDescanso(0);
+            $arSoportePagoAct->setHorasDiurnas(0);
+            $arSoportePagoAct->setHorasNocturnas(0);
+            $arSoportePagoAct->setHorasFestivasDiurnas(0);
+            $arSoportePagoAct->setHorasFestivasNocturnas(0);
+            $arSoportePagoAct->setHorasExtrasOrdinariasDiurnas(0);
+            $arSoportePagoAct->setHorasExtrasOrdinariasNocturnas(0);
+            $arSoportePagoAct->setHorasExtrasFestivasDiurnas(0);
+            $arSoportePagoAct->setHorasExtrasFestivasNocturnas(0);
+            $arSoportePagoAct->setHorasRecargoNocturno(0);
+            $arSoportePagoAct->setHorasRecargoFestivoDiurno(0);
+            $arSoportePagoAct->setHorasRecargoFestivoNocturno(0);
+            $em->persist($arSoportePagoAct);            
+            $arProgramacionAlterna = new \Brasa\TurnoBundle\Entity\TurProgramacionAlterna();
+            $arProgramacionAlterna->setSoportePagoRel($arSoportePago);
+            $em->persist($arProgramacionAlterna);           
+        }    
+        $em->flush();
+    }    
+    
 }
