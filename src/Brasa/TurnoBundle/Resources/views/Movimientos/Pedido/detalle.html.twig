@@ -180,9 +180,9 @@
                                 <td>{% if arPedidoDetalle.compuesto == 0 %}{% if arPedidoDetalle.sabado == 1 %} SI {% else %} NO {% endif %}{% endif %}</td>
                                 <td>{% if arPedidoDetalle.compuesto == 0 %}{% if arPedidoDetalle.domingo == 1 %} SI {% else %} NO {% endif %}{% endif %}</td>
                                 <td>{% if arPedidoDetalle.compuesto == 0 %}{% if arPedidoDetalle.festivo == 1 %} SI {% else %} NO {% endif %}{% endif %}</td>                                
-                                <td style="text-align: right">{{ arPedidoDetalle.horas | number_format(0, '.', ',') }}({{ arPedidoDetalle.horasProgramadas | number_format(0, '.', ',') }})</td> 
-                                <td style="text-align: right">{{ arPedidoDetalle.horasDiurnas | number_format(0, '.', ',') }}({{ arPedidoDetalle.horasDiurnasProgramadas | number_format(0, '.', ',') }})</td> 
-                                <td style="text-align: right">{{ arPedidoDetalle.horasNocturnas | number_format(0, '.', ',') }}({{ arPedidoDetalle.horasNocturnasProgramadas | number_format(0, '.', ',') }})</td> 
+                                <td style="text-align: right">{{ arPedidoDetalle.horas | number_format(1, '.', ',') }}({{ arPedidoDetalle.horasProgramadas | number_format(1, '.', ',') }})</td> 
+                                <td style="text-align: right">{{ arPedidoDetalle.horasDiurnas | number_format(1, '.', ',') }}({{ arPedidoDetalle.horasDiurnasProgramadas | number_format(1, '.', ',') }})</td> 
+                                <td style="text-align: right">{{ arPedidoDetalle.horasNocturnas | number_format(1, '.', ',') }}({{ arPedidoDetalle.horasNocturnasProgramadas | number_format(1, '.', ',') }})</td> 
                                 <td style="text-align: right">{{ arPedidoDetalle.dias | number_format(0, '.', ',') }}</td>                                 
                                 <td style="text-align: right">{{ arPedidoDetalle.vrPrecioMinimo | number_format(0, '.', ',') }}</td>                     
                                 {% if arPedido.estadoAutorizado == 0 and arPedidoDetalle.compuesto == 0%}

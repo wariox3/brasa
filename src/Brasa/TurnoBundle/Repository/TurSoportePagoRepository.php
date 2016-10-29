@@ -1002,4 +1002,15 @@ class TurSoportePagoRepository extends EntityRepository {
             $em->persist($arSoportePagoProgramacion);
         }                
     }
+    
+    public function ajustarDevengado($codigoSoportePagoPeriodo = "") {
+        $em = $this->getEntityManager();
+        $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
+        $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);                
+        $arSoportePagos = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo));                                                     
+        foreach ($arSoportePagos as $arSoportePago) {
+            
+        }            
+            
+    }
 }

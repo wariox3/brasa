@@ -180,8 +180,8 @@
                                 <td>{{ arProgramacionDetalle.dia29  }}</td>
                                 <td>{{ arProgramacionDetalle.dia30  }}</td>
                                 <td>{{ arProgramacionDetalle.dia31  }}</td>
-                                <td style="text-align: right">{{ arProgramacionDetalle.horasDiurnas | number_format(0, '.', ',') }}</td>
-                                <td style="text-align: right">{{ arProgramacionDetalle.horasNocturnas | number_format(0, '.', ',') }}</td>
+                                <td style="text-align: right">{{ arProgramacionDetalle.horasDiurnas | number_format(1, '.', ',') }}</td>
+                                <td style="text-align: right">{{ arProgramacionDetalle.horasNocturnas | number_format(1, '.', ',') }}</td>
                                 <td>{{ arProgramacionDetalle.codigoPedidoDetalleFk  }}</td>
                                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" /></td>
                             </tr>

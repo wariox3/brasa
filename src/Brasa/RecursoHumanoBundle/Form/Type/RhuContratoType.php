@@ -101,7 +101,8 @@ class RhuContratoType extends AbstractType
             ->add('cargoDescripcion', 'text', array('required' => false))                                                                       
             ->add('comentarios', 'textarea', array('required' => false))            
             ->add('salarioIntegral', 'checkbox', array('required'  => false))
-            ->add('limitarHoraExtra', 'checkbox', array('required'  => false))                            
+            ->add('limitarHoraExtra', 'checkbox', array('required'  => false))     
+            ->add('vrDevengadoPactado', 'number', array('required' => true))
             ->add('ciudadContratoRel', 'entity', array(
                 'class' => 'BrasaGeneralBundle:GenCiudad',
                 'query_builder' => function (EntityRepository $er)  {

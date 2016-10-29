@@ -279,13 +279,16 @@ class GenerarSoportePagoController extends Controller
             if ($form->get('BtnLiquidar')->isClicked()) {                                                
                 $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->liquidar($codigoSoportePagoPeriodo);
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago_detalle', array('codigoSoportePagoPeriodo' => $codigoSoportePagoPeriodo)));                                
-            }                     
-            
+            }                                 
             if ($form->get('BtnLiquidarCompensacion2')->isClicked()) { 
                 $em->getRepository('BrasaTurnoBundle:TurSoportePago')->compensar("", $codigoSoportePagoPeriodo);
                 $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->liquidar($codigoSoportePagoPeriodo);                                
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago_detalle', array('codigoSoportePagoPeriodo' => $codigoSoportePagoPeriodo)));                
                 
+            }    
+            if ($form->get('BtnAjustarDevengado')->isClicked()) { 
+                $em->getRepository('BrasaTurnoBundle:TurSoportePago')->ajustarDevengado($codigoSoportePagoPeriodo);
+                return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago_detalle', array('codigoSoportePagoPeriodo' => $codigoSoportePagoPeriodo)));                                
             }            
         }
         $arSoportesPago = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 1500);        
@@ -503,6 +506,7 @@ class GenerarSoportePagoController extends Controller
         $arConfiguracion = new \Brasa\TurnoBundle\Entity\TurConfiguracion();
         $arConfiguracion = $em->getRepository('BrasaTurnoBundle:TurConfiguracion')->find(1);
         $arrBotonLiquidarCompensacion = array('label' => 'Compensacion', 'disabled' => true);
+        $arrBotonAjustarDevengado = array('label' => 'Ajustar devengado', 'disabled' => false);
         if($arConfiguracion->getHabilitarCompesacion()) {
             $arrBotonLiquidarCompensacion['disabled'] = false;
         }
@@ -510,6 +514,7 @@ class GenerarSoportePagoController extends Controller
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))                        
             ->add('BtnLiquidar', 'submit', array('label'  => 'Liquidar'))                                                    
             ->add('BtnLiquidarCompensacion2', 'submit', $arrBotonLiquidarCompensacion)                        
+            ->add('BtnAjustarDevengado', 'submit', $arrBotonAjustarDevengado)                        
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar')) 
             ->getForm();
         return $form;
@@ -1162,15 +1167,7 @@ class GenerarSoportePagoController extends Controller
         $arrDias['festivos'] = $festivos;
         return $arrDias;
     }
-    
-    private function truncateFloat($number, $digitos)
-    {
-        $raiz = 10;
-        $multiplicador = pow ($raiz,$digitos);
-        $resultado = ((int)($number * $multiplicador)) / $multiplicador;
-        return number_format($resultado, $digitos);
-
-    }   
+     
     private function devuelveDiaSemanaEspaniol ($dateFecha) {
         $strDia = "";
         switch ($dateFecha->format('N')) {

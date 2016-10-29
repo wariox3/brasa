@@ -62,10 +62,10 @@
                 <td>{% if arTurnos.licencia == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arTurnos.licenciaNoRemunerada == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arTurnos.vacacion == 1 %} SI {% else %} NO {% endif %}</td>
-                <td style="text-align: right">{{ arTurnos.horas | number_format(0, '.', ',') }}</td>                 
-                <td style="text-align: right">{{ arTurnos.horasNomina | number_format(0, '.', ',') }}</td>                 
-                <td style="text-align: right">{{ arTurnos.horasDiurnas | number_format(0, '.', ',') }}</td> 
-                <td style="text-align: right">{{ arTurnos.horasNocturnas | number_format(0, '.', ',') }}</td>                 
+                <td style="text-align: right">{{ arTurnos.horas | number_format(1, '.', ',') }}</td>                 
+                <td style="text-align: right">{{ arTurnos.horasNomina | number_format(1, '.', ',') }}</td>                 
+                <td style="text-align: right">{{ arTurnos.horasDiurnas | number_format(1, '.', ',') }}</td> 
+                <td style="text-align: right">{{ arTurnos.horasNocturnas | number_format(1, '.', ',') }}</td>                 
                 <td style="text-align: center"><a href="{{ path('brs_tur_base_turno_nuevo', {'codigoTurno': arTurnos.codigoTurnoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                                
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arTurnos.codigoTurnoPk }}" /></td>
             </tr>

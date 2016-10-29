@@ -551,7 +551,7 @@ class ProgramacionController extends Controller
         $intIndice = 0;
         $boolTurnosSobrepasados = false;
         foreach ($arrControles['LblCodigo'] as $intCodigo) {
-            /*if($intCodigo == 16173) {
+            /*if($intCodigo == 19355) {
                 echo "hola";
             }*/
             $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();

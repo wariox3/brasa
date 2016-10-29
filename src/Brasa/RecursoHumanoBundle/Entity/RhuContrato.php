@@ -255,6 +255,11 @@ class RhuContrato
     private $limitarHoraExtra = false;     
     
     /**
+     * @ORM\Column(name="vr_devengado_pactado", type="float")
+     */
+    private $VrDevengadoPactado = 0;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="contratosEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
@@ -2697,5 +2702,29 @@ class RhuContrato
     public function getComentariosTerminacion()
     {
         return $this->comentariosTerminacion;
+    }
+
+    /**
+     * Set vrDevengadoPactado
+     *
+     * @param float $vrDevengadoPactado
+     *
+     * @return RhuContrato
+     */
+    public function setVrDevengadoPactado($vrDevengadoPactado)
+    {
+        $this->VrDevengadoPactado = $vrDevengadoPactado;
+
+        return $this;
+    }
+
+    /**
+     * Get vrDevengadoPactado
+     *
+     * @return float
+     */
+    public function getVrDevengadoPactado()
+    {
+        return $this->VrDevengadoPactado;
     }
 }
