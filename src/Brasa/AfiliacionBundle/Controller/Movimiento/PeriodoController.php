@@ -18,6 +18,9 @@ class PeriodoController extends Controller
     public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         $paginator  = $this->get('knp_paginator');
+        if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 128, 1)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->formularioFiltro();
         $form->handleRequest($request);

@@ -17,6 +17,9 @@ class generalController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();        
         $paginator  = $this->get('knp_paginator');
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 98)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
         $this->lista();

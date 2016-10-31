@@ -13,7 +13,10 @@ class GenerarPeriodoController extends Controller
      */
     public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $form = $this->formulario();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 104)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        }
+        $form = $this->formulario();        
         $form->handleRequest($request);
         if ($form->isValid()) {
             if ($form->get('BtnGenerar')->isClicked()) {
