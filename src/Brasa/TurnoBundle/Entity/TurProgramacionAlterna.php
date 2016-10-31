@@ -15,12 +15,32 @@ class TurProgramacionAlterna
      * @ORM\Column(name="codigo_programacion_alterna_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoProgramacionAlternaPk;             
+    private $codigoProgramacionAlternaPk;                    
     
+    /**
+     * @ORM\Column(name="codigo_soporte_pago_periodo_fk", type="integer", nullable=true)
+     */    
+    private $codigoSoportePagoPeriodoFk; 
+
     /**
      * @ORM\Column(name="codigo_soporte_pago_fk", type="integer", nullable=true)
      */    
-    private $codigoSoportePagoFk;    
+    private $codigoSoportePagoFk;     
+    
+    /**
+     * @ORM\Column(name="codigo_recurso_fk", type="integer", nullable=true)
+     */    
+    private $codigoRecursoFk;    
+    
+    /**
+     * @ORM\Column(name="anio", type="integer")
+     */    
+    private $anio = 0;    
+    
+    /**
+     * @ORM\Column(name="mes", type="integer")
+     */    
+    private $mes = 0;     
     
     /**
      * @ORM\Column(name="dia_1", type="string", length=5, nullable=true)
@@ -191,12 +211,24 @@ class TurProgramacionAlterna
      * @ORM\Column(name="horas_nocturnas", type="float")
      */    
     private $horasNocturnas = 0;     
-    
+ 
+    /**
+     * @ORM\ManyToOne(targetEntity="TurSoportePagoPeriodo", inversedBy="programacionesAlternasSoportePagoPeriodoRel")
+     * @ORM\JoinColumn(name="codigo_soporte_pago_periodo_fk", referencedColumnName="codigo_soporte_pago_periodo_pk")
+     */
+    protected $soportePagoPeriodoRel; 
+
     /**
      * @ORM\ManyToOne(targetEntity="TurSoportePago", inversedBy="programacionesAlternasSoportePagoRel")
      * @ORM\JoinColumn(name="codigo_soporte_pago_fk", referencedColumnName="codigo_soporte_pago_pk")
      */
-    protected $soportePagoRel;    
+    protected $soportePagoRel;     
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurRecurso", inversedBy="programacionesAlternasRecursoRel")
+     * @ORM\JoinColumn(name="codigo_recurso_fk", referencedColumnName="codigo_recurso_pk")
+     */
+    protected $recursoRel;     
     
 
     /**
@@ -210,27 +242,75 @@ class TurProgramacionAlterna
     }
 
     /**
-     * Set codigoSoportePagoFk
+     * Set codigoRecursoFk
      *
-     * @param integer $codigoSoportePagoFk
+     * @param integer $codigoRecursoFk
      *
      * @return TurProgramacionAlterna
      */
-    public function setCodigoSoportePagoFk($codigoSoportePagoFk)
+    public function setCodigoRecursoFk($codigoRecursoFk)
     {
-        $this->codigoSoportePagoFk = $codigoSoportePagoFk;
+        $this->codigoRecursoFk = $codigoRecursoFk;
 
         return $this;
     }
 
     /**
-     * Get codigoSoportePagoFk
+     * Get codigoRecursoFk
      *
      * @return integer
      */
-    public function getCodigoSoportePagoFk()
+    public function getCodigoRecursoFk()
     {
-        return $this->codigoSoportePagoFk;
+        return $this->codigoRecursoFk;
+    }
+
+    /**
+     * Set anio
+     *
+     * @param integer $anio
+     *
+     * @return TurProgramacionAlterna
+     */
+    public function setAnio($anio)
+    {
+        $this->anio = $anio;
+
+        return $this;
+    }
+
+    /**
+     * Get anio
+     *
+     * @return integer
+     */
+    public function getAnio()
+    {
+        return $this->anio;
+    }
+
+    /**
+     * Set mes
+     *
+     * @param integer $mes
+     *
+     * @return TurProgramacionAlterna
+     */
+    public function setMes($mes)
+    {
+        $this->mes = $mes;
+
+        return $this;
+    }
+
+    /**
+     * Get mes
+     *
+     * @return integer
+     */
+    public function getMes()
+    {
+        return $this->mes;
     }
 
     /**
@@ -1047,6 +1127,102 @@ class TurProgramacionAlterna
     public function getHorasNocturnas()
     {
         return $this->horasNocturnas;
+    }
+
+    /**
+     * Set recursoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurRecurso $recursoRel
+     *
+     * @return TurProgramacionAlterna
+     */
+    public function setRecursoRel(\Brasa\TurnoBundle\Entity\TurRecurso $recursoRel = null)
+    {
+        $this->recursoRel = $recursoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get recursoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurRecurso
+     */
+    public function getRecursoRel()
+    {
+        return $this->recursoRel;
+    }
+
+    /**
+     * Set codigoSoportePagoPeriodoFk
+     *
+     * @param integer $codigoSoportePagoPeriodoFk
+     *
+     * @return TurProgramacionAlterna
+     */
+    public function setCodigoSoportePagoPeriodoFk($codigoSoportePagoPeriodoFk)
+    {
+        $this->codigoSoportePagoPeriodoFk = $codigoSoportePagoPeriodoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSoportePagoPeriodoFk
+     *
+     * @return integer
+     */
+    public function getCodigoSoportePagoPeriodoFk()
+    {
+        return $this->codigoSoportePagoPeriodoFk;
+    }
+
+    /**
+     * Set codigoSoportePagoFk
+     *
+     * @param integer $codigoSoportePagoFk
+     *
+     * @return TurProgramacionAlterna
+     */
+    public function setCodigoSoportePagoFk($codigoSoportePagoFk)
+    {
+        $this->codigoSoportePagoFk = $codigoSoportePagoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSoportePagoFk
+     *
+     * @return integer
+     */
+    public function getCodigoSoportePagoFk()
+    {
+        return $this->codigoSoportePagoFk;
+    }
+
+    /**
+     * Set soportePagoPeriodoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo $soportePagoPeriodoRel
+     *
+     * @return TurProgramacionAlterna
+     */
+    public function setSoportePagoPeriodoRel(\Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo $soportePagoPeriodoRel = null)
+    {
+        $this->soportePagoPeriodoRel = $soportePagoPeriodoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get soportePagoPeriodoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo
+     */
+    public function getSoportePagoPeriodoRel()
+    {
+        return $this->soportePagoPeriodoRel;
     }
 
     /**

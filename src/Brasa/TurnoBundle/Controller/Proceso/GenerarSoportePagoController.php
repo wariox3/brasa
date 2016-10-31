@@ -26,7 +26,7 @@ class GenerarSoportePagoController extends Controller
         $form->handleRequest($request); 
         $this->listaPeriodo();
         if ($form->isValid()) {
-            /*if($request->request->get('OpGenerarProgramacion')) {
+            if($request->request->get('OpGenerarProgramacion')) {
                 set_time_limit(0);
                 ini_set("memory_limit", -1);
                 $codigoSoportePagoPeriodo = $request->request->get('OpGenerarProgramacion');
@@ -40,8 +40,7 @@ class GenerarSoportePagoController extends Controller
                 $em->flush();                 
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));
             }
-             * 
-             */
+
             if($request->request->get('OpGenerar')) {  
                 set_time_limit(0);
                 ini_set("memory_limit", -1);
@@ -221,7 +220,7 @@ class GenerarSoportePagoController extends Controller
                 }                
                 $em->flush();                                                   
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));                
-            }            
+            }  
             if ($form->get('BtnEliminar')->isClicked()) {                
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->eliminar($arrSeleccionados);
@@ -245,7 +244,7 @@ class GenerarSoportePagoController extends Controller
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);                
                 $this->listaPeriodo();
-            }            
+            }             
         }        
         $arSoportePagoPeriodos = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 100);
         return $this->render('BrasaTurnoBundle:Procesos/GenerarSoportePago:generar.html.twig', array(
@@ -500,7 +499,7 @@ class GenerarSoportePagoController extends Controller
             ->add('estadoCerrado', 'choice', array('choices'   => array('0' => 'SIN CERRAR', '1' => 'CERRADO', '2' => 'TODOS'), 'data' => $session->get('filtroSoportePagoEstadoCerrado')))                                
             ->add('BtnDesbloquear', 'submit', array('label'  => 'Desbloquear')) 
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar')) 
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))                
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))         
             ->getForm();
         return $form;
     }

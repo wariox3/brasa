@@ -159,7 +159,11 @@ class TurSoportePagoPeriodo
      * @ORM\OneToMany(targetEntity="TurSoportePagoDetalle", mappedBy="soportePagoPeriodoRel")
      */
     protected $soportesPagosDetallesSoportePagoPeriodoRel;     
-    
+   
+   /**
+     * @ORM\OneToMany(targetEntity="TurProgramacionAlterna", mappedBy="soportePagoPeriodoRel")
+     */
+    protected $programacionesAlternasSoportePagoPeriodoRel;     
 
     /**
      * Constructor
@@ -686,6 +690,54 @@ class TurSoportePagoPeriodo
     }
 
     /**
+     * Set anio
+     *
+     * @param integer $anio
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setAnio($anio)
+    {
+        $this->anio = $anio;
+
+        return $this;
+    }
+
+    /**
+     * Get anio
+     *
+     * @return integer
+     */
+    public function getAnio()
+    {
+        return $this->anio;
+    }
+
+    /**
+     * Set mes
+     *
+     * @param integer $mes
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setMes($mes)
+    {
+        $this->mes = $mes;
+
+        return $this;
+    }
+
+    /**
+     * Get mes
+     *
+     * @return integer
+     */
+    public function getMes()
+    {
+        return $this->mes;
+    }
+
+    /**
      * Set recursoGrupoRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurRecursoGrupo $recursoGrupoRel
@@ -836,50 +888,36 @@ class TurSoportePagoPeriodo
     }
 
     /**
-     * Set anio
+     * Add programacionesAlternasSoportePagoPeriodoRel
      *
-     * @param integer $anio
+     * @param \Brasa\TurnoBundle\Entity\TurProgramacionAlterna $programacionesAlternasSoportePagoPeriodoRel
      *
      * @return TurSoportePagoPeriodo
      */
-    public function setAnio($anio)
+    public function addProgramacionesAlternasSoportePagoPeriodoRel(\Brasa\TurnoBundle\Entity\TurProgramacionAlterna $programacionesAlternasSoportePagoPeriodoRel)
     {
-        $this->anio = $anio;
+        $this->programacionesAlternasSoportePagoPeriodoRel[] = $programacionesAlternasSoportePagoPeriodoRel;
 
         return $this;
     }
 
     /**
-     * Get anio
+     * Remove programacionesAlternasSoportePagoPeriodoRel
      *
-     * @return integer
+     * @param \Brasa\TurnoBundle\Entity\TurProgramacionAlterna $programacionesAlternasSoportePagoPeriodoRel
      */
-    public function getAnio()
+    public function removeProgramacionesAlternasSoportePagoPeriodoRel(\Brasa\TurnoBundle\Entity\TurProgramacionAlterna $programacionesAlternasSoportePagoPeriodoRel)
     {
-        return $this->anio;
+        $this->programacionesAlternasSoportePagoPeriodoRel->removeElement($programacionesAlternasSoportePagoPeriodoRel);
     }
 
     /**
-     * Set mes
+     * Get programacionesAlternasSoportePagoPeriodoRel
      *
-     * @param integer $mes
-     *
-     * @return TurSoportePagoPeriodo
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function setMes($mes)
+    public function getProgramacionesAlternasSoportePagoPeriodoRel()
     {
-        $this->mes = $mes;
-
-        return $this;
-    }
-
-    /**
-     * Get mes
-     *
-     * @return integer
-     */
-    public function getMes()
-    {
-        return $this->mes;
+        return $this->programacionesAlternasSoportePagoPeriodoRel;
     }
 }

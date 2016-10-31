@@ -203,6 +203,12 @@ class TurRecurso
     protected $simulacionesDetallesRecursoRel; 
 
     /**
+     * @ORM\OneToMany(targetEntity="TurProgramacionAlterna", mappedBy="recursoRel")
+     */
+    protected $programacionesAlternasRecursoRel;     
+    
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -213,9 +219,11 @@ class TurRecurso
         $this->pedidosDetallesRecursosRecursoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->serviciosDetallesRecursosRecursoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->costosRecursosRecursoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->costosRecursosDetallesRecursoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->novedadesRecursoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->novedadesRecursoReemplazoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->simulacionesDetallesRecursoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->programacionesAlternasRecursoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1071,6 +1079,40 @@ class TurRecurso
     }
 
     /**
+     * Add costosRecursosDetallesRecursoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCostoRecursoDetalle $costosRecursosDetallesRecursoRel
+     *
+     * @return TurRecurso
+     */
+    public function addCostosRecursosDetallesRecursoRel(\Brasa\TurnoBundle\Entity\TurCostoRecursoDetalle $costosRecursosDetallesRecursoRel)
+    {
+        $this->costosRecursosDetallesRecursoRel[] = $costosRecursosDetallesRecursoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove costosRecursosDetallesRecursoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurCostoRecursoDetalle $costosRecursosDetallesRecursoRel
+     */
+    public function removeCostosRecursosDetallesRecursoRel(\Brasa\TurnoBundle\Entity\TurCostoRecursoDetalle $costosRecursosDetallesRecursoRel)
+    {
+        $this->costosRecursosDetallesRecursoRel->removeElement($costosRecursosDetallesRecursoRel);
+    }
+
+    /**
+     * Get costosRecursosDetallesRecursoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCostosRecursosDetallesRecursoRel()
+    {
+        return $this->costosRecursosDetallesRecursoRel;
+    }
+
+    /**
      * Add novedadesRecursoRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurNovedad $novedadesRecursoRel
@@ -1173,36 +1215,36 @@ class TurRecurso
     }
 
     /**
-     * Add costosRecursosDetallesRecursoRel
+     * Add programacionesAlternasRecursoRel
      *
-     * @param \Brasa\TurnoBundle\Entity\TurCostoRecursoDetalle $costosRecursosDetallesRecursoRel
+     * @param \Brasa\TurnoBundle\Entity\TurProgramacionAlterna $programacionesAlternasRecursoRel
      *
      * @return TurRecurso
      */
-    public function addCostosRecursosDetallesRecursoRel(\Brasa\TurnoBundle\Entity\TurCostoRecursoDetalle $costosRecursosDetallesRecursoRel)
+    public function addProgramacionesAlternasRecursoRel(\Brasa\TurnoBundle\Entity\TurProgramacionAlterna $programacionesAlternasRecursoRel)
     {
-        $this->costosRecursosDetallesRecursoRel[] = $costosRecursosDetallesRecursoRel;
+        $this->programacionesAlternasRecursoRel[] = $programacionesAlternasRecursoRel;
 
         return $this;
     }
 
     /**
-     * Remove costosRecursosDetallesRecursoRel
+     * Remove programacionesAlternasRecursoRel
      *
-     * @param \Brasa\TurnoBundle\Entity\TurCostoRecursoDetalle $costosRecursosDetallesRecursoRel
+     * @param \Brasa\TurnoBundle\Entity\TurProgramacionAlterna $programacionesAlternasRecursoRel
      */
-    public function removeCostosRecursosDetallesRecursoRel(\Brasa\TurnoBundle\Entity\TurCostoRecursoDetalle $costosRecursosDetallesRecursoRel)
+    public function removeProgramacionesAlternasRecursoRel(\Brasa\TurnoBundle\Entity\TurProgramacionAlterna $programacionesAlternasRecursoRel)
     {
-        $this->costosRecursosDetallesRecursoRel->removeElement($costosRecursosDetallesRecursoRel);
+        $this->programacionesAlternasRecursoRel->removeElement($programacionesAlternasRecursoRel);
     }
 
     /**
-     * Get costosRecursosDetallesRecursoRel
+     * Get programacionesAlternasRecursoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getCostosRecursosDetallesRecursoRel()
+    public function getProgramacionesAlternasRecursoRel()
     {
-        return $this->costosRecursosDetallesRecursoRel;
+        return $this->programacionesAlternasRecursoRel;
     }
 }

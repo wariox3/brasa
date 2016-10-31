@@ -302,8 +302,8 @@ class TurSoportePago
    /**
      * @ORM\OneToMany(targetEntity="TurProgramacionAlterna", mappedBy="soportePagoRel")
      */
-    protected $programacionesAlternasSoportePagoRel;       
-
+    protected $programacionesAlternasSoportePagoRel;         
+    
 
     /**
      * Constructor
@@ -311,7 +311,6 @@ class TurSoportePago
     public function __construct()
     {
         $this->soportesPagosDetallesSoportePagoRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->programacionesAlternasSoportePagoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
