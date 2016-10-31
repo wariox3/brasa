@@ -27,7 +27,7 @@ class GenerarSoportePagoController extends Controller
         $this->listaPeriodo();
         if ($form->isValid()) {
             if($request->request->get('OpGenerarProgramacion')) {
-                set_time_limit(0);
+                /*set_time_limit(0);
                 ini_set("memory_limit", -1);
                 $codigoSoportePagoPeriodo = $request->request->get('OpGenerarProgramacion');
                 $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
@@ -39,6 +39,8 @@ class GenerarSoportePagoController extends Controller
                 }                     
                 $em->flush();                 
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));
+                 * 
+                 */
             }
 
             if($request->request->get('OpGenerar')) {  
