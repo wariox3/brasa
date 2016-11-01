@@ -521,6 +521,27 @@ class ProgramacionesPagoController extends Controller
                     return $this->redirect($this->generateUrl('brs_rhu_programacion_pago_resumen_turno_ver', array('codigoProgramacionPagoDetalle' => $codigoProgramacionPagoDetalle)));
                 }
             }
+            if($form->get('BtnActualizarPagoAdicional')->isClicked()) {
+                $arUsuario = $this->get('security.context')->getToken()->getUser();
+                $arrSeleccionados = $request->request->get('ChkSeleccionarValor');
+                if(count($arrSeleccionados) > 0) {
+                    $arrControles = $request->request->All();
+                    foreach ($arrSeleccionados as $codigoPagoAdicional) {
+                        if($arrControles['TxtValor'.$codigoPagoAdicional] != "") {
+                            $valor = $arrControles['TxtValor'.$codigoPagoAdicional];
+                            $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+                            $arPagoAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->find($codigoPagoAdicional);                            
+                            $arPagoAdicional->setEstadoInactivo(0);
+                            $arPagoAdicional->setFechaUltimaEdicion(new \DateTime('now'));
+                            $arPagoAdicional->setValor($valor);
+                            $arPagoAdicional->setCodigoUsuarioUltimaEdicion($arUsuario->getUserName());            
+                            $em->persist($arPagoAdicional);
+                        }
+                    }
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_programacion_pago_resumen_turno_ver', array('codigoProgramacionPagoDetalle' => $codigoProgramacionPagoDetalle)));
+                }
+            }            
             if($form->get('BtnMarcar')->isClicked()) {
                 $arProgramacionPagoDetalle->setMarca(1);
                 $em->persist($arProgramacionPagoDetalle);
@@ -636,6 +657,7 @@ class ProgramacionesPagoController extends Controller
         
         $arrBotonEliminarPagoAdicional = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonInactivarPagoAdicional = array('label' => 'Inactivar', 'disabled' => false);
+        $arrBotonActualizarPagoAdicional = array('label' => 'Actualizar', 'disabled' => false);
         $arrBotonMarcar = array('label' => 'Marcar', 'disabled' => false);
         if($arProgramacionPago->getEstadoPagado() == 1) {            
             $arrBotonActualizar['disabled'] = true;
@@ -643,6 +665,7 @@ class ProgramacionesPagoController extends Controller
             $arrBotonActualizarHorasSoportePago['disabled'] = true;            
             $arrBotonEliminarPagoAdicional['disabled'] = true;            
             $arrBotonInactivarPagoAdicional['disabled'] = true;
+            $arrBotonActualizarPagoAdicional['disabled'] = true;
             $arrBotonMarcar['disabled'] = true;
         }         
         $form = $this->createFormBuilder()             
@@ -651,6 +674,7 @@ class ProgramacionesPagoController extends Controller
             ->add('BtnActualizarHorasSoportePago', 'submit',$arrBotonActualizarHorasSoportePago)            
             ->add('BtnEliminarPagoAdicional', 'submit', $arrBotonEliminarPagoAdicional)
             ->add('BtnInactivarPagoAdicional', 'submit', $arrBotonInactivarPagoAdicional)
+            ->add('BtnActualizarPagoAdicional', 'submit', $arrBotonActualizarPagoAdicional)
             ->add('BtnMarcar', 'submit', $arrBotonMarcar)
             ->getForm();
         return $form;

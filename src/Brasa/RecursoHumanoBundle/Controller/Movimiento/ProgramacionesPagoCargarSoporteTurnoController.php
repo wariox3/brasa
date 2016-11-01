@@ -116,7 +116,13 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                     
                     if($intDiasIncapacidad != $arSoportePago->getIncapacidad()) {
                         $arrInconsistencias[] = array('inconsistencia' => "El empleado " . $arEmpleado->getNumeroIdentificacion() . "-" . $arEmpleado->getNombreCorto() . " tiene incapacidades de " . $arSoportePago->getIncapacidad() . " dias en turnos y de " . $intDiasIncapacidad . " en recurso humano");
-                    }                                        
+                    }         
+                    if($arSoportePagoPeriodo->getAjusteDevengado()) {
+                        if($arSoportePago->getVrAjusteDevengadoPactado() > 0) {
+                            $arProgramacionPagoDetalle->setVrAjusteDevengado($arSoportePago->getVrAjusteDevengadoPactado());
+                        }
+                    }
+                    
                     $em->persist($arProgramacionPagoDetalle);                
                 }                
                 $arProgramacionPago->setInconsistencias(0);

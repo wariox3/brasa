@@ -46,6 +46,16 @@ class TurSoportePago
      * @ORM\Column(name="vr_salario", type="float")
      */    
     private $vrSalario = 0;    
+
+    /**
+     * @ORM\Column(name="vr_devengado_pactado", type="float")
+     */    
+    private $vrDevengadoPactado = 0; 
+    
+    /**
+     * @ORM\Column(name="vr_ajuste_devengado_pactado", type="float")
+     */    
+    private $vrAjusteDevengadoPactado = 0;     
     
     /**
      * @ORM\Column(name="vr_pago", type="float")
@@ -1709,5 +1719,53 @@ class TurSoportePago
     public function getProgramacionesAlternasSoportePagoRel()
     {
         return $this->programacionesAlternasSoportePagoRel;
+    }
+
+    /**
+     * Set vrDevengadoPactado
+     *
+     * @param float $vrDevengadoPactado
+     *
+     * @return TurSoportePago
+     */
+    public function setVrDevengadoPactado($vrDevengadoPactado)
+    {
+        $this->vrDevengadoPactado = $vrDevengadoPactado;
+
+        return $this;
+    }
+
+    /**
+     * Get vrDevengadoPactado
+     *
+     * @return float
+     */
+    public function getVrDevengadoPactado()
+    {
+        return $this->vrDevengadoPactado;
+    }
+
+    /**
+     * Set vrAjusteDevengadoPactado
+     *
+     * @param float $vrAjusteDevengadoPactado
+     *
+     * @return TurSoportePago
+     */
+    public function setVrAjusteDevengadoPactado($vrAjusteDevengadoPactado)
+    {
+        $this->vrAjusteDevengadoPactado = $vrAjusteDevengadoPactado;
+
+        return $this;
+    }
+
+    /**
+     * Get vrAjusteDevengadoPactado
+     *
+     * @return float
+     */
+    public function getVrAjusteDevengadoPactado()
+    {
+        return $this->vrAjusteDevengadoPactado;
     }
 }

@@ -133,6 +133,7 @@ class RhuLiquidacionRepository extends EntityRepository {
                 $arLiquidacion->setVrSalarioPromedioCesantias(0);
                 $arLiquidacion->setDiasCesantiasAusentismo(0);                
             }
+            
             //Liquidar primas
             if($arLiquidacion->getLiquidarPrima() == 1) {            
                 $dateFechaDesde = $arLiquidacion->getContratoRel()->getFechaUltimoPagoPrimas();
@@ -199,6 +200,7 @@ class RhuLiquidacionRepository extends EntityRepository {
                     $arLiquidacion->setVrIngresoBasePrestacionPrimasInicial(0);
                     $arLiquidacion->setVrSalarioPromedioPrimas(0);                
             }
+            
             //Liquidar vacaciones
             if($arLiquidacion->getContratoRel()->getFechaUltimoPagoVacaciones() <= $arLiquidacion->getFechaHasta()) {
                 if($arLiquidacion->getLiquidarVacaciones() == 1) { 
@@ -227,6 +229,11 @@ class RhuLiquidacionRepository extends EntityRepository {
                     $arLiquidacion->setVrVacaciones($douVacaciones);
                     $arLiquidacion->setFechaUltimoPagoVacaciones($arLiquidacion->getContratoRel()->getFechaUltimoPagoVacaciones());
                 }
+            } else {
+                $arLiquidacion->setVrSalarioVacaciones(0);
+                $arLiquidacion->setDiasVacaciones(0);
+                $arLiquidacion->setDiasVacacionesAusentismo(0);
+                $arLiquidacion->setVrVacaciones(0);                
             }                   
             
         } else {

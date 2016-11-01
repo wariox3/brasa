@@ -1066,44 +1066,13 @@ class TurSoportePagoRepository extends EntityRepository {
             }
             $em->persist($arSoportePagoProgramacion);
         }
-    }
-
-    public function ajustarDevengado($codigoSoportePagoPeriodo = "") {
-        $em = $this->getEntityManager();
-        $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
-        $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);
-        $arSoportePagos = new \Brasa\TurnoBundle\Entity\TurSoportePago();
-        $arSoportePagos = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo));
-        foreach ($arSoportePagos as $arSoportePago) {
-            $arContrado = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-            $arContrado = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arSoportePago->getCodigoContratoFk());
-            $devengadoPactado = $arContrado->getVrDevengadoPactado();
-            $dias = $arSoportePago->getDiasTransporte();
-            $valorDia = $arContrado->getVrSalario() / 30;
-            $arSoportePagoAct = new \Brasa\TurnoBundle\Entity\TurSoportePago();
-            $arSoportePagoAct = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->find($arSoportePago->getCodigoSoportePagoPk());
-            $arSoportePagoAct->setHoras(0);
-            $arSoportePagoAct->setHorasDescanso(0);
-            $arSoportePagoAct->setHorasDiurnas($dias * 8);
-            $arSoportePagoAct->setHorasNocturnas(0);
-            $arSoportePagoAct->setHorasFestivasDiurnas(0);
-            $arSoportePagoAct->setHorasFestivasNocturnas(0);
-            $arSoportePagoAct->setHorasExtrasOrdinariasDiurnas(0);
-            $arSoportePagoAct->setHorasExtrasOrdinariasNocturnas(0);
-            $arSoportePagoAct->setHorasExtrasFestivasDiurnas(0);
-            $arSoportePagoAct->setHorasExtrasFestivasNocturnas(0);
-            $arSoportePagoAct->setHorasRecargoNocturno(0);
-            $arSoportePagoAct->setHorasRecargoFestivoDiurno(0);
-            $arSoportePagoAct->setHorasRecargoFestivoNocturno(0);
-            $em->persist($arSoportePagoAct);
-        }
-        $em->flush();
-    }
+    }    
 
     public function generarProgramacionAlterna($codigoSoportePagoPeriodo) {
         $em = $this->getEntityManager();
-        $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
+        $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();        
         $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);                        
+        $arSoportePagoPeriodo->setAjusteDevengado(1);
         $arFestivos = $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($arSoportePagoPeriodo->getFechaDesde()->format('Y-m-').'01', $arSoportePagoPeriodo->getFechaHasta()->format('Y-m-').'31');                        
         
         $strSql = "DELETE FROM tur_programacion_alterna WHERE codigo_soporte_pago_periodo_fk = " . $codigoSoportePagoPeriodo;
@@ -1111,19 +1080,24 @@ class TurSoportePagoRepository extends EntityRepository {
         $strSql = "DELETE FROM tur_soporte_pago_detalle WHERE codigo_soporte_pago_periodo_fk = " . $codigoSoportePagoPeriodo;
         $em->getConnection()->executeQuery($strSql);        
         $arSecuencia = new \Brasa\TurnoBundle\Entity\TurSecuencia();
-        $arSecuencia = $em->getRepository('BrasaTurnoBundle:TurSecuencia')->findAll(1);        
+        $arSecuencia = $em->getRepository('BrasaTurnoBundle:TurSecuencia')->find($arSoportePagoPeriodo->getCentroCostoRel()->getSecuencia());                
+        $arSecuenciaDetalle = new \Brasa\TurnoBundle\Entity\TurSecuenciaDetalle();
+        $arSecuenciaDetalle = $em->getRepository('BrasaTurnoBundle:TurSecuenciaDetalle')->findBy(array('codigoSecuenciaFk' => $arSoportePagoPeriodo->getCentroCostoRel()->getSecuencia()));        
+        $indiceSecuencia = 0;
         $arSoportesPago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
         $arSoportesPago = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo));                                
-        foreach ($arSoportesPago as $arSoportePago) {
+        foreach ($arSoportesPago as $arSoportePago) {   
+            if($indiceSecuencia >= $arSecuencia->getFilas()) {
+                $indiceSecuencia = 0;
+            }
             $arProgramacionDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
-            $arProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->periodoDias($arSoportePago->getAnio(), $arSoportePago->getMes(), $arSoportePago->getCodigoRecursoFk());
-        
+            $arProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->periodoDias($arSoportePago->getAnio(), $arSoportePago->getMes(), $arSoportePago->getCodigoRecursoFk());        
             $arProgramacionAlterna = new \Brasa\TurnoBundle\Entity\TurProgramacionAlterna();
             $arProgramacionAlterna->setSoportePagoPeriodoRel($arSoportePago->getSoportePagoPeriodoRel());
             $arProgramacionAlterna->setSoportePagoRel($arSoportePago);
             $arProgramacionAlterna->setAnio($arSoportePago->getAnio());
             $arProgramacionAlterna->setMes($arSoportePago->getMes());            
-            $arProgramacionAlterna->setRecursoRel($arSoportePago->getRecursoRel());            
+            $arProgramacionAlterna->setRecursoRel($arSoportePago->getRecursoRel());              
             for($i = 1; $i <= 31; $i++) {
                 $strTurnoDefinitivo = NULL;
                 foreach ($arProgramacionDetalles as $arProgramacionDetalle) {
@@ -1138,7 +1112,7 @@ class TurSoportePagoRepository extends EntityRepository {
                         }
                     }
                 }
-                $strTurnoDefinitivo = $this->turnoDefinitivo($arSecuencia, $i, $strTurnoDefinitivo);
+                $strTurnoDefinitivo = $this->turnoDefinitivo($arSecuenciaDetalle[$indiceSecuencia], $i, $strTurnoDefinitivo);
                 if($i == 1) {
                     $arProgramacionAlterna->setDia1($strTurnoDefinitivo);                    
                 }
@@ -1231,9 +1205,10 @@ class TurSoportePagoRepository extends EntityRepository {
                 }
                 if($i == 31) {
                     $arProgramacionAlterna->setDia31($strTurnoDefinitivo);                    
-                }                
+                }                   
             }
             $em->persist($arProgramacionAlterna);            
+            $indiceSecuencia++;
         }               
         $em->flush();
         
@@ -1247,7 +1222,7 @@ class TurSoportePagoRepository extends EntityRepository {
         $em->flush();                
 
         $em->getRepository('BrasaTurnoBundle:TurSoportePago')->resumen($arSoportePagoPeriodo);                     
-         
+        $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->liquidar($codigoSoportePagoPeriodo);                                                                     
         
     }
     

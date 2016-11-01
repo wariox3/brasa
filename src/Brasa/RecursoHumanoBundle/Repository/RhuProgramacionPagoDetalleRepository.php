@@ -273,7 +273,6 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                 $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());
                 $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConcepto->getOperacion());                                
                 $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);                            
-
                 if($arPagoConcepto->getPrestacional() == 1) {
                     if($arPagoConcepto->getGeneraIngresoBasePrestacion() == 1) {
                         $douIngresoBasePrestacional += $douPagoDetalle;    
@@ -294,10 +293,41 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                     }                    
                     $arPagoDetalle->setPrestacional(1);
                 }
-
                 $em->persist($arPagoDetalle);                                
             }
 
+            //Concepto ajuste devengado
+            if($arProgramacionPagoDetalle->getVrAjusteDevengado() > 0) {                
+                $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($arConfiguracion->getCodigoAjusteDevengado());                                
+                $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
+                $arPagoDetalle->setPagoRel($arPago);
+                $arPagoDetalle->setPagoConceptoRel($arPagoConcepto);
+                $arPagoDetalle->setAdicional(1);                                               
+                $douPagoDetalle = round($arProgramacionPagoDetalle->getVrAjusteDevengado());                
+                $devengado += $douPagoDetalle;
+                $devengadoPrestacional += $douPagoDetalle;
+                $arPagoDetalle->setVrPago($douPagoDetalle);
+                $arPagoDetalle->setOperacion(1);
+                $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $arPagoConcepto->getOperacion());                                
+                $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);                            
+                if($arPagoConcepto->getPrestacional() == 1) {
+                    if($arPagoConcepto->getGeneraIngresoBasePrestacion() == 1) {
+                        $douIngresoBasePrestacional += $douPagoDetalle;    
+                        $arPagoDetalle->setVrIngresoBasePrestacion($douPagoDetalle);
+                    }                                        
+                    if($arPagoConcepto->getGeneraIngresoBaseCotizacion() == 1) {
+                        $douIngresoBaseCotizacion += $douPagoDetalle;    
+                        $arPagoDetalle->setVrIngresoBaseCotizacion($douPagoDetalle);
+                        $arPagoDetalle->setCotizacion(1);
+                        if($arPagoConcepto->getComponeSalario() == 1) {                                                    
+                            $arPagoDetalle->setVrIngresoBaseCotizacionSalario($douPagoDetalle);                                                    
+                        }
+                    }                    
+                    $arPagoDetalle->setPrestacional(1);
+                }
+                $em->persist($arPagoDetalle);                 
+            }
+            
             //Procesar creditos
             $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
             $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->findBy(array('codigoEmpleadoFk' => $arProgramacionPagoDetalle->getCodigoEmpleadoFk(), 'codigoCreditoTipoPagoFk' => 1, 'estadoPagado' => 0, 'aprobado' => 1, 'estadoSuspendido' => 0));

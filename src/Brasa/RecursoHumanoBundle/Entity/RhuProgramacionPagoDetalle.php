@@ -250,6 +250,11 @@ class RhuProgramacionPagoDetalle
     private $marca = 0;    
     
     /**
+     * @ORM\Column(name="vr_ajuste_devengado", type="float")
+     */
+    private $vrAjusteDevengado = 0;      
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuProgramacionPago", inversedBy="programacionesPagosDetallesProgramacionPagoRel")
      * @ORM\JoinColumn(name="codigo_programacion_pago_fk", referencedColumnName="codigo_programacion_pago_pk")
      */
@@ -1579,5 +1584,29 @@ class RhuProgramacionPagoDetalle
     public function getPagosProgramacionPagoDetalleRel()
     {
         return $this->pagosProgramacionPagoDetalleRel;
+    }
+
+    /**
+     * Set vrAjusteDevengado
+     *
+     * @param float $vrAjusteDevengado
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setVrAjusteDevengado($vrAjusteDevengado)
+    {
+        $this->vrAjusteDevengado = $vrAjusteDevengado;
+
+        return $this;
+    }
+
+    /**
+     * Get vrAjusteDevengado
+     *
+     * @return float
+     */
+    public function getVrAjusteDevengado()
+    {
+        return $this->vrAjusteDevengado;
     }
 }

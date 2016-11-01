@@ -34,7 +34,6 @@
         </div> 
         <table  class="table table-striped table-bordered table-condensed table-hover">
             <tr>
-                <th></th>
                 <th>CODIGO</th>
                 <th>GRUPO</th>
                 <th>DESDE</th>
@@ -52,8 +51,7 @@
                 <th></th>
             </tr>
             {% for arSoportePagoPeriodos in arSoportePagoPeriodos %}
-            <tr>
-                <td><button class="btn btn-default btn-xs" type="submit" name="OpGenerarProgramacion" value="{{ arSoportePagoPeriodos.codigoSoportePagoPeriodoPk }}">CP</button></td>                
+            <tr>                
                 <td>{{ arSoportePagoPeriodos.codigoSoportePagoPeriodoPk  }}</td>
                 <td>{{ arSoportePagoPeriodos.recursoGrupoRel.nombre |default('') }}</td>
                 <td>{{ arSoportePagoPeriodos.fechaDesde |date("Y/m/d")  }}</td>

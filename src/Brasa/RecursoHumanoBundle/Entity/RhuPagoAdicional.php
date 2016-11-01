@@ -104,6 +104,11 @@ class RhuPagoAdicional
     private $fechaUltimaEdicion;
     
     /**
+     * @ORM\Column(name="codigo_usuario_ultima_edicion", type="string", length=50, nullable=true)
+     */    
+    private $codigoUsuarioUltimaEdicion;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuPagoConcepto", inversedBy="pagosAdicionalesPagoConceptoRel")
      * @ORM\JoinColumn(name="codigo_pago_concepto_fk", referencedColumnName="codigo_pago_concepto_pk")
      */
@@ -612,5 +617,29 @@ class RhuPagoAdicional
     public function getProgramacionPagoRel()
     {
         return $this->programacionPagoRel;
+    }
+
+    /**
+     * Set codigoUsuarioUltimaEdicion
+     *
+     * @param string $codigoUsuarioUltimaEdicion
+     *
+     * @return RhuPagoAdicional
+     */
+    public function setCodigoUsuarioUltimaEdicion($codigoUsuarioUltimaEdicion)
+    {
+        $this->codigoUsuarioUltimaEdicion = $codigoUsuarioUltimaEdicion;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuarioUltimaEdicion
+     *
+     * @return string
+     */
+    public function getCodigoUsuarioUltimaEdicion()
+    {
+        return $this->codigoUsuarioUltimaEdicion;
     }
 }

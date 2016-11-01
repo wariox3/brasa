@@ -101,6 +101,11 @@ class TurConfiguracion
      */    
     private $habilitarCompesacion = false;     
     
+    /**     
+     * @ORM\Column(name="habilitar_programacion_alterna", type="boolean")
+     */    
+    private $habilitarProgramacionAlterna = false;      
+    
     /**
      * @ORM\Column(name="codigo_formato_factura", type="integer")
      */    
@@ -613,5 +618,29 @@ class TurConfiguracion
     public function getHabilitarCompesacion()
     {
         return $this->habilitarCompesacion;
+    }
+
+    /**
+     * Set habilitarProgramacionAlterna
+     *
+     * @param boolean $habilitarProgramacionAlterna
+     *
+     * @return TurConfiguracion
+     */
+    public function setHabilitarProgramacionAlterna($habilitarProgramacionAlterna)
+    {
+        $this->habilitarProgramacionAlterna = $habilitarProgramacionAlterna;
+
+        return $this;
+    }
+
+    /**
+     * Get habilitarProgramacionAlterna
+     *
+     * @return boolean
+     */
+    public function getHabilitarProgramacionAlterna()
+    {
+        return $this->habilitarProgramacionAlterna;
     }
 }

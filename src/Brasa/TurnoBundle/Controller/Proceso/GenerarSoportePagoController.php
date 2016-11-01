@@ -84,7 +84,8 @@ class GenerarSoportePagoController extends Controller
                                 if($arContrato->getFechaDesde() <= $arSoportePagoPeriodo->getFechaHasta()) {
                                     $arSoportePago = new \Brasa\TurnoBundle\Entity\TurSoportePago();                                                
                                     $arSoportePago->setCodigoContratoFk($arContrato->getCodigoContratoPk());
-                                    $arSoportePago->setVrSalario($arContrato->getVrSalario());                            
+                                    $arSoportePago->setVrSalario($arContrato->getVrSalario()); 
+                                    $arSoportePago->setVrDevengadoPactado($arContrato->getVrDevengadoPactado());
                                     $arSoportePago->setRecursoRel($arRecurso);
                                     $arSoportePago->setSoportePagoPeriodoRel($arSoportePagoPeriodo);
                                     $arSoportePago->setAnio($arSoportePagoPeriodo->getAnio());
@@ -150,6 +151,8 @@ class GenerarSoportePagoController extends Controller
                 $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
                 $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);                
                 if($arSoportePagoPeriodo->getEstadoProgramacionPago() == 0) {
+                    $strSql = "DELETE FROM tur_programacion_alterna WHERE codigo_soporte_pago_periodo_fk = " . $codigoSoportePagoPeriodo;           
+                    $em->getConnection()->executeQuery($strSql);                    
                     $em->getRepository('BrasaTurnoBundle:TurSoportePagoInconsistencia')->limpiar($codigoSoportePagoPeriodo);                            
                     $strSql = "DELETE FROM tur_soporte_pago_detalle WHERE codigo_soporte_pago_periodo_fk = " . $codigoSoportePagoPeriodo;           
                     $em->getConnection()->executeQuery($strSql);
@@ -286,10 +289,6 @@ class GenerarSoportePagoController extends Controller
                 $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->liquidar($codigoSoportePagoPeriodo);                                
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago_detalle', array('codigoSoportePagoPeriodo' => $codigoSoportePagoPeriodo)));                
                 
-            }    
-            if ($form->get('BtnAjustarDevengado')->isClicked()) { 
-                $em->getRepository('BrasaTurnoBundle:TurSoportePago')->ajustarDevengado($codigoSoportePagoPeriodo);
-                return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago_detalle', array('codigoSoportePagoPeriodo' => $codigoSoportePagoPeriodo)));                                
             }            
             if ($form->get('BtnGenerarProgramacionAlterna')->isClicked()) { 
                 $em->getRepository('BrasaTurnoBundle:TurSoportePago')->generarProgramacionAlterna($codigoSoportePagoPeriodo);
@@ -416,6 +415,9 @@ class GenerarSoportePagoController extends Controller
             $arSoportePagoPeriodo->setDiasDescansoFijo($arSoportePagoPeriodo->getRecursoGrupoRel()->getDiasDescansoFijo());
             $arSoportePagoPeriodo->setAnio($arSoportePagoPeriodo->getFechaDesde()->format('Y'));
             $arSoportePagoPeriodo->setMes($arSoportePagoPeriodo->getFechaDesde()->format('m'));
+            $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
+            $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arSoportePagoPeriodo->getRecursoGrupoRel()->getCodigoCentroCostoFk());
+            $arSoportePagoPeriodo->setCentroCostoRel($arCentroCosto);
             $em->persist($arSoportePagoPeriodo);
             $em->flush();
             return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));                                                                              
@@ -510,17 +512,18 @@ class GenerarSoportePagoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $arConfiguracion = new \Brasa\TurnoBundle\Entity\TurConfiguracion();
         $arConfiguracion = $em->getRepository('BrasaTurnoBundle:TurConfiguracion')->find(1);
-        $arrBotonLiquidarCompensacion = array('label' => 'Compensacion', 'disabled' => true);
-        $arrBotonAjustarDevengado = array('label' => 'Ajustar devengado', 'disabled' => false);
-        $arrBotonGenerarProgramacionAlterna = array('label' => 'Generar programacion alterna', 'disabled' => false);
+        $arrBotonLiquidarCompensacion = array('label' => 'Compensacion', 'disabled' => true);        
+        $arrBotonGenerarProgramacionAlterna = array('label' => 'Generar programacion alterna', 'disabled' => true);
         if($arConfiguracion->getHabilitarCompesacion()) {
             $arrBotonLiquidarCompensacion['disabled'] = false;
+        }
+        if($arConfiguracion->getHabilitarProgramacionAlterna()) {
+            $arrBotonGenerarProgramacionAlterna['disabled'] = false;
         }
         $form = $this->createFormBuilder()
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))                        
             ->add('BtnLiquidar', 'submit', array('label'  => 'Liquidar'))                                                    
-            ->add('BtnLiquidarCompensacion2', 'submit', $arrBotonLiquidarCompensacion)                        
-            ->add('BtnAjustarDevengado', 'submit', $arrBotonAjustarDevengado)                        
+            ->add('BtnLiquidarCompensacion2', 'submit', $arrBotonLiquidarCompensacion)                                    
             ->add('BtnGenerarProgramacionAlterna', 'submit', $arrBotonGenerarProgramacionAlterna)                        
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar')) 
             ->getForm();

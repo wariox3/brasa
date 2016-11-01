@@ -211,6 +211,7 @@ class PagosAdicionalesAgregarController extends Controller
         }
         if($form->isValid()) {
             $arrControles = $request->request->All();
+            $arUsuario = $this->get('security.context')->getToken()->getUser();
             $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arPagoAdicional->getCodigoEmpleadoFk());        
             if ($codigoCentroCosto == null){
                 $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoUltimoFk());
@@ -258,6 +259,7 @@ class PagosAdicionalesAgregarController extends Controller
                         $arPagoAdicional->setPermanente(1);
                         $arPagoAdicional->setAplicaDiaLaborado($form->get('aplicarDiaLaborado')->getData());
                         $arPagoAdicional->setFechaUltimaEdicion(new \DateTime('now'));
+                        $arPagoAdicional->setCodigoUsuarioUltimaEdicion($arUsuario->getUserName());
                         $em->persist($arPagoAdicional);                                                        
                         $em->flush();
                         if($form->get('BtnGuardaryNuevo')->isClicked()) {

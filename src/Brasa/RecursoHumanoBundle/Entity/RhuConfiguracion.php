@@ -234,12 +234,17 @@ class RhuConfiguracion
     /**
      * @ORM\Column(name="codigo_hora_recargo_festivo_nocturno", type="integer")
      */
-    private $codigoHoraRecargoFestivoNocturno;
-
+    private $codigoHoraRecargoFestivoNocturno;   
+    
     /**
      * @ORM\Column(name="codigo_vacacion", type="integer")
      */
     private $codigoVacacion;
+    
+    /**
+     * @ORM\Column(name="codigo_ajuste_devengado", type="integer")
+     */
+    private $codigoAjusteDevengado;    
     
     /**
      * @ORM\Column(name="afecta_vacaciones_parafiscales", type="boolean")
@@ -286,7 +291,9 @@ class RhuConfiguracion
     /**
      * @ORM\Column(name="correo_nomina", type="string", length=100, nullable=true)
      */    
-    private $correoNomina;    
+    private $correoNomina;  
+    
+    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadRiesgoProfesional", inversedBy="configuracionEntidadRiesgoProfesionalRel")
@@ -1640,5 +1647,29 @@ class RhuConfiguracion
     public function getEntidadRiesgoProfesionalRel()
     {
         return $this->entidadRiesgoProfesionalRel;
+    }
+
+    /**
+     * Set codigoAjusteDevengado
+     *
+     * @param integer $codigoAjusteDevengado
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoAjusteDevengado($codigoAjusteDevengado)
+    {
+        $this->codigoAjusteDevengado = $codigoAjusteDevengado;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoAjusteDevengado
+     *
+     * @return integer
+     */
+    public function getCodigoAjusteDevengado()
+    {
+        return $this->codigoAjusteDevengado;
     }
 }

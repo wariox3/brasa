@@ -35,6 +35,7 @@ class TurSoportePagoPeriodoRepository extends EntityRepository {
         
         $arSoportePagoPeriodo->setRecursos($intRegistros);        
         $diaAuxilioTransporte = 77700 / 30;
+        $porHoraNocturna = 135;
         $porRecargoNocturno = 35;
         $porFestivaDiurna = 175;
         $porFestivaNocturna = 210;
@@ -50,19 +51,21 @@ class TurSoportePagoPeriodoRepository extends EntityRepository {
             $salario = $arSoportePago->getVrSalario();
             $vrDia = $salario / 30;
             $vrHora = $vrDia / 8;
-            $vrDiurna = $vrHora * ($arSoportePago->getHorasDiurnas() + $arSoportePago->getHorasNocturnas());            
-            //Solo el recargo
-            $vrNocturna = (($vrHora * $porRecargoNocturno)/100) * $arSoportePago->getHorasNocturnas();
             $vrDescanso = $vrHora * $arSoportePago->getHorasDescanso();
+            $vrDiurna = $vrHora * $arSoportePago->getHorasDiurnas();            
+            $vrNocturna = (($vrHora * $porHoraNocturna)/100) * $arSoportePago->getHorasNocturnas();            
             $vrFestivaDiurna = (($vrHora * $porFestivaDiurna)/100) * $arSoportePago->getHorasFestivasDiurnas();
             $vrFestivaNocturna = (($vrHora * $porFestivaNocturna)/100) * $arSoportePago->getHorasFestivasNocturnas();
             $vrExtraOrdinariaDiurna = (($vrHora * $porExtraOrdinariaDiurna)/100) * $arSoportePago->getHorasExtrasOrdinariasDiurnas();
             $vrExtraOrdinariaNocturna = (($vrHora * $porExtraOrdinariaNocturna)/100) * $arSoportePago->getHorasExtrasOrdinariasNocturnas();                        
             $vrExtraFestivaDiurna = (($vrHora * $porExtraFestivaDiurna)/100) * $arSoportePago->getHorasExtrasFestivasDiurnas();
             $vrExtraFestivaNocturna = (($vrHora * $porExtraFestivaNocturna)/100) * $arSoportePago->getHorasExtrasFestivasNocturnas();            
-            $vrAuxilioTransporte = $diaAuxilioTransporte * $arSoportePago->getDias();
+            $vrAuxilioTransporte = $diaAuxilioTransporte * $arSoportePago->getDiasTransporte();
             $vrPago = $vrDiurna + $vrNocturna + $vrDescanso + $vrFestivaDiurna + $vrFestivaNocturna + $vrExtraOrdinariaDiurna + $vrExtraOrdinariaNocturna + $vrExtraFestivaDiurna + $vrExtraFestivaNocturna;
             $vrDevengado = $vrPago + $vrAuxilioTransporte;
+            $vrDevengadoPactadoPeriodo = ($arSoportePago->getVrDevengadoPactado() / 30) * $arSoportePago->getDiasTransporte();
+            $vrAjusteDevengadoPactado = $vrDevengadoPactadoPeriodo - $vrDevengado;
+            $arSoportePagoAct->setVrAjusteDevengadoPactado($vrAjusteDevengadoPactado);
             $arSoportePagoAct->setVrPago($vrPago);
             $arSoportePagoAct->setVrAuxilioTransporte($vrAuxilioTransporte);
             $arSoportePagoAct->setVrDevengado($vrDevengado);            

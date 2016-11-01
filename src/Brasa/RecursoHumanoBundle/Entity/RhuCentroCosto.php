@@ -144,6 +144,11 @@ class RhuCentroCosto
     private $descansoOrdinario = false;             
     
     /**
+     * @ORM\Column(name="secuencia", type="integer", nullable=true)
+     */    
+    private $secuencia;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuCliente", inversedBy="centrosCostosClienteRel")
      * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
      */
@@ -1717,5 +1722,29 @@ class RhuCentroCosto
     public function getTurSoportesPagosPeriodosCentroCostoRel()
     {
         return $this->turSoportesPagosPeriodosCentroCostoRel;
+    }
+
+    /**
+     * Set secuencia
+     *
+     * @param integer $secuencia
+     *
+     * @return RhuCentroCosto
+     */
+    public function setSecuencia($secuencia)
+    {
+        $this->secuencia = $secuencia;
+
+        return $this;
+    }
+
+    /**
+     * Get secuencia
+     *
+     * @return integer
+     */
+    public function getSecuencia()
+    {
+        return $this->secuencia;
     }
 }

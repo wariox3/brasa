@@ -133,6 +133,11 @@ class TurSoportePagoPeriodo
      */    
     private $mes = 0;     
     
+    /**     
+     * @ORM\Column(name="ajuste_devengado", type="boolean")
+     */    
+    private $ajusteDevengado = false;     
+    
     /**
      * @ORM\ManyToOne(targetEntity="TurRecursoGrupo", inversedBy="soportesPagosPeriodosRecursoGrupoRel")
      * @ORM\JoinColumn(name="codigo_recurso_grupo_fk", referencedColumnName="codigo_recurso_grupo_pk")
@@ -919,5 +924,29 @@ class TurSoportePagoPeriodo
     public function getProgramacionesAlternasSoportePagoPeriodoRel()
     {
         return $this->programacionesAlternasSoportePagoPeriodoRel;
+    }
+
+    /**
+     * Set ajusteDevengado
+     *
+     * @param boolean $ajusteDevengado
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setAjusteDevengado($ajusteDevengado)
+    {
+        $this->ajusteDevengado = $ajusteDevengado;
+
+        return $this;
+    }
+
+    /**
+     * Get ajusteDevengado
+     *
+     * @return boolean
+     */
+    public function getAjusteDevengado()
+    {
+        return $this->ajusteDevengado;
     }
 }
