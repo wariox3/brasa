@@ -10,7 +10,7 @@ class GenerarSoportePagoController extends Controller
 {
     var $strListaDql = "";
     var $strListaDqlDetalle = "";
-
+    
     /**
      * @Route("/tur/proceso/generar/soporte/pago", name="brs_tur_proceso_generar_soporte_pago")
      */     
@@ -50,7 +50,7 @@ class GenerarSoportePagoController extends Controller
                 $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
                 $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);                
                 $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
-                $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arSoportePagoPeriodo->getRecursoGrupoRel()->getCodigoCentroCostoFk());                
+                $arCentroCosto = $arSoportePagoPeriodo->getCentroCostoRel();                
                 $dateFechaDesde = $arSoportePagoPeriodo->getFechaDesde();
                 $dateFechaHasta = $arSoportePagoPeriodo->getFechaHasta();
                 $intDiaInicial = $dateFechaDesde->format('j');
@@ -79,7 +79,7 @@ class GenerarSoportePagoController extends Controller
                     $arContratos = $query->getResult();
                     $numeroContratos = count($arContratos);
                     foreach ($arContratos as $arContrato) {
-                        if($arContrato->getCentroCostoRel()->getCodigoRecursoGrupoFk() == $arSoportePagoPeriodo->getCodigoRecursoGrupoFk()) {
+                        if($arContrato->getCodigoCentroCostoFk() == $arSoportePagoPeriodo->getCodigoCentroCostoFk()) {
                             if($arContrato->getEstadoTerminado() == 0 || $arContrato->getFechaHasta() >= $arSoportePagoPeriodo->getFechaDesde()) {
                                 if($arContrato->getFechaDesde() <= $arSoportePagoPeriodo->getFechaHasta()) {
                                     $arSoportePago = new \Brasa\TurnoBundle\Entity\TurSoportePago();                                                
@@ -252,7 +252,7 @@ class GenerarSoportePagoController extends Controller
             }             
         }        
         $arSoportePagoPeriodos = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 100);
-        return $this->render('BrasaTurnoBundle:Procesos/GenerarSoportePago:generar.html.twig', array(
+        return $this->render('BrasaTurnoBundle:Procesos/GenerarSoportePago:lista.html.twig', array(
             'arSoportePagoPeriodos' => $arSoportePagoPeriodos,
             'form' => $form->createView()));
     }
@@ -306,6 +306,65 @@ class GenerarSoportePagoController extends Controller
             'form' => $form->createView()));
     }    
 
+    /**
+     * @Route("/tur/proceso/generar/soporte/pago/nuevo/{codigoSoportePagoPeriodo}", name="brs_tur_proceso_generar_soporte_pago_nuevo")
+     */    
+    public function nuevoAction($codigoSoportePagoPeriodo) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();                 
+        $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
+        if($codigoSoportePagoPeriodo != 0) {
+            $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);
+        }else{
+            $arSoportePagoPeriodo->setFechaDesde(new \DateTime('now'));            
+            $arSoportePagoPeriodo->setFechaHasta(new \DateTime('now'));  
+            $arSoportePagoPeriodo->setDiasPeriodo(15);
+        }
+        $form = $this->createForm(new TurSoportePagoPeriodoType, $arSoportePagoPeriodo);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $arSoportePagoPeriodo = $form->getData();
+            $arFestivos = $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($arSoportePagoPeriodo->getFechaDesde()->format('Y-m-d'), $arSoportePagoPeriodo->getFechaHasta()->format('Y-m-d'));
+            $arrDias = $this->festivosDomingos($arSoportePagoPeriodo->getFechaDesde(), $arSoportePagoPeriodo->getFechaHasta(), $arFestivos);
+            $arSoportePagoPeriodo->setDiaDomingoReal($arrDias['domingos']);
+            $arSoportePagoPeriodo->setDiaFestivoReal($arrDias['festivos']);
+            $arSoportePagoPeriodo->setDiasDescansoFijo($arSoportePagoPeriodo->getCentroCostoRel()->getDiasDescansoFijo());
+            $arSoportePagoPeriodo->setAnio($arSoportePagoPeriodo->getFechaDesde()->format('Y'));
+            $arSoportePagoPeriodo->setMes($arSoportePagoPeriodo->getFechaDesde()->format('m'));                        
+            $em->persist($arSoportePagoPeriodo);
+            $em->flush();
+            return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));                                                                              
+        }
+        return $this->render('BrasaTurnoBundle:Procesos/GenerarSoportePago:nuevo.html.twig', array(
+            'arSoportePagoPeriodo' => $arSoportePagoPeriodo,
+            'form' => $form->createView()));
+    }    
+
+    /**
+     * @Route("/tur/proceso/generar/soporte/pago/editar/{codigoSoportePago}", name="brs_tur_proceso_generar_soporte_pago_editar")
+     */     
+    public function editarAction($codigoSoportePago) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();                 
+        $arSoportePago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
+        if($codigoSoportePago != 0) {
+            $arSoportePago = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->find($codigoSoportePago);
+        }
+        $form = $this->createForm(new TurSoportePagoType, $arSoportePago);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $arSoportePago = $form->getData();            
+            $em->persist($arSoportePago);
+            $em->flush();
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+        }
+        return $this->render('BrasaTurnoBundle:Procesos/GenerarSoportePago:editar.html.twig', array(
+            'arSoportePago' => $arSoportePago,
+            'form' => $form->createView()));
+    }     
+    
     /**
      * @Route("/tur/proceso/generar/soporte/pago/detalle/ver/{codigoSoportePago}", name="brs_tur_proceso_generar_soporte_pago_detalle_ver")
      */    
@@ -391,70 +450,33 @@ class GenerarSoportePagoController extends Controller
         return $this->render('BrasaTurnoBundle:Procesos/GenerarSoportePago:inconsistencia.html.twig', array(                        
             'arSoportePagoInconsistencia' => $arSoportePagoInconsistencia,
             'form' => $form->createView()));
-    }    
-    
+    }                  
+
     /**
-     * @Route("/tur/proceso/generar/soporte/pago/nuevo/{codigoSoportePagoPeriodo}", name="brs_tur_proceso_generar_soporte_pago_nuevo")
+     * @Route("/tur/proceso/generar/soporte/pago/ver/programacion/{codigoSoportePagoPeriodo}", name="brs_tur_proceso_generar_soporte_pago_ver_programacion")
      */    
-    public function nuevoAction($codigoSoportePagoPeriodo) {
-        $request = $this->getRequest();
+    public function verProgramacionAction($codigoSoportePagoPeriodo) {
         $em = $this->getDoctrine()->getManager();
-        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();                 
+        $request = $this->getRequest();
+        $paginator  = $this->get('knp_paginator');
         $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
-        if($codigoSoportePagoPeriodo != 0) {
-            $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);
-        }else{
-            $arSoportePagoPeriodo->setFechaDesde(new \DateTime('now'));            
-            $arSoportePagoPeriodo->setFechaHasta(new \DateTime('now'));  
-            $arSoportePagoPeriodo->setDiasPeriodo(15);
-        }
-        $form = $this->createForm(new TurSoportePagoPeriodoType, $arSoportePagoPeriodo);
-        $form->handleRequest($request);
+        $arSoportePagoPeriodo =  $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);                                        
+        $form = $this->formularioInconsistencias();
+        $form->handleRequest($request);        
         if ($form->isValid()) {
-            $arSoportePagoPeriodo = $form->getData();
-            $arFestivos = $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($arSoportePagoPeriodo->getFechaDesde()->format('Y-m-d'), $arSoportePagoPeriodo->getFechaHasta()->format('Y-m-d'));
-            $arrDias = $this->festivosDomingos($arSoportePagoPeriodo->getFechaDesde(), $arSoportePagoPeriodo->getFechaHasta(), $arFestivos);
-            $arSoportePagoPeriodo->setDiaDomingoReal($arrDias['domingos']);
-            $arSoportePagoPeriodo->setDiaFestivoReal($arrDias['festivos']);
-            $arSoportePagoPeriodo->setDiasDescansoFijo($arSoportePagoPeriodo->getRecursoGrupoRel()->getDiasDescansoFijo());
-            $arSoportePagoPeriodo->setAnio($arSoportePagoPeriodo->getFechaDesde()->format('Y'));
-            $arSoportePagoPeriodo->setMes($arSoportePagoPeriodo->getFechaDesde()->format('m'));
-            $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
-            $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arSoportePagoPeriodo->getRecursoGrupoRel()->getCodigoCentroCostoFk());
-            $arSoportePagoPeriodo->setCentroCostoRel($arCentroCosto);
-            $em->persist($arSoportePagoPeriodo);
-            $em->flush();
-            return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));                                                                              
-        }
-        return $this->render('BrasaTurnoBundle:Procesos/GenerarSoportePago:nuevo.html.twig', array(
-            'arSoportePagoPeriodo' => $arSoportePagoPeriodo,
+            if ($form->get('BtnAnalizar')->isClicked()) {  
+                $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->analizarInconsistencias($codigoSoportePagoPeriodo);
+                return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago_inconsistencia', array('codigoSoportePagoPeriodo' => $codigoSoportePagoPeriodo)));                                
+            }
+        }        
+        
+        $dql =  $em->getRepository('BrasaTurnoBundle:TurSoportePagoInconsistencia')->listaDql($codigoSoportePagoPeriodo);                        
+        $arSoportePagoInconsistencia = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 500);        
+        return $this->render('BrasaTurnoBundle:Procesos/GenerarSoportePago:verProgramacion.html.twig', array(                        
+            'arSoportePagoInconsistencia' => $arSoportePagoInconsistencia,
             'form' => $form->createView()));
-    }    
-
-    /**
-     * @Route("/tur/proceso/generar/soporte/pago/editar/{codigoSoportePago}", name="brs_tur_proceso_generar_soporte_pago_editar")
-     */     
-    public function editarAction($codigoSoportePago) {
-        $request = $this->getRequest();
-        $em = $this->getDoctrine()->getManager();
-        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();                 
-        $arSoportePago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
-        if($codigoSoportePago != 0) {
-            $arSoportePago = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->find($codigoSoportePago);
-        }
-        $form = $this->createForm(new TurSoportePagoType, $arSoportePago);
-        $form->handleRequest($request);
-        if ($form->isValid()) {
-            $arSoportePago = $form->getData();            
-            $em->persist($arSoportePago);
-            $em->flush();
-            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
-        }
-        return $this->render('BrasaTurnoBundle:Procesos/GenerarSoportePago:editar.html.twig', array(
-            'arSoportePago' => $arSoportePago,
-            'form' => $form->createView()));
-    }    
-
+    }     
+    
     private function listaPeriodo() {
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();

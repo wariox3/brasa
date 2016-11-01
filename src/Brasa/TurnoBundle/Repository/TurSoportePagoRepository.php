@@ -361,8 +361,8 @@ class TurSoportePagoRepository extends EntityRepository {
             $arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->find($codigoProgramacionDetalle);            
         }        
         $arSoportePagoPeriodo = $arSoportePago->getSoportePagoPeriodoRel();
-        $strTurnoFijoNomina = $arSoportePagoPeriodo->getRecursoGrupoRel()->getCodigoTurnoFijoNominaFk();
-        $strTurnoFijoDescanso = $arSoportePagoPeriodo->getRecursoGrupoRel()->getCodigoTurnoFijoDescansoFk();
+        $strTurnoFijoNomina = $arSoportePagoPeriodo->getCentroCostoRel()->getCodigoTurnoFijoNominaFk();
+        $strTurnoFijoDescanso = $arSoportePagoPeriodo->getCentroCostoRel()->getCodigoTurnoFijoDescansoFk();
 
         if($arSoportePago->getRecursoRel()->getCodigoTurnoFijoNominaFk()) {
             $strTurnoFijoNomina = $arSoportePago->getRecursoRel()->getCodigoTurnoFijoNominaFk();

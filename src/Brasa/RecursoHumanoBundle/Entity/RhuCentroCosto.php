@@ -139,6 +139,11 @@ class RhuCentroCosto
     private $codigoRecursoGrupoFk = 0;    
     
     /**     
+     * @ORM\Column(name="genera_soporte_pago", type="boolean")
+     */    
+    private $generaSoportePago = false;    
+    
+    /**     
      * @ORM\Column(name="descanso_ordinario", type="boolean")
      */    
     private $descansoOrdinario = false;             
@@ -147,6 +152,22 @@ class RhuCentroCosto
      * @ORM\Column(name="secuencia", type="integer", nullable=true)
      */    
     private $secuencia;    
+    
+    /**
+     * @ORM\Column(name="codigo_turno_fijo_nomina_fk", type="string", length=5, nullable=true)
+     */    
+    private $codigoTurnoFijoNominaFk;     
+    
+    /**
+     * @ORM\Column(name="codigo_turno_fijo_descanso_fk", type="string", length=5, nullable=true)
+     */    
+    private $codigoTurnoFijoDescansoFk;         
+
+    /**
+     * @ORM\Column(name="dias_descanso_fijo", type="integer", nullable=true)
+     */    
+    private $diasDescansoFijo = 0;      
+    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuCliente", inversedBy="centrosCostosClienteRel")
@@ -1746,5 +1767,101 @@ class RhuCentroCosto
     public function getSecuencia()
     {
         return $this->secuencia;
+    }
+
+    /**
+     * Set codigoTurnoFijoNominaFk
+     *
+     * @param string $codigoTurnoFijoNominaFk
+     *
+     * @return RhuCentroCosto
+     */
+    public function setCodigoTurnoFijoNominaFk($codigoTurnoFijoNominaFk)
+    {
+        $this->codigoTurnoFijoNominaFk = $codigoTurnoFijoNominaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTurnoFijoNominaFk
+     *
+     * @return string
+     */
+    public function getCodigoTurnoFijoNominaFk()
+    {
+        return $this->codigoTurnoFijoNominaFk;
+    }
+
+    /**
+     * Set codigoTurnoFijoDescansoFk
+     *
+     * @param string $codigoTurnoFijoDescansoFk
+     *
+     * @return RhuCentroCosto
+     */
+    public function setCodigoTurnoFijoDescansoFk($codigoTurnoFijoDescansoFk)
+    {
+        $this->codigoTurnoFijoDescansoFk = $codigoTurnoFijoDescansoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTurnoFijoDescansoFk
+     *
+     * @return string
+     */
+    public function getCodigoTurnoFijoDescansoFk()
+    {
+        return $this->codigoTurnoFijoDescansoFk;
+    }
+
+    /**
+     * Set diasDescansoFijo
+     *
+     * @param integer $diasDescansoFijo
+     *
+     * @return RhuCentroCosto
+     */
+    public function setDiasDescansoFijo($diasDescansoFijo)
+    {
+        $this->diasDescansoFijo = $diasDescansoFijo;
+
+        return $this;
+    }
+
+    /**
+     * Get diasDescansoFijo
+     *
+     * @return integer
+     */
+    public function getDiasDescansoFijo()
+    {
+        return $this->diasDescansoFijo;
+    }
+
+    /**
+     * Set generaSoportePago
+     *
+     * @param boolean $generaSoportePago
+     *
+     * @return RhuCentroCosto
+     */
+    public function setGeneraSoportePago($generaSoportePago)
+    {
+        $this->generaSoportePago = $generaSoportePago;
+
+        return $this;
+    }
+
+    /**
+     * Get generaSoportePago
+     *
+     * @return boolean
+     */
+    public function getGeneraSoportePago()
+    {
+        return $this->generaSoportePago;
     }
 }

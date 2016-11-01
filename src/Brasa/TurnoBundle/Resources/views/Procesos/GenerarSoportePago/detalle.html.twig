@@ -52,6 +52,7 @@
         </div>
         <div class="btn-toolbar" style="float:left">
             <div class="btn-group">           
+                <a class="btn btn-default btn-sm btn-default" href="javascript:abrirVentana3('{{ path('brs_tur_proceso_generar_soporte_pago_ver_programacion', { 'codigoSoportePagoPeriodo': arSoportePagoPeriodo.codigoSoportePagoPeriodoPk }) }}', 'VerInconsistencias', 500, 700)" >Ver programacion</a>                                    
                 <a {% if  arSoportePagoPeriodo.inconsistencias == 0 %} class="btn btn-default btn-sm" {% else %} class="btn btn-default btn-sm btn-danger" {% endif %}  href="javascript:abrirVentana3('{{ path('brs_tur_proceso_generar_soporte_pago_inconsistencia', { 'codigoSoportePagoPeriodo': arSoportePagoPeriodo.codigoSoportePagoPeriodoPk }) }}', 'VerInconsistencias', 500, 700)" >Inconsistencias</a>                                    
                 {{ form_widget(form.BtnLiquidar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>
