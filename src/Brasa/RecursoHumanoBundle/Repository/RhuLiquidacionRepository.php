@@ -131,7 +131,8 @@ class RhuLiquidacionRepository extends EntityRepository {
                 $arLiquidacion->setVrIngresoBasePrestacionCesantias(0);
                 $arLiquidacion->setVrIngresoBasePrestacionCesantiasInicial(0); 
                 $arLiquidacion->setVrSalarioPromedioCesantias(0);
-                $arLiquidacion->setDiasCesantiasAusentismo(0);                
+                $arLiquidacion->setDiasCesantiasAusentismo(0); 
+                $arLiquidacion->setFechaUltimoPagoCesantias($arLiquidacion->getContratoRel()->getFechaUltimoPagoCesantias());
             }
             
             //Liquidar primas
@@ -199,6 +200,7 @@ class RhuLiquidacionRepository extends EntityRepository {
                     $arLiquidacion->setVrIngresoBasePrestacionPrimas(0);
                     $arLiquidacion->setVrIngresoBasePrestacionPrimasInicial(0);
                     $arLiquidacion->setVrSalarioPromedioPrimas(0);                
+                    $arLiquidacion->setFechaUltimoPagoPrimas($arLiquidacion->getContratoRel()->getFechaUltimoPagoPrimas());
             }
             
             //Liquidar vacaciones
