@@ -248,8 +248,8 @@ class ProgramacionController extends Controller
         $arProgramacion = new \Brasa\TurnoBundle\Entity\TurProgramacion();
         $arProgramacion = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->find($codigoProgramacion);               
         $form = $this->createFormBuilder()
-            ->add('secuenciaRel', 'entity', array(
-                'class' => 'BrasaTurnoBundle:TurSecuencia',
+            ->add('secuenciaDetalleRel', 'entity', array(
+                'class' => 'BrasaTurnoBundle:TurSecuenciaDetalle',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('s')
                     ->orderBy('s.nombre', 'ASC');},

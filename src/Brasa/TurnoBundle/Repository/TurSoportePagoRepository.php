@@ -1326,4 +1326,33 @@ class TurSoportePagoRepository extends EntityRepository {
         return $strTurnoDevolver;
     }
     
+    public function ajustarDevengado($codigoSoportePagoPeriodo) {
+        $em = $this->getEntityManager();
+        $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();        
+        $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);                        
+        $arSoportePagoPeriodo->setAjusteDevengado(1);        
+        $arSoportesPago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
+        $arSoportesPago = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo));                                
+        foreach ($arSoportesPago as $arSoportePago) {             
+            $arSoportePagoAct = new \Brasa\TurnoBundle\Entity\TurSoportePago();
+            $arSoportePagoAct = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->find($arSoportePago->getCodigoSoportePagoPk());
+            $arSoportePagoAct->setHoras($arSoportePago->getDiasTransporte() * 8);
+            $arSoportePagoAct->setHorasDescanso(0);
+            $arSoportePagoAct->setHorasDiurnas($arSoportePago->getDiasTransporte() * 8);
+            $arSoportePagoAct->setHorasNocturnas(0);
+            $arSoportePagoAct->setHorasFestivasDiurnas(0);
+            $arSoportePagoAct->setHorasFestivasNocturnas(0);
+            $arSoportePagoAct->setHorasExtrasOrdinariasDiurnas(0);
+            $arSoportePagoAct->setHorasExtrasOrdinariasNocturnas(0);
+            $arSoportePagoAct->setHorasExtrasFestivasDiurnas(0);
+            $arSoportePagoAct->setHorasExtrasFestivasNocturnas(0);            
+            $arSoportePagoAct->setHorasRecargoNocturno(0);
+            $arSoportePagoAct->setHorasRecargoFestivoDiurno(0);            
+            $arSoportePagoAct->setHorasRecargoFestivoNocturno(0);                        
+            $em->persist($arSoportePagoAct);
+        }               
+        $em->flush();                    
+        $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->liquidar($codigoSoportePagoPeriodo);                                                                             
+    }    
+    
 }
