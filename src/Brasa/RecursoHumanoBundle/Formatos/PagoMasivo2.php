@@ -338,49 +338,7 @@ class PagoMasivo2 extends \FPDF_FPDF {
                             }
                             $pdf->Ln();
                             $pdf->SetAutoPageBreak(true, 15);
-                        }                    
-                    
-                        /*$strAnio = $arSoportePago->getFechaDesde()->format('Y');
-                        $strMes = $arSoportePago->getFechaDesde()->format('m');
-
-                        $arrProgramacion = array();
-                        $dql   = "SELECT pd.dia1, pd.dia2, pd.dia3, pd.dia4, pd.dia5, pd.dia6, pd.dia7, pd.dia8, pd.dia9, pd.dia10, pd.dia11, pd.dia12, pd.dia13, pd.dia14, pd.dia15, pd.dia16, pd.dia17, pd.dia18, pd.dia19, pd.dia20, pd.dia21, pd.dia22, pd.dia23, pd.dia24, pd.dia25, pd.dia26, pd.dia27, pd.dia28, pd.dia29, pd.dia30, pd.dia31 FROM BrasaTurnoBundle:TurProgramacionDetalle pd WHERE pd.anio = " . $strAnio . " AND pd.mes = " . $strMes . " AND pd.codigoRecursoFk = " . $arSoportePago->getCodigoRecursoFk();
-                        $query = self::$em->createQuery($dql);
-                        $arResultados = $query->getResult();
-                        $numeroProgramaciones = count($arResultados);
-                        foreach($arResultados as $arResultado) {
-                            for($j=1; $j<=31; $j++) {
-                                if($arResultado['dia'.$j]) {
-                                    if(isset($arrProgramacion[1][$j])){
-                                        if(!$arrProgramacion[1][$j]) {
-                                            $arrProgramacion[1][$j] = $arResultado['dia'.$j];
-                                        }
-                                    } else {
-                                         $arrProgramacion[1][$j] = $arResultado['dia'.$j];
-                                    }
-                                } else {
-                                    if(isset($arrProgramacion[1][$j])){
-                                        if(!$arrProgramacion[1][$j]) {
-                                            $arrProgramacion[1][$j] = null;
-                                        }
-                                    } else {
-                                        $arrProgramacion[1][$j] = null;
-                                    }
-
-                                }
-                            }
-
-                        }
-                        $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
-
-                        foreach ($arrProgramacion as $detalle) {
-                            $pdf->SetFont('Arial', '', 5);
-                            for($j=$desde; $j<=$hasta; $j++) {
-                                $pdf->Cell(6.2, 4, $detalle[$j], 1, 0, 'L');
-                            }
-                            $pdf->Ln();
-                            $pdf->SetAutoPageBreak(true, 15);
-                        }*/
+                        }                                        
                     }
                 }
             if($contador < $numeroPagos) {

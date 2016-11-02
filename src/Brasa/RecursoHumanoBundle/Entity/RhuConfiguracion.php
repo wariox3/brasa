@@ -293,16 +293,18 @@ class RhuConfiguracion
      */    
     private $correoNomina;  
     
+    /**
+     * Si esta activado muestra el mensaje en la colilla de pago
+     * @ORM\Column(name="imprimir_mensaje_pago", type="boolean")
+     */
+    private $imprimirMensajePago = false;    
     
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadRiesgoProfesional", inversedBy="configuracionEntidadRiesgoProfesionalRel")
      * @ORM\JoinColumn(name="codigo_entidad_riesgo_fk", referencedColumnName="codigo_entidad_riesgo_pk")
      */
-    protected $entidadRiesgoProfesionalRel;
-
-        
-
+    protected $entidadRiesgoProfesionalRel;  
         
 
     /**
@@ -1671,5 +1673,29 @@ class RhuConfiguracion
     public function getCodigoAjusteDevengado()
     {
         return $this->codigoAjusteDevengado;
+    }
+
+    /**
+     * Set imprimirMensajePago
+     *
+     * @param boolean $imprimirMensajePago
+     *
+     * @return RhuConfiguracion
+     */
+    public function setImprimirMensajePago($imprimirMensajePago)
+    {
+        $this->imprimirMensajePago = $imprimirMensajePago;
+
+        return $this;
+    }
+
+    /**
+     * Get imprimirMensajePago
+     *
+     * @return boolean
+     */
+    public function getImprimirMensajePago()
+    {
+        return $this->imprimirMensajePago;
     }
 }
