@@ -95,18 +95,12 @@ class RhuCredito
     /**
      * @ORM\Column(name="numero_cuota_actual", type="integer")
      */
-    private $numeroCuotaActual = 0; 
-    
+    private $numeroCuotaActual = 0;     
     
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
      */    
-    private $comentarios; 
-    
-    /**
-     * @ORM\Column(name="aprobado", type="integer")
-     */
-    private $aprobado = 1;
+    private $comentarios;     
     
     /**
      * @ORM\Column(name="seguro", type="integer")

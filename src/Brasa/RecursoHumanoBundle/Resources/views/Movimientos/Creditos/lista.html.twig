@@ -62,18 +62,17 @@
     
         <table  class="table table-striped table-bordered table-condensed table-hover">
             <tr>
-                <th>{{ knp_pagination_sortable(arCreditos, 'CÓDIGO', 'c.codigoCreditoPk') }}</th>
+                <th>{{ knp_pagination_sortable(arCreditos, 'CÓD', 'c.codigoCreditoPk') }}</th>
                 <th>TIPO</th>
                 <th>INICIA</th>
                 <th>DOCUMENTO</th>
                 <th>EMPLEADO</th>
-                <th style="text-align: right">VR.CREDITO</th>
+                <th style="text-align: right">VALOR</th>
                 <th style="text-align: right">VR.CUOTA</th>                
                 <th style="text-align: right">CUOTAS</th>
                 <th style="text-align: right">C.ACTUAL</th>
-                <th style="text-align: right">PAGADO</th>
-                <th style="text-align: right">APROBADO</th>
-                <th style="text-align: right">SUSPENDIDO</th>
+                <th><p data-toggle="tooltip" data-placement="top" title="Pagado">PAG</p></th>                
+                <th><p data-toggle="tooltip" data-placement="top" title="Suspendido">SUS</p></th>
                 <th style="text-align: center"></th>
                 <th style="text-align: center"></th>
                 <th style="text-align: center"></th>
@@ -85,15 +84,18 @@
                 <td>{{ arCreditos.fechaInicio |date("Y/m/d")  }}</td>
                 <td>{{ arCreditos.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arCreditos.empleadoRel.nombreCorto  }}</td>
-                <td style="text-align: right">{{ arCreditos.VrPagar | number_format(2, '.', ',') }}</td>
-                <td style="text-align: right">{{ arCreditos.VrCuota | number_format(2, '.', ',') }}</td>                
+                <td style="text-align: right">{{ arCreditos.VrPagar | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arCreditos.VrCuota | number_format(0, '.', ',') }}</td>                
                 <td style="text-align: right">{{ arCreditos.numeroCuotas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arCreditos.numeroCuotaActual | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right" {% if arCreditos.estadoPagado == 1 %} class="success"> SI {% else %} <td {{ arCreditos.estadoPagado }} class="danger">NO {% endif %}</td>
-                <td style="text-align: right" {% if arCreditos.aprobado == 0 %} class="danger"> NO {% else %} <td class="success">SI {% endif %}</td>
                 <td style="text-align: right" {% if arCreditos.estadoSuspendido == 0 %} class="success"> NO {% else %} <td class="danger">SI {% endif %}</td>
-                <td style="text-align: center"><a href="{{ path('brs_rhu_creditos_nuevo', { 'codigoCredito': arCreditos.codigoCreditoPk,  'codigoEmpleado': arCreditos.codigoEmpleadoFk}) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                                   
-                <td><a href="{{ path('brs_rhu_credito_detalle', { 'codigoCreditoPk': arCreditos.codigoCreditoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>
+                {% if arCreditos.estadoPagado == 0 %}
+                    <td style="text-align: center"><a href="{{ path('brs_rhu_creditos_nuevo', { 'codigoCredito': arCreditos.codigoCreditoPk,  'codigoEmpleado': arCreditos.codigoEmpleadoFk}) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                                   
+                {% else %}    
+                    <td></td>
+                {% endif %}                    
+                <td><a href="{{ path('brs_rhu_credito_detalle', { 'codigoCredito': arCreditos.codigoCreditoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCreditos.codigoCreditoPk }}" /></td>
             </tr>
             {% endfor %}
@@ -101,7 +103,7 @@
         
         <!-- Botones Menu Items -->
         <div class="btn-group" style="float: left">
-                <div class="btn btn-default btn-sm">Créditos <span class="badge">{{ arCreditos.getTotalItemCount }}</span></div>                        
+                <div class="btn btn-default btn-sm">Registros <span class="badge">{{ arCreditos.getTotalItemCount }}</span></div>                        
         </div>
         <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
                 {{ knp_pagination_render(arCreditos) }}       
@@ -117,10 +119,7 @@
             <div class="btn-group">
                 <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_creditos_nuevo', {'codigoCredito': 0}) }}">Nuevo</a>                
             </div>
-            <div class="btn-group">
-                {{ form_widget(form.BtnSuspender, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-                {{ form_widget(form.BtnDesaprobar, { 'attr': {'class': 'btn btn-warning btn-sm'} }) }}
-                {{ form_widget(form.BtnAprobar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+            <div class="btn-group">                
                 {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm', 'onclick': 'return confirm("Esta seguro de eliminar el registro?")'} }) }}
             </div>
         </div>

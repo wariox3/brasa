@@ -330,7 +330,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
             
             //Procesar creditos
             $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-            $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->findBy(array('codigoEmpleadoFk' => $arProgramacionPagoDetalle->getCodigoEmpleadoFk(), 'codigoCreditoTipoPagoFk' => 1, 'estadoPagado' => 0, 'aprobado' => 1, 'estadoSuspendido' => 0));
+            $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->findBy(array('codigoEmpleadoFk' => $arProgramacionPagoDetalle->getCodigoEmpleadoFk(), 'codigoCreditoTipoPagoFk' => 1, 'estadoPagado' => 0, 'estadoSuspendido' => 0));
             foreach ($arCreditos as $arCredito) {
                 if($arCredito->getSaldo() > 0) {
                     $descontarCuota = true;

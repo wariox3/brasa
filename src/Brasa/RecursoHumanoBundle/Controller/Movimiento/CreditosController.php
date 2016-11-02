@@ -27,8 +27,7 @@ class CreditosController extends Controller
         $form->handleRequest($request);
         $this->listar();
         $mensaje = 0;
-        if ($form->isValid())
-        {
+        if ($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if ($form->get('BtnEliminar')->isClicked()) {
                 if(count($arrSeleccionados) > 0) {
@@ -42,55 +41,6 @@ class CreditosController extends Controller
                             $em->remove($arCreditos);
                             $em->flush();
                         }
-                    }
-                }
-                $this->filtrarLista($form);
-                $form = $this->formularioLista();
-                $this->listar();
-            }
-
-            if($form->get('BtnAprobar')->isClicked()) {
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoCredito) {
-                        $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-                        $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCredito);
-                        $arCreditos->setAprobado(1);
-                        $em->persist($arCreditos);
-                        $em->flush();
-                    }
-                }
-                $this->filtrarLista($form);
-                $form = $this->formularioLista();
-                $this->listar();
-            }
-
-            if($form->get('BtnDesaprobar')->isClicked()) {
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoCredito) {
-                        $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-                        $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCredito);
-                        $arCreditos->setAprobado(0);
-                        $em->persist($arCreditos);
-                        $em->flush();
-                    }
-                }
-                $this->filtrarLista($form);
-                $form = $this->formularioLista();
-                $this->listar();
-            }
-
-            if($form->get('BtnSuspender')->isClicked()) {
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigoCredito) {
-                        $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-                        $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCredito);
-                        if ($arCreditos->getEstadoSuspendido() == 0){
-                            $arCreditos->setEstadoSuspendido(1);
-                        } else {
-                            $arCreditos->setEstadoSuspendido(0);
-                        }
-                        $em->persist($arCreditos);
-                        $em->flush();
                     }
                 }
                 $this->filtrarLista($form);
@@ -123,98 +73,6 @@ class CreditosController extends Controller
             'mensaje' => $mensaje,
             'form' => $form->createView()
             ));
-    }
-
-    /**
-     * @Route("/rhu/creditos/refinanciar/{codigoCredito}", name="brs_rhu_creditos_refinanciar")
-     */
-    public function refinanciarAction($codigoCredito) {
-        $request = $this->getRequest();
-        $em = $this->getDoctrine()->getManager();
-        $formCredito = $this->createFormBuilder()
-            ->setAction($this->generateUrl('brs_rhu_creditos_refinanciar', array('codigoCredito' => $codigoCredito)))
-            ->add('numeroCuotas', 'text', array('label'  => 'Numero cuotas'))
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
-            ->getForm();
-        $formCredito->handleRequest($request);
-        $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-        $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCredito);
-        if ($formCredito->isValid()) {
-            $intCuotas = $formCredito->get('numeroCuotas')->getData();
-            $douVrCuota = $arCredito->getSaldo() / $intCuotas;
-            $arCredito->setVrCuota($douVrCuota);
-            $arCredito->setNumeroCuotaActual(0);
-            $arCredito->setNumeroCuotas($intCuotas);
-            $em->persist($arCredito);
-            $em->flush();
-            return $this->redirect($this->generateUrl('brs_rhu_credito_detalle', array('codigoCreditoPk' => $codigoCredito)));
-        }
-        $strErrores = "";
-        if($arCredito->getVrCuotaTemporal() > 0) {
-            $strErrores = "No se puede refinanciar el credito porque tiene periodos generados pendientes por pagar.";
-        }
-        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Creditos:refinanciar.html.twig', array(
-            'arCredito' => $arCredito,
-            'formCredito' => $formCredito->createView(),
-            'errores' => $strErrores
-        ));
-    }
-
-    private function listar() {
-        $session = $this->getRequest()->getSession();
-        $em = $this->getDoctrine()->getManager();
-        $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->listaCreditoDQL(
-                    $session->get('filtroIdentificacion'),
-                    $session->get('filtroDesde'),
-                    $session->get('filtroHasta')
-                    );
-    }
-
-    private function formularioLista() {
-        $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
-        $strNombreEmpleado = "";
-        if($session->get('filtroIdentificacion')) {
-            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $session->get('filtroIdentificacion')));
-            if($arEmpleado) {                
-                $strNombreEmpleado = $arEmpleado->getNombreCorto();
-            }  else {
-                $session->set('filtroIdentificacion', null);
-            }          
-        }
-        $form = $this->createFormBuilder()
-            ->add('txtNumeroIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
-            ->add('txtNombreCorto', 'text', array('label'  => 'Nombre','data' => $strNombreEmpleado))
-            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
-            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
-            ->add('BtnAprobar', 'submit', array('label'  => 'Aprobar',))
-            ->add('BtnDesaprobar', 'submit', array('label'  => 'Desaprobar',))
-            ->add('BtnSuspender', 'submit', array('label'  => 'Suspender / No suspender',))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
-            ->getForm();
-        return $form;
-    }
-
-    private function filtrarLista($form) {
-        $session = $this->getRequest()->getSession();
-        $request = $this->getRequest();
-        $controles = $request->request->get('form');
-        $arrControles = $request->request->All();
-        $session->set('filtroIdentificacion', $form->get('txtNumeroIdentificacion')->getData());
-                
-        $dateFechaDesde = $form->get('fechaDesde')->getData();
-        $dateFechaHasta = $form->get('fechaHasta')->getData();
-        if ($form->get('fechaDesde')->getData() == null || $form->get('fechaHasta')->getData() == null){
-            $session->set('filtroDesde', $form->get('fechaDesde')->getData());
-            $session->set('filtroHasta', $form->get('fechaHasta')->getData());
-        } else {
-            $session->set('filtroDesde', $dateFechaDesde->format('Y-m-d'));
-            $session->set('filtroHasta', $dateFechaHasta->format('Y-m-d')); 
-        }
-        
     }
 
     /**
@@ -289,29 +147,37 @@ class CreditosController extends Controller
     }
     
     /**
-     * @Route("/rhu/creditos/detalle/{codigoCreditoPk}", name="brs_rhu_credito_detalle")
+     * @Route("/rhu/creditos/detalle/{codigoCredito}", name="brs_rhu_credito_detalle")
      */
-    public function detalleAction($codigoCreditoPk) {
+    public function detalleAction($codigoCredito) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        $form = $this->createFormBuilder()
-            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
-            ->getForm();
+        $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+        $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCredito);        
+        $form = $this->formularioDetalle($arCredito);
         $form->handleRequest($request);
-        $codigoCreditoFk = $codigoCreditoPk;
-        $arCreditos = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
-        $arCreditos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCreditoPk);
+        $codigoCreditoFk = $codigoCredito;
         $arCreditoPago = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoPago();
-        $arCreditoPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuCreditoPago')->findBy(array('codigoCreditoFk' => $codigoCreditoFk));
+        $arCreditoPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuCreditoPago')->findBy(array('codigoCreditoFk' => $codigoCredito));
         if($form->isValid()) {
             if($form->get('BtnImprimir')->isClicked()) {
                 $objFormatoDetalleCredito = new \Brasa\RecursoHumanoBundle\Formatos\FormatoDetalleCredito();
                 $objFormatoDetalleCredito->Generar($this, $codigoCreditoFk);
             }
+            if($form->get('BtnSuspender')->isClicked()) {
+                if ($arCredito->getEstadoSuspendido() == 0){
+                    $arCredito->setEstadoSuspendido(1);
+                } else {
+                    $arCredito->setEstadoSuspendido(0);
+                }
+                $em->persist($arCredito);
+                $em->flush();  
+                return $this->redirect($this->generateUrl('brs_rhu_credito_detalle', array('codigoCredito' => $codigoCredito)));
+            }                        
         }
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Creditos:detalle.html.twig', array(
                     'arCreditoPago' => $arCreditoPago,
-                    'arCreditos' => $arCreditos,
+                    'arCreditos' => $arCredito,
                     'form' => $form->createView()
                     ));
     }
@@ -452,6 +318,110 @@ class CreditosController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Creditos:cargarCredito.html.twig', array(
             'form' => $form->createView()
             ));
+    }    
+    
+    /**
+     * @Route("/rhu/creditos/refinanciar/{codigoCredito}", name="brs_rhu_creditos_refinanciar")
+     */
+    public function refinanciarAction($codigoCredito) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $formCredito = $this->createFormBuilder()
+            ->setAction($this->generateUrl('brs_rhu_creditos_refinanciar', array('codigoCredito' => $codigoCredito)))
+            ->add('numeroCuotas', 'text', array('label'  => 'Numero cuotas'))
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
+            ->getForm();
+        $formCredito->handleRequest($request);
+        $arCredito = new \Brasa\RecursoHumanoBundle\Entity\RhuCredito();
+        $arCredito = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->find($codigoCredito);
+        if ($formCredito->isValid()) {
+            $intCuotas = $formCredito->get('numeroCuotas')->getData();
+            $douVrCuota = $arCredito->getSaldo() / $intCuotas;
+            $arCredito->setVrCuota($douVrCuota);
+            $arCredito->setNumeroCuotaActual(0);
+            $arCredito->setNumeroCuotas($intCuotas);
+            $em->persist($arCredito);
+            $em->flush();
+            return $this->redirect($this->generateUrl('brs_rhu_credito_detalle', array('codigoCreditoPk' => $codigoCredito)));
+        }
+        $strErrores = "";
+        if($arCredito->getVrCuotaTemporal() > 0) {
+            $strErrores = "No se puede refinanciar el credito porque tiene periodos generados pendientes por pagar.";
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Creditos:refinanciar.html.twig', array(
+            'arCredito' => $arCredito,
+            'formCredito' => $formCredito->createView(),
+            'errores' => $strErrores
+        ));
+    }
+
+    private function listar() {
+        $session = $this->getRequest()->getSession();
+        $em = $this->getDoctrine()->getManager();
+        $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuCredito')->listaCreditoDQL(
+                    $session->get('filtroIdentificacion'),
+                    $session->get('filtroDesde'),
+                    $session->get('filtroHasta')
+                    );
+    }
+
+    private function formularioLista() {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $strNombreEmpleado = "";
+        if($session->get('filtroIdentificacion')) {
+            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $session->get('filtroIdentificacion')));
+            if($arEmpleado) {                
+                $strNombreEmpleado = $arEmpleado->getNombreCorto();
+            }  else {
+                $session->set('filtroIdentificacion', null);
+            }          
+        }
+        $form = $this->createFormBuilder()
+            ->add('txtNumeroIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
+            ->add('txtNombreCorto', 'text', array('label'  => 'Nombre','data' => $strNombreEmpleado))
+            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+            ->add('BtnPdf', 'submit', array('label'  => 'PDF',))            
+            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
+            ->getForm();
+        return $form;
+    }
+
+    private function formularioDetalle($ar) {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        $arrBotonSuspender = array('label' => 'Suspender', 'disabled' => false);
+        if($ar->getEstadoPagado() == 1) {   
+             $arrBotonSuspender['disabled'] = true;
+        }
+        
+        $form = $this->createFormBuilder()
+            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
+            ->add('BtnSuspender', 'submit', $arrBotonSuspender)
+            ->getForm();
+        return $form;
+    }    
+    
+    private function filtrarLista($form) {
+        $session = $this->getRequest()->getSession();
+        $request = $this->getRequest();
+        $controles = $request->request->get('form');
+        $arrControles = $request->request->All();
+        $session->set('filtroIdentificacion', $form->get('txtNumeroIdentificacion')->getData());
+                
+        $dateFechaDesde = $form->get('fechaDesde')->getData();
+        $dateFechaHasta = $form->get('fechaHasta')->getData();
+        if ($form->get('fechaDesde')->getData() == null || $form->get('fechaHasta')->getData() == null){
+            $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+            $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        } else {
+            $session->set('filtroDesde', $dateFechaDesde->format('Y-m-d'));
+            $session->set('filtroHasta', $dateFechaHasta->format('Y-m-d')); 
+        }
+        
     }
 
     private function generarExcel() {

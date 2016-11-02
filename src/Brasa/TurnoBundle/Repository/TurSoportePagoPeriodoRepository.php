@@ -96,7 +96,7 @@ class TurSoportePagoPeriodoRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $em->getRepository('BrasaTurnoBundle:TurSoportePagoInconsistencia')->limpiar($codigoSoportePagoPeriodo);        
         $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();        
-        $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);                
+        $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);                        
         $arSoportePagoPeriodo->setInconsistencias(0);
         $arrInconsistencias = array();
         $arSoportesPagoProcesar = new \Brasa\TurnoBundle\Entity\TurSoportePago();
@@ -123,8 +123,7 @@ class TurSoportePagoPeriodoRepository extends EntityRepository {
                     }                    
                 }                
             }
-        }
-        
+        }        
 
         $dql  = "SELECT c.codigoEmpleadoFk, e.numeroIdentificacion, e.nombreCorto FROM BrasaRecursoHumanoBundle:RhuContrato c JOIN c.empleadoRel e "
                     . "WHERE c.codigoCentroCostoFk = " . $arSoportePagoPeriodo->getCodigoCentroCostoFk()                    
@@ -143,9 +142,29 @@ class TurSoportePagoPeriodoRepository extends EntityRepository {
             } else {
                 $arrInconsistencias[] = array('inconsistencia' => "El empleado esta en un centro de costos pagado por turnos y no esta en programado en turnos", 'recurso' => $arContrato['nombreCorto'], 'numeroIdentificacion' => $arContrato['numeroIdentificacion'], 'codigo'=> $arContrato['codigoEmpleadoFk']);
             }
+        }                
+        
+        //Recursos sin turno asignado
+        foreach ($arSoportesPagoProcesar as $arSoportePago) { 
+            $desde = $arSoportePago->getFechaDesde()->format('j');
+            $hasta = $arSoportePago->getFechaHasta()->format('j');            
+            $dql   = "SELECT spp.codigoSoportePagoProgramacionPk, spp.dia1, spp.dia2, spp.dia3, spp.dia4, spp.dia5, spp.dia6, spp.dia7, spp.dia8, spp.dia9, spp.dia10, "
+                    . "spp.dia11, spp.dia12, spp.dia13, spp.dia14, spp.dia15, spp.dia16, spp.dia17, spp.dia18, spp.dia19, spp.dia20, "
+                    . "spp.dia21, spp.dia22, spp.dia23, spp.dia24, spp.dia25, spp.dia26, spp.dia27, spp.dia28, spp.dia29, spp.dia30, spp.dia31 "
+                    . "FROM BrasaTurnoBundle:TurSoportePagoProgramacion spp "
+                    . "WHERE spp.codigoSoportePagoFk =" . $arSoportePago->getCodigoSoportePagoPk();       
+            $query = $em->createQuery($dql);                
+            $arResultado = $query->getResult();
+            if($arResultado) {
+                for($i = $desde; $i <= $hasta; $i++) {
+                    if($arResultado[0]['dia'.$i] == "") {
+                        $arrInconsistencias[] = array('inconsistencia' => "El empleado no tiene turno asignado el dia" . $i, 'recurso' => $arSoportePago->getRecursoRel()->getNombreCorto(), 'numeroIdentificacion' => $arSoportePago->getRecursoRel()->getNumeroIdentificacion(), 'codigo'=> $arSoportePago->getCodigoRecursoFk());
+                    }                        
+                }                
+            } else {
+                $arrInconsistencias[] = array('inconsistencia' => "No se encontro soporte pago programacion", 'recurso' => $arSoportePago->getRecursoRel()->getNombreCorto(), 'numeroIdentificacion' => $arSoportePago->getRecursoRel()->getNumeroIdentificacion(), 'codigo'=> $arSoportePago->getCodigoRecursoFk());
+            }                         
         }
-        
-        
         
         if(count($arrInconsistencias) > 0) {  
             $arSoportePagoPeriodo->setInconsistencias(1);
@@ -159,6 +178,9 @@ class TurSoportePagoPeriodoRepository extends EntityRepository {
                 $em->persist($arSoportePagoInconsistencia);                        
             }            
         }
+        
+        
+        
         $em->persist($arSoportePagoPeriodo);
         $em->flush();                
     }    

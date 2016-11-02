@@ -9,8 +9,11 @@
         {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
         <div class="btn-group">
+            {{ form_widget(form.BtnSuspender, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
-            <a class="btn btn-default btn-sm" id="{{ path('brs_rhu_creditos_refinanciar', { 'codigoCredito': arCreditos.codigoCreditoPk}) }}" style="float:left">Refinanciar</a>
+            {% if arCreditos.estadoPagado == 0 %}
+                <a class="btn btn-default btn-sm" id="{{ path('brs_rhu_creditos_refinanciar', { 'codigoCredito': arCreditos.codigoCreditoPk}) }}" style="float:left">Refinanciar</a>
+            {% endif %}
         </div>
         <br><br>
         <div class="panel panel-default">
@@ -60,16 +63,16 @@
                     <tr>
                         <td class="titulo">FECHA INICIO</td>
                         <td class="td-label">{{ arCreditos.fechaInicio |date("Y/m/d") }}</td>
-                        <td class="titulo">APROBADO:</th>
-                        <td> {% if arCreditos.aprobado == 0 %} NO {% else %} SI {% endif %} </td>
+                        <td class="titulo">SUSPENDIDO:</th>
+                        <td> {% if arCreditos.estadoSuspendido == 0 %} NO {% else %} SI {% endif %} </td>
                         <td class="titulo">TOTAL PAGOS:</th>
                         <td class="td-in-well" align="right">{{ arCreditos.totalPagos | number_format(2, '.', ',')}}</td>                                                                        
                     </tr>
                     <tr>
                         <td class="titulo">TIPO PAGO:</th>
                         <td class="td-label">{{ arCreditos.creditoTipopagoRel.nombre }}</td>
-                        <td class="titulo">SUSPENDIDO:</th>
-                        <td> {% if arCreditos.estadoSuspendido == 0 %} NO {% else %} SI {% endif %} </td>
+                        <td class="titulo"></th>
+                        <td></td>
                         <td class="titulo">SALDO:</th>
                         <td class="td-in-well" align="right">{{ arCreditos.saldo | number_format(2, '.', ',')}}</td>                                                                        
                     </tr>
@@ -113,7 +116,7 @@
         <div class="btn-toolbar" style="float: right">
             <div class="btn-toolbar" style="float: right">
                 <div class="btn-group">
-                    {% if arCreditos.aprobado == 0 or arCreditos.estadoPagado == 1 %} <a class="btn btn-default btn-sm" href="">Nuevo</a> {% else %}
+                    {% if arCreditos.estadoPagado == 1 %} <a class="btn btn-default btn-sm" href="">Nuevo</a> {% else %}
                     <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_credito_nuevo_detalle', { 'codigoCreditoPk': arCreditos.codigoCreditoPk}) }}', 'AgregarCredito', 600, 900)" style="float:left">Nuevo</a>
                     {% endif%}
                                             

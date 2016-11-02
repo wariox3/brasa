@@ -416,6 +416,8 @@ class GenerarSoportePagoController extends Controller
             $diaSemana = $this->devuelveDiaSemanaEspaniol($dateFecha);
             $arrDiaSemana[$i] = array('dia' => $i, 'diaSemana' => $diaSemana);
         }        
+        $arSoportePagoProgramacion = new \Brasa\TurnoBundle\Entity\TurSoportePagoProgramacion();
+        $arSoportePagoProgramacion =  $em->getRepository('BrasaTurnoBundle:TurSoportePagoProgramacion')->findBy(array('codigoSoportePagoFk' => $arSoportePago->getCodigoSoportePagoPk()));                                
         $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
         $arProgramacionDetalle =  $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('anio' => $strAnio, 'mes' => $strMes, 'codigoRecursoFk' => $arSoportePago->getCodigoRecursoFk()));                        
         $arSoportesPagoDetalle = $paginator->paginate($em->createQuery($this->strListaDqlDetalle), $request->query->get('page', 1), 200);        
@@ -424,6 +426,7 @@ class GenerarSoportePagoController extends Controller
             'arSoportesPagosDetalles' => $arSoportesPagoDetalle,
             'arSoportePago' => $arSoportePago,
             'arrDiaSemana' => $arrDiaSemana,
+            'arSoportePagoProgramacion' => $arSoportePagoProgramacion,
             'form' => $form->createView()));
     }     
     

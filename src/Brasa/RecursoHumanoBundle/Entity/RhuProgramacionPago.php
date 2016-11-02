@@ -114,7 +114,7 @@ class RhuProgramacionPago
     private $codigoUsuario;
     
     /**
-     * @ORM\Column(name="mensaje_pago", type="string", length=200, nullable=true)
+     * @ORM\Column(name="mensaje_pago", type="string", length=400, nullable=true)
      */    
     private $mensaje_pago;    
     
@@ -160,6 +160,7 @@ class RhuProgramacionPago
      */
     protected $facturasDetallesProgramacionPagoRel;
   
+
     /**
      * Constructor
      */
@@ -616,6 +617,54 @@ class RhuProgramacionPago
     }
 
     /**
+     * Set codigoUsuario
+     *
+     * @param string $codigoUsuario
+     *
+     * @return RhuProgramacionPago
+     */
+    public function setCodigoUsuario($codigoUsuario)
+    {
+        $this->codigoUsuario = $codigoUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoUsuario
+     *
+     * @return string
+     */
+    public function getCodigoUsuario()
+    {
+        return $this->codigoUsuario;
+    }
+
+    /**
+     * Set mensajePago
+     *
+     * @param string $mensajePago
+     *
+     * @return RhuProgramacionPago
+     */
+    public function setMensajePago($mensajePago)
+    {
+        $this->mensaje_pago = $mensajePago;
+
+        return $this;
+    }
+
+    /**
+     * Get mensajePago
+     *
+     * @return string
+     */
+    public function getMensajePago()
+    {
+        return $this->mensaje_pago;
+    }
+
+    /**
      * Set pagoTipoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuPagoTipo $pagoTipoRel
@@ -865,53 +914,5 @@ class RhuProgramacionPago
     public function getFacturasDetallesProgramacionPagoRel()
     {
         return $this->facturasDetallesProgramacionPagoRel;
-    }
-
-    /**
-     * Set codigoUsuario
-     *
-     * @param string $codigoUsuario
-     *
-     * @return RhuProgramacionPago
-     */
-    public function setCodigoUsuario($codigoUsuario)
-    {
-        $this->codigoUsuario = $codigoUsuario;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoUsuario
-     *
-     * @return string
-     */
-    public function getCodigoUsuario()
-    {
-        return $this->codigoUsuario;
-    }
-
-    /**
-     * Set mensajePago
-     *
-     * @param string $mensajePago
-     *
-     * @return RhuProgramacionPago
-     */
-    public function setMensajePago($mensajePago)
-    {
-        $this->mensaje_pago = $mensajePago;
-
-        return $this;
-    }
-
-    /**
-     * Get mensajePago
-     *
-     * @return string
-     */
-    public function getMensajePago()
-    {
-        return $this->mensaje_pago;
     }
 }
