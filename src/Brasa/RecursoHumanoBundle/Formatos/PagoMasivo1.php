@@ -268,7 +268,7 @@ class PagoMasivo1 extends \FPDF_FPDF {
                     $hasta = $arPago->getFechaHasta()->format('j');
                     if($hasta == 30) {$hasta = 31;}
 
-                    $arSoportePago =  self::$em->getRepository('BrasaTurnoBundle:TurSoportePago')->find($arPago->getCodigoSoportePagoFk());
+                $arSoportePago =  self::$em->getRepository('BrasaTurnoBundle:TurSoportePago')->find($arPago->getCodigoSoportePagoFk());
                     if($arSoportePago) {
                         $header = array('D1','D2','D3','D4','D5','D6','D7','D8','D9','D10','D11','D12','D13','D14','D15','D16','D17','D18','D19','D20','D21','D22','D23','D24','D25','D26','D27','D28','D29','D30','D31');
                         $pdf->SetFillColor(200, 200, 200);
@@ -294,13 +294,15 @@ class PagoMasivo1 extends \FPDF_FPDF {
                             $pdf->Ln();
                             $pdf->SetAutoPageBreak(true, 15);
                         }                                        
-                    }
+                    }                
+                } else {
+                   $pdf->Ln(8); 
                 }
                 $pdf->Ln(5);
                 
                 if($arConfiguracion->getImprimirMensajePago()) {
                     $pdf->SetFont('Arial', 'B', 7);
-                    $pdf->Cell(193, 4, $arPago->getProgramacionPagoRel()->getMensajePago(), 0, 0, 'C');                    
+                    $pdf->Cell(193, 4, utf8_decode($arPago->getProgramacionPagoRel()->getMensajePago()), 0, 0, 'C');                    
                 }
                 
                 if($contador < $numeroPagos) {
