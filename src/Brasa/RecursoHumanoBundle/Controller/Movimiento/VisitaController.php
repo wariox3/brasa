@@ -87,10 +87,10 @@ class VisitaController extends Controller
                 $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['form_txtNumeroIdentificacion']));
                 if(count($arEmpleado) > 0) {
                     $arVisita->setEmpleadoRel($arEmpleado);
-                    if($arEmpleado->getCodigoContratoActivoFk() != '') {                        
-                        $arVisita->setFecha(new \DateTime('now'));
-                        if($codigoVisita == 0) {
+                    if($arEmpleado->getCodigoContratoActivoFk() != '') {                                                
+                        if($codigoVisita == 0) {                            
                             $arVisita->setCodigoUsuario($arUsuario->getUserName());                                                                                                                
+                            $arVisita->setFechaCreacion(new \DateTime('now'));                            
                         }
                         $em->persist($arVisita);
                         $em->flush();

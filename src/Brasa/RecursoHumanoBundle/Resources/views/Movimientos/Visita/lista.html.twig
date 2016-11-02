@@ -60,11 +60,11 @@
         </div>
         <table  class="table table-striped table-bordered table-condensed table-hover">
             <tr>
-                <th>{{ knp_pagination_sortable(arVisitas, 'CODIGO', 'v.codigoVisitaPk') }}</th>
-                <th>FECHA</th>
+                <th>{{ knp_pagination_sortable(arVisitas, 'CODIGO', 'v.codigoVisitaPk') }}</th>                
                 <th>TIPO</th>                
-                <th>GRUPO PAGO</th>                
-                <th>IDENTIFICACIÓN</th>
+                <th>FECHA</th>
+                <th>VENCE</th>                
+                <th>DOCUMENTO</th>
                 <th>{{ knp_pagination_sortable(arVisitas, 'EMPLEADO', 'e.nombreCorto') }}</th>                
                 <th>REALIZA VISITA</th>
                 <th>AUT</th>
@@ -76,10 +76,10 @@
             </tr>
             {% for arVisitas in arVisitas %}
             <tr>
-                <td><input type="hidden" name="LblCodigo[]" value="{{ arVisitas.codigoVisitaPk }}">{{ arVisitas.codigoVisitaPk }} </td>
+                <td><input type="hidden" name="LblCodigo[]" value="{{ arVisitas.codigoVisitaPk }}">{{ arVisitas.codigoVisitaPk }} </td>                
+                <td>{{ arVisitas.visitaTipoRel.nombre | default('')  }}</td>                
                 <td>{{ arVisitas.fecha |date("Y-m-d H:i:s")  }}</td>
-                <td>{{ arVisitas.visitaTipoRel.nombre | default('')  }}</td>
-                <td>{{ arVisitas.empleadoRel.centroCostoRel.nombre | default('')  }}</td>
+                <td>{{ arVisitas.fechaVence |date("Y-m-d")  }}</td>
                 <td>{{ arVisitas.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arVisitas.empleadoRel.nombreCorto  }}</td>
                 <td>{{ arVisitas.nombreQuienVisita  }}</td>

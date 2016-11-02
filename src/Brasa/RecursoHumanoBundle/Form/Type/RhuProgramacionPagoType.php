@@ -27,7 +27,8 @@ class RhuProgramacionPagoType extends AbstractType
             ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd'))                
             ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd'))
             ->add('fechaHastaReal', 'date', array('format' => 'yyyyMMdd'))
-            ->add('dias', 'number', array('required' => true))                                               
+            ->add('dias', 'number', array('required' => true)) 
+            ->add('mensajePago', 'textarea', array('required' => false))                                            
             ->add('guardar', 'submit');        
     }
  

@@ -114,6 +114,11 @@ class RhuProgramacionPago
     private $codigoUsuario;
     
     /**
+     * @ORM\Column(name="mensaje_pago", type="string", length=200, nullable=true)
+     */    
+    private $mensaje_pago;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuPagoTipo", inversedBy="programacionesPagosPagoTipoRel")
      * @ORM\JoinColumn(name="codigo_pago_tipo_fk", referencedColumnName="codigo_pago_tipo_pk")
      */
@@ -884,5 +889,29 @@ class RhuProgramacionPago
     public function getCodigoUsuario()
     {
         return $this->codigoUsuario;
+    }
+
+    /**
+     * Set mensajePago
+     *
+     * @param string $mensajePago
+     *
+     * @return RhuProgramacionPago
+     */
+    public function setMensajePago($mensajePago)
+    {
+        $this->mensaje_pago = $mensajePago;
+
+        return $this;
+    }
+
+    /**
+     * Get mensajePago
+     *
+     * @return string
+     */
+    public function getMensajePago()
+    {
+        return $this->mensaje_pago;
     }
 }

@@ -99,22 +99,28 @@ class ProgramacionesPagoController extends Controller
     }
 
     /**
-     * @Route("/rhu/programaciones/pago/nuevo", name="brs_rhu_programaciones_pago_nuevo")
+     * @Route("/rhu/programaciones/pago/nuevo/{codigoProgramacionPago}", name="brs_rhu_programaciones_pago_nuevo")
      */
-    public function nuevoAction(Request $request) {
+    public function nuevoAction($codigoProgramacionPago, Request $request) {
         $em = $this->getDoctrine()->getManager();
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
-        $arProgramacionPago->setFechaDesde(new \DateTime('now'));
-        $arProgramacionPago->setFechaHasta(new \DateTime('now'));
-        $arProgramacionPago->setFechaHastaReal(new \DateTime('now'));
+        if($codigoProgramacionPago != 0) {
+            $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
+        } else {
+            $arProgramacionPago->setFechaDesde(new \DateTime('now'));
+            $arProgramacionPago->setFechaHasta(new \DateTime('now'));
+            $arProgramacionPago->setFechaHastaReal(new \DateTime('now'));             
+        }
         $form = $this->createForm(new RhuProgramacionPagoType(), $arProgramacionPago);
         $form->handleRequest($request);
-        if ($form->isValid()) {
-            $arUsuario = $this->get('security.context')->getToken()->getUser();
-            $arProgramacionPago = $form->getData();
-            $arProgramacionPago->setFechaHastaReal($arProgramacionPago->getFechaHasta());
-            $arProgramacionPago->setNoGeneraPeriodo(1);
-            $arProgramacionPago->setCodigoUsuario($arUsuario->getUserName());
+        if ($form->isValid()) {            
+            $arProgramacionPago = $form->getData();            
+            if($codigoProgramacionPago == 0) {
+                $arProgramacionPago->setNoGeneraPeriodo(1);
+                $arUsuario = $this->get('security.context')->getToken()->getUser();
+                $arProgramacionPago->setCodigoUsuario($arUsuario->getUserName());
+            }
+            
             $em->persist($arProgramacionPago);
             $em->flush();
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";

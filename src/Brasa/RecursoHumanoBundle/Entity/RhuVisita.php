@@ -23,6 +23,11 @@ class RhuVisita
     private $fecha;                 
     
     /**
+     * @ORM\Column(name="fecha_creacion", type="datetime", nullable=true)
+     */    
+    private $fechaCreacion;    
+    
+    /**
      * @ORM\Column(name="codigo_empleado_fk", type="integer")
      */    
     private $codigoEmpleadoFk;
@@ -80,9 +85,6 @@ class RhuVisita
      * @ORM\JoinColumn(name="codigo_visita_tipo_fk", referencedColumnName="codigo_visita_tipo_pk")
      */
     protected $visitaTipoRel;
-
-    
-    
 
     
 
@@ -382,5 +384,29 @@ class RhuVisita
     public function getVisitaTipoRel()
     {
         return $this->visitaTipoRel;
+    }
+
+    /**
+     * Set fechaCreacion
+     *
+     * @param \DateTime $fechaCreacion
+     *
+     * @return RhuVisita
+     */
+    public function setFechaCreacion($fechaCreacion)
+    {
+        $this->fechaCreacion = $fechaCreacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaCreacion
+     *
+     * @return \DateTime
+     */
+    public function getFechaCreacion()
+    {
+        return $this->fechaCreacion;
     }
 }
