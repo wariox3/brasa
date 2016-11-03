@@ -110,7 +110,9 @@ class TurSoportePagoPeriodoRepository extends EntityRepository {
                     $arrVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->dias($arSoportePago->getRecursoRel()->getCodigoEmpleadoFk(), $arSoportePago->getCodigoContratoFk(), $arSoportePagoPeriodo->getFechaDesde(), $arSoportePagoPeriodo->getFechaHasta());                            
                     $intDiasVacaciones = $arrVacaciones['dias'];                    
                     $intDiasLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->diasLicenciaPeriodo31($arSoportePagoPeriodo->getFechaDesde(), $arSoportePagoPeriodo->getFechaHasta(), $arSoportePago->getRecursoRel()->getCodigoEmpleadoFk());                                                
+                    $intDiasIncapacidadSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->diasIncapacidad($codigoSoportePagoPeriodo, $arSoportePago->getCodigoRecursoFk());
                     $intDiasIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->diasIncapacidadPeriodo31($arSoportePagoPeriodo->getFechaDesde(), $arSoportePagoPeriodo->getFechaHasta(), $arSoportePago->getRecursoRel()->getCodigoEmpleadoFk());                
+                    
                     if($intDiasVacaciones != $arSoportePago->getVacacion()) {
                         $arrInconsistencias[] = array('inconsistencia' => "Vacaciones de " . $arSoportePago->getVacacion() . " dias en turnos y de " . $intDiasVacaciones . " en recurso humano", 'recurso' => $arSoportePago->getRecursoRel()->getNombreCorto(), 'numeroIdentificacion' => $arSoportePago->getRecursoRel()->getNumeroIdentificacion(), 'codigo'=> $arSoportePago->getRecursoRel()->getCodigoEmpleadoFk());
                     }
@@ -118,7 +120,7 @@ class TurSoportePagoPeriodoRepository extends EntityRepository {
                     if($intDiasLicencia != $intDiasLicenciaSoportePago) {
                         $arrInconsistencias[] = array('inconsistencia' => "Licencias de " . $intDiasLicenciaSoportePago . " dias en turnos y de " . $intDiasLicencia . " en recurso humano", 'recurso' => $arSoportePago->getRecursoRel()->getNombreCorto(), 'numeroIdentificacion' => $arSoportePago->getRecursoRel()->getNumeroIdentificacion(), 'codigo'=> $arSoportePago->getRecursoRel()->getCodigoEmpleadoFk());
                     }
-                    if($intDiasIncapacidad != $arSoportePago->getIncapacidad()) {
+                    if($intDiasIncapacidad != $intDiasIncapacidadSoportePagoPeriodo) {
                         $arrInconsistencias[] = array('inconsistencia' => "Incapacidades de " . $arSoportePago->getIncapacidad() . " dias en turnos y de " . $intDiasIncapacidad . " en recurso humano", 'recurso' => $arSoportePago->getRecursoRel()->getNombreCorto(), 'numeroIdentificacion' => $arSoportePago->getRecursoRel()->getNumeroIdentificacion(), 'codigo'=> $arSoportePago->getRecursoRel()->getCodigoEmpleadoFk());
                     }                    
                 }                
@@ -183,5 +185,20 @@ class TurSoportePagoPeriodoRepository extends EntityRepository {
         
         $em->persist($arSoportePagoPeriodo);
         $em->flush();                
-    }    
+    }
+
+    public function diasIncapacidad($codigoSoportePagoPeriodo, $codigoRecurso) {
+        $em = $this->getEntityManager();
+        $diasIncapacidad = 0;
+        $dql   = "SELECT SUM(sp.incapacidad) as diasIncapacidad "
+                . "FROM BrasaTurnoBundle:TurSoportePago sp "
+                . "WHERE sp.codigoSoportePagoPeriodoFk =  " . $codigoSoportePagoPeriodo . " AND sp.codigoRecursoFk = " . $codigoRecurso;
+        $query = $em->createQuery($dql);  
+        $arrayResultado = $query->getResult();         
+        if($arrayResultado) {
+            $diasIncapacidad = $arrayResultado[0]['diasIncapacidad'];                    
+        } 
+        
+        return $diasIncapacidad;
+    }
 }
