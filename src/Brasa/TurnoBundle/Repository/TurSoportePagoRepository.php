@@ -437,7 +437,7 @@ class TurSoportePagoRepository extends EntityRepository {
         $arSoportePagoDetalle->setVacacion($arTurno->getVacacion());
         $arSoportePagoDetalle->setIngreso($arTurno->getIngreso());
         $arSoportePagoDetalle->setInduccion($arTurno->getInduccion());
-        if($dateFecha->format('d') == 31) {
+        if($dateFecha->format('d') == 31 && $arSoportePagoPeriodo->getPagarDia31() == false) {
             $arSoportePagoDetalle->setDias(0);
             $arSoportePagoDetalle->setHoras(0);
             $arSoportePagoDetalle->setHorasDiurnas(0);
@@ -484,7 +484,7 @@ class TurSoportePagoRepository extends EntityRepository {
             $arSoportePagoDetalle->setTurnoRel($arTurno);
             $arSoportePagoDetalle->setDescanso($arTurno->getDescanso());
             $arSoportePagoDetalle->setNovedad(0);
-            if($dateFecha->format('d') == 31) {
+            if($dateFecha->format('d') == 31 && $arSoportePagoPeriodo->getPagarDia31() == false) {
                 $arSoportePagoDetalle->setDias(0);
                 $arSoportePagoDetalle->setHoras(0);
                 $arSoportePagoDetalle->setHorasDiurnas(0);
@@ -668,7 +668,7 @@ class TurSoportePagoRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
         $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);
-        $descanso = $arSoportePagoPeriodo->getDiasDescansoFijo();
+        $descanso = $arSoportePagoPeriodo->getDiaDescansoCompensacion();
         $diasPeriodo = $arSoportePagoPeriodo->getDiasPeriodo();
         $horasPeriodo =  $diasPeriodo * 8;
         $horasDescanso = $descanso * 8;

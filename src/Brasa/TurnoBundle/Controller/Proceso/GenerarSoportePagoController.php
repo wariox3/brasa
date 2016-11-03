@@ -330,6 +330,13 @@ class GenerarSoportePagoController extends Controller
             $arSoportePagoPeriodo->setDiaDomingoReal($arrDias['domingos']);
             $arSoportePagoPeriodo->setDiaFestivoReal($arrDias['festivos']);
             $arSoportePagoPeriodo->setDiasDescansoFijo($arSoportePagoPeriodo->getCentroCostoRel()->getDiasDescansoFijo());
+            if($arSoportePagoPeriodo->getCentroCostoRel()->getDescansoCompensacionDominicales()) {
+                $arSoportePagoPeriodo->setDiaDescansoCompensacion($arrDias['domingos']+$arrDias['festivos']);
+            }   
+            if($arSoportePagoPeriodo->getCentroCostoRel()->getDescansoCompensacionFijo()) {
+                $arSoportePagoPeriodo->setDiaDescansoCompensacion($arSoportePagoPeriodo->getCentroCostoRel()->getDiasDescansoCompensacionFijo());
+            }
+            $arSoportePagoPeriodo->setPagarDia31($arSoportePagoPeriodo->getCentroCostoRel()->getPagarDia31());
             $arSoportePagoPeriodo->setAnio($arSoportePagoPeriodo->getFechaDesde()->format('Y'));
             $arSoportePagoPeriodo->setMes($arSoportePagoPeriodo->getFechaDesde()->format('m'));                        
             $em->persist($arSoportePagoPeriodo);
@@ -1195,14 +1202,14 @@ class GenerarSoportePagoController extends Controller
         $fechaDesde = date_create($desde->format('Y-m-d'));
         $domingos = 0;
         $festivos = 0;        
-        while($fechaDesde <= $hasta) {
-            $fechaDesde->modify('+1 day');  
+        while($fechaDesde <= $hasta) {              
             if($fechaDesde->format('N') == 7) {
                $domingos++; 
             }
             if($this->festivo($arFestivos, $fechaDesde) == true) {
                $festivos++; 
             }
+            $fechaDesde->modify('+1 day');
         }
         $arrDias['domingos'] = $domingos;
         $arrDias['festivos'] = $festivos;

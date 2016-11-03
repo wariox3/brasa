@@ -26,8 +26,8 @@
                     <tr>
                         <td class="titulo">GRUPO:</td>
                         <td class="td-in-well">{{ arSoportePagoPeriodo.recursoGrupoRel.nombre |default('') }}</td>
-                        <td class="titulo">DIAS FESTIVOS</td>
-                        <td align="right">{{ arSoportePagoPeriodo.festivos}}</td>
+                        <td class="titulo"></td>
+                        <td align="right"></td>
                     </tr>
                     <tr>
                         <td class="titulo">FECHA DESDE:</td>
@@ -46,7 +46,13 @@
                         <td>{% if arSoportePagoPeriodo.descansoFestivoFijo == 1 %}SI{% else %}NO{% endif %}</td>
                         <td class="titulo" >DOMINGOS REALES:</td>
                         <td align="right">{{ arSoportePagoPeriodo.diaDomingoReal}}</td>
-                    </tr>                                                             
+                    </tr>    
+                    <tr>
+                        <td class="titulo" ></td>
+                        <td></td>
+                        <td class="titulo" >DIAS DESCANSO COMPENSACION:</td>
+                        <td align="right">{{ arSoportePagoPeriodo.diaDescansoCompensacion}}</td>
+                    </tr>                     
                 </table>
             </div>
         </div>

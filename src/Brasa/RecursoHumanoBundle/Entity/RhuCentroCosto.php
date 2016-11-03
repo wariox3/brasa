@@ -166,8 +166,27 @@ class RhuCentroCosto
     /**
      * @ORM\Column(name="dias_descanso_fijo", type="integer", nullable=true)
      */    
-    private $diasDescansoFijo = 0;      
+    private $diasDescansoFijo = 0;             
     
+    /**     
+     * @ORM\Column(name="descanso_compensacion_dominicales", type="boolean")
+     */    
+    private $descansoCompensacionDominicales = false;    
+
+    /**     
+     * @ORM\Column(name="descanso_compensacion_fijo", type="boolean")
+     */    
+    private $descansoCompensacionFijo = false;    
+    
+    /**
+     * @ORM\Column(name="dias_descanso_compensacionFijo", type="integer", nullable=true)
+     */    
+    private $diasDescansoCompensacionFijo = 0;     
+    
+    /**     
+     * @ORM\Column(name="pagar_dia_31", type="boolean")
+     */    
+    private $pagarDia31 = false;    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuCliente", inversedBy="centrosCostosClienteRel")
@@ -1863,5 +1882,101 @@ class RhuCentroCosto
     public function getGeneraSoportePago()
     {
         return $this->generaSoportePago;
+    }
+
+    /**
+     * Set descansoCompensacionDominicales
+     *
+     * @param boolean $descansoCompensacionDominicales
+     *
+     * @return RhuCentroCosto
+     */
+    public function setDescansoCompensacionDominicales($descansoCompensacionDominicales)
+    {
+        $this->descansoCompensacionDominicales = $descansoCompensacionDominicales;
+
+        return $this;
+    }
+
+    /**
+     * Get descansoCompensacionDominicales
+     *
+     * @return boolean
+     */
+    public function getDescansoCompensacionDominicales()
+    {
+        return $this->descansoCompensacionDominicales;
+    }
+
+    /**
+     * Set descansoCompensacionFijo
+     *
+     * @param boolean $descansoCompensacionFijo
+     *
+     * @return RhuCentroCosto
+     */
+    public function setDescansoCompensacionFijo($descansoCompensacionFijo)
+    {
+        $this->descansoCompensacionFijo = $descansoCompensacionFijo;
+
+        return $this;
+    }
+
+    /**
+     * Get descansoCompensacionFijo
+     *
+     * @return boolean
+     */
+    public function getDescansoCompensacionFijo()
+    {
+        return $this->descansoCompensacionFijo;
+    }
+
+    /**
+     * Set diasDescansoCompensacionFijo
+     *
+     * @param integer $diasDescansoCompensacionFijo
+     *
+     * @return RhuCentroCosto
+     */
+    public function setDiasDescansoCompensacionFijo($diasDescansoCompensacionFijo)
+    {
+        $this->diasDescansoCompensacionFijo = $diasDescansoCompensacionFijo;
+
+        return $this;
+    }
+
+    /**
+     * Get diasDescansoCompensacionFijo
+     *
+     * @return integer
+     */
+    public function getDiasDescansoCompensacionFijo()
+    {
+        return $this->diasDescansoCompensacionFijo;
+    }
+
+    /**
+     * Set pagarDia31
+     *
+     * @param boolean $pagarDia31
+     *
+     * @return RhuCentroCosto
+     */
+    public function setPagarDia31($pagarDia31)
+    {
+        $this->pagarDia31 = $pagarDia31;
+
+        return $this;
+    }
+
+    /**
+     * Get pagarDia31
+     *
+     * @return boolean
+     */
+    public function getPagarDia31()
+    {
+        return $this->pagarDia31;
     }
 }

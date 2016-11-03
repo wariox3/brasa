@@ -118,6 +118,16 @@ class TurSoportePagoPeriodo
      */    
     private $diaDescanso = 0;    
     
+    /**
+     * @ORM\Column(name="dia_descanso_compensacion", type="integer")
+     */    
+    private $diaDescansoCompensacion = 0;    
+    
+    /**     
+     * @ORM\Column(name="pagar_dia_31", type="boolean")
+     */    
+    private $pagarDia31 = false;    
+    
     /**     
      * @ORM\Column(name="inconsistencias", type="boolean")
      */    
@@ -948,5 +958,53 @@ class TurSoportePagoPeriodo
     public function getAjusteDevengado()
     {
         return $this->ajusteDevengado;
+    }
+
+    /**
+     * Set diaDescansoCompensacion
+     *
+     * @param integer $diaDescansoCompensacion
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setDiaDescansoCompensacion($diaDescansoCompensacion)
+    {
+        $this->diaDescansoCompensacion = $diaDescansoCompensacion;
+
+        return $this;
+    }
+
+    /**
+     * Get diaDescansoCompensacion
+     *
+     * @return integer
+     */
+    public function getDiaDescansoCompensacion()
+    {
+        return $this->diaDescansoCompensacion;
+    }
+
+    /**
+     * Set pagarDia31
+     *
+     * @param boolean $pagarDia31
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setPagarDia31($pagarDia31)
+    {
+        $this->pagarDia31 = $pagarDia31;
+
+        return $this;
+    }
+
+    /**
+     * Get pagarDia31
+     *
+     * @return boolean
+     */
+    public function getPagarDia31()
+    {
+        return $this->pagarDia31;
     }
 }

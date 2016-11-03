@@ -132,23 +132,74 @@
             </div>                
         </div>
     </div>    
+                  
     <div class="panel panel-default">
         <div class="panel-heading">Informacion programacion turnos</div>
         <div class="panel-body">                 
             <div class="form-group form-group-sm">
-                <label class="col-sm-2 control-label">Descanso ordinario:</label>
-                <div class="col-sm-10">
+                <label class="col-sm-3 control-label">Descanso ordinario:</label>
+                <div class="col-sm-9">
                         {{ form_widget(form.descansoOrdinario) }}
                 </div>
             </div> 
             <div class="form-group form-group-sm">
-                <label class="col-sm-2 control-label">Secuencia:</label>
-                <div class="col-sm-10">
+                <label class="col-sm-3 control-label">Pagar dia 31:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.pagarDia31) }}
+                </div>
+            </div>                 
+            <div class="form-group form-group-sm">
+                <label class="col-sm-3 control-label">Secuencia:</label>
+                <div class="col-sm-9">
                         {{ form_widget(form.secuencia, { 'attr': {'class': 'form-control'} }) }}
                 </div>
-            </div>                
-        </div>
-    </div>                  
+            </div>     
+            <div class="form-group form-group-sm">
+                <label class="col-sm-3 control-label">Turno fijo:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.codigoTurnoFijoNominaFk, { 'attr': {'class': 'form-control', 'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()'} }) }}                        
+                    <p style="font-size: 0.8em;">* Independiente del turno programado, se liquida con este turno la nomina</p>
+                </div>                
+            </div> 
+            <div class="form-group form-group-sm">
+                <label class="col-sm-3 control-label">Turno fijo descanso:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.codigoTurnoFijoDescansoFk, { 'attr': {'class': 'form-control', 'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()'} }) }}                        
+                    <p style="font-size: 0.8em;">* Cuando el turno es de descanso es reemplazado por este turno</p>
+                </div>                
+            </div>                     
+            <div class="form-group form-group-sm">
+                <label class="col-sm-3 control-label">Dias de descanso fijo:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.diasDescansoFijo, { 'attr': {'class': 'form-control', 'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()'} }) }}                                            
+                </div>                
+            </div>                  
+        </div>                 
+    </div>   
+    <div class="panel panel-default">
+        <div class="panel-heading">Informacion programacion turnos (Compensacion)</div>
+        <div class="panel-body">                 
+            <div class="form-group form-group-sm">
+                <label class="col-sm-3 control-label">Descanso dominicales:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.descansoCompensacionDominicales) }}
+                </div>
+            </div>         
+            <div class="form-group form-group-sm">
+                <label class="col-sm-3 control-label">Descanso fijo:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.descansoCompensacionFijo) }}
+                </div>
+            </div>                 
+            <div class="form-group form-group-sm">
+                <label class="col-sm-3 control-label">Dias de descanso fijo:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.diasDescansoCompensacionFijo, { 'attr': {'class': 'form-control', 'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()'} }) }}                                            
+                </div>                
+            </div>                  
+        </div>                 
+    </div>                
+                
     <div class="modal-footer">     
             <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_base_centros_costos_lista') }}">Cancelar</a>        
             {{ form_widget(form.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
