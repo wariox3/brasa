@@ -274,6 +274,10 @@ class GenerarSoportePagoController extends Controller
                 $this->listaDetalle("", $codigoSoportePagoPeriodo);
                 $this->generarExcel();
             }
+            if ($form->get('BtnExcelPago')->isClicked()) {
+                $this->listaDetalle("", $codigoSoportePagoPeriodo);
+                $this->generarExcelPago();
+            }            
             if ($form->get('BtnEliminar')->isClicked()) {                
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurSoportePago')->eliminar($arrSeleccionados);
@@ -329,14 +333,17 @@ class GenerarSoportePagoController extends Controller
             $arrDias = $this->festivosDomingos($arSoportePagoPeriodo->getFechaDesde(), $arSoportePagoPeriodo->getFechaHasta(), $arFestivos);
             $arSoportePagoPeriodo->setDiaDomingoReal($arrDias['domingos']);
             $arSoportePagoPeriodo->setDiaFestivoReal($arrDias['festivos']);
-            $arSoportePagoPeriodo->setDiasDescansoFijo($arSoportePagoPeriodo->getCentroCostoRel()->getDiasDescansoFijo());
-            if($arSoportePagoPeriodo->getCentroCostoRel()->getDescansoCompensacionDominicales()) {
-                $arSoportePagoPeriodo->setDiaDescansoCompensacion($arrDias['domingos']+$arrDias['festivos']);
-            }   
-            if($arSoportePagoPeriodo->getCentroCostoRel()->getDescansoCompensacionFijo()) {
-                $arSoportePagoPeriodo->setDiaDescansoCompensacion($arSoportePagoPeriodo->getCentroCostoRel()->getDiasDescansoCompensacionFijo());
+            
+            if($codigoSoportePagoPeriodo == 0) {
+                if($arSoportePagoPeriodo->getCentroCostoRel()->getDescansoCompensacionDominicales()) {
+                    $arSoportePagoPeriodo->setDiaDescansoCompensacion($arrDias['domingos']+$arrDias['festivos']);
+                }   
+                if($arSoportePagoPeriodo->getCentroCostoRel()->getDescansoCompensacionFijo()) {
+                    $arSoportePagoPeriodo->setDiaDescansoCompensacion($arSoportePagoPeriodo->getCentroCostoRel()->getDiasDescansoCompensacionFijo());
+                }
+                $arSoportePagoPeriodo->setPagarDia31($arSoportePagoPeriodo->getCentroCostoRel()->getPagarDia31());                
             }
-            $arSoportePagoPeriodo->setPagarDia31($arSoportePagoPeriodo->getCentroCostoRel()->getPagarDia31());
+            
             $arSoportePagoPeriodo->setAnio($arSoportePagoPeriodo->getFechaDesde()->format('Y'));
             $arSoportePagoPeriodo->setMes($arSoportePagoPeriodo->getFechaDesde()->format('m'));                        
             $em->persist($arSoportePagoPeriodo);
@@ -559,6 +566,7 @@ class GenerarSoportePagoController extends Controller
         }
         $form = $this->createFormBuilder()
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))                        
+            ->add('BtnExcelPago', 'submit', array('label'  => 'Excel pago'))                        
             ->add('BtnLiquidar', 'submit', array('label'  => 'Liquidar'))                                                    
             ->add('BtnLiquidarCompensacion2', 'submit', $arrBotonLiquidarCompensacion)                                    
             ->add('BtnGenerarProgramacionAlterna', 'submit', $arrBotonGenerarProgramacionAlterna)                        
@@ -988,6 +996,107 @@ class GenerarSoportePagoController extends Controller
         $objWriter->save('php://output');
         exit;
     } 
+
+    private function generarExcelPago() {
+        ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);        
+        $em = $this->getDoctrine()->getManager();        
+        $objPHPExcel = new \PHPExcel();
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("EMPRESA")
+            ->setLastModifiedBy("EMPRESA")
+            ->setTitle("Office 2007 XLSX Test Document")
+            ->setSubject("Office 2007 XLSX Test Document")
+            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+            ->setKeywords("office 2007 openxml php")
+            ->setCategory("Test result file");
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(8); 
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'Z'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
+        }      
+        for($col = 'V'; $col !== 'Z'; $col++) {            
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }         
+        $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'ID')
+                    ->setCellValue('B1', 'CODIGO')
+                    ->setCellValue('C1', 'IDENTIFICACION')
+                    ->setCellValue('D1', 'RECURSO')
+                    ->setCellValue('E1', 'CONTRATO')
+                    ->setCellValue('F1', 'DESDE')
+                    ->setCellValue('G1', 'HASTA')
+                    ->setCellValue('H1', 'DÍAS')
+                    ->setCellValue('I1', 'H')
+                    ->setCellValue('J1', 'HDS')
+                    ->setCellValue('K1', 'HD')
+                    ->setCellValue('L1', 'HN')
+                    ->setCellValue('M1', 'HFD')
+                    ->setCellValue('N1', 'HFN')                
+                    ->setCellValue('O1', 'HEOD')
+                    ->setCellValue('P1', 'HEON')
+                    ->setCellValue('Q1', 'HEFD')
+                    ->setCellValue('R1', 'HEFN')
+                    ->setCellValue('S1', 'HRN')
+                    ->setCellValue('T1', 'HRFD')
+                    ->setCellValue('U1', 'HRFN')
+                    ->setCellValue('V1', 'SALARIO')
+                    ->setCellValue('W1', 'A.TRA')
+                    ->setCellValue('X1', 'PAGO')
+                    ->setCellValue('Y1', 'DEVENGADO');
+
+        $i = 2;
+        $query = $em->createQuery($this->strListaDql);
+        $arSoportesPago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
+        $arSoportesPago = $query->getResult();
+        foreach ($arSoportesPago as $arSoportePago) {  
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A' . $i, $arSoportePago->getCodigoSoportePagoPk())
+                    ->setCellValue('B' . $i, $arSoportePago->getRecursoRel()->getCodigoEmpleadoFk())
+                    ->setCellValue('C' . $i, $arSoportePago->getRecursoRel()->getNumeroIdentificacion())
+                    ->setCellValue('D' . $i, $arSoportePago->getRecursoRel()->getNombreCorto())
+                    ->setCellValue('E' . $i, $arSoportePago->getCodigoContratoFk())
+                    ->setCellValue('F' . $i, $arSoportePago->getFechaDesde()->format('Y/m/d'))
+                    ->setCellValue('G' . $i, $arSoportePago->getFechaHasta()->format('Y/m/d'))
+                    ->setCellValue('H' . $i, $arSoportePago->getDias())
+                    ->setCellValue('I' . $i, $arSoportePago->getHoras())
+                    ->setCellValue('J' . $i, $arSoportePago->getHorasDescanso())
+                    ->setCellValue('K' . $i, $arSoportePago->getHorasDiurnas())
+                    ->setCellValue('L' . $i, $arSoportePago->getHorasNocturnas())
+                    ->setCellValue('M' . $i, $arSoportePago->getHorasFestivasDiurnas())
+                    ->setCellValue('N' . $i, $arSoportePago->getHorasFestivasNocturnas())                    
+                    ->setCellValue('O' . $i, $arSoportePago->getHorasExtrasOrdinariasDiurnas())
+                    ->setCellValue('P' . $i, $arSoportePago->getHorasExtrasOrdinariasNocturnas())
+                    ->setCellValue('Q' . $i, $arSoportePago->getHorasExtrasFestivasDiurnas())
+                    ->setCellValue('R' . $i, $arSoportePago->getHorasExtrasFestivasNocturnas())
+                    ->setCellValue('S' . $i, $arSoportePago->getHorasRecargoNocturno())
+                    ->setCellValue('T' . $i, $arSoportePago->getHorasRecargoFestivoDiurno())
+                    ->setCellValue('U' . $i, $arSoportePago->getHorasRecargoFestivoNocturno())
+                    ->setCellValue('V' . $i, $arSoportePago->getVrSalario())
+                    ->setCellValue('W' . $i, $arSoportePago->getVrAuxilioTransporte())
+                    ->setCellValue('X' . $i, $arSoportePago->getVrPago())
+                    ->setCellValue('Y' . $i, $arSoportePago->getVrDevengado());
+            $i++;
+        }
+        $objPHPExcel->getActiveSheet()->setTitle('SoportePago');       
+        $objPHPExcel->setActiveSheetIndex(0);
+        
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="SoportesPagoTurnos.xlsx"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('php://output');
+        exit;
+    }
     
     private function turnoHoras($intHoraInicio, $intMinutoInicio, $intHoraFinal, $boolFestivo, $intHoras, $boolNovedad = 0, $boolDescanso = 0) {        
         if($boolNovedad == 0) {

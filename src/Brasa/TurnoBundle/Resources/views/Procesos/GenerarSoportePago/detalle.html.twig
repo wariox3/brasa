@@ -38,13 +38,13 @@
                     <tr>
                         <td class="titulo">FECHA HASTA:</td>
                         <td class="td-in-well">{{ arSoportePagoPeriodo.fechaHasta |date("Y/m/d") }}</td>
-                        <td class="titulo" >FESTIVOS REALES:</td>
+                        <td class="titulo" >FESTIVOS:</td>
                         <td align="right">{{ arSoportePagoPeriodo.diaFestivoReal}}</td>
                     </tr>
                     <tr>
                         <td class="titulo" >DESCANSO FESTIVO FIJO:</td>
                         <td>{% if arSoportePagoPeriodo.descansoFestivoFijo == 1 %}SI{% else %}NO{% endif %}</td>
-                        <td class="titulo" >DOMINGOS REALES:</td>
+                        <td class="titulo" >DOMINGOS:</td>
                         <td align="right">{{ arSoportePagoPeriodo.diaDomingoReal}}</td>
                     </tr>    
                     <tr>
@@ -155,6 +155,7 @@
         <div class="btn-toolbar" style="float: right">
             <div class="btn-group">
                 {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnExcelPago, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
             </div>
             <div class="btn-group">                
                 {{ form_widget(form.BtnAjustarDevengado, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}

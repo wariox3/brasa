@@ -31,35 +31,52 @@
                     {{ form_widget(form.diasPeriodo, { 'attr': {'class': 'form-control'} }) }}  
                     <p style="font-size: 0.8em;">- Numero de dias que tiene el periodo</p>                     
                 </div>                
-            </div>                                
+            </div>                                                    
         </div>
     </div>                      
     <div class="panel panel-default">
         <div class="panel-heading">Informacion parametros liquidacion</div>
         <div class="panel-body">                    
             <div class="form-group form-group-sm">
-                <label for="form_festivos" class="col-sm-3 control-label">Dias festivos:</label>
+                <label class="col-sm-3 control-label">Dias festivos:</label>
                 <div class="col-sm-9">
                     {{ form_widget(form.festivos, { 'attr': {'class': 'form-control'} }) }}  
                     <p style="font-size: 0.8em;">- Numero de dias festivos en el periodo, solo funcionan cunado esta activado el check de descansos fijos</p>                     
                 </div>                
             </div>  
             <div class="form-group form-group-sm">
-                <label for="form_diasAdicionales" class="col-sm-3 control-label">Dias adicionales:</label>
+                <label class="col-sm-3 control-label">Dias adicionales:</label>
                 <div class="col-sm-9">
                     {{ form_widget(form.diasAdicionales, { 'attr': {'class': 'form-control'} }) }} 
                     <p style="font-size: 0.8em;">- Se utiliza para el mes de febrero donde se adicionan 1 o 2 turnos de 8 horas</p> 
                 </div>                
             </div>                
             <div class="form-group form-group-sm">
-                <label for="form_descansoFestivoFijo" class="col-sm-3 control-label">Descanso festivo fijo:</label>
+                <label class="col-sm-3 control-label">Descanso festivo fijo:</label>
                 <div class="col-sm-9">
                     {{ form_widget(form.descansoFestivoFijo) }} 
                     <p style="font-size: 0.8em;">- Los turnos de descanso son anulados y se cambian por los festivos</p> 
                 </div>                
-            </div>                
+            </div> 
+            <div class="form-group form-group-sm">
+                <label class="col-sm-3 control-label">Pagar dia 31 completo:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(form.pagarDia31) }}
+                </div>
+            </div>                    
         </div>
-    </div>                    
+    </div>      
+    <div class="panel panel-default">
+        <div class="panel-heading">Informacion programacion turnos (Compensacion)</div>
+        <div class="panel-body">                                           
+            <div class="form-group form-group-sm">
+                <label class="col-sm-3 control-label">Dias de descanso fijo:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.diaDescansoCompensacion, { 'attr': {'class': 'form-control', 'style':'text-transform:uppercase;','onblur':'javascript:this.value=this.value.toUpperCase()'} }) }}                                            
+                </div>                
+            </div>                  
+        </div>                 
+    </div>                     
     <div class="modal-footer">
         <a class="btn btn-default btn-sm" href="{{ path('brs_tur_proceso_generar_soporte_pago') }}">Cancelar</a>        
         {{ form_widget(form.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
