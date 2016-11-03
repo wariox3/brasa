@@ -172,6 +172,7 @@ class FormatoCarta extends \FPDF_FPDF {
         $sustitucion13 = $floNoPrestacionalLetras." $(";
         $sustitucion13 .= number_format($floNoPrestacional, 2,'.',',');
         $sustitucion13 .= ")";
+        $sustitucion12 = $arContrato->getEmpleadoRel()->getCiudadExpedicionRel()->getNombre();
         $sustitucion14 = $arContrato->getEntidadSaludRel()->getNombre();
         $sustitucion15 = $arContrato->getEntidadPensionRel()->getNombre();        
         $sustitucion16 = $arConfiguracionNomina->getEntidadRiesgoProfesionalRel()->getNombre();
@@ -191,6 +192,7 @@ class FormatoCarta extends \FPDF_FPDF {
         $patron9 = '/#9/';
         $patron10 = '/#a/';
         $patron11 = '/#b/';
+        $patron12 = '/#c/';
         $patron13 = '/#d/';
         $patron14 = '/#e/';
         $patron15 = '/#f/';
@@ -211,6 +213,7 @@ class FormatoCarta extends \FPDF_FPDF {
         $cadenaCambiada = preg_replace($patron9, $sustitucion9, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron10, $sustitucion10, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron11, $sustitucion11, $cadenaCambiada);
+        $cadenaCambiada = preg_replace($patron12, $sustitucion12, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron13, $sustitucion13, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron14, $sustitucion14, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron15, $sustitucion15, $cadenaCambiada);
