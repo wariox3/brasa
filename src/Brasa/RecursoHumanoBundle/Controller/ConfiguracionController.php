@@ -196,6 +196,7 @@ class ConfiguracionController extends Controller
             $aportesPorcentajeVacaciones = $controles['aportesPorcentajeVacaciones'];
             $tipoBasePagoVacaciones = $controles['tipoBasePagoVacaciones'];
             $codigoConceptoVacacion = $controles['conceptoVacacion'];
+            $afectaVacacionesParafiscales = $controles['afectaVacacionesParafiscales'];
             // guardar la tarea en la base de datos
             $arConfiguracion->setCodigoAuxilioTransporte($codigoConceptoAuxilioTransporte);
             $arConfiguracion->setVrAuxilioTransporte($ValorAuxilioTransporte);
@@ -214,6 +215,14 @@ class ConfiguracionController extends Controller
             $arConfiguracion->setCodigoComprobantePagoNomina($comprobantePagoNomina);
             $arConfiguracion->setCodigoComprobantepagoBanco($comprobantePagoBanco);
             $arConfiguracion->setControlPago($controlPago);
+            $arConfiguracion->setPrestacionesPorcentajeCesantias($prestacionesPorcentajeCesantias);
+            $arConfiguracion->setPrestacionesPorcentajeInteresesCesantias($prestacionesPorcentajeInteresesCesantias);
+            $arConfiguracion->setPrestacionesPorcentajeVacaciones($prestacionesPorcentajeVacaciones);
+            $arConfiguracion->setPrestacionesPorcentajePrimas($prestacionesPorcentajePrimas);
+            $arConfiguracion->setAportesPorcentajeCaja($aportesPorcentajeCaja);
+            $arConfiguracion->setAportesPorcentajeVacaciones($aportesPorcentajeVacaciones);
+            $arConfiguracion->setTipoBasePagoVacaciones($tipoBasePagoVacaciones);
+            //$arConfiguracion->setAfectaVacacionesParafiscales($afectaVacacionesParafiscales);
             $arrControles = $request->request->All();
             $intIndiceConsecutivo = 0;
                     foreach ($arrControles['LblCodigo'] as $intCodigo) {
