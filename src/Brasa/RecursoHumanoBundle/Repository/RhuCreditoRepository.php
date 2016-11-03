@@ -13,7 +13,7 @@ class RhuCreditoRepository extends EntityRepository {
     
     public function listaDQL($strIdentificacion = "", $strDesde = "", $strHasta = "") {        
         $em = $this->getEntityManager();
-        $dql   = "SELECT c, e FROM BrasaRecursoHumanoBundle:RhuCredito c JOIN c.empleadoRel e WHERE c.codigoCreditoPk <> 0 AND c.estadoPagado <> 1 AND c.aprobado <> 0";   
+        $dql   = "SELECT c, e FROM BrasaRecursoHumanoBundle:RhuCredito c JOIN c.empleadoRel e WHERE c.codigoCreditoPk <> 0 AND c.estadoPagado <> 1";   
         if($strIdentificacion != "" ) {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
         }
@@ -50,7 +50,7 @@ class RhuCreditoRepository extends EntityRepository {
     
     public function fechaAntigua() {        
         $em = $this->getEntityManager();
-        $dql   = "SELECT min(c.fecha) FROM BrasaRecursoHumanoBundle:RhuCredito c WHERE c.estadoPagado <> 1 AND c.aprobado <> 0";
+        $dql   = "SELECT min(c.fecha) FROM BrasaRecursoHumanoBundle:RhuCredito c WHERE c.estadoPagado <> 1";
         $query = $em->createQuery($dql);
         $fechaAntigua = $query->getSingleScalarResult(); 
         return $fechaAntigua;
@@ -78,7 +78,6 @@ class RhuCreditoRepository extends EntityRepository {
                 . "WHERE c.codigoEmpleadoFk = " . $codigoEmpleado . " "
                 . "AND c.codigoCreditoTipoPagoFk = 1 "
                 . "AND c.estadoPagado = 0 "
-                . "AND c.aprobado = 1 "
                 . "AND c.estadoSuspendido = 0";
         $query = $em->createQuery($dql);
         $floCuota = $query->getSingleScalarResult();
@@ -98,7 +97,6 @@ class RhuCreditoRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuCredito c "
                 . "WHERE c.saldo > 0 "
-                . "AND c.aprobado = 1 "
                 . "AND c.codigoEmpleadoFk = " . $codigoEmpleado;
         $query = $em->createQuery($dql);
         $arCreditos = $query->getResult();
@@ -109,7 +107,6 @@ class RhuCreditoRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $dql   = "SELECT SUM(c.saldo) FROM BrasaRecursoHumanoBundle:RhuCredito c "
                 . "WHERE c.saldoTotal > 0 "
-                . "AND c.aprobado = 1"
                 . "AND c.codigoEmpleadoFk = " . $codigoEmpleado;
         $query = $em->createQuery($dql);
         $arCreditos = $query->getResult();
