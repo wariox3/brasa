@@ -231,7 +231,11 @@ class TurSecuenciaDetalle
      * @ORM\Column(name="horas", type="integer")
      */    
     private $horas = 0;    
-      
+
+    /**
+     * @ORM\Column(name="dias", type="integer")
+     */    
+    private $dias = 0;    
 
     /**
      * Get codigoSecuenciaPk
@@ -1283,5 +1287,29 @@ class TurSecuenciaDetalle
     public function getCodigoSecuenciaFk()
     {
         return $this->codigoSecuenciaFk;
+    }
+
+    /**
+     * Set dias
+     *
+     * @param integer $dias
+     *
+     * @return TurSecuenciaDetalle
+     */
+    public function setDias($dias)
+    {
+        $this->dias = $dias;
+
+        return $this;
+    }
+
+    /**
+     * Get dias
+     *
+     * @return integer
+     */
+    public function getDias()
+    {
+        return $this->dias;
     }
 }

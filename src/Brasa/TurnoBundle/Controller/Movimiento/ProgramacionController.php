@@ -254,7 +254,7 @@ class ProgramacionController extends Controller
                     return $er->createQueryBuilder('s')
                     ->orderBy('s.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))                  
+                'required' => false))                  
             ->add('TxtCodigoRecurso', 'text')
             ->add('TxtNombreRecurso', 'text')                 
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
@@ -283,6 +283,110 @@ class ProgramacionController extends Controller
                             $arProgramacionDetalle->setMes($arProgramacion->getFecha()->format('m'));
                             if($arRecurso) {
                                 $arProgramacionDetalle->setRecursoRel($arRecurso);
+                            }
+                            
+                            $arSecuenciaDetalle = $form->get('secuenciaDetalleRel')->getData();
+                            if($arSecuenciaDetalle) {
+                                $arrSecuenciaDetalle = $em->getRepository('BrasaTurnoBundle:TurSecuenciaDetalle')->convertirArray($arSecuenciaDetalle);
+                                $intUltimoDia = $strUltimoDiaMes = date("d",(mktime(0,0,0,$arProgramacion->getFecha()->format('m')+1,1,$arProgramacion->getFecha()->format('Y'))-1));
+                                $j = 1;
+                                for($i=1; $i<=$intUltimoDia; $i++) {
+                                    if($i == 1) {
+                                        $arProgramacionDetalle->setDia1($arrSecuenciaDetalle[$j]);
+                                    }
+                                    if($i == 2) {
+                                        $arProgramacionDetalle->setDia2($arrSecuenciaDetalle[$j]);
+                                    }
+                                    if($i == 3) {
+                                        $arProgramacionDetalle->setDia3($arrSecuenciaDetalle[$j]);
+                                    }
+                                    if($i == 4) {
+                                        $arProgramacionDetalle->setDia4($arrSecuenciaDetalle[$j]);
+                                    }
+                                    if($i == 5) {
+                                        $arProgramacionDetalle->setDia5($arrSecuenciaDetalle[$j]);
+                                    }
+                                    if($i == 6) {
+                                        $arProgramacionDetalle->setDia6($arrSecuenciaDetalle[$j]);
+                                    }
+                                    if($i == 7) {
+                                        $arProgramacionDetalle->setDia7($arrSecuenciaDetalle[$j]);
+                                    }
+                                    if($i == 8) {
+                                        $arProgramacionDetalle->setDia8($arrSecuenciaDetalle[$j]);
+                                    }
+                                    if($i == 9) {
+                                        $arProgramacionDetalle->setDia9($arrSecuenciaDetalle[$j]);
+                                    }
+                                    if($i == 10) {
+                                        $arProgramacionDetalle->setDia10($arrSecuenciaDetalle[$j]);
+                                    }
+                                    if($i == 11) {
+                                        $arProgramacionDetalle->setDia11($arrSecuenciaDetalle[$j]);
+                                    }
+                                    if($i == 12) {
+                                        $arProgramacionDetalle->setDia12($arrSecuenciaDetalle[$j]);
+                                    }
+                                    if($i == 13) {
+                                        $arProgramacionDetalle->setDia13($arrSecuenciaDetalle[$j]);
+                                    }
+                                    if($i == 14) {
+                                        $arProgramacionDetalle->setDia14($arrSecuenciaDetalle[$j]);
+                                    }
+                                    if($i == 15) {
+                                        $arProgramacionDetalle->setDia15($arrSecuenciaDetalle[$j]);
+                                    }
+                                    if($i == 16) {
+                                        $arProgramacionDetalle->setDia16($arrSecuenciaDetalle[$j]);
+                                    }
+                                    if($i == 17) {
+                                        $arProgramacionDetalle->setDia17($arrSecuenciaDetalle[$j]);
+                                    }
+                                    if($i == 18) {
+                                        $arProgramacionDetalle->setDia18($arrSecuenciaDetalle[$j]);
+                                    }
+                                    if($i == 19) {
+                                        $arProgramacionDetalle->setDia19($arrSecuenciaDetalle[$j]);
+                                    }
+                                    if($i == 20) {
+                                        $arProgramacionDetalle->setDia20($arrSecuenciaDetalle[$j]);
+                                    }
+                                    if($i == 21) {
+                                        $arProgramacionDetalle->setDia21($arrSecuenciaDetalle[$j]);
+                                    }
+                                    if($i == 22) {
+                                        $arProgramacionDetalle->setDia22($arrSecuenciaDetalle[$j]);
+                                    }
+                                    if($i == 23) {
+                                        $arProgramacionDetalle->setDia23($arrSecuenciaDetalle[$j]);
+                                    }
+                                    if($i == 24) {
+                                        $arProgramacionDetalle->setDia24($arrSecuenciaDetalle[$j]);
+                                    }
+                                    if($i == 25) {
+                                        $arProgramacionDetalle->setDia25($arrSecuenciaDetalle[$j]);
+                                    }
+                                    if($i == 26) {
+                                        $arProgramacionDetalle->setDia26($arrSecuenciaDetalle[$j]);
+                                    }
+                                    if($i == 27) {
+                                        $arProgramacionDetalle->setDia27($arrSecuenciaDetalle[$j]);
+                                    }
+                                    if($i == 28) {
+                                        $arProgramacionDetalle->setDia28($arrSecuenciaDetalle[$j]);
+                                    }
+                                    if($i == 29) {
+                                        $arProgramacionDetalle->setDia29($arrSecuenciaDetalle[$j]);
+                                    }
+                                    if($i == 30) {
+                                        $arProgramacionDetalle->setDia30($arrSecuenciaDetalle[$j]);
+                                    }      
+                                    if($i == 31) {
+                                        $arProgramacionDetalle->setDia31($arrSecuenciaDetalle[$j]);
+                                    }                                                                                                             
+                                    $j++;
+                                    if($j > $arrSecuenciaDetalle['dias']) { $j=1;}
+                                }                                
                             }
                             $em->persist($arProgramacionDetalle);
                         }
