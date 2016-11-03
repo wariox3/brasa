@@ -159,6 +159,7 @@ class ConfiguracionController extends Controller
             ->add('aportesPorcentajeCaja', 'number', array('data' => $arConfiguracion->getAportesPorcentajeCaja(), 'required' => true))
             ->add('aportesPorcentajeVacaciones', 'number', array('data' => $arConfiguracion->getAportesPorcentajeVacaciones(), 'required' => true))
             ->add('tipoBasePagoVacaciones', 'choice', array('choices' => array('1' => 'SALARIO', '2' => 'SALARIO PRESTACIONAL', '3' => 'SALARIO+RECARGOS NOCTURNOS', '0' => 'SIN ASIGNAR'), 'data' => $arConfiguracion->getTipoBasePagoVacaciones()))
+            ->add('tipoPlanillaSso', 'choice', array('choices' => array('1' => 'SUCURSAL', '2' => 'UNICA'), 'data' => $arConfiguracion->getTipoPlanillaSso()))
             ->add('cuentaNominaPagar', 'number', array('data' => $arConfiguracion->getCuentaNominaPagar(), 'required' => true))
             ->add('cuentaPago', 'number', array('data' => $arConfiguracion->getCuentaPago(), 'required' => true))
             ->add('conceptoVacacion', 'entity', $arrayPropiedadesConceptoVacacion, array('required' => true))
@@ -197,6 +198,7 @@ class ConfiguracionController extends Controller
             $tipoBasePagoVacaciones = $controles['tipoBasePagoVacaciones'];
             $codigoConceptoVacacion = $controles['conceptoVacacion'];
             $afectaVacacionesParafiscales = $controles['afectaVacacionesParafiscales'];
+            $tipoPlanillaSso = $controles['tipoPlanillaSso'];
             // guardar la tarea en la base de datos
             $arConfiguracion->setCodigoAuxilioTransporte($codigoConceptoAuxilioTransporte);
             $arConfiguracion->setVrAuxilioTransporte($ValorAuxilioTransporte);
@@ -223,6 +225,7 @@ class ConfiguracionController extends Controller
             $arConfiguracion->setAportesPorcentajeVacaciones($aportesPorcentajeVacaciones);
             $arConfiguracion->setTipoBasePagoVacaciones($tipoBasePagoVacaciones);
             //$arConfiguracion->setAfectaVacacionesParafiscales($afectaVacacionesParafiscales);
+            $arConfiguracion->setTipoPlanillaSso($tipoPlanillaSso);
             $arrControles = $request->request->All();
             $intIndiceConsecutivo = 0;
                     foreach ($arrControles['LblCodigo'] as $intCodigo) {

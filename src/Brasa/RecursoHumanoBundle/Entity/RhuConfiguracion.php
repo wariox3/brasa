@@ -297,7 +297,13 @@ class RhuConfiguracion
      * Si esta activado muestra el mensaje en la colilla de pago
      * @ORM\Column(name="imprimir_mensaje_pago", type="boolean")
      */
-    private $imprimirMensajePago = false;    
+    private $imprimirMensajePago = false;   
+    
+    /**
+     * Tipo de planilla pago seguridad social 1-sucursal 2-unica
+     * @ORM\Column(name="tipo_planilla_sso", type="integer")
+     */
+    private $tipoPlanillaSso = 1;
     
     
     /**
@@ -306,6 +312,8 @@ class RhuConfiguracion
      */
     protected $entidadRiesgoProfesionalRel;  
         
+
+    
 
     /**
      * Set codigoConfiguracionPk
@@ -1412,6 +1420,30 @@ class RhuConfiguracion
     }
 
     /**
+     * Set codigoAjusteDevengado
+     *
+     * @param integer $codigoAjusteDevengado
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoAjusteDevengado($codigoAjusteDevengado)
+    {
+        $this->codigoAjusteDevengado = $codigoAjusteDevengado;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoAjusteDevengado
+     *
+     * @return integer
+     */
+    public function getCodigoAjusteDevengado()
+    {
+        return $this->codigoAjusteDevengado;
+    }
+
+    /**
      * Set afectaVacacionesParafiscales
      *
      * @param boolean $afectaVacacionesParafiscales
@@ -1628,54 +1660,6 @@ class RhuConfiguracion
     }
 
     /**
-     * Set entidadRiesgoProfesionalRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel
-     *
-     * @return RhuConfiguracion
-     */
-    public function setEntidadRiesgoProfesionalRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel = null)
-    {
-        $this->entidadRiesgoProfesionalRel = $entidadRiesgoProfesionalRel;
-
-        return $this;
-    }
-
-    /**
-     * Get entidadRiesgoProfesionalRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional
-     */
-    public function getEntidadRiesgoProfesionalRel()
-    {
-        return $this->entidadRiesgoProfesionalRel;
-    }
-
-    /**
-     * Set codigoAjusteDevengado
-     *
-     * @param integer $codigoAjusteDevengado
-     *
-     * @return RhuConfiguracion
-     */
-    public function setCodigoAjusteDevengado($codigoAjusteDevengado)
-    {
-        $this->codigoAjusteDevengado = $codigoAjusteDevengado;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoAjusteDevengado
-     *
-     * @return integer
-     */
-    public function getCodigoAjusteDevengado()
-    {
-        return $this->codigoAjusteDevengado;
-    }
-
-    /**
      * Set imprimirMensajePago
      *
      * @param boolean $imprimirMensajePago
@@ -1697,5 +1681,53 @@ class RhuConfiguracion
     public function getImprimirMensajePago()
     {
         return $this->imprimirMensajePago;
+    }
+
+    /**
+     * Set tipoPlanillaSso
+     *
+     * @param integer $tipoPlanillaSso
+     *
+     * @return RhuConfiguracion
+     */
+    public function setTipoPlanillaSso($tipoPlanillaSso)
+    {
+        $this->tipoPlanillaSso = $tipoPlanillaSso;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoPlanillaSso
+     *
+     * @return integer
+     */
+    public function getTipoPlanillaSso()
+    {
+        return $this->tipoPlanillaSso;
+    }
+
+    /**
+     * Set entidadRiesgoProfesionalRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel
+     *
+     * @return RhuConfiguracion
+     */
+    public function setEntidadRiesgoProfesionalRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel = null)
+    {
+        $this->entidadRiesgoProfesionalRel = $entidadRiesgoProfesionalRel;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadRiesgoProfesionalRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional
+     */
+    public function getEntidadRiesgoProfesionalRel()
+    {
+        return $this->entidadRiesgoProfesionalRel;
     }
 }
