@@ -437,7 +437,7 @@ class RhuLiquidacionRepository extends EntityRepository {
         while($intDiasAcumulados <= $intDias) {            
             //echo $intDiasAcumulados . "(" . $i . ")" . "(" . $intMes . ")" . "(" . $intAnio . ")" . "<br />";
             $fechaHastaPeriodo = $intAnio . "-" . $intMes . "-" . $i;
-            if($i == 30) {
+            if($i == 30 || $i == 31) {
                 $i = 1;                
                 if($intMes == 12) {
                     $intMes = 1;
