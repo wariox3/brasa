@@ -282,6 +282,9 @@ class GenerarSoportePagoController extends Controller
                 $this->generarExcel();
             }
             if ($form->get('BtnExcelPago')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 106)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }                
                 $this->listaDetalle("", $codigoSoportePagoPeriodo);
                 $this->generarExcelPago();
             }            

@@ -1218,6 +1218,30 @@ INSERT INTO `gen_tipo_identificacion` (`codigo_tipo_identificacion_pk`, `nombre`
 INSERT INTO `gen_tipo_identificacion` (`codigo_tipo_identificacion_pk`, `nombre`, `codigo_interface`) VALUES('41','PASAPORTE','PA');
 INSERT INTO `gen_tipo_identificacion` (`codigo_tipo_identificacion_pk`, `nombre`, `codigo_interface`) VALUES('42','TIPO DOCUMENTO EXTRANJERO','TDE');
 
+insert into `gen_cobertura` (`codigo_cobertura_pk`, `nombre`) values('1','LOCAL');
+insert into `gen_cobertura` (`codigo_cobertura_pk`, `nombre`) values('2','INTERNACIONAL');
+insert into `gen_cobertura` (`codigo_cobertura_pk`, `nombre`) values('3','NACIONAL');
+
+insert into `gen_dimension` (`codigo_dimension_pk`, `nombre`) values('1','MEDIANA');
+insert into `gen_dimension` (`codigo_dimension_pk`, `nombre`) values('2','PEQUEÑA');
+insert into `gen_dimension` (`codigo_dimension_pk`, `nombre`) values('3','GRANDE');
+
+insert into `gen_origen_capital` (`codigo_origen_capital_pk`, `nombre`) values('1','ESTATAL');
+insert into `gen_origen_capital` (`codigo_origen_capital_pk`, `nombre`) values('2','PRIVADO');
+
+insert into `gen_origen_judicial` (`codigo_origen_judicial_pk`, `nombre`) values('1','PERSONA JURIDICA');
+insert into `gen_origen_judicial` (`codigo_origen_judicial_pk`, `nombre`) values('2','PERSONA NATURAL');
+
+insert into `gen_sector_economico` (`codigo_sector_economico_pk`, `nombre`) values('1','COMERCIO');
+insert into `gen_sector_economico` (`codigo_sector_economico_pk`, `nombre`) values('2','CONSTRUCCION');
+insert into `gen_sector_economico` (`codigo_sector_economico_pk`, `nombre`) values('3','EDUCATIVO');
+insert into `gen_sector_economico` (`codigo_sector_economico_pk`, `nombre`) values('4','INDUSTRIAL');
+insert into `gen_sector_economico` (`codigo_sector_economico_pk`, `nombre`) values('5','MINERO Y ENERGETICO');
+insert into `gen_sector_economico` (`codigo_sector_economico_pk`, `nombre`) values('6','PROPIEDAD HORIZONTAL');
+insert into `gen_sector_economico` (`codigo_sector_economico_pk`, `nombre`) values('7','RESIDENCIAL');
+insert into `gen_sector_economico` (`codigo_sector_economico_pk`, `nombre`) values('8','SALUD');
+insert into `gen_sector_economico` (`codigo_sector_economico_pk`, `nombre`) values('9','SERVICIOS');
+
 /** Administracion documental **/
 INSERT INTO `ad_directorio` (`codigo_directorio_pk`, `numero`, `nombre`, `numeroArchivos`, `ruta_principal`) VALUES('1','1','1','36','/bodegadocumentos/archivos/');
 
@@ -5816,6 +5840,7 @@ INSERT INTO `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tip
 INSERT INTO `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) VALUES('103','AFILIACIONES PAGADAS','CONSULTA','AFILIACION');
 INSERT INTO `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) VALUES('104','GENERAR PERIODO','PROCESO','AFILIACION');
 INSERT INTO `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) VALUES('105','ACTUALIZAR CLIENTE CARTERA','PROCESO','AFILIACION');
+INSERT INTO `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) VALUES('106','EXPORTAR SOPORTE PAGO VALORES NOMINA','PROCESO','TURNOS');
 
 insert into `rhu_visita_tipo` (`codigo_visita_tipo_pk`, `nombre`) values('1','PERIODICO');
 insert into `rhu_visita_tipo` (`codigo_visita_tipo_pk`, `nombre`) values('2','INGRESO');
