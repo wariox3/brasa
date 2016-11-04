@@ -179,7 +179,7 @@ class RhuCentroCosto
     private $descansoCompensacionFijo = false;    
     
     /**
-     * @ORM\Column(name="dias_descanso_compensacionFijo", type="integer", nullable=true)
+     * @ORM\Column(name="dias_descanso_compensacion_fijo", type="integer", nullable=true)
      */    
     private $diasDescansoCompensacionFijo = 0;     
     
@@ -316,7 +316,7 @@ class RhuCentroCosto
      * @ORM\OneToMany(targetEntity="Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo", mappedBy="centroCostoRel")
      */
     protected $turSoportesPagosPeriodosCentroCostoRel;     
-    
+       
     /**
      * Constructor
      */
@@ -342,6 +342,7 @@ class RhuCentroCosto
         $this->permisosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->cartasCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->soportesPagosHorariosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->turSoportesPagosPeriodosCentroCostoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -928,6 +929,246 @@ class RhuCentroCosto
     public function getCodigoRecursoGrupoFk()
     {
         return $this->codigoRecursoGrupoFk;
+    }
+
+    /**
+     * Set generaSoportePago
+     *
+     * @param boolean $generaSoportePago
+     *
+     * @return RhuCentroCosto
+     */
+    public function setGeneraSoportePago($generaSoportePago)
+    {
+        $this->generaSoportePago = $generaSoportePago;
+
+        return $this;
+    }
+
+    /**
+     * Get generaSoportePago
+     *
+     * @return boolean
+     */
+    public function getGeneraSoportePago()
+    {
+        return $this->generaSoportePago;
+    }
+
+    /**
+     * Set descansoOrdinario
+     *
+     * @param boolean $descansoOrdinario
+     *
+     * @return RhuCentroCosto
+     */
+    public function setDescansoOrdinario($descansoOrdinario)
+    {
+        $this->descansoOrdinario = $descansoOrdinario;
+
+        return $this;
+    }
+
+    /**
+     * Get descansoOrdinario
+     *
+     * @return boolean
+     */
+    public function getDescansoOrdinario()
+    {
+        return $this->descansoOrdinario;
+    }
+
+    /**
+     * Set secuencia
+     *
+     * @param integer $secuencia
+     *
+     * @return RhuCentroCosto
+     */
+    public function setSecuencia($secuencia)
+    {
+        $this->secuencia = $secuencia;
+
+        return $this;
+    }
+
+    /**
+     * Get secuencia
+     *
+     * @return integer
+     */
+    public function getSecuencia()
+    {
+        return $this->secuencia;
+    }
+
+    /**
+     * Set codigoTurnoFijoNominaFk
+     *
+     * @param string $codigoTurnoFijoNominaFk
+     *
+     * @return RhuCentroCosto
+     */
+    public function setCodigoTurnoFijoNominaFk($codigoTurnoFijoNominaFk)
+    {
+        $this->codigoTurnoFijoNominaFk = $codigoTurnoFijoNominaFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTurnoFijoNominaFk
+     *
+     * @return string
+     */
+    public function getCodigoTurnoFijoNominaFk()
+    {
+        return $this->codigoTurnoFijoNominaFk;
+    }
+
+    /**
+     * Set codigoTurnoFijoDescansoFk
+     *
+     * @param string $codigoTurnoFijoDescansoFk
+     *
+     * @return RhuCentroCosto
+     */
+    public function setCodigoTurnoFijoDescansoFk($codigoTurnoFijoDescansoFk)
+    {
+        $this->codigoTurnoFijoDescansoFk = $codigoTurnoFijoDescansoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoTurnoFijoDescansoFk
+     *
+     * @return string
+     */
+    public function getCodigoTurnoFijoDescansoFk()
+    {
+        return $this->codigoTurnoFijoDescansoFk;
+    }
+
+    /**
+     * Set diasDescansoFijo
+     *
+     * @param integer $diasDescansoFijo
+     *
+     * @return RhuCentroCosto
+     */
+    public function setDiasDescansoFijo($diasDescansoFijo)
+    {
+        $this->diasDescansoFijo = $diasDescansoFijo;
+
+        return $this;
+    }
+
+    /**
+     * Get diasDescansoFijo
+     *
+     * @return integer
+     */
+    public function getDiasDescansoFijo()
+    {
+        return $this->diasDescansoFijo;
+    }
+
+    /**
+     * Set descansoCompensacionDominicales
+     *
+     * @param boolean $descansoCompensacionDominicales
+     *
+     * @return RhuCentroCosto
+     */
+    public function setDescansoCompensacionDominicales($descansoCompensacionDominicales)
+    {
+        $this->descansoCompensacionDominicales = $descansoCompensacionDominicales;
+
+        return $this;
+    }
+
+    /**
+     * Get descansoCompensacionDominicales
+     *
+     * @return boolean
+     */
+    public function getDescansoCompensacionDominicales()
+    {
+        return $this->descansoCompensacionDominicales;
+    }
+
+    /**
+     * Set descansoCompensacionFijo
+     *
+     * @param boolean $descansoCompensacionFijo
+     *
+     * @return RhuCentroCosto
+     */
+    public function setDescansoCompensacionFijo($descansoCompensacionFijo)
+    {
+        $this->descansoCompensacionFijo = $descansoCompensacionFijo;
+
+        return $this;
+    }
+
+    /**
+     * Get descansoCompensacionFijo
+     *
+     * @return boolean
+     */
+    public function getDescansoCompensacionFijo()
+    {
+        return $this->descansoCompensacionFijo;
+    }
+
+    /**
+     * Set diasDescansoCompensacionFijo
+     *
+     * @param integer $diasDescansoCompensacionFijo
+     *
+     * @return RhuCentroCosto
+     */
+    public function setDiasDescansoCompensacionFijo($diasDescansoCompensacionFijo)
+    {
+        $this->diasDescansoCompensacionFijo = $diasDescansoCompensacionFijo;
+
+        return $this;
+    }
+
+    /**
+     * Get diasDescansoCompensacionFijo
+     *
+     * @return integer
+     */
+    public function getDiasDescansoCompensacionFijo()
+    {
+        return $this->diasDescansoCompensacionFijo;
+    }
+
+    /**
+     * Set pagarDia31
+     *
+     * @param boolean $pagarDia31
+     *
+     * @return RhuCentroCosto
+     */
+    public function setPagarDia31($pagarDia31)
+    {
+        $this->pagarDia31 = $pagarDia31;
+
+        return $this;
+    }
+
+    /**
+     * Get pagarDia31
+     *
+     * @return boolean
+     */
+    public function getPagarDia31()
+    {
+        return $this->pagarDia31;
     }
 
     /**
@@ -1707,30 +1948,6 @@ class RhuCentroCosto
     }
 
     /**
-     * Set descansoOrdinario
-     *
-     * @param boolean $descansoOrdinario
-     *
-     * @return RhuCentroCosto
-     */
-    public function setDescansoOrdinario($descansoOrdinario)
-    {
-        $this->descansoOrdinario = $descansoOrdinario;
-
-        return $this;
-    }
-
-    /**
-     * Get descansoOrdinario
-     *
-     * @return boolean
-     */
-    public function getDescansoOrdinario()
-    {
-        return $this->descansoOrdinario;
-    }
-
-    /**
      * Add turSoportesPagosPeriodosCentroCostoRel
      *
      * @param \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo $turSoportesPagosPeriodosCentroCostoRel
@@ -1762,221 +1979,5 @@ class RhuCentroCosto
     public function getTurSoportesPagosPeriodosCentroCostoRel()
     {
         return $this->turSoportesPagosPeriodosCentroCostoRel;
-    }
-
-    /**
-     * Set secuencia
-     *
-     * @param integer $secuencia
-     *
-     * @return RhuCentroCosto
-     */
-    public function setSecuencia($secuencia)
-    {
-        $this->secuencia = $secuencia;
-
-        return $this;
-    }
-
-    /**
-     * Get secuencia
-     *
-     * @return integer
-     */
-    public function getSecuencia()
-    {
-        return $this->secuencia;
-    }
-
-    /**
-     * Set codigoTurnoFijoNominaFk
-     *
-     * @param string $codigoTurnoFijoNominaFk
-     *
-     * @return RhuCentroCosto
-     */
-    public function setCodigoTurnoFijoNominaFk($codigoTurnoFijoNominaFk)
-    {
-        $this->codigoTurnoFijoNominaFk = $codigoTurnoFijoNominaFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoTurnoFijoNominaFk
-     *
-     * @return string
-     */
-    public function getCodigoTurnoFijoNominaFk()
-    {
-        return $this->codigoTurnoFijoNominaFk;
-    }
-
-    /**
-     * Set codigoTurnoFijoDescansoFk
-     *
-     * @param string $codigoTurnoFijoDescansoFk
-     *
-     * @return RhuCentroCosto
-     */
-    public function setCodigoTurnoFijoDescansoFk($codigoTurnoFijoDescansoFk)
-    {
-        $this->codigoTurnoFijoDescansoFk = $codigoTurnoFijoDescansoFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoTurnoFijoDescansoFk
-     *
-     * @return string
-     */
-    public function getCodigoTurnoFijoDescansoFk()
-    {
-        return $this->codigoTurnoFijoDescansoFk;
-    }
-
-    /**
-     * Set diasDescansoFijo
-     *
-     * @param integer $diasDescansoFijo
-     *
-     * @return RhuCentroCosto
-     */
-    public function setDiasDescansoFijo($diasDescansoFijo)
-    {
-        $this->diasDescansoFijo = $diasDescansoFijo;
-
-        return $this;
-    }
-
-    /**
-     * Get diasDescansoFijo
-     *
-     * @return integer
-     */
-    public function getDiasDescansoFijo()
-    {
-        return $this->diasDescansoFijo;
-    }
-
-    /**
-     * Set generaSoportePago
-     *
-     * @param boolean $generaSoportePago
-     *
-     * @return RhuCentroCosto
-     */
-    public function setGeneraSoportePago($generaSoportePago)
-    {
-        $this->generaSoportePago = $generaSoportePago;
-
-        return $this;
-    }
-
-    /**
-     * Get generaSoportePago
-     *
-     * @return boolean
-     */
-    public function getGeneraSoportePago()
-    {
-        return $this->generaSoportePago;
-    }
-
-    /**
-     * Set descansoCompensacionDominicales
-     *
-     * @param boolean $descansoCompensacionDominicales
-     *
-     * @return RhuCentroCosto
-     */
-    public function setDescansoCompensacionDominicales($descansoCompensacionDominicales)
-    {
-        $this->descansoCompensacionDominicales = $descansoCompensacionDominicales;
-
-        return $this;
-    }
-
-    /**
-     * Get descansoCompensacionDominicales
-     *
-     * @return boolean
-     */
-    public function getDescansoCompensacionDominicales()
-    {
-        return $this->descansoCompensacionDominicales;
-    }
-
-    /**
-     * Set descansoCompensacionFijo
-     *
-     * @param boolean $descansoCompensacionFijo
-     *
-     * @return RhuCentroCosto
-     */
-    public function setDescansoCompensacionFijo($descansoCompensacionFijo)
-    {
-        $this->descansoCompensacionFijo = $descansoCompensacionFijo;
-
-        return $this;
-    }
-
-    /**
-     * Get descansoCompensacionFijo
-     *
-     * @return boolean
-     */
-    public function getDescansoCompensacionFijo()
-    {
-        return $this->descansoCompensacionFijo;
-    }
-
-    /**
-     * Set diasDescansoCompensacionFijo
-     *
-     * @param integer $diasDescansoCompensacionFijo
-     *
-     * @return RhuCentroCosto
-     */
-    public function setDiasDescansoCompensacionFijo($diasDescansoCompensacionFijo)
-    {
-        $this->diasDescansoCompensacionFijo = $diasDescansoCompensacionFijo;
-
-        return $this;
-    }
-
-    /**
-     * Get diasDescansoCompensacionFijo
-     *
-     * @return integer
-     */
-    public function getDiasDescansoCompensacionFijo()
-    {
-        return $this->diasDescansoCompensacionFijo;
-    }
-
-    /**
-     * Set pagarDia31
-     *
-     * @param boolean $pagarDia31
-     *
-     * @return RhuCentroCosto
-     */
-    public function setPagarDia31($pagarDia31)
-    {
-        $this->pagarDia31 = $pagarDia31;
-
-        return $this;
-    }
-
-    /**
-     * Get pagarDia31
-     *
-     * @return boolean
-     */
-    public function getPagarDia31()
-    {
-        return $this->pagarDia31;
     }
 }

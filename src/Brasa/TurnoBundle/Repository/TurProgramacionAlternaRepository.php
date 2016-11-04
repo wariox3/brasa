@@ -4,7 +4,17 @@ namespace Brasa\TurnoBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
-class TurProgramacionAlternaRepository extends EntityRepository {              
+class TurProgramacionAlternaRepository extends EntityRepository {      
+    public function listaDql($codigoSoportePagoPeriodo = "") {
+        $dql   = "SELECT pa FROM BrasaTurnoBundle:TurProgramacionAlterna pa WHERE pa.codigoProgramacionAlternaPk <> 0 ";
+        
+        if($codigoSoportePagoPeriodo != '') {
+            $dql .= " AND pa.codigoSoportePagoPeriodoFk = " . $codigoSoportePagoPeriodo;  
+        }        
+        //$dql .= " ORDER BY pd.codigoPuestoFk";
+        return $dql;
+    }     
+    
     public function periodoDias($anio, $mes, $codigoRecurso = "") {
         $em = $this->getEntityManager();
         $dql   = "SELECT pa.codigoProgramacionAlternaPk, pa.dia1, pa.dia2, pa.dia3, pa.dia4, pa.dia5, pa.dia6, pa.dia7, pa.dia8, pa.dia9, pa.dia10, "

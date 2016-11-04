@@ -488,7 +488,7 @@ class GenerarSoportePagoController extends Controller
         $paginator  = $this->get('knp_paginator');
         $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
         $arSoportePagoPeriodo =  $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);                                        
-        $form = $this->formularioInconsistencias();
+        $form = $this->formularioVerProgramacionAlterna();
         $form->handleRequest($request);        
         if ($form->isValid()) {
             if ($form->get('BtnAnalizar')->isClicked()) {  
@@ -496,11 +496,21 @@ class GenerarSoportePagoController extends Controller
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago_inconsistencia', array('codigoSoportePagoPeriodo' => $codigoSoportePagoPeriodo)));                                
             }
         }        
-        
-        $dql =  $em->getRepository('BrasaTurnoBundle:TurSoportePagoInconsistencia')->listaDql($codigoSoportePagoPeriodo);                        
-        $arSoportePagoInconsistencia = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 500);        
+        $strAnio = $arSoportePagoPeriodo->getFechaDesde()->format('Y');
+        $strMes = $arSoportePagoPeriodo->getFechaDesde()->format('m');
+        $strAnioMes = $arSoportePagoPeriodo->getFechaDesde()->format('Y/m');
+        $arrDiaSemana = array();
+        for($i = 1; $i <= 31; $i++) {
+            $strFecha = $strAnioMes . '/' . $i;
+            $dateFecha = date_create($strFecha);
+            $diaSemana = $this->devuelveDiaSemanaEspaniol($dateFecha);
+            $arrDiaSemana[$i] = array('dia' => $i, 'diaSemana' => $diaSemana);
+        }        
+        $dql =  $em->getRepository('BrasaTurnoBundle:TurProgramacionAlterna')->listaDql($codigoSoportePagoPeriodo);                        
+        $arProgramacionAlterna = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 500);        
         return $this->render('BrasaTurnoBundle:Procesos/GenerarSoportePago:verProgramacion.html.twig', array(                        
-            'arSoportePagoInconsistencia' => $arSoportePagoInconsistencia,
+            'arProgramacionAlterna' => $arProgramacionAlterna,
+            'arrDiaSemana' => $arrDiaSemana,
             'form' => $form->createView()));
     }     
     
@@ -609,6 +619,13 @@ class GenerarSoportePagoController extends Controller
     private function formularioInconsistencias() {
         $form = $this->createFormBuilder()     
             ->add('BtnAnalizar', 'submit', array('label'  => 'Analizar'))                
+            ->getForm();
+        return $form;
+    }    
+    
+    private function formularioVerProgramacionAlterna() {
+        $form = $this->createFormBuilder()     
+                            
             ->getForm();
         return $form;
     }    
