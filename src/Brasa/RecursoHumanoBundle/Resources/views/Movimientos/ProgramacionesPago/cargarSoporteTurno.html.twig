@@ -20,10 +20,17 @@
                 <td>{{ arSoportePagoPeriodos.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arSoportePagoPeriodos.fechaHasta |date("Y/m/d")  }}</td>  
                 <td style="text-align: right">{{ arSoportePagoPeriodos.recursos | number_format(0, '.', ',') }}</td>
-                {% if arSoportePagoPeriodos.inconsistencias == 0 %}
+                {% if arSoportePagoPeriodos.inconsistencias == 0 and arSoportePagoPeriodos.estadoAprobadoPagoNomina == 1 %}
                     <td><button class="btn btn-default btn-xs" type="submit" name="OpCargar" value="{{ arSoportePagoPeriodos.codigoSoportePagoPeriodoPk }}">Cargar</button></td>
                 {% else %}
-                    <td>El soporte tiene inconsistencias</td>
+                    <td>
+                        {% if arSoportePagoPeriodos.inconsistencias == 1 %}
+                            Inconsistencias 
+                        {% endif %}
+                        {% if arSoportePagoPeriodos.estadoAprobadoPagoNomina == 0 %}                            
+                            Sin aprobar para pago nomina
+                        {% endif %}
+                    </td>
                 {% endif %}
             </tr>
 

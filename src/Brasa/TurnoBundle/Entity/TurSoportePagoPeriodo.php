@@ -103,6 +103,16 @@ class TurSoportePagoPeriodo
      */    
     private $estadoBloquearProgramacion = false;    
     
+    /**     
+     * @ORM\Column(name="estado_bloqueo_nomina", type="boolean")
+     */    
+    private $estadoBloqueoNomina = false;    
+
+    /**     
+     * @ORM\Column(name="estado_aprobado_pago_nomina", type="boolean")
+     */    
+    private $estadoAprobadoPagoNomina = false;
+    
     /**
      * @ORM\Column(name="dia_festivo_real", type="integer")
      */    
@@ -1006,5 +1016,53 @@ class TurSoportePagoPeriodo
     public function getPagarDia31()
     {
         return $this->pagarDia31;
+    }
+
+    /**
+     * Set estadoBloqueoNomina
+     *
+     * @param boolean $estadoBloqueoNomina
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setEstadoBloqueoNomina($estadoBloqueoNomina)
+    {
+        $this->estadoBloqueoNomina = $estadoBloqueoNomina;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoBloqueoNomina
+     *
+     * @return boolean
+     */
+    public function getEstadoBloqueoNomina()
+    {
+        return $this->estadoBloqueoNomina;
+    }
+
+    /**
+     * Set estadoAprobadoPagoNomina
+     *
+     * @param boolean $estadoAprobadoPagoNomina
+     *
+     * @return TurSoportePagoPeriodo
+     */
+    public function setEstadoAprobadoPagoNomina($estadoAprobadoPagoNomina)
+    {
+        $this->estadoAprobadoPagoNomina = $estadoAprobadoPagoNomina;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAprobadoPagoNomina
+     *
+     * @return boolean
+     */
+    public function getEstadoAprobadoPagoNomina()
+    {
+        return $this->estadoAprobadoPagoNomina;
     }
 }

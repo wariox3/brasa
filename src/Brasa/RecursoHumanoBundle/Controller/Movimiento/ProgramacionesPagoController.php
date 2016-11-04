@@ -153,6 +153,18 @@ class ProgramacionesPagoController extends Controller
                     $objMensaje->Mensaje("error", "No puede generar empleados cuando la programacion esta generada", $this);
                 }
             }
+            if($form->get('BtnDesbloquearSoportePagoTurnos')->isClicked()) {
+                if($arProgramacionPago->getCodigoSoportePagoPeriodoFk()) {
+                    $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();                       
+                    $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($arProgramacionPago->getCodigoSoportePagoPeriodoFk());                
+                    $arSoportePagoPeriodo->setEstadoBloqueoNomina(0);
+                    $em->persist($arSoportePagoPeriodo);
+                    $em->flush();
+                    $objMensaje->Mensaje("informacion", "Se desbloqueo el soporte de pago de turnos, ahora puede ser modificado", $this);
+                    return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
+                }
+            }                        
+            
             if($form->get('BtnEliminarEmpleados')->isClicked()) {               
                     $arrSeleccionados = $request->request->get('ChkSeleccionarSede');
                     if(count($arrSeleccionados) > 0) {
@@ -632,6 +644,7 @@ class ProgramacionesPagoController extends Controller
 
     private function formularioDetalle($arProgramacionPago) {
         $arrBotonGenerarEmpleados = array('label' => 'Cargar contratos', 'disabled' => false);
+        $arrBotonDesbloquearSoportePagoTurnos = array('label' => 'Desbloquear soporte pago turnos', 'disabled' => false);
         $arrBotonEliminarEmpleados = array('label' => 'Eliminar', 'disabled' => false);
         $arrBotonEliminarTodoEmpleados = array('label' => 'Eliminar todo', 'disabled' => false);
         //$arrBotonActualizarDetalle = array('label' => 'Actualizar detalle', 'disabled' => false);
@@ -647,8 +660,10 @@ class ProgramacionesPagoController extends Controller
             //$arrBotonActualizarDetalle['disabled'] = true;            
             
         }        
+        
         $form = $this->createFormBuilder()    
                    // ->add('BtnActualizarDetalle', 'submit', $arrBotonActualizarDetalle)
+                    ->add('BtnDesbloquearSoportePagoTurnos', 'submit', $arrBotonDesbloquearSoportePagoTurnos)                            
                     ->add('BtnGenerarEmpleados', 'submit', $arrBotonGenerarEmpleados)                        
                     ->add('BtnEliminarEmpleados', 'submit', $arrBotonEliminarEmpleados)
                     ->add('BtnEliminarTodoEmpleados', 'submit', $arrBotonEliminarTodoEmpleados)                    

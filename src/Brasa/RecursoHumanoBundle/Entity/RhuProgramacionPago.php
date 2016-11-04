@@ -119,6 +119,11 @@ class RhuProgramacionPago
     private $mensaje_pago;    
     
     /**
+     * @ORM\Column(name="codigo_soporte_pago_periodo_fk", type="integer", nullable=true)
+     */    
+    private $codigoSoportePagoPeriodoFk;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuPagoTipo", inversedBy="programacionesPagosPagoTipoRel")
      * @ORM\JoinColumn(name="codigo_pago_tipo_fk", referencedColumnName="codigo_pago_tipo_pk")
      */
@@ -914,5 +919,29 @@ class RhuProgramacionPago
     public function getFacturasDetallesProgramacionPagoRel()
     {
         return $this->facturasDetallesProgramacionPagoRel;
+    }
+
+    /**
+     * Set codigoSoportePagoPeriodoFk
+     *
+     * @param integer $codigoSoportePagoPeriodoFk
+     *
+     * @return RhuProgramacionPago
+     */
+    public function setCodigoSoportePagoPeriodoFk($codigoSoportePagoPeriodoFk)
+    {
+        $this->codigoSoportePagoPeriodoFk = $codigoSoportePagoPeriodoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoSoportePagoPeriodoFk
+     *
+     * @return integer
+     */
+    public function getCodigoSoportePagoPeriodoFk()
+    {
+        return $this->codigoSoportePagoPeriodoFk;
     }
 }

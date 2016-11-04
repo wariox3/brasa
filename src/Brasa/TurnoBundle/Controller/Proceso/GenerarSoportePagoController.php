@@ -42,7 +42,6 @@ class GenerarSoportePagoController extends Controller
                  * 
                  */
             }
-
             if($request->request->get('OpGenerar')) {  
                 set_time_limit(0);
                 ini_set("memory_limit", -1);
@@ -225,27 +224,35 @@ class GenerarSoportePagoController extends Controller
                 }                
                 $em->flush();                                                   
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));                
+            } 
+            if($request->request->get('OpAprobarPagoNomina')) {    
+                $codigoSoportePagoPeriodo = $request->request->get('OpAprobarPagoNomina');                
+                $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
+                $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);                
+                if($arSoportePagoPeriodo->getEstadoAprobadoPagoNomina() == 0) {                    
+                    $arSoportePagoPeriodo->setEstadoAprobadoPagoNomina(1);
+                    $em->persist($arSoportePagoPeriodo);
+                    $em->flush();                    
+                }                                             
+                return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));                
             }  
+            if($request->request->get('OpDesAprobarPagoNomina')) {    
+                $codigoSoportePagoPeriodo = $request->request->get('OpDesAprobarPagoNomina');                
+                $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
+                $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);                
+                if($arSoportePagoPeriodo->getEstadoAprobadoPagoNomina() == 1 && $arSoportePagoPeriodo->getEstadoCerrado() == 0) {                    
+                    $arSoportePagoPeriodo->setEstadoAprobadoPagoNomina(0);
+                    $em->persist($arSoportePagoPeriodo);
+                    $em->flush();                    
+                }                                             
+                return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));                
+            }            
             if ($form->get('BtnEliminar')->isClicked()) {                
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->eliminar($arrSeleccionados);
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));                
                 
-            }            
-            if ($form->get('BtnDesbloquear')->isClicked()) {                
-                $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados AS $codigo) {                                
-                        $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigo);                    
-                        if($arSoportePagoPeriodo->getEstadoCerrado() == 0 && $arSoportePagoPeriodo->getEstadoProgramacionPago() == 1) {
-                              $arSoportePagoPeriodo->setEstadoProgramacionPago(0);                
-                        }                                     
-                    }
-                    $em->flush();
-                }                                
-                return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago'));                
-                
-            }            
+            }                       
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);                
                 $this->listaPeriodo();
@@ -264,10 +271,10 @@ class GenerarSoportePagoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
-        $form = $this->formularioDetalle();
-        $form->handleRequest($request);
         $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
-        $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);
+        $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);        
+        $form = $this->formularioDetalle($arSoportePagoPeriodo);
+        $form->handleRequest($request);
         $this->lista($codigoSoportePagoPeriodo);
         if ($form->isValid()) {
             if ($form->get('BtnExcel')->isClicked()) {
@@ -278,7 +285,7 @@ class GenerarSoportePagoController extends Controller
                 $this->listaDetalle("", $codigoSoportePagoPeriodo);
                 $this->generarExcelPago();
             }            
-            if ($form->get('BtnEliminar')->isClicked()) {                
+            if ($form->get('BtnEliminarDetalle')->isClicked()) {                
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaTurnoBundle:TurSoportePago')->eliminar($arrSeleccionados);
                 $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->liquidar($codigoSoportePagoPeriodo);
@@ -388,7 +395,7 @@ class GenerarSoportePagoController extends Controller
         $paginator  = $this->get('knp_paginator');
         $arSoportePago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
         $arSoportePago =  $em->getRepository('BrasaTurnoBundle:TurSoportePago')->find($codigoSoportePago);                                        
-        $form = $this->formularioVer();
+        $form = $this->formularioVer($arSoportePago->getSoportePagoPeriodoRel());
         $form->handleRequest($request);
         $this->listaDetalle($codigoSoportePago, "");
         if ($form->isValid()) {
@@ -543,42 +550,55 @@ class GenerarSoportePagoController extends Controller
         }
         $form = $this->createFormBuilder()
             ->add('recursoGrupoRel', 'entity', $arrayPropiedadesRecursoGrupo)
-            ->add('estadoCerrado', 'choice', array('choices'   => array('0' => 'SIN CERRAR', '1' => 'CERRADO', '2' => 'TODOS'), 'data' => $session->get('filtroSoportePagoEstadoCerrado')))                                
-            ->add('BtnDesbloquear', 'submit', array('label'  => 'Desbloquear')) 
+            ->add('estadoCerrado', 'choice', array('choices'   => array('0' => 'SIN CERRAR', '1' => 'CERRADO', '2' => 'TODOS'), 'data' => $session->get('filtroSoportePagoEstadoCerrado')))                                            
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar')) 
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))         
             ->getForm();
         return $form;
     }
 
-    private function formularioDetalle() {
+    private function formularioDetalle($ar) {
         $em = $this->getDoctrine()->getManager();
         $arConfiguracion = new \Brasa\TurnoBundle\Entity\TurConfiguracion();
         $arConfiguracion = $em->getRepository('BrasaTurnoBundle:TurConfiguracion')->find(1);
+        $arrBotonEliminarDetalle = array('label' => 'Eliminar', 'disabled' => false);        
+        $arrBotonLiquidar = array('label' => 'Liquidar', 'disabled' => false);        
         $arrBotonLiquidarCompensacion = array('label' => 'Compensacion', 'disabled' => true);        
         $arrBotonGenerarProgramacionAlterna = array('label' => 'Generar programacion alterna', 'disabled' => true);
         $arrBotonAjustarDevengado = array('label' => 'Ajustar devengado', 'disabled' => false);
+
         if($arConfiguracion->getHabilitarCompesacion()) {
             $arrBotonLiquidarCompensacion['disabled'] = false;
         }
         if($arConfiguracion->getHabilitarProgramacionAlterna()) {
             $arrBotonGenerarProgramacionAlterna['disabled'] = false;
         }
+        if($ar->getEstadoAprobadoPagoNomina() == 1) {
+            $arrBotonLiquidarCompensacion['disabled'] = true;
+            $arrBotonGenerarProgramacionAlterna['disabled'] = true;
+            $arrBotonAjustarDevengado['disabled'] = true;
+            $arrBotonLiquidar['disabled'] = true;
+            $arrBotonEliminarDetalle['disabled'] = true;
+        }        
         $form = $this->createFormBuilder()
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))                        
             ->add('BtnExcelPago', 'submit', array('label'  => 'Excel pago'))                        
-            ->add('BtnLiquidar', 'submit', array('label'  => 'Liquidar'))                                                    
+            ->add('BtnLiquidar', 'submit', $arrBotonLiquidar)                                    
             ->add('BtnLiquidarCompensacion2', 'submit', $arrBotonLiquidarCompensacion)                                    
             ->add('BtnGenerarProgramacionAlterna', 'submit', $arrBotonGenerarProgramacionAlterna)                        
-            ->add('BtnAjustarDevengado', 'submit', $arrBotonAjustarDevengado)                        
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar')) 
+            ->add('BtnAjustarDevengado', 'submit', $arrBotonAjustarDevengado)
+            ->add('BtnEliminarDetalle', 'submit', $arrBotonEliminarDetalle)            
             ->getForm();
         return $form;
     }
     
-    private function formularioVer() {
+    private function formularioVer($ar) {
+        $arrBotonActualizar = array('label' => 'Actualizar', 'disabled' => false);
+        if($ar->getEstadoAprobadoPagoNomina() == 1) {
+            $arrBotonActualizar['disabled'] = true;
+        }
         $form = $this->createFormBuilder()     
-            ->add('BtnActualizar', 'submit', array('label'  => 'Actualizar'))                
+            ->add('BtnActualizar', 'submit', $arrBotonActualizar)               
             ->getForm();
         return $form;
     }

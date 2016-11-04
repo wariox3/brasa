@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container">
     <div class="page-header">
-        <h3>Resumen programación pago</h3>
+        <h3>Detalle programación pago</h3>
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
     {{ form_errors(form) }}
@@ -18,8 +18,9 @@
                 </button>
                 <ul class="dropdown-menu" role="menu">
                     <li><a href="{{ path('brs_rhu_pagos_adicionales_generarmasivo_suplementario_detalle', { 'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk }) }}" target="_blank">Agregar tiempo suplementario (Masivo)</a></li>
-                </ul>
-            </div>                
+                </ul>                
+            </div>   
+            {{ form_widget(form.BtnDesbloquearSoportePagoTurnos, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
         </div>
     </div><br /> <br />
     <div class="panel panel-default">
