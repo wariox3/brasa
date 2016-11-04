@@ -58,7 +58,7 @@
                 <td>{{ arSoportePagoPeriodos.fechaHasta |date("Y/m/d")  }}</td>
                 <td style="text-align: right">{{ arSoportePagoPeriodos.recursos | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportePagoPeriodos.diasPeriodo | number_format(0, '.', ',') }}</td>
-                <td>{% if arSoportePagoPeriodos.inconsistencias == 1 %} SI {% else %} NO {% endif %}</td>
+                <td {% if arSoportePagoPeriodos.inconsistencias == 1 %} class="danger" {% endif %}>{% if arSoportePagoPeriodos.inconsistencias == 1 %} SI (<a href="javascript:abrirVentana3('{{ path('brs_tur_proceso_generar_soporte_pago_inconsistencia', { 'codigoSoportePagoPeriodo': arSoportePagoPeriodos.codigoSoportePagoPeriodoPk }) }}', 'VerInconsistencias', 500, 700)" >Ver</a>){% else %} NO {% endif %}</td>
                 <td>{% if arSoportePagoPeriodos.estadoAprobadoPagoNomina == 1 %} SI {% else %} NO {% endif %}</td>                
                 <td>{% if arSoportePagoPeriodos.estadoBloqueoNomina == 1 %} SI {% else %} NO {% endif %}</td>                
                 <td>

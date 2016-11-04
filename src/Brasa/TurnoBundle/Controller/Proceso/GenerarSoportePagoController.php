@@ -1033,10 +1033,10 @@ class GenerarSoportePagoController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(8); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        for($col = 'A'; $col !== 'Z'; $col++) {
+        for($col = 'A'; $col !== 'AB'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
         }      
-        for($col = 'V'; $col !== 'Z'; $col++) {            
+        for($col = 'V'; $col !== 'AB'; $col++) {            
             $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
         }         
         $objPHPExcel->setActiveSheetIndex(0)
@@ -1064,11 +1064,13 @@ class GenerarSoportePagoController extends Controller
                     ->setCellValue('V1', 'SALARIO')
                     ->setCellValue('W1', 'A.TRA')
                     ->setCellValue('X1', 'PAGO')
-                    ->setCellValue('Y1', 'DEVENGADO');
+                    ->setCellValue('Y1', 'DEVENGADO')
+                    ->setCellValue('Z1', 'DEV_PACTADO')
+                    ->setCellValue('AA1', 'DEV_AJUSTE');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
-        $arSoportesPago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
+        $arSoportesPago = new \Brasa\TurnoBundle\Entity\TurSoportePago();      
         $arSoportesPago = $query->getResult();
         foreach ($arSoportesPago as $arSoportePago) {  
             $objPHPExcel->setActiveSheetIndex(0)
@@ -1096,7 +1098,9 @@ class GenerarSoportePagoController extends Controller
                     ->setCellValue('V' . $i, $arSoportePago->getVrSalario())
                     ->setCellValue('W' . $i, $arSoportePago->getVrAuxilioTransporte())
                     ->setCellValue('X' . $i, $arSoportePago->getVrPago())
-                    ->setCellValue('Y' . $i, $arSoportePago->getVrDevengado());
+                    ->setCellValue('Y' . $i, $arSoportePago->getVrDevengado())
+                    ->setCellValue('Z' . $i, $arSoportePago->getVrDevengadoPactado())
+                    ->setCellValue('AA' . $i, $arSoportePago->getVrAjusteDevengadoPactado());
             $i++;
         }
         $objPHPExcel->getActiveSheet()->setTitle('SoportePago');       

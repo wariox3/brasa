@@ -157,10 +157,12 @@ class ProgramacionesPagoController extends Controller
                 if($arProgramacionPago->getCodigoSoportePagoPeriodoFk()) {
                     $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();                       
                     $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($arProgramacionPago->getCodigoSoportePagoPeriodoFk());                
-                    $arSoportePagoPeriodo->setEstadoBloqueoNomina(0);
-                    $em->persist($arSoportePagoPeriodo);
-                    $em->flush();
-                    $objMensaje->Mensaje("informacion", "Se desbloqueo el soporte de pago de turnos, ahora puede ser modificado", $this);
+                    if($arSoportePagoPeriodo->getEstadoCerrado() == 0) {
+                        $arSoportePagoPeriodo->setEstadoBloqueoNomina(0);
+                        $em->persist($arSoportePagoPeriodo);
+                        $em->flush();
+                        $objMensaje->Mensaje("informacion", "Se desbloqueo el soporte de pago de turnos, ahora puede ser modificado", $this);                        
+                    }
                     return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
                 }
             }                        
