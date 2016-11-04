@@ -469,13 +469,14 @@ class MovimientoAnticipoController extends Controller
                     ->setCellValue('B1', 'NUMERO')
                     ->setCellValue('C1', 'NIT')                
                     ->setCellValue('D1', 'CLIENTE')
-                    ->setCellValue('E1', 'CUENTA')
-                    ->setCellValue('F1', 'FECHA PAGO')
-                    ->setCellValue('G1', 'ANTICIPO')
-                    ->setCellValue('H1', 'TOTAL')
-                    ->setCellValue('I1', 'ANULADO')
-                    ->setCellValue('J1', 'AUTORIZADO')
-                    ->setCellValue('K1', 'IMPRESO');
+                    ->setCellValue('E1', 'ASESOR')
+                    ->setCellValue('F1', 'CUENTA')
+                    ->setCellValue('G1', 'FECHA PAGO')
+                    ->setCellValue('H1', 'ANTICIPO')
+                    ->setCellValue('I1', 'TOTAL')
+                    ->setCellValue('J1', 'ANULADO')
+                    ->setCellValue('K1', 'AUTORIZADO')
+                    ->setCellValue('L1', 'IMPRESO');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -486,13 +487,13 @@ class MovimientoAnticipoController extends Controller
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arAnticipo->getCodigoAnticipoPk())
                     ->setCellValue('B' . $i, $arAnticipo->getNumero())
-                    ->setCellValue('E' . $i, $arAnticipo->getCuentaRel()->getNombre())
-                    ->setCellValue('F' . $i, $arAnticipo->getFechaPago()->format('Y-m-d'))
-                    ->setCellValue('G' . $i, $arAnticipo->getVrAnticipo())
-                    ->setCellValue('H' . $i, $arAnticipo->getVrTotal())
-                    ->setCellValue('I' . $i, $objFunciones->devuelveBoolean($arAnticipo->getEstadoAnulado()))
-                    ->setCellValue('J' . $i, $objFunciones->devuelveBoolean($arAnticipo->getEstadoAutorizado()))
-                    ->setCellValue('K' . $i, $objFunciones->devuelveBoolean($arAnticipo->getEstadoImpreso()));
+                    ->setCellValue('F' . $i, $arAnticipo->getCuentaRel()->getNombre())
+                    ->setCellValue('G' . $i, $arAnticipo->getFechaPago()->format('Y-m-d'))
+                    ->setCellValue('H' . $i, $arAnticipo->getVrAnticipo())
+                    ->setCellValue('I' . $i, $arAnticipo->getVrTotal())
+                    ->setCellValue('J' . $i, $objFunciones->devuelveBoolean($arAnticipo->getEstadoAnulado()))
+                    ->setCellValue('K' . $i, $objFunciones->devuelveBoolean($arAnticipo->getEstadoAutorizado()))
+                    ->setCellValue('L' . $i, $objFunciones->devuelveBoolean($arAnticipo->getEstadoImpreso()));
             if($arAnticipo->getClienteRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('C' . $i, $arAnticipo->getClienteRel()->getNit());
@@ -500,7 +501,11 @@ class MovimientoAnticipoController extends Controller
             if($arAnticipo->getClienteRel()) {
                 $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('D' . $i, $arAnticipo->getClienteRel()->getNombreCorto());
-            }            
+            } 
+            if($arAnticipo->getClienteRel()) {
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('E' . $i, $arAnticipo->getClienteRel()->getAsesorRel()->getNombre());
+            } 
             $i++;
         }
 
