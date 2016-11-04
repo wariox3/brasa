@@ -44,7 +44,7 @@ class MovimientoAnticipoController extends Controller
             }
         }
 
-        $arAnticipos = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
+        $arAnticipos = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 50);
         return $this->render('BrasaCarteraBundle:Movimientos/Anticipo:lista.html.twig', array(
             'arAnticipos' => $arAnticipos,            
             'form' => $form->createView()));
@@ -334,12 +334,15 @@ class MovimientoAnticipoController extends Controller
     private function lista() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
+        
         $this->strListaDql =  $em->getRepository('BrasaCarteraBundle:CarAnticipo')->listaDQL(
                 $session->get('filtroAnticipoNumero'), 
                 $session->get('filtroCodigoCliente'),
                 $session->get('filtroAnticipoEstadoAutorizado'),
                 $session->get('filtroAnticipoEstadoAnulado'),
-                $session->get('filtroAnticipoEstadoImpreso'));
+                $session->get('filtroAnticipoEstadoImpreso'),
+                $strFechaDesde = $session->get('filtroDesde'),
+                $strFechaHasta = $session->get('filtroHasta'));
     }
 
     private function filtrar ($form) {       
@@ -348,7 +351,16 @@ class MovimientoAnticipoController extends Controller
         $session->set('filtroAnticipoEstadoAutorizado', $form->get('estadoAutorizado')->getData());
         $session->set('filtroAnticipoEstadoAnulado', $form->get('estadoAnulado')->getData());
         $session->set('filtroAnticipoEstadoImpreso', $form->get('estadoImpreso')->getData());
-        $session->set('filtroNit', $form->get('TxtNit')->getData());   
+        $session->set('filtroNit', $form->get('TxtNit')->getData()); 
+        $dateFechaDesde = $form->get('fechaDesde')->getData();
+        $dateFechaHasta = $form->get('fechaHasta')->getData();
+        if ($form->get('fechaDesde')->getData() == null || $form->get('fechaHasta')->getData() == null){
+            $session->set('filtroDesde', $form->get('fechaDesde')->getData());
+            $session->set('filtroHasta', $form->get('fechaHasta')->getData());
+        } else {
+            $session->set('filtroDesde', $dateFechaDesde->format('Y-m-d'));
+            $session->set('filtroHasta', $dateFechaHasta->format('Y-m-d')); 
+        }
     }
 
     private function formularioFiltro() {
@@ -367,13 +379,26 @@ class MovimientoAnticipoController extends Controller
         } else {
             $session->set('filtroCodigoCliente', null);
         }
-        
+        $dateFecha = new \DateTime('now');
+        $strFechaDesde = $dateFecha->format('Y/m/')."01";
+        $intUltimoDia = $strUltimoDiaMes = date("d",(mktime(0,0,0,$dateFecha->format('m')+1,1,$dateFecha->format('Y'))-1));
+        $strFechaHasta = $dateFecha->format('Y/m/').$intUltimoDia;
+        if($session->get('filtroDesde') != "") {
+            $strFechaDesde = $session->get('filtroDesde');
+        }
+        if($session->get('filtroHasta') != "") {
+            $strFechaHasta = $session->get('filtroHasta');
+        }    
+        $dateFechaDesde = date_create($strFechaDesde);
+        $dateFechaHasta = date_create($strFechaHasta);
         $form = $this->createFormBuilder()
             ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCotizacionNumero')))
             ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
             ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))
             ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAnticipoEstadoAutorizado')))                
             ->add('estadoAnulado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAnticipoEstadoAnulado')))                    
+            ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde))                            
+            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta))
             ->add('estadoImpreso', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroAnticipoEstadoImpreso')))                
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))

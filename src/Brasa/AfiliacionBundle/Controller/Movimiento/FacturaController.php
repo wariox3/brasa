@@ -67,7 +67,7 @@ class FacturaController extends Controller
             }
         }
 
-        $arFacturas = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
+        $arFacturas = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 50);
         return $this->render('BrasaAfiliacionBundle:Movimiento/Factura:lista.html.twig', array(
             'arFacturas' => $arFacturas,
             'form' => $form->createView()));
@@ -382,7 +382,7 @@ class FacturaController extends Controller
         }
         //$this->lista();
     }
-
+    
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
@@ -403,11 +403,11 @@ class FacturaController extends Controller
         $strFechaDesde = $dateFecha->format('Y/m/')."01";
         $intUltimoDia = $strUltimoDiaMes = date("d",(mktime(0,0,0,$dateFecha->format('m')+1,1,$dateFecha->format('Y'))-1));
         $strFechaHasta = $dateFecha->format('Y/m/').$intUltimoDia;
-        if($session->get('filtroCursoFechaDesde') != "") {
-            $strFechaDesde = $session->get('filtroCursoFechaDesde');
+        if($session->get('filtroDesde') != "") {
+            $strFechaDesde = $session->get('filtroDesde');
         }
-        if($session->get('filtroCursoFechaHasta') != "") {
-            $strFechaHasta = $session->get('filtroCursoFechaHasta');
+        if($session->get('filtroHasta') != "") {
+            $strFechaHasta = $session->get('filtroHasta');
         }    
         $dateFechaDesde = date_create($strFechaDesde);
         $dateFechaHasta = date_create($strFechaHasta);

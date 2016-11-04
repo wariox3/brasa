@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class CarAnticipoRepository extends EntityRepository
 {
-   public function listaDql($numero, $codigoCliente = "", $boolEstadoAutorizado = "", $boolEstadoAnulado = "", $boolEstadoImpreso = "") {
+   public function listaDql($numero, $codigoCliente = "", $boolEstadoAutorizado = "", $boolEstadoAnulado = "", $boolEstadoImpreso = "", $strFechaDesde = "", $strFechaHasta = "") {
         $dql   = "SELECT a FROM BrasaCarteraBundle:CarAnticipo a WHERE a.codigoAnticipoPk <> 0";
         if($numero != "") {
             $dql .= " AND a.numero = " . $numero;  
@@ -36,6 +36,12 @@ class CarAnticipoRepository extends EntityRepository
         }
         if($boolEstadoImpreso == "0") {
             $dql .= " AND a.estadoImpreso = 0";
+        }        
+        if($strFechaDesde != "") {
+            $dql .= " AND a.fecha >= '" . $strFechaDesde . "'";
+        }        
+        if($strFechaHasta != "") {
+            $dql .= " AND a.fecha <= '" . $strFechaHasta . "'";
         }        
         $dql .= " ORDER BY a.fecha DESC";
         return $dql;
