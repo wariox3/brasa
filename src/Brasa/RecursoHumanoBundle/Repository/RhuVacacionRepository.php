@@ -44,10 +44,16 @@ class RhuVacacionRepository extends EntityRepository {
         $arVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigoVacacion);                         
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContrato = $arVacacion->getContratoRel();
-        $fechaDesdePeriodo = $arContrato->getFechaUltimoPagoVacaciones();                                
+        $fechaDesdePeriodo = $arContrato->getFechaUltimoPagoVacaciones();
+        if ($fechaDesdePeriodo == null){
+            $fechaDesdePeriodo = $arContrato->getFechaDesde();
+        }
         $fechaHastaPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestacionesHasta(360, $fechaDesdePeriodo);
         $intDias = ($arVacacion->getDiasDisfrutados() + $arVacacion->getDiasPagados()) * 24;
         $fechaDesdePeriodo = $arContrato->getFechaUltimoPagoVacaciones();
+        if ($fechaDesdePeriodo == null){
+            $fechaDesdePeriodo = $arContrato->getFechaDesde();
+        }
         $strFechaDesde = $fechaDesdePeriodo->format('Y-m-d');
         $strFechaDesde = strtotime ( '+1 day' , strtotime ( $strFechaDesde ) ) ;
         $strFechaDesde = date ( 'Y-m-d' , $strFechaDesde );        
