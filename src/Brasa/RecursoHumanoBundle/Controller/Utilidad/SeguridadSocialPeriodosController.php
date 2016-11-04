@@ -202,11 +202,9 @@ class SeguridadSocialPeriodosController extends Controller
                 $condigoInterfaceRiesgos = $arEntidadRiesgos->getCodigoInterface();
                 $strRutaArchivo = $arConfiguracion->getRutaTemporal();
                 $tipoSucursal = $arConfiguracionNomina->getTipoPlanillaSso();
-                if ($tipoSucursal == 2){
-                    $tipo = 'U';
-                } else {
-                    $tipo = 'S';
-                }
+                if ($tipoSucursal == null){
+                    $tipoSucursal = 'S';
+                } 
                 ///$strRutaArchivo = "c:/xampp/";
                 $strNombreArchivo = "pila" . date('YmdHis') . ".txt";
                 ob_clean();
@@ -225,7 +223,7 @@ class SeguridadSocialPeriodosController extends Controller
                 fputs($ar, 'E');
                 fputs($ar, '          ');
                 fputs($ar, '          '); // Nro 9 del formato
-                fputs($ar, $tipo); // Nro 10 del formato
+                fputs($ar, $tipoSucursal); // Nro 10 del formato
                 fputs($ar, $this->RellenarNr($arPeriodoDetalle->getSsoSucursalRel()->getCodigoInterface(), " ", 10, "D")); //Nro 11
                 fputs($ar, $this->RellenarNr($arPeriodoDetalle->getSsoSucursalRel()->getNombre(), " ", 40, "D")); //Nro 12
                 //Arp del aportante

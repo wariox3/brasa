@@ -300,10 +300,10 @@ class RhuConfiguracion
     private $imprimirMensajePago = false;   
     
     /**
-     * Tipo de planilla pago seguridad social 1-sucursal 2-unica
-     * @ORM\Column(name="tipo_planilla_sso", type="integer")
+     * Tipo de planilla pago seguridad social s-sucursal u-unica
+     * @ORM\Column(name="tipo_planilla_sso", type="string", length=1, nullable=true)
      */
-    private $tipoPlanillaSso = 1;
+    private $tipoPlanillaSso;
     
     
     /**
@@ -312,6 +312,8 @@ class RhuConfiguracion
      */
     protected $entidadRiesgoProfesionalRel;  
         
+
+    
 
     
 
@@ -1686,7 +1688,7 @@ class RhuConfiguracion
     /**
      * Set tipoPlanillaSso
      *
-     * @param integer $tipoPlanillaSso
+     * @param string $tipoPlanillaSso
      *
      * @return RhuConfiguracion
      */
@@ -1700,7 +1702,7 @@ class RhuConfiguracion
     /**
      * Get tipoPlanillaSso
      *
-     * @return integer
+     * @return string
      */
     public function getTipoPlanillaSso()
     {

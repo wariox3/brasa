@@ -92,11 +92,18 @@ class AfiPeriodoRepository extends EntityRepository {
                 $riesgos = $this->redondearAporte($salarioPeriodo, $salarioPeriodo, $arContrato->getClasificacionRiesgoRel()->getPorcentaje(), $intDias, $salarioMinimo);
             }            
 
-            if($salarioPeriodo >= $salarioMinimo * 4) {
+            /*if($salarioPeriodo >= $salarioMinimo * 4) {
                 $icbf = ($salarioPeriodo * $porcentajeIcbf)/100;
                 $sena = ($salarioPeriodo * $porcentajeSena)/100;
+            }*/
+            $floCotizacionFSPSolidaridad = 0;
+            $floCotizacionFSPSubsistencia = 0;
+            if($salarioPeriodo >= ($salarioMinimo * 4)) {
+                $floCotizacionFSPSolidaridad = round($salarioPeriodo * 0.005, -2, PHP_ROUND_HALF_DOWN);
+                $floCotizacionFSPSubsistencia = round($salarioPeriodo * 0.005, -2, PHP_ROUND_HALF_DOWN);
             }
-            $subtotal = $pension + $salud + $caja + $riesgos + $sena + $icbf + $administracion;
+            $totalFondosSolidaridad = $floCotizacionFSPSolidaridad + $floCotizacionFSPSubsistencia;
+            $subtotal = $pension + $salud + $caja + $riesgos + $sena + $icbf + $administracion + $totalFondosSolidaridad;
             $iva = round($administracion * $arConfiguracion->getPorcentajeIva() / 100);
             //$iva = $this->redondearCien($iva);
             $total = $subtotal + $iva;
@@ -114,6 +121,8 @@ class AfiPeriodoRepository extends EntityRepository {
             $arPeriodoDetalle->setCaja($caja);
             $arPeriodoDetalle->setRiesgos($riesgos);
             $arPeriodoDetalle->setAdministracion($administracion);
+            $arPeriodoDetalle->setAportesFondoSolidaridadPensionalSolidaridad($floCotizacionFSPSolidaridad);
+            $arPeriodoDetalle->setAportesFondoSolidaridadPensionalSubsistencia($floCotizacionFSPSubsistencia);
             $arPeriodoDetalle->setSubtotal($subtotal);
             $arPeriodoDetalle->setIva($iva);
             $arPeriodoDetalle->setTotal($total);
@@ -351,6 +360,7 @@ class AfiPeriodoRepository extends EntityRepository {
             $floCotizacionIcbf = $this->redondearAporte($floSalario + $floSuplementario, $floIbcCaja, $floTarifaIcbf, $intDiasCotizarCaja, $salarioMinimo);
             $floCotizacionSena = $this->redondearAporte($floSalario + $floSuplementario, $floIbcCaja, $floTarifaSena, $intDiasCotizarCaja, $salarioMinimo);
             $floTotalCotizacionFondos = $floAporteVoluntarioFondoPensionesObligatorias + $floCotizacionVoluntariaFondoPensionesObligatorias + $floCotizacionPension;
+            $floTotalFondoSolidaridad = $floCotizacionFSPSolidaridad + $floCotizacionFSPSubsistencia;
             $arPeriodoDetallePago->setAporteVoluntarioFondoPensionesObligatorias($floAporteVoluntarioFondoPensionesObligatorias);
             $arPeriodoDetallePago->setCotizacionVoluntarioFondoPensionesObligatorias($floCotizacionVoluntariaFondoPensionesObligatorias);
             $arPeriodoDetallePago->setAportesFondoSolidaridadPensionalSolidaridad($floCotizacionFSPSolidaridad);
@@ -362,7 +372,7 @@ class AfiPeriodoRepository extends EntityRepository {
             $arPeriodoDetallePago->setCotizacionIcbf($floCotizacionIcbf);
             $arPeriodoDetallePago->setCotizacionSena($floCotizacionSena);                        
             //$arPeriodoDetallePago->setCentroTrabajoCodigoCt($arEmpleado->getContratoRel()->getCodigoCentroCostoFk());
-            $floTotalCotizacion = $floTotalCotizacionFondos + $floCotizacionSalud + $floCotizacionRiesgos + $floCotizacionCaja + $floCotizacionIcbf+$floCotizacionSena;
+            $floTotalCotizacion = $floTotalFondoSolidaridad + $floTotalCotizacionFondos + $floCotizacionSalud + $floCotizacionRiesgos + $floCotizacionCaja + $floCotizacionIcbf+$floCotizacionSena;
             $arPeriodoDetallePago->setTotalCotizacion($floTotalCotizacion);
             $em->persist($arPeriodoDetallePago);            
             $secuencia++;
@@ -473,14 +483,16 @@ class AfiPeriodoRepository extends EntityRepository {
                 $floCotizacionVoluntariaFondoPensionesObligatorias = 0;
                 $floCotizacionPension = $this->redondearAporte($floSalario + $floSuplementario, $floIbcPension, $floTarifaPension, $intDiasCotizarPension, $salarioMinimo);            
                 if($floSalario >= ($salarioMinimo * 4)) {
-                    $floCotizacionFSPSolidaridad = 0;
-                    $floCotizacionFSPSubsistencia = 0;
+                    //$floCotizacionFSPSolidaridad = 0;
+                    //$floCotizacionFSPSubsistencia = 0;
+                    $floCotizacionFSPSolidaridad = round($floIbcPension * 0.005, -2, PHP_ROUND_HALF_DOWN);
+                    $floCotizacionFSPSubsistencia = round($floIbcPension * 0.005, -2, PHP_ROUND_HALF_DOWN);
                 }
                 $floCotizacionSalud = $this->redondearAporte($floSalario + $floSuplementario, $floIbcSalud, $floTarifaSalud, $intDiasCotizarSalud, $salarioMinimo);
                 $floCotizacionRiesgos = $this->redondearAporte($floSalario + $floSuplementario, $floIbcRiesgos, $floTarifaRiesgos, $intDiasCotizarRiesgos, $salarioMinimo);
                 $floCotizacionCaja = $this->redondearAporte($floSalario + $floSuplementario, $floIbcCaja, $floTarifaCaja, $intDiasCotizarCaja, $salarioMinimo);
                 $floTotalCotizacionFondos = $floAporteVoluntarioFondoPensionesObligatorias + $floCotizacionVoluntariaFondoPensionesObligatorias + $floCotizacionPension;
-                
+                $floTotalFondoSolidaridad = $floCotizacionFSPSolidaridad + $floCotizacionFSPSubsistencia;
                 $arPeriodoDetallePago->setAporteVoluntarioFondoPensionesObligatorias($floAporteVoluntarioFondoPensionesObligatorias);
                 $arPeriodoDetallePago->setCotizacionVoluntarioFondoPensionesObligatorias($floCotizacionVoluntariaFondoPensionesObligatorias);
                 $arPeriodoDetallePago->setAportesFondoSolidaridadPensionalSolidaridad($floCotizacionFSPSolidaridad);
@@ -491,7 +503,7 @@ class AfiPeriodoRepository extends EntityRepository {
                 $arPeriodoDetallePago->setCotizacionRiesgos($floCotizacionRiesgos);
                 $arPeriodoDetallePago->setCotizacionCaja($floCotizacionCaja);
                 //$arPeriodoDetallePago->setCentroTrabajoCodigoCt($arEmpleado->getContratoRel()->getCodigoCentroCostoFk());
-                $totalCotizacion = $floTotalCotizacionFondos + $floCotizacionSalud + $floCotizacionRiesgos + $floCotizacionCaja + $floCotizacionIcbf+$floCotizacionSena;
+                $totalCotizacion = $floTotalCotizacionFondos + $floTotalFondoSolidaridad + $floCotizacionSalud + $floCotizacionRiesgos + $floCotizacionCaja + $floCotizacionIcbf+$floCotizacionSena;
                 //$totalCotizacionGeneral += $totalCotizacion;
                 $totalCotizacion = $this->redondearCien($totalCotizacion);
                 $arPeriodoDetallePago->setTotalCotizacion($totalCotizacion);

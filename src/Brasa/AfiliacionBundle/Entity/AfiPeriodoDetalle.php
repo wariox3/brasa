@@ -110,7 +110,17 @@ class AfiPeriodoDetalle
     /**     
      * @ORM\Column(name="ingreso", type="boolean")
      */    
-    private $ingreso = 0;    
+    private $ingreso = 0;
+
+    /**
+     * @ORM\Column(name="aportes_fondo_solidaridad_pensional_solidaridad", type="float")
+     */
+    private $aportesFondoSolidaridadPensionalSolidaridad = 0;    
+    
+    /**
+     * @ORM\Column(name="aportes_fondo_solidaridad_pensional_subsistencia", type="float")
+     */
+    private $aportesFondoSolidaridadPensionalSubsistencia = 0;
     
     /**
      * @ORM\ManyToOne(targetEntity="AfiPeriodo", inversedBy="periodosDetallesPeriodoRel")
@@ -130,6 +140,8 @@ class AfiPeriodoDetalle
      */
     protected $contratoRel;     
     
+    
+
     /**
      * Get codigoPeriodoDetallePk
      *
@@ -213,30 +225,6 @@ class AfiPeriodoDetalle
     }
 
     /**
-     * Set periodoRel
-     *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodo $periodoRel
-     *
-     * @return AfiPeriodoDetalle
-     */
-    public function setPeriodoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodo $periodoRel = null)
-    {
-        $this->periodoRel = $periodoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get periodoRel
-     *
-     * @return \Brasa\AfiliacionBundle\Entity\AfiPeriodo
-     */
-    public function getPeriodoRel()
-    {
-        return $this->periodoRel;
-    }
-
-    /**
      * Set codigoEmpleadoFk
      *
      * @param integer $codigoEmpleadoFk
@@ -282,54 +270,6 @@ class AfiPeriodoDetalle
     public function getCodigoContratoFk()
     {
         return $this->codigoContratoFk;
-    }
-
-    /**
-     * Set empleadoRel
-     *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiEmpleado $empleadoRel
-     *
-     * @return AfiPeriodoDetalle
-     */
-    public function setEmpleadoRel(\Brasa\AfiliacionBundle\Entity\AfiEmpleado $empleadoRel = null)
-    {
-        $this->empleadoRel = $empleadoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get empleadoRel
-     *
-     * @return \Brasa\AfiliacionBundle\Entity\AfiEmpleado
-     */
-    public function getEmpleadoRel()
-    {
-        return $this->empleadoRel;
-    }
-
-    /**
-     * Set contratoRel
-     *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiContrato $contratoRel
-     *
-     * @return AfiPeriodoDetalle
-     */
-    public function setContratoRel(\Brasa\AfiliacionBundle\Entity\AfiContrato $contratoRel = null)
-    {
-        $this->contratoRel = $contratoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get contratoRel
-     *
-     * @return \Brasa\AfiliacionBundle\Entity\AfiContrato
-     */
-    public function getContratoRel()
-    {
-        return $this->contratoRel;
     }
 
     /**
@@ -525,30 +465,6 @@ class AfiPeriodoDetalle
     }
 
     /**
-     * Set ingreso
-     *
-     * @param boolean $ingreso
-     *
-     * @return AfiPeriodoDetalle
-     */
-    public function setIngreso($ingreso)
-    {
-        $this->ingreso = $ingreso;
-
-        return $this;
-    }
-
-    /**
-     * Get ingreso
-     *
-     * @return boolean
-     */
-    public function getIngreso()
-    {
-        return $this->ingreso;
-    }
-
-    /**
      * Set afiliacion
      *
      * @param float $afiliacion
@@ -570,30 +486,6 @@ class AfiPeriodoDetalle
     public function getAfiliacion()
     {
         return $this->afiliacion;
-    }
-
-    /**
-     * Set total
-     *
-     * @param float $total
-     *
-     * @return AfiPeriodoDetalle
-     */
-    public function setTotal($total)
-    {
-        $this->total = $total;
-
-        return $this;
-    }
-
-    /**
-     * Get total
-     *
-     * @return float
-     */
-    public function getTotal()
-    {
-        return $this->total;
     }
 
     /**
@@ -621,6 +513,30 @@ class AfiPeriodoDetalle
     }
 
     /**
+     * Set subtotal
+     *
+     * @param float $subtotal
+     *
+     * @return AfiPeriodoDetalle
+     */
+    public function setSubtotal($subtotal)
+    {
+        $this->subtotal = $subtotal;
+
+        return $this;
+    }
+
+    /**
+     * Get subtotal
+     *
+     * @return float
+     */
+    public function getSubtotal()
+    {
+        return $this->subtotal;
+    }
+
+    /**
      * Set iva
      *
      * @param float $iva
@@ -645,26 +561,170 @@ class AfiPeriodoDetalle
     }
 
     /**
-     * Set subtotal
+     * Set total
      *
-     * @param float $subtotal
+     * @param float $total
      *
      * @return AfiPeriodoDetalle
      */
-    public function setSubtotal($subtotal)
+    public function setTotal($total)
     {
-        $this->subtotal = $subtotal;
+        $this->total = $total;
 
         return $this;
     }
 
     /**
-     * Get subtotal
+     * Get total
      *
      * @return float
      */
-    public function getSubtotal()
+    public function getTotal()
     {
-        return $this->subtotal;
+        return $this->total;
+    }
+
+    /**
+     * Set ingreso
+     *
+     * @param boolean $ingreso
+     *
+     * @return AfiPeriodoDetalle
+     */
+    public function setIngreso($ingreso)
+    {
+        $this->ingreso = $ingreso;
+
+        return $this;
+    }
+
+    /**
+     * Get ingreso
+     *
+     * @return boolean
+     */
+    public function getIngreso()
+    {
+        return $this->ingreso;
+    }
+
+    /**
+     * Set aportesFondoSolidaridadPensionalSolidaridad
+     *
+     * @param float $aportesFondoSolidaridadPensionalSolidaridad
+     *
+     * @return AfiPeriodoDetalle
+     */
+    public function setAportesFondoSolidaridadPensionalSolidaridad($aportesFondoSolidaridadPensionalSolidaridad)
+    {
+        $this->aportesFondoSolidaridadPensionalSolidaridad = $aportesFondoSolidaridadPensionalSolidaridad;
+
+        return $this;
+    }
+
+    /**
+     * Get aportesFondoSolidaridadPensionalSolidaridad
+     *
+     * @return float
+     */
+    public function getAportesFondoSolidaridadPensionalSolidaridad()
+    {
+        return $this->aportesFondoSolidaridadPensionalSolidaridad;
+    }
+
+    /**
+     * Set aportesFondoSolidaridadPensionalSubsistencia
+     *
+     * @param float $aportesFondoSolidaridadPensionalSubsistencia
+     *
+     * @return AfiPeriodoDetalle
+     */
+    public function setAportesFondoSolidaridadPensionalSubsistencia($aportesFondoSolidaridadPensionalSubsistencia)
+    {
+        $this->aportesFondoSolidaridadPensionalSubsistencia = $aportesFondoSolidaridadPensionalSubsistencia;
+
+        return $this;
+    }
+
+    /**
+     * Get aportesFondoSolidaridadPensionalSubsistencia
+     *
+     * @return float
+     */
+    public function getAportesFondoSolidaridadPensionalSubsistencia()
+    {
+        return $this->aportesFondoSolidaridadPensionalSubsistencia;
+    }
+
+    /**
+     * Set periodoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodo $periodoRel
+     *
+     * @return AfiPeriodoDetalle
+     */
+    public function setPeriodoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodo $periodoRel = null)
+    {
+        $this->periodoRel = $periodoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get periodoRel
+     *
+     * @return \Brasa\AfiliacionBundle\Entity\AfiPeriodo
+     */
+    public function getPeriodoRel()
+    {
+        return $this->periodoRel;
+    }
+
+    /**
+     * Set empleadoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiEmpleado $empleadoRel
+     *
+     * @return AfiPeriodoDetalle
+     */
+    public function setEmpleadoRel(\Brasa\AfiliacionBundle\Entity\AfiEmpleado $empleadoRel = null)
+    {
+        $this->empleadoRel = $empleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get empleadoRel
+     *
+     * @return \Brasa\AfiliacionBundle\Entity\AfiEmpleado
+     */
+    public function getEmpleadoRel()
+    {
+        return $this->empleadoRel;
+    }
+
+    /**
+     * Set contratoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiContrato $contratoRel
+     *
+     * @return AfiPeriodoDetalle
+     */
+    public function setContratoRel(\Brasa\AfiliacionBundle\Entity\AfiContrato $contratoRel = null)
+    {
+        $this->contratoRel = $contratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get contratoRel
+     *
+     * @return \Brasa\AfiliacionBundle\Entity\AfiContrato
+     */
+    public function getContratoRel()
+    {
+        return $this->contratoRel;
     }
 }

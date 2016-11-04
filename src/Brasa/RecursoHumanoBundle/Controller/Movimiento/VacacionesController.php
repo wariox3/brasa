@@ -112,10 +112,10 @@ class VacacionesController extends Controller
                             } else {
                                 if ($form->get('diasDisfrutados')->getData() == 0 && $form->get('diasPagados')->getData() == 0){
                                     $objMensaje->Mensaje("error", "Los dias pagados o los dias disfrutados, no pueden estar en ceros", $this);
-                                } else {
+                                } else {                                                                                                                
                                     $arVacacion->setCentroCostoRel($arEmpleado->getCentroCostoRel());
                                     $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-                                    $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoActivoFk());
+                                    $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado->getCodigoContratoActivoFk());                                    
                                     $arVacacion->setContratoRel($arContrato);
                                     $fechaDesdePeriodo = $arContrato->getFechaUltimoPagoVacaciones();                                
                                     $fechaHastaPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestacionesHasta(360, $fechaDesdePeriodo);
