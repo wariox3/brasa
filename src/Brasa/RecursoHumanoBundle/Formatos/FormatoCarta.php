@@ -38,6 +38,9 @@ class FormatoCarta extends \FPDF_FPDF {
         $codigoCartaTipo = $arCartaTipo->getCodigoCartaTipoPk();
         $arContenidoFormatoA = new \Brasa\GeneralBundle\Entity\GenContenidoFormato();
         $arContenidoFormatoA = self::$em->getRepository('BrasaGeneralBundle:GenContenidoFormato')->find($arCartaTipo->getCodigoContenidoFormatoFk());
+        $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+        $this->Text(10, 55, utf8_decode($arConfiguracion->getCiudadRel()->getNombre()). " ". self::$fechaProceso);
         if ($arContenidoFormatoA->getRequiereFormatoIso() == 1){
             $this->SetFillColor(272, 272, 272);
             $this->SetFont('Arial','B',10);
@@ -76,7 +79,7 @@ class FormatoCarta extends \FPDF_FPDF {
         $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracion = self::$em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);        
         $this->SetFont('Arial','','9');
-        $this->Text(10, 55, utf8_decode($arConfiguracion->getCiudadRel()->getNombre()). " ". self::$fechaProceso);
+        //$this->Text(10, 55, utf8_decode($arConfiguracion->getCiudadRel()->getNombre()). " ". self::$fechaProceso);
         $this->Ln(20);
     }
 
