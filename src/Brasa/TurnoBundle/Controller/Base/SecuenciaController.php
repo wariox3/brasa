@@ -31,59 +31,60 @@ class SecuenciaController extends Controller {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if ($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaTurnoBundle:TurPlantilla')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_tur_base_plantilla_lista'));
+                $em->getRepository('BrasaTurnoBundle:TurSecuenciaDetalle')->eliminar($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_tur_base_secuencia_lista'));
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
-                $this->filtrar($form);
+                //$this->filtrar($form);
             }
-            if ($form->get('BtnExcel')->isClicked()) {
-                $this->filtrar($form);
-                $this->generarExcel();
-            }
+            if ($form->get('BtnDetalleNuevo')->isClicked()) {
+                $arSecuenciaDetalleNuevo = new \Brasa\TurnoBundle\Entity\TurSecuenciaDetalle();                
+                $em->persist($arSecuenciaDetalleNuevo);
+                $em->flush();
+                return $this->redirect($this->generateUrl('brs_tur_base_secuencia_lista'));
+            }            
         }
 
-        $arSecuencias = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
+        $arSecuenciaDetalles = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
         return $this->render('BrasaTurnoBundle:Base/Secuencia:lista.html.twig', array(
-                    'arSecuencias' => $arSecuencias,
-                    'form' => $form->createView()));
-    }
-
-    /**
-     * @Route("/tur/base/plantilla/nuevo/{codigoPlantilla}", name="brs_tur_base_plantilla_nuevo")
-     */     
-    public function nuevoAction($codigoPlantilla = 0) {
-        $request = $this->getRequest();
-        $em = $this->getDoctrine()->getManager();
-        $arPlantilla = new \Brasa\TurnoBundle\Entity\TurPlantilla();
-        if ($codigoPlantilla != 0) {
-            $arPlantilla = $em->getRepository('BrasaTurnoBundle:TurPlantilla')->find($codigoPlantilla);
-        }
-        $form = $this->createForm(new TurPlantillaType, $arPlantilla);
-        $form->handleRequest($request);
-        if ($form->isValid()) {
-            $arPlantilla = $form->getData();
-            $arUsuario = $this->getUser();
-            $arPlantilla->setUsuario($arUsuario->getUserName());
-            $em->persist($arPlantilla);
-            $em->flush();
-
-            if ($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_tur_base_plantilla_nuevo', array('codigoPlantilla' => 0)));
-            } else {
-                return $this->redirect($this->generateUrl('brs_tur_base_plantilla_detalle', array('codigoPlantilla' => $arPlantilla->getCodigoPlantillaPk())));
-            }
-        }
-        return $this->render('BrasaTurnoBundle:Base/Plantilla:nuevo.html.twig', array(
-                    'arPlantilla' => $arPlantilla,
+                    'arSecuenciaDetalles' => $arSecuenciaDetalles,
                     'form' => $form->createView()));
     }
     
+    /**
+     * @Route("/tur/base/secuencia/detalle/editar/{codigoSecuenciaDetalle}", name="brs_tur_base_secuencia_detalle_editar")
+     */     
+    public function detalleEditarAction($codigoSecuenciaDetalle) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $arSecuenciaDetalleAct = new \Brasa\TurnoBundle\Entity\TurSecuenciaDetalle();
+        $arSecuenciaDetalleAct = $em->getRepository('BrasaTurnoBundle:TurSecuenciaDetalle')->find($codigoSecuenciaDetalle);        
+        $arSecuenciaDetalle = new \Brasa\TurnoBundle\Entity\TurSecuenciaDetalle();
+        $arSecuenciaDetalle = $em->getRepository('BrasaTurnoBundle:TurSecuenciaDetalle')->findBy(array('codigoSecuenciaDetallePk' => $codigoSecuenciaDetalle));
+        $arrBotonDetalleEliminar = array('label' => 'Eliminar', 'disabled' => false);
+        $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);       
+        $form = $this->createFormBuilder()
+            ->setAction($this->generateUrl('brs_tur_base_secuencia_detalle_editar', array('codigoSecuenciaDetalle' => $codigoSecuenciaDetalle)))
+                ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)                
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $arrSeleccionados = $request->request->get('ChkSeleccionar');
+            $arrControles = $request->request->All();
+            if ($form->get('BtnDetalleActualizar')->isClicked()) {
+                $this->actualizarDetalle($arrControles);
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            }
+        }
+        return $this->render('BrasaTurnoBundle:Base/Secuencia:detalleEditar.html.twig', array(
+                    'arSecuenciaDetalle' => $arSecuenciaDetalle,
+                    'form' => $form->createView()
+        ));
+    }    
+    
     private function lista() {
         $em = $this->getDoctrine()->getManager();
-        $this->strDqlLista = $em->getRepository('BrasaTurnoBundle:TurSecuenciaDetalle')->listaDQL(
-                $this->strNombre, $this->strCodigo
-        );
+        $this->strDqlLista = $em->getRepository('BrasaTurnoBundle:TurSecuenciaDetalle')->listaDQL();
     }
 
     private function filtrar($form) {
@@ -96,62 +97,234 @@ class SecuenciaController extends Controller {
         $form = $this->createFormBuilder()
                 ->add('TxtNombre', 'text', array('label' => 'Nombre', 'data' => $this->strNombre))
                 ->add('TxtCodigo', 'text', array('label' => 'Codigo', 'data' => $this->strCodigo))
-                ->add('BtnEliminar', 'submit', array('label' => 'Eliminar',))
-                ->add('BtnExcel', 'submit', array('label' => 'Excel',))
+                ->add('BtnEliminar', 'submit', array('label' => 'Eliminar',))                
+                ->add('BtnDetalleNuevo', 'submit', array('label' => 'Nuevo',))                
                 ->add('BtnFiltrar', 'submit', array('label' => 'Filtrar'))
                 ->getForm();
         return $form;
     }
 
-    private function generarExcel() {
-        ob_clean();
+    private function actualizarDetalle($arrControles) {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
-        $objPHPExcel = new \PHPExcel();
-        // Set document properties
-        $objPHPExcel->getProperties()->setCreator("EMPRESA")
-                ->setLastModifiedBy("EMPRESA")
-                ->setTitle("Office 2007 XLSX Test Document")
-                ->setSubject("Office 2007 XLSX Test Document")
-                ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
-                ->setKeywords("office 2007 openxml php")
-                ->setCategory("Test result file");
-        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(9);
-        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('A1', 'CÓDIG0')
-                ->setCellValue('B1', 'NOMBRE');
-
-        $i = 2;
-
-        $query = $em->createQuery($this->strDqlLista);
-        $arPlantillas = new \Brasa\TurnoBundle\Entity\TurPlantilla();
-        $arPlantillas = $query->getResult();
-
-        foreach ($arPlantillas as $arPlantilla) {
-            $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arPlantilla->getCodigoPlantillaPk())
-                    ->setCellValue('B' . $i, $arPlantilla->getNombreCorto());
-
-            $i++;
+        $intIndice = 0;
+        if(isset($arrControles['LblCodigo'])) {
+            foreach ($arrControles['LblCodigo'] as $intCodigo) {
+                $arSecuenciaDetalle = new \Brasa\TurnoBundle\Entity\TurSecuenciaDetalle();
+                $arSecuenciaDetalle = $em->getRepository('BrasaTurnoBundle:TurSecuenciaDetalle')->find($intCodigo);
+                if ($arrControles['TxtDias' . $intCodigo] != '') {                    
+                    $arSecuenciaDetalle->setDias($arrControles['TxtDias' . $intCodigo]);
+                } else {
+                    $arSecuenciaDetalle->setDias(1);
+                }
+                if ($arrControles['TxtNombre' . $intCodigo] != '') {                    
+                    $arSecuenciaDetalle->setNombre($arrControles['TxtNombre' . $intCodigo]);
+                } else {
+                    $arSecuenciaDetalle->setNombre(null);
+                }                
+                if ($arrControles['TxtDia1' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDia1' . $intCodigo]);
+                    $arSecuenciaDetalle->setDia1($strTurno);
+                } else {
+                    $arSecuenciaDetalle->setDia1(null);
+                }
+                if ($arrControles['TxtDia2' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDia2' . $intCodigo]);
+                    $arSecuenciaDetalle->setDia2($strTurno);
+                } else {
+                    $arSecuenciaDetalle->setDia2(null);
+                }
+                if ($arrControles['TxtDia3' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDia3' . $intCodigo]);
+                    $arSecuenciaDetalle->setDia3($strTurno);
+                } else {
+                    $arSecuenciaDetalle->setDia3(null);
+                }
+                if ($arrControles['TxtDia4' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDia4' . $intCodigo]);
+                    $arSecuenciaDetalle->setDia4($strTurno);
+                } else {
+                    $arSecuenciaDetalle->setDia4(null);
+                }
+                if ($arrControles['TxtDia5' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDia5' . $intCodigo]);
+                    $arSecuenciaDetalle->setDia5($strTurno);
+                } else {
+                    $arSecuenciaDetalle->setDia5(null);
+                }
+                if ($arrControles['TxtDia6' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDia6' . $intCodigo]);
+                    $arSecuenciaDetalle->setDia6($strTurno);
+                } else {
+                    $arSecuenciaDetalle->setDia6(null);
+                }
+                if ($arrControles['TxtDia7' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDia7' . $intCodigo]);
+                    $arSecuenciaDetalle->setDia7($strTurno);
+                } else {
+                    $arSecuenciaDetalle->setDia7(null);
+                }
+                if ($arrControles['TxtDia8' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDia8' . $intCodigo]);
+                    $arSecuenciaDetalle->setDia8($strTurno);
+                } else {
+                    $arSecuenciaDetalle->setDia8(null);
+                }
+                if ($arrControles['TxtDia9' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDia9' . $intCodigo]);
+                    $arSecuenciaDetalle->setDia9($strTurno);
+                } else {
+                    $arSecuenciaDetalle->setDia9(null);
+                }
+                if ($arrControles['TxtDia10' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDia10' . $intCodigo]);
+                    $arSecuenciaDetalle->setDia10($strTurno);
+                } else {
+                    $arSecuenciaDetalle->setDia10(null);
+                }
+                if ($arrControles['TxtDia11' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDia11' . $intCodigo]);
+                    $arSecuenciaDetalle->setDia11($strTurno);
+                } else {
+                    $arSecuenciaDetalle->setDia11(null);
+                }
+                if ($arrControles['TxtDia12' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDia12' . $intCodigo]);
+                    $arSecuenciaDetalle->setDia12($strTurno);
+                } else {
+                    $arSecuenciaDetalle->setDia12(null);
+                }
+                if ($arrControles['TxtDia13' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDia13' . $intCodigo]);
+                    $arSecuenciaDetalle->setDia13($strTurno);
+                } else {
+                    $arSecuenciaDetalle->setDia13(null);
+                }
+                if ($arrControles['TxtDia14' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDia14' . $intCodigo]);
+                    $arSecuenciaDetalle->setDia14($strTurno);
+                } else {
+                    $arSecuenciaDetalle->setDia14(null);
+                }
+                if ($arrControles['TxtDia15' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDia15' . $intCodigo]);
+                    $arSecuenciaDetalle->setDia15($strTurno);
+                } else {
+                    $arSecuenciaDetalle->setDia15(null);
+                }
+                if ($arrControles['TxtDia16' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDia16' . $intCodigo]);
+                    $arSecuenciaDetalle->setDia16($strTurno);
+                } else {
+                    $arSecuenciaDetalle->setDia16(null);
+                }
+                if ($arrControles['TxtDia17' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDia17' . $intCodigo]);
+                    $arSecuenciaDetalle->setDia17($strTurno);
+                } else {
+                    $arSecuenciaDetalle->setDia17(null);
+                }
+                if ($arrControles['TxtDia18' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDia18' . $intCodigo]);
+                    $arSecuenciaDetalle->setDia18($strTurno);
+                } else {
+                    $arSecuenciaDetalle->setDia18(null);
+                }
+                if ($arrControles['TxtDia19' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDia19' . $intCodigo]);
+                    $arSecuenciaDetalle->setDia19($strTurno);
+                } else {
+                    $arSecuenciaDetalle->setDia19(null);
+                }
+                if ($arrControles['TxtDia20' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDia20' . $intCodigo]);
+                    $arSecuenciaDetalle->setDia20($strTurno);
+                } else {
+                    $arSecuenciaDetalle->setDia20(null);
+                }
+                if ($arrControles['TxtDia21' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDia21' . $intCodigo]);
+                    $arSecuenciaDetalle->setDia21($strTurno);
+                } else {
+                    $arSecuenciaDetalle->setDia21(null);
+                }
+                if ($arrControles['TxtDia22' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDia22' . $intCodigo]);
+                    $arSecuenciaDetalle->setDia22($strTurno);
+                } else {
+                    $arSecuenciaDetalle->setDia22(null);
+                }
+                if ($arrControles['TxtDia23' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDia23' . $intCodigo]);
+                    $arSecuenciaDetalle->setDia23($strTurno);
+                } else {
+                    $arSecuenciaDetalle->setDia23(null);
+                }
+                if ($arrControles['TxtDia24' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDia24' . $intCodigo]);
+                    $arSecuenciaDetalle->setDia24($strTurno);
+                } else {
+                    $arSecuenciaDetalle->setDia24(null);
+                }
+                if ($arrControles['TxtDia25' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDia25' . $intCodigo]);
+                    $arSecuenciaDetalle->setDia25($strTurno);
+                } else {
+                    $arSecuenciaDetalle->setDia25(null);
+                }
+                if ($arrControles['TxtDia26' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDia26' . $intCodigo]);
+                    $arSecuenciaDetalle->setDia26($strTurno);
+                } else {
+                    $arSecuenciaDetalle->setDia26(null);
+                }
+                if ($arrControles['TxtDia27' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDia27' . $intCodigo]);
+                    $arSecuenciaDetalle->setDia27($strTurno);
+                } else {
+                    $arSecuenciaDetalle->setDia27(null);
+                }
+                if ($arrControles['TxtDia28' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDia28' . $intCodigo]);
+                    $arSecuenciaDetalle->setDia28($strTurno);
+                } else {
+                    $arSecuenciaDetalle->setDia28(null);
+                }
+                if ($arrControles['TxtDia29' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDia29' . $intCodigo]);
+                    $arSecuenciaDetalle->setDia29($strTurno);
+                } else {
+                    $arSecuenciaDetalle->setDia29(null);
+                }
+                if ($arrControles['TxtDia30' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDia30' . $intCodigo]);
+                    $arSecuenciaDetalle->setDia30($strTurno);
+                } else {
+                    $arSecuenciaDetalle->setDia30(null);
+                }
+                if ($arrControles['TxtDia31' . $intCodigo] != '') {
+                    $strTurno = $this->validarTurno($arrControles['TxtDia31' . $intCodigo]);
+                    $arSecuenciaDetalle->setDia31($strTurno);
+                } else {
+                    $arSecuenciaDetalle->setDia31(null);
+                }
+                $em->persist($arSecuenciaDetalle);
+            }            
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('Plantilla');
-        $objPHPExcel->setActiveSheetIndex(0);
-        // Redirect output to a client’s web browser (Excel2007)
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Plantillas.xlsx"');
-        header('Cache-Control: max-age=0');
-        // If you're serving to IE 9, then the following may be needed
-        header('Cache-Control: max-age=1');
-        // If you're serving to IE over SSL, then the following may be needed
-        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
-        header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-        header('Pragma: public'); // HTTP/1.0
-        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
-        $objWriter->save('php://output');
-        exit;
-    }
+        $em->flush();
+    }    
+    
+    private function validarTurno($strTurno) {
+        $em = $this->getDoctrine()->getManager();
+        $strTurnoDevolver = NUll;
+        if($strTurno != "") {
+            $arTurno = new \Brasa\TurnoBundle\Entity\TurTurno();
+            $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($strTurno);
+            if($arTurno) {
+                $strTurnoDevolver = $strTurno;
+            }
+        }
 
+        return $strTurnoDevolver;
+    }    
 }

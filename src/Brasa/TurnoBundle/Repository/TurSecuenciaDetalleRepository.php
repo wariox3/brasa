@@ -6,6 +6,18 @@ use Doctrine\ORM\EntityRepository;
 
 class TurSecuenciaDetalleRepository extends EntityRepository {
         
+    public function ListaDql() {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT sd FROM BrasaTurnoBundle:TurSecuenciaDetalle sd WHERE sd.codigoSecuenciaDetallePk <> 0";
+        /*if($strNombre != "" ) {
+            $dql .= " AND p.nombre LIKE '%" . $strNombre . "%'";
+        }
+        if($strCodigo != "" ) {
+            $dql .= " AND p.codigoPlantillaPk LIKE '%" . $strCodigo . "%'";
+        }*/
+        //$dql .= " ORDER BY p.nombre";
+        return $dql;
+    }  
     
     public function convertirArray($arSecuenciaDetalle) {
         $array = array(
@@ -43,4 +55,16 @@ class TurSecuenciaDetalleRepository extends EntityRepository {
             'dias' => $arSecuenciaDetalle->getDias());
         return $array;
     }
+    
+    public function eliminar($arrSeleccionados) {
+        $em = $this->getEntityManager();
+        if(count($arrSeleccionados) > 0) {
+            foreach ($arrSeleccionados AS $codigo) {
+                $ar = $em->getRepository('BrasaTurnoBundle:TurSecuenciaDetalle')->find($codigo);
+                $em->remove($ar);
+            }
+            $em->flush();
+        }
+    }       
+    
 }
