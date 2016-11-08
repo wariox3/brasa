@@ -19,7 +19,8 @@ class SegPermisoDocumentoType extends AbstractType
             ->add('eliminar', 'checkbox', array('required'  => false))                                            
             ->add('autorizar', 'checkbox', array('required'  => false))                                            
             ->add('desautorizar', 'checkbox', array('required'  => false))                                            
-            ->add('aprobar', 'checkbox', array('required'  => false))                            
+            ->add('aprobar', 'checkbox', array('required'  => false))
+            ->add('anular', 'checkbox', array('required'  => false))    
             ->add('guardar', 'submit', array('label' => 'Guardar'));
     }
 

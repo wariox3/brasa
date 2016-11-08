@@ -80,7 +80,7 @@ class FacturaController extends Controller
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
-        $arFactura = new \Brasa\AfiliacionBundle\Entity\AfiFactura();
+        $arFactura = new \Brasa\AfiliacionBundle\Entity\AfiFactura();        
         if($codigoFactura != '' && $codigoFactura != '0') {
             $arFactura = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->find($codigoFactura);
         } else{
@@ -141,6 +141,9 @@ class FacturaController extends Controller
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));
             }
             if($form->get('BtnAnular')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 130, 9)) {
+                return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 $strResultado = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->anular($codigoFactura);
                 if($strResultado != "") {
                     $objMensaje->Mensaje("error", $strResultado, $this);

@@ -38,7 +38,7 @@
                 </div>
             </div>                               
             <div class="form-group form-group-sm">
-                <label class="col-sm-3 control-label">Deautorizar:</label>
+                <label class="col-sm-3 control-label">Desautorizar:</label>
                 <div class="col-sm-9">
                     {{ form_widget(form.desautorizar) }}
                 </div>
@@ -48,7 +48,13 @@
                 <div class="col-sm-9">
                     {{ form_widget(form.aprobar) }}
                 </div>
-            </div>                                
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="col-sm-3 control-label">Anular:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.anular) }}
+                </div>
+            </div>    
         </div>
     </div>                  
     <div class="modal-footer">            
