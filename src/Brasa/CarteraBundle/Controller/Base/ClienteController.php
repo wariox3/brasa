@@ -11,6 +11,7 @@ class ClienteController extends Controller
     var $strDqlLista = "";
     var $strCodigo = "";
     var $strNombre = "";
+    var $strIdentificacion = "";
     /**
      * @Route("/cartera/base/cliente/lista", name="brs_cartera_base_cliente_listar")
      */   
@@ -87,19 +88,22 @@ class ClienteController extends Controller
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaCarteraBundle:CarCliente')->listaDQL(
                 $this->strNombre,                
-                $this->strCodigo   
+                $this->strCodigo,
+                $this->strIdentificacion
                 ); 
     }
 
     private function filtrar ($form) {
         $this->strCodigo = $form->get('TxtCodigo')->getData();
         $this->strNombre = $form->get('TxtNombre')->getData();
+        $this->strIdentificacion = $form->get('TxtIdentificacion')->getData();
         $this->lista();
     }
     
     private function formularioFiltro() {
         $form = $this->createFormBuilder()            
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $this->strNombre))
+            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $this->strIdentificacion))
             ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->strCodigo))                            
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))

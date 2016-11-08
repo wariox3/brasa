@@ -127,6 +127,9 @@ class PeriodoController extends Controller
             }
             
             if ($form->get('BtnEliminar')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 128, 4)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 try{
                     $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->eliminar($arrSeleccionados);
@@ -162,8 +165,14 @@ class PeriodoController extends Controller
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
         if($codigoPeriodo != '' && $codigoPeriodo != '0') {
+            if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 128, 3)) {
+                return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+            }
             $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);
         } else {
+            if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 128, 2)) {
+                return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+            }
             $fecha = new \DateTime('now');
             $arPeriodo->setFechaDesde($fecha);
             $arPeriodo->setFechaHasta($fecha);
@@ -209,6 +218,9 @@ class PeriodoController extends Controller
                 $this->generarDetalleExcel();
             }
             if ($form->get('BtnDetalleCobroImprimir')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 128, 1)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 $objPeriodoCobro = new \Brasa\AfiliacionBundle\Formatos\PeriodoCobro();
                 $objPeriodoCobro->Generar($this, $codigoPeriodo);
                 //$this->listaDetalle($codigoPeriodo);

@@ -128,6 +128,7 @@ class EmpleadoController extends Controller
             'arContratos' => $arContratos,
             'form' => $form->createView()));
     }
+        
 
     /**
      * @Route("/afi/base/empleado/contrato/nuevo/{codigoEmpleado}/{codigoContrato}", name="brs_afi_base_empleado_contrato_nuevo")
@@ -239,7 +240,7 @@ class EmpleadoController extends Controller
             ->add('TxtNumeroIdentificacion', 'text', array('label'  => 'Nombre','data' => $session->get('filtroEmpleadoIdentificacion')))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))            
             ->getForm();
         return $form;
     }

@@ -27,14 +27,34 @@ class SegPermisoDocumentoRepository extends EntityRepository {
                     if($arPermisoDocumento->getNuevo() == 1) {
                         $boolPermiso = true;
                     }
+                    break;
+                case 3: //Editar
+                    if($arPermisoDocumento->getEditar() == 1) {
+                        $boolPermiso = true;
+                    }
                     break;    
                 case 4: //Eliminar
                     if($arPermisoDocumento->getEliminar() == 1) {
                         $boolPermiso = true;
                     }
                     break;
+                case 5: //Autorizar
+                    if($arPermisoDocumento->getAutorizar() == 1) {
+                        $boolPermiso = true;
+                    }
+                    break;
+                case 6: //Desa-Autorizar
+                    if($arPermisoDocumento->getDesautorizar() == 1) {
+                        $boolPermiso = true;
+                    }
+                    break;                    
                 case 9: //Anular
-                    if($arPermisoDocumento->getEliminar() == 1) {
+                    if($arPermisoDocumento->getAnular() == 1) {
+                        $boolPermiso = true;
+                    }
+                    break;
+                case 10: //Imprimir
+                    if($arPermisoDocumento->getImprimir() == 1) {
                         $boolPermiso = true;
                     }
                     break;    

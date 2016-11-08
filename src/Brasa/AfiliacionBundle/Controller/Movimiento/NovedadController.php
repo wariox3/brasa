@@ -23,6 +23,9 @@ class NovedadController extends Controller
         if ($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');                                               
             if ($form->get('BtnEliminar')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 129, 4)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaAfiliacionBundle:AfiNovedad')->eliminar($arrSeleccionados);
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_novedad'));
@@ -50,8 +53,14 @@ class NovedadController extends Controller
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arNovedad = new \Brasa\AfiliacionBundle\Entity\AfiNovedad();
         if($codigoNovedad != '' && $codigoNovedad != '0') {
+            if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 129, 3)) {
+               return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+            }
             $arNovedad = $em->getRepository('BrasaAfiliacionBundle:AfiNovedad')->find($codigoNovedad);
         } else {
+            if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 129, 2)) {
+                return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+            }
             $fecha = new \DateTime('now');
             $arNovedad->setFechaDesde($fecha);
             $arNovedad->setFechaHasta($fecha);

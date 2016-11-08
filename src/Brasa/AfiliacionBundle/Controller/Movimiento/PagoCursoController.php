@@ -41,6 +41,9 @@ class PagoCursoController extends Controller
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_pago_curso'));
             }            
             if ($form->get('BtnEliminar')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 127, 4)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaAfiliacionBundle:AfiPagoCurso')->eliminar($arrSeleccionados);
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_pago_curso'));
@@ -69,8 +72,14 @@ class PagoCursoController extends Controller
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         $arPagoCurso = new \Brasa\AfiliacionBundle\Entity\AfiPagoCurso();
         if($codigoPagoCurso != '' && $codigoPagoCurso != '0') {
+            if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 127, 3)) {
+                return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+            }
             $arPagoCurso = $em->getRepository('BrasaAfiliacionBundle:AfiPagoCurso')->find($codigoPagoCurso);
         } else{
+            if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 127, 2)) {
+                return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+            }
             $arPagoCurso->setFecha(new \DateTime('now'));            
         }       
         $form = $this->createForm(new AfiPagoCursoType, $arPagoCurso);
@@ -104,7 +113,10 @@ class PagoCursoController extends Controller
         $form = $this->formularioDetalle($arPagoCurso);
         $form->handleRequest($request);        
         if ($form->isValid()) {
-            if($form->get('BtnAutorizar')->isClicked()) {      
+            if($form->get('BtnAutorizar')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 127, 5)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 $arrControles = $request->request->All();                
                 $strResultado = $em->getRepository('BrasaAfiliacionBundle:AfiPagoCurso')->autorizar($codigoPagoCurso);
                 if($strResultado != "") {
@@ -112,7 +124,10 @@ class PagoCursoController extends Controller
                 }
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_pago_curso_detalle', array('codigoPagoCurso' => $codigoPagoCurso)));
             }            
-            if($form->get('BtnDesAutorizar')->isClicked()) {                            
+            if($form->get('BtnDesAutorizar')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 127, 6)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 $strResultado = $em->getRepository('BrasaAfiliacionBundle:AfiPagoCurso')->desAutorizar($codigoPagoCurso);
                 if($strResultado != "") {
                     $objMensaje->Mensaje("error", $strResultado, $this);
@@ -120,6 +135,9 @@ class PagoCursoController extends Controller
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_pago_curso_detalle', array('codigoPagoCurso' => $codigoPagoCurso)));
             }    
             if($form->get('BtnImprimir')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 127, 10)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 $strResultado = $em->getRepository('BrasaAfiliacionBundle:AfiPagoCurso')->imprimir($codigoPagoCurso);
                 if($strResultado != "") {
                     $objMensaje->Mensaje("error", $strResultado, $this);

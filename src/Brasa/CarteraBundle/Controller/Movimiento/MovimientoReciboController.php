@@ -27,6 +27,9 @@ class MovimientoReciboController extends Controller
         $this->lista();        
         if ($form->isValid()) {               
             if ($form->get('BtnEliminar')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 116, 4)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaCarteraBundle:CarRecibo')->eliminar($arrSeleccionados);
                 return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_listar'));                
@@ -59,8 +62,14 @@ class MovimientoReciboController extends Controller
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();                 
         $arRecibo = new \Brasa\CarteraBundle\Entity\CarRecibo();
         if($codigoRecibo != 0) {
+            if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 116, 3)) {
+                return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+            }
             $arRecibo = $em->getRepository('BrasaCarteraBundle:CarRecibo')->find($codigoRecibo);
         }else{
+            if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 116, 2)) {
+                return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+            }
             $arRecibo->setFecha(new \DateTime('now'));
             $arRecibo->setFechaPago(new \DateTime('now'));
         }
@@ -129,7 +138,10 @@ class MovimientoReciboController extends Controller
         $form = $this->formularioDetalle($arRecibo);
         $form->handleRequest($request);
         if($form->isValid()) {
-            if($form->get('BtnAutorizar')->isClicked()) {  
+            if($form->get('BtnAutorizar')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 116, 5)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 $arrControles = $request->request->All();
                 if ($arRecibo->getEstadoAutorizado() == 0){
                     $this->actualizarDetalle($arrControles, $codigoRecibo);
@@ -161,7 +173,10 @@ class MovimientoReciboController extends Controller
                 }
                 
             }
-            if($form->get('BtnDesAutorizar')->isClicked()) {            
+            if($form->get('BtnDesAutorizar')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 116, 6)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 if($arRecibo->getEstadoAutorizado() == 1 && $arRecibo->getEstadoImpreso() == 0) {
                     $arRecibo->setEstadoAutorizado(0);
                     $arDetallesRecibo = $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->findBy(array('codigoReciboFk' => $codigoRecibo));
@@ -179,7 +194,10 @@ class MovimientoReciboController extends Controller
                     $objMensaje->Mensaje('error', "El recibo debe estar autorizado y no puede estar impreso", $this);
                 }
             }
-            if($form->get('BtnAnular')->isClicked()) {            
+            if($form->get('BtnAnular')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 116, 9)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 if($arRecibo->getEstadoImpreso() == 1) {
                     $arRecibo->setEstadoAnulado(1);
                     $arRecibo->setVrTotalAjustePeso(0);
@@ -230,6 +248,9 @@ class MovimientoReciboController extends Controller
                 return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_detalle', array('codigoRecibo' => $codigoRecibo)));                    
             }    
             if($form->get('BtnImprimir')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 116, 10)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 if($arRecibo->getEstadoAutorizado() == 1 ) {
                     $strResultado = $em->getRepository('BrasaCarteraBundle:CarRecibo')->imprimir($codigoRecibo);
                     if($strResultado != "") {

@@ -27,6 +27,9 @@ class MovimientoNotaCreditoController extends Controller
         $this->lista();        
         if ($form->isValid()) {               
             if ($form->get('BtnEliminar')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 118, 4)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaCarteraBundle:CarNotaCredito')->eliminar($arrSeleccionados);
                 return $this->redirect($this->generateUrl('brs_cartera_movimiento_notacredito_listar'));                
@@ -59,8 +62,14 @@ class MovimientoNotaCreditoController extends Controller
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();                 
         $arNotaCredito = new \Brasa\CarteraBundle\Entity\CarNotaCredito();
         if($codigoNotaCredito != 0) {
+            if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 118, 3)) {
+                return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+            }
             $arNotaCredito = $em->getRepository('BrasaCarteraBundle:CarNotaCredito')->find($codigoNotaCredito);
         }else{
+            if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 118, 2)) {
+                return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+            }
             $arNotaCredito->setFecha(new \DateTime('now'));
             $arNotaCredito->setFechaPago(new \DateTime('now'));
         }
@@ -127,7 +136,10 @@ class MovimientoNotaCreditoController extends Controller
         $form = $this->formularioDetalle($arNotaCredito);
         $form->handleRequest($request);
         if($form->isValid()) {
-            if($form->get('BtnAutorizar')->isClicked()) {  
+            if($form->get('BtnAutorizar')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 118, 5)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 $arrControles = $request->request->All();
                 if ($arNotaCredito->getEstadoAutorizado() == 0){
                     $this->actualizarDetalle($arrControles, $codigoNotaCredito);
@@ -158,7 +170,10 @@ class MovimientoNotaCreditoController extends Controller
                     $objMensaje->Mensaje('error', 'No se puede autorizar, ya esta autorizado', $this);
                 }    
             }
-            if($form->get('BtnDesAutorizar')->isClicked()) {            
+            if($form->get('BtnDesAutorizar')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 118, 6)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 if($arNotaCredito->getEstadoAutorizado() == 1 && $arNotaCredito->getEstadoImpreso() == 0) {
                     $arNotaCredito->setEstadoAutorizado(0);
                     $arDetallesNotaCredito = $em->getRepository('BrasaCarteraBundle:CarNotaCreditoDetalle')->findBy(array('codigoNotaCreditoFk' => $codigoNotaCredito));
@@ -176,7 +191,10 @@ class MovimientoNotaCreditoController extends Controller
                     $objMensaje->Mensaje('error', "La nota credito debe estar autorizado y no puede estar impreso", $this);
                 }
             } 
-            if($form->get('BtnAnular')->isClicked()) {            
+            if($form->get('BtnAnular')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 118, 9)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 if($arNotaCredito->getEstadoImpreso() == 1) {
                     $arNotaCredito->setEstadoAnulado(1);
                     $arNotaCredito->setValor(0);
@@ -217,6 +235,9 @@ class MovimientoNotaCreditoController extends Controller
                 }
             }    
             if($form->get('BtnImprimir')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 118, 10)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 if($arNotaCredito->getEstadoAutorizado() == 1 ) {
                     $strResultado = $em->getRepository('BrasaCarteraBundle:CarNotaCredito')->imprimir($codigoNotaCredito);
                     if($strResultado != "") {

@@ -40,7 +40,10 @@ class CursoController extends Controller
                 $em->flush();
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_curso'));
             }            
-            if ($form->get('BtnEliminar')->isClicked()) {
+            if ($form->get('BtnEliminar')->isClicked()) {                
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 126, 4)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->eliminar($arrSeleccionados);
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_curso'));
@@ -107,8 +110,14 @@ class CursoController extends Controller
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arCurso = new \Brasa\AfiliacionBundle\Entity\AfiCurso();
         if($codigoCurso != '' && $codigoCurso != '0') {
+            if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 126, 3)) {
+                return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+            }
             $arCurso = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->find($codigoCurso);
         } else {
+            if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 126, 2)) {
+                return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+            }
             $fecha = date('Y-m-d');
             $nuevafecha = strtotime ( '+360 day' , strtotime ( $fecha ) ) ;
             $nuevafecha = date ('Y-m-d', $nuevafecha ); 
@@ -242,7 +251,10 @@ class CursoController extends Controller
         $form->handleRequest($request);
         $this->listaDetalle($codigoCurso);
         if ($form->isValid()) {  
-            if($form->get('BtnAutorizar')->isClicked()) {      
+            if($form->get('BtnAutorizar')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 126, 5)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 $arrControles = $request->request->All();
                 $this->actualizarDetalle($arrControles, $codigoCurso);
                 $strResultado = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->autorizar($codigoCurso);
@@ -251,14 +263,20 @@ class CursoController extends Controller
                 }
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_curso_detalle', array('codigoCurso' => $codigoCurso)));
             }            
-            if($form->get('BtnAnular')->isClicked()) {      
+            if($form->get('BtnAnular')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 126, 9)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 $strResultado = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->anular($codigoCurso);
                 if($strResultado != "") {
                     $objMensaje->Mensaje("error", $strResultado, $this);
                 }
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_curso_detalle', array('codigoCurso' => $codigoCurso)));
             }            
-            if($form->get('BtnDesAutorizar')->isClicked()) {                            
+            if($form->get('BtnDesAutorizar')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 126, 6)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 $strResultado = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->desAutorizar($codigoCurso);
                 if($strResultado != "") {
                     $objMensaje->Mensaje("error", $strResultado, $this);
@@ -266,6 +284,9 @@ class CursoController extends Controller
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_curso_detalle', array('codigoCurso' => $codigoCurso)));
             }    
             if($form->get('BtnImprimir')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 126, 10)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 $strResultado = $em->getRepository('BrasaAfiliacionBundle:AfiCurso')->imprimir($codigoCurso);
                 if($strResultado != "") {
                     $objMensaje->Mensaje("error", $strResultado, $this);

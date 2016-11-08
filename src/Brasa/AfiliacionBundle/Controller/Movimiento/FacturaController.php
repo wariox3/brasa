@@ -45,6 +45,9 @@ class FacturaController extends Controller
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_factura'));
             }
             if ($form->get('BtnEliminar')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 130, 4)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 try{
                     $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->eliminar($arrSeleccionados);
@@ -82,8 +85,14 @@ class FacturaController extends Controller
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         $arFactura = new \Brasa\AfiliacionBundle\Entity\AfiFactura();        
         if($codigoFactura != '' && $codigoFactura != '0') {
+            if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 130, 3)) {
+                return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+            }
             $arFactura = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->find($codigoFactura);
         } else{
+            if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 130, 2)) {
+                return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+            }
             $arFactura->setFecha(new \DateTime('now'));
             $arFactura->setFechaVence(new \DateTime('now'));
         }
@@ -132,6 +141,9 @@ class FacturaController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {
             if($form->get('BtnAutorizar')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 130, 5)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 $arrControles = $request->request->All();
                 $this->actualizarDetalle($arrControles, $codigoFactura);
                 $strResultado = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->autorizar($codigoFactura);
@@ -142,6 +154,9 @@ class FacturaController extends Controller
             }
             if($form->get('BtnAnular')->isClicked()) {
                 if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 130, 9)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 130, 9)) {
                 return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
                 }
                 $strResultado = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->anular($codigoFactura);
@@ -151,6 +166,9 @@ class FacturaController extends Controller
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));
             }
             if($form->get('BtnDesAutorizar')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 130, 6)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 $strResultado = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->desAutorizar($codigoFactura);
                 if($strResultado != "") {
                     $objMensaje->Mensaje("error", $strResultado, $this);
@@ -158,6 +176,9 @@ class FacturaController extends Controller
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_factura_detalle', array('codigoFactura' => $codigoFactura)));
             }
             if($form->get('BtnImprimir')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 130, 10)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 $strResultado = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->imprimir($codigoFactura);
                 if($strResultado != "") {
                     $objMensaje->Mensaje("error", $strResultado, $this);

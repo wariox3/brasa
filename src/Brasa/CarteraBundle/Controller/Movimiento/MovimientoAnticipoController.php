@@ -27,6 +27,9 @@ class MovimientoAnticipoController extends Controller
         $this->lista();        
         if ($form->isValid()) {               
             if ($form->get('BtnEliminar')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 115, 4)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaCarteraBundle:CarAnticipo')->eliminar($arrSeleccionados);
                 return $this->redirect($this->generateUrl('brs_cartera_movimiento_anticipo_listar'));                
@@ -59,8 +62,14 @@ class MovimientoAnticipoController extends Controller
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();                 
         $arAnticipo = new \Brasa\CarteraBundle\Entity\CarAnticipo();
         if($codigoAnticipo != 0) {
+            if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 115, 3)) {
+                return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+            }
             $arAnticipo = $em->getRepository('BrasaCarteraBundle:CarAnticipo')->find($codigoAnticipo);
         }else{
+            if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 115, 2)) {
+                return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+            }
             $arAnticipo->setFecha(new \DateTime('now'));
             $arAnticipo->setFechaPago(new \DateTime('now'));
         }
@@ -138,7 +147,10 @@ class MovimientoAnticipoController extends Controller
         $form = $this->formularioDetalle($arAnticipo);
         $form->handleRequest($request);
         if($form->isValid()) {
-            if($form->get('BtnAutorizar')->isClicked()) {  
+            if($form->get('BtnAutorizar')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 115, 5)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 $arrControles = $request->request->All();
                 if ($arAnticipo->getEstadoAutorizado() == 0){
                     $this->actualizarDetalle($arrControles, $codigoAnticipo);
@@ -170,7 +182,10 @@ class MovimientoAnticipoController extends Controller
                 }
                 
             }
-            if($form->get('BtnDesAutorizar')->isClicked()) {            
+            if($form->get('BtnDesAutorizar')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 115, 6)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 if($arAnticipo->getEstadoAutorizado() == 1 && $arAnticipo->getEstadoImpreso() == 0) {
                     $arAnticipo->setEstadoAutorizado(0);
                     $arDetallesAnticipo = $em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->findBy(array('codigoAnticipoFk' => $codigoAnticipo));
@@ -188,7 +203,10 @@ class MovimientoAnticipoController extends Controller
                     $objMensaje->Mensaje('error', "El anticipo debe estar autorizado y no puede estar impreso", $this);
                 }
             }
-            if($form->get('BtnAnular')->isClicked()) {            
+            if($form->get('BtnAnular')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 115, 9)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 if($arAnticipo->getEstadoImpreso() == 1) {
                     $arAnticipo->setEstadoAnulado(1);
                     $arAnticipo->setVrTotalAjustePeso(0);
@@ -228,7 +246,7 @@ class MovimientoAnticipoController extends Controller
                     $objMensaje->Mensaje("error", "No se puede actualizar el registro, esta autorizado", $this);
                 }    
             }
-            if($form->get('BtnDetalleEliminar')->isClicked()) {  
+            if($form->get('BtnDetalleEliminar')->isClicked()) {                
                 if($arAnticipo->getEstadoAutorizado() == 0 ) {
                     $arrSeleccionados = $request->request->get('ChkSeleccionar');
                     $em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->eliminarSeleccionados($arrSeleccionados);
@@ -239,6 +257,9 @@ class MovimientoAnticipoController extends Controller
                 return $this->redirect($this->generateUrl('brs_cartera_movimiento_anticipo_detalle', array('codigoAnticipo' => $codigoAnticipo)));                    
             }    
             if($form->get('BtnImprimir')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 115, 10)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 if($arAnticipo->getEstadoAutorizado() == 1 ) {
                     $strResultado = $em->getRepository('BrasaCarteraBundle:CarAnticipo')->imprimir($codigoAnticipo);
                     if($strResultado != "") {
@@ -279,7 +300,7 @@ class MovimientoAnticipoController extends Controller
     public function detalleNuevoAction($codigoAnticipo, $codigoAnticipoDetalle = 0) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
-        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();        
         $paginator  = $this->get('knp_paginator');
         $arAnticipo = new \Brasa\CarteraBundle\Entity\CarAnticipo();
         $arAnticipo = $em->getRepository('BrasaCarteraBundle:CarAnticipo')->find($codigoAnticipo);

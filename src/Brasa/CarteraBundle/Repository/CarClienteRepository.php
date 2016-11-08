@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityRepository;
 
 class CarClienteRepository extends EntityRepository {
     
-    public function ListaDql($strNombre = "", $strCodigo = "") {
+    public function ListaDql($strNombre = "", $strCodigo = "", $strIdentificacion = "") {
         $em = $this->getEntityManager();
         $dql   = "SELECT c FROM BrasaCarteraBundle:CarCliente c WHERE c.codigoClientePk <> 0";
         if($strNombre != "" ) {
@@ -15,6 +15,9 @@ class CarClienteRepository extends EntityRepository {
         }
         if($strCodigo != "" ) {
             $dql .= " AND c.codigoClientePk LIKE '%" . $strCodigo . "%'";
+        }
+        if($strIdentificacion != "" ) {
+            $dql .= " AND c.nit LIKE '%" . $strIdentificacion . "%'";
         }
         $dql .= " ORDER BY c.nombreCorto";
         return $dql;
