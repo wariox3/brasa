@@ -1,6 +1,6 @@
 <?php
 
-namespace Brasa\TurnoBundle\Controller\Utilidad;
+namespace Brasa\TurnoBundle\Controller\Utilidad\Programacion;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -9,7 +9,7 @@ use ZipArchive;
 use Symfony\Component\HttpFoundation\Response;
 
 
-class ProgramacionInconsistenciaController extends Controller
+class InconsistenciaController extends Controller
 {
     var $strDqlLista = "";
     /**

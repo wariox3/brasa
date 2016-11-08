@@ -1,6 +1,6 @@
 <?php
 
-namespace Brasa\TurnoBundle\Controller\Utilidad;
+namespace Brasa\TurnoBundle\Controller\Utilidad\Programacion;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityRepository;
 use ZipArchive;
 use Symfony\Component\HttpFoundation\Response;
 
-class ProgramacionDescargaMasivaController extends Controller
+class DescargaMasivaController extends Controller
 {
     var $strDqlLista = "";
     /**
