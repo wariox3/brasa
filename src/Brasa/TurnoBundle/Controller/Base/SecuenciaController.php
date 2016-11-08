@@ -43,9 +43,9 @@ class SecuenciaController extends Controller {
             }
         }
 
-        $arPlantillas = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
-        return $this->render('BrasaTurnoBundle:Base/Plantilla:lista.html.twig', array(
-                    'arPlantillas' => $arPlantillas,
+        $arSecuencias = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
+        return $this->render('BrasaTurnoBundle:Base/Secuencia:lista.html.twig', array(
+                    'arSecuencias' => $arSecuencias,
                     'form' => $form->createView()));
     }
 
@@ -81,7 +81,7 @@ class SecuenciaController extends Controller {
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
-        $this->strDqlLista = $em->getRepository('BrasaTurnoBundle:TurPlantilla')->listaDQL(
+        $this->strDqlLista = $em->getRepository('BrasaTurnoBundle:TurSecuenciaDetalle')->listaDQL(
                 $this->strNombre, $this->strCodigo
         );
     }
