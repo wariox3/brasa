@@ -36,9 +36,13 @@
                         
                     </div>
                     <label class="col-sm-2 control-label">Secuencia:</label>
-                    <div class="col-sm-4">                  
-                        {{ form_widget(form.secuenciaDetalleRel , { 'attr': {'class': 'form-control'} }) }}
+                    <div class="col-sm-3">                  
+                        {{ form_widget(form.secuenciaDetalleRel , { 'attr': {'class': 'form-control'} }) }}                        
                     </div>                   
+                    <div class="col-sm-1">                  
+                        {{ form_widget(form.TxtPosicion , { 'attr': {'class': 'form-control'} }) }}
+                    </div>                                       
+                    
                 </div>                                     
             </div>
         </div>    

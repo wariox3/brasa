@@ -256,7 +256,8 @@ class ProgramacionController extends Controller
                 'property' => 'nombre',
                 'required' => false))                  
             ->add('TxtCodigoRecurso', 'text')
-            ->add('TxtNombreRecurso', 'text')                 
+            ->add('TxtNombreRecurso', 'text')    
+            ->add('TxtPosicion', 'number', array('data' => 1))
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
             ->getForm();
         $form->handleRequest($request);
@@ -287,9 +288,13 @@ class ProgramacionController extends Controller
                             
                             $arSecuenciaDetalle = $form->get('secuenciaDetalleRel')->getData();
                             if($arSecuenciaDetalle) {
+                                $posicionInicial = $form->get('TxtPosicion')->getData();
                                 $arrSecuenciaDetalle = $em->getRepository('BrasaTurnoBundle:TurSecuenciaDetalle')->convertirArray($arSecuenciaDetalle);
                                 $intUltimoDia = $strUltimoDiaMes = date("d",(mktime(0,0,0,$arProgramacion->getFecha()->format('m')+1,1,$arProgramacion->getFecha()->format('Y'))-1));
                                 $j = 1;
+                                if($posicionInicial <= $arrSecuenciaDetalle) {
+                                  $j = $posicionInicial;
+                                }                                
                                 for($i=1; $i<=$intUltimoDia; $i++) {
                                     if($i == 1) {
                                         $arProgramacionDetalle->setDia1($arrSecuenciaDetalle[$j]);
