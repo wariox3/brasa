@@ -422,7 +422,7 @@ class PeriodoController extends Controller
                         $arEntidadRiesgos = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional')->find($codigoInterfaceRiesgos);
                         $codigoInterfaceRiesgos = $arEntidadRiesgos->getCodigoInterface();
                         $tipo = "E";
-                        $tipoDoc = "NI";
+                        $tipoDoc = $arPeriodo->getClienteRel()->getTipoIdentificacion();
                         $formaPresentacion = $form->get('tipo')->getData();
                         $nit = $arPeriodo->getClienteRel()->getNit();
                         $dv = $arPeriodo->getClienteRel()->getDigitoVerificacion();

@@ -28,7 +28,12 @@ class AfiCliente
     /**
      * @ORM\Column(name="digito_verificacion", type="string", length=1, nullable=true)
      */
-    private $digitoVerificacion;             
+    private $digitoVerificacion;
+    
+    /**
+     * @ORM\Column(name="tipo_identificacion", type="string", length=2, nullable=true)
+     */
+    private $tipoIdentificacion;
     
     /**
      * @ORM\Column(name="nombre_corto", type="string", length=50)
@@ -231,6 +236,7 @@ class AfiCliente
     
 
    
+    
     /**
      * Constructor
      */
@@ -300,6 +306,30 @@ class AfiCliente
     public function getDigitoVerificacion()
     {
         return $this->digitoVerificacion;
+    }
+
+    /**
+     * Set tipoIdentificacion
+     *
+     * @param string $tipoIdentificacion
+     *
+     * @return AfiCliente
+     */
+    public function setTipoIdentificacion($tipoIdentificacion)
+    {
+        $this->tipoIdentificacion = $tipoIdentificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoIdentificacion
+     *
+     * @return string
+     */
+    public function getTipoIdentificacion()
+    {
+        return $this->tipoIdentificacion;
     }
 
     /**

@@ -59,7 +59,8 @@ class AfiClienteType extends AbstractType
             ->add('redondearCobro', 'checkbox', array('required'  => false))                            
             ->add('comentarios', 'textarea', array('required' => false))
             ->add('codigoSucursal', 'text', array('required' => false))
-            ->add('independiente', 'checkbox', array('required'  => false))                
+            ->add('independiente', 'checkbox', array('required'  => false))
+            ->add('tipoIdentificacion', 'choice', array('choices'   => array('NI' => 'NIT', 'CC' => 'CEDULA DE CIUDADANIA')))                
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }

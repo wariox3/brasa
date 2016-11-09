@@ -121,8 +121,12 @@
                     <td>{{ arReciboDetalle.codigoReciboDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arReciboDetalle.codigoReciboDetallePk }}"></td>                                                    
                     <td>{{ arReciboDetalle.numeroFactura  }}</td>
                     <td>{{ arReciboDetalle.cuentaCobrarTipoRel.nombre |default('')  }}</td>
-                    {% if arRecibo.estadoAutorizado == 0 %}                        
-                        <td style="text-align: right"><input style="text-align: right" class="input-grid" type="text" name="TxtVrDescuento{{ arReciboDetalle.codigoReciboDetallePk }}" value="{{ arReciboDetalle.vrDescuento  }}" size="8" style="width:65px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
+                    {% if arRecibo.estadoAutorizado == 0 %}
+                        {% if rol == 'ROLE_ADMIN'%}
+                            <td style="text-align: right"><input style="text-align: right" class="input-grid" type="text" name="TxtVrDescuento{{ arReciboDetalle.codigoReciboDetallePk }}" value="{{ arReciboDetalle.vrDescuento  }}" size="8" style="width:65px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
+                        {% else %}
+                            <td style="text-align: right"><input style="text-align: right" class="input-grid" type="text" name="TxtVrDescuento{{ arReciboDetalle.codigoReciboDetallePk }}" value="{{ arReciboDetalle.vrDescuento  }}" size="8" style="width:65px" onkeypress="return validarNumeros(event)" onclick="this.select()" readonly="readonly"/></td>                        
+                        {% endif %}
                         <td style="text-align: right"><input style="text-align: right" class="input-grid" type="text" name="TxtVrAjustePeso{{ arReciboDetalle.codigoReciboDetallePk }}" value="{{ arReciboDetalle.vrAjustePeso  }}" size="8" style="width:65px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
                         <td style="text-align: right"><input style="text-align: right" class="input-grid" type="text" name="TxtVrReteIca{{ arReciboDetalle.codigoReciboDetallePk }}" value="{{ arReciboDetalle.vrReteIca  }}" size="8" style="width:65px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
                         <td style="text-align: right"><input style="text-align: right" class="input-grid" type="text" name="TxtVrReteIva{{ arReciboDetalle.codigoReciboDetallePk }}" value="{{ arReciboDetalle.vrReteIva  }}" size="8" style="width:65px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        

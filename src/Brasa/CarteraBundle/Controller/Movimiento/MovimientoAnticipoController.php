@@ -146,6 +146,8 @@ class MovimientoAnticipoController extends Controller
         $arAnticipo = $em->getRepository('BrasaCarteraBundle:CarAnticipo')->find($codigoAnticipo);
         $form = $this->formularioDetalle($arAnticipo);
         $form->handleRequest($request);
+        $arUsuario = $this->getUser();
+        $rol = $arUsuario->getRoles();
         if($form->isValid()) {
             if($form->get('BtnAutorizar')->isClicked()) {
                 if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 115, 5)) {
@@ -290,7 +292,8 @@ class MovimientoAnticipoController extends Controller
         return $this->render('BrasaCarteraBundle:Movimientos/Anticipo:detalle.html.twig', array(
                     'arAnticipo' => $arAnticipo,
                     'arAnticipoDetalle' => $arAnticipoDetalle,
-                    'form' => $form->createView()
+                    'form' => $form->createView(),
+                    'rol' => $rol
                     ));
     }
     

@@ -137,6 +137,8 @@ class MovimientoReciboController extends Controller
         $arRecibo = $em->getRepository('BrasaCarteraBundle:CarRecibo')->find($codigoRecibo);
         $form = $this->formularioDetalle($arRecibo);
         $form->handleRequest($request);
+        $arUsuario = $this->getUser();
+        $rol = $arUsuario->getRoles();
         if($form->isValid()) {
             if($form->get('BtnAutorizar')->isClicked()) {
                 if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 116, 5)) {
@@ -270,7 +272,8 @@ class MovimientoReciboController extends Controller
         return $this->render('BrasaCarteraBundle:Movimientos/Recibo:detalle.html.twig', array(
                     'arRecibo' => $arRecibo,
                     'arReciboDetalle' => $arReciboDetalle,
-                    'form' => $form->createView()
+                    'form' => $form->createView(),
+                    'rol' => $rol 
                     ));
     }
     
