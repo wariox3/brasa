@@ -51,6 +51,7 @@ DELETE FROM tur_cotizacion;
 DELETE FROM tur_recurso;
 
 /* Recurso humano */
+DELETE FROM rhu_visita;
 DELETE FROM rhu_provision;
 DELETE FROM rhu_provision_periodo;
 DELETE FROM rhu_soporte_pago_horario_detalle;
