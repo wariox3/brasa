@@ -207,7 +207,7 @@ class MovimientoAnticipoController extends Controller
                 if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 115, 9)) {
                     return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
                 }
-                if($arAnticipo->getEstadoImpreso() == 1) {
+                if($arAnticipo->getEstadoImpresoAnticipado() == 1) {
                     $arAnticipo->setEstadoAnulado(1);
                     $arAnticipo->setVrTotalAjustePeso(0);
                     $arAnticipo->setVrTotalDescuento(0);
@@ -449,8 +449,13 @@ class MovimientoAnticipoController extends Controller
             $arrBotonDesAutorizar['disabled'] = true;
             $arrBotonAnular['disabled'] = false;
         }
+        
         if($ar->getEstadoAnulado() == 1) {
             $arrBotonAnular['disabled'] = true;
+        }
+        if($ar->getEstadoImpresoAnticipado() == 1) {
+            //$arrBotonDesAutorizar['disabled'] = true;
+            $arrBotonAnular['disabled'] = false;
         }
         $form = $this->createFormBuilder()
                     ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            

@@ -66,6 +66,7 @@ class ActualizarClienteCarteraController extends Controller
         $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiCliente')->listaDQL(
                 $session->get('filtroClienteNombre'),
                 '',
+                $session->get('filtroClienteIdentificacion'),
                 $session->get('filtroIndependiente')
                 );
     }
@@ -73,6 +74,7 @@ class ActualizarClienteCarteraController extends Controller
     private function filtrar ($form) {
         $session = $this->getRequest()->getSession();
         $session->set('filtroClienteNombre', $form->get('TxtNombre')->getData());
+        $session->set('filtroClienteIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroIndependiente', $form->get('independiente')->getData());
         $this->lista();
     }
@@ -81,6 +83,7 @@ class ActualizarClienteCarteraController extends Controller
         $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroClienteNombre')))
+            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroClienteIdentificacion')))
             ->add('independiente', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'),'data' => $session->get('filtroIndependiente')))
             ->add('BtnActualizar', 'submit', array('label'  => 'Actualizar',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
