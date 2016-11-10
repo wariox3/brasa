@@ -25,160 +25,176 @@ class ProvisionController extends Controller
         if($form->isValid()) {            
             if($request->request->get('OpGenerar')) {
                 $codigoProvisionPeriodo = $request->request->get('OpGenerar');
-                set_time_limit(0);
-                ini_set("memory_limit", -1);            
-                $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();            
-                $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
-                $salarioMinimo = $arConfiguracion->getVrSalario();
-                $porcentajeCaja = $arConfiguracion->getAportesPorcentajeCaja();
-                $porcentajeCesantias = $arConfiguracion->getPrestacionesPorcentajeCesantias();        
-                $porcentajeInteresesCesantias = $arConfiguracion->getPrestacionesPorcentajeInteresesCesantias();
-                $porcentajeVacaciones = $arConfiguracion->getPrestacionesPorcentajeVacaciones();
-                $porcentajePrimas = $arConfiguracion->getPrestacionesPorcentajePrimas();            
-                $porcentajeIndemnizacion = $arConfiguracion->getPrestacionesPorcentajeIndemnizacion();                 
                 $arProvisionPeriodo = new \Brasa\RecursoHumanoBundle\Entity\RhuProvisionPeriodo();
                 $arProvisionPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuProvisionPeriodo')->find($codigoProvisionPeriodo);
-                $ingresoBasePrestacionTotal = 0;
-                $ingresoBaseCotizacionTotal = 0;
-                $cesantiasTotal = 0;
-                $interesesCesantiasTotal = 0;
-                $primasTotal = 0;  
-                $vacacionesTotal = 0;
-                $indemnizacionTotal = 0;                          
-                $pensionTotal = 0; 
-                $saludTotal = 0;         
-                $riesgosTotal = 0;
-                $cajaTotal = 0;
-                $senaTotal = 0;
-                $icbfTotal = 0;                 
-                $dql   = "SELECT p.codigoEmpleadoFk, p.codigoContratoFk FROM BrasaRecursoHumanoBundle:RhuPago p "
-                        . "WHERE p.estadoPagado = 1 AND p.fechaDesdePago >= '" . $arProvisionPeriodo->getFechaDesde()->format('Y/m/d') . "' AND p.fechaDesdePago <= '" . $arProvisionPeriodo->getFechaHasta()->format('Y/m/d') . "' "
-                        . "GROUP BY p.codigoEmpleadoFk, p.codigoContratoFk";
-                $query = $em->createQuery($dql);
-                $arEmpleados = $query->getResult();                
-                foreach ($arEmpleados as $arEmpleado) {
-                    $ingresoBasePrestacion = 0;
-                    $ingresoBaseCotizacion = 0;
-                    $ingresoBaseIndemnizacion = 0;
-                    $ingresoBaseVacacion = 0;                    
-                    $dql   = "SELECT pd.vrIngresoBasePrestacion, pd.vrIngresoBaseCotizacion, pc.provisionIndemnizacion, pc.provisionVacacion FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p JOIN pd.pagoConceptoRel pc "
-                            . "WHERE p.codigoEmpleadoFk = " . $arEmpleado['codigoEmpleadoFk'] . " AND p.codigoContratoFk = " . $arEmpleado['codigoContratoFk'] . " AND p.estadoPagado = 1 AND p.fechaDesdePago >= '" . $arProvisionPeriodo->getFechaDesde()->format('Y/m/d') . "' AND p.fechaDesdePago <= '" . $arProvisionPeriodo->getFechaHasta()->format('Y/m/d') . "'";
+                if($arProvisionPeriodo->getEstadoGenerado() == 0) {
+                    set_time_limit(0);
+                    ini_set("memory_limit", -1);            
+                    $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();            
+                    $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
+                    $salarioMinimo = $arConfiguracion->getVrSalario();
+                    $porcentajeCaja = $arConfiguracion->getAportesPorcentajeCaja();
+                    $porcentajeCesantias = $arConfiguracion->getPrestacionesPorcentajeCesantias();        
+                    $porcentajeInteresesCesantias = $arConfiguracion->getPrestacionesPorcentajeInteresesCesantias();
+                    $porcentajeVacaciones = $arConfiguracion->getPrestacionesPorcentajeVacaciones();
+                    $porcentajePrimas = $arConfiguracion->getPrestacionesPorcentajePrimas();            
+                    $porcentajeIndemnizacion = $arConfiguracion->getPrestacionesPorcentajeIndemnizacion();                 
+
+                    $ingresoBasePrestacionTotal = 0;
+                    $ingresoBaseCotizacionTotal = 0;
+                    $cesantiasTotal = 0;
+                    $interesesCesantiasTotal = 0;
+                    $primasTotal = 0;  
+                    $vacacionesTotal = 0;
+                    $indemnizacionTotal = 0;                          
+                    $pensionTotal = 0; 
+                    $saludTotal = 0;         
+                    $riesgosTotal = 0;
+                    $cajaTotal = 0;
+                    $senaTotal = 0;
+                    $icbfTotal = 0;                 
+                    $dql   = "SELECT p.codigoEmpleadoFk, p.codigoContratoFk FROM BrasaRecursoHumanoBundle:RhuPago p "
+                            . "WHERE p.estadoPagado = 1 AND p.fechaDesdePago >= '" . $arProvisionPeriodo->getFechaDesde()->format('Y/m/d') . "' AND p.fechaDesdePago <= '" . $arProvisionPeriodo->getFechaHasta()->format('Y/m/d') . "' "
+                            . "GROUP BY p.codigoEmpleadoFk, p.codigoContratoFk";
                     $query = $em->createQuery($dql);
-                    $arPagosDetalles = $query->getResult();                                         
-                    foreach ($arPagosDetalles as $arPagoDetalle) {
-                        $ingresoBasePrestacion += $arPagoDetalle['vrIngresoBasePrestacion'];
-                        $ingresoBaseCotizacion += $arPagoDetalle['vrIngresoBaseCotizacion'];
-                        if($arPagoDetalle['provisionIndemnizacion'] == 1) {
-                            $ingresoBaseIndemnizacion +=  $arPagoDetalle['vrIngresoBasePrestacion'];
+                    $arEmpleados = $query->getResult();                
+                    foreach ($arEmpleados as $arEmpleado) {
+                        $ingresoBasePrestacion = 0;
+                        $ingresoBaseCotizacion = 0;
+                        $ingresoBaseIndemnizacion = 0;
+                        $ingresoBaseVacacion = 0;                    
+                        $dql   = "SELECT pd.vrIngresoBasePrestacion, pd.vrIngresoBaseCotizacion, pc.provisionIndemnizacion, pc.provisionVacacion FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p JOIN pd.pagoConceptoRel pc "
+                                . "WHERE p.codigoEmpleadoFk = " . $arEmpleado['codigoEmpleadoFk'] . " AND p.codigoContratoFk = " . $arEmpleado['codigoContratoFk'] . " AND p.estadoPagado = 1 AND p.fechaDesdePago >= '" . $arProvisionPeriodo->getFechaDesde()->format('Y/m/d') . "' AND p.fechaDesdePago <= '" . $arProvisionPeriodo->getFechaHasta()->format('Y/m/d') . "'";
+                        $query = $em->createQuery($dql);
+                        $arPagosDetalles = $query->getResult();                                         
+                        foreach ($arPagosDetalles as $arPagoDetalle) {
+                            $ingresoBasePrestacion += $arPagoDetalle['vrIngresoBasePrestacion'];
+                            $ingresoBaseCotizacion += $arPagoDetalle['vrIngresoBaseCotizacion'];
+                            if($arPagoDetalle['provisionIndemnizacion'] == 1) {
+                                $ingresoBaseIndemnizacion +=  $arPagoDetalle['vrIngresoBasePrestacion'];
+                            }
+                            if($arPagoDetalle['provisionVacacion'] == 1) {
+                                $ingresoBaseVacacion +=  $arPagoDetalle['vrIngresoBasePrestacion'];
+                            }                         
                         }
-                        if($arPagoDetalle['provisionVacacion'] == 1) {
-                            $ingresoBaseVacacion +=  $arPagoDetalle['vrIngresoBasePrestacion'];
-                        }                         
+                        $arEmpleadoAct = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+                        $arEmpleadoAct = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arEmpleado['codigoEmpleadoFk']);                                        
+                        $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+                        $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado['codigoContratoFk']);                    
+                        $porcentajeRiesgos = $arContrato->getClasificacionRiesgoRel()->getPorcentaje();
+                        $porcentajePension = $arContrato->getTipoPensionRel()->getPorcentajeEmpleador();                
+                        $porcentajeSalud = $arContrato->getTipoSaludRel()->getPorcentajeEmpleador();
+                        //Prestaciones
+                        if($arContrato->getSalarioIntegral() == 0) {
+                            $cesantias = ($ingresoBasePrestacion * $porcentajeCesantias) / 100; // Porcentaje 8.33                
+                            $interesesCesantias = ($cesantias * $porcentajeInteresesCesantias) / 100; // Porcentaje 1 sobre las cesantias                        
+                            $primas = ($ingresoBasePrestacion * $porcentajePrimas) / 100; // 8.33                               
+                        } else {
+                            $cesantias = 0;
+                            $interesesCesantias = 0;
+                            $primas = 0;
+                        }
+                        $vacaciones = ($ingresoBaseVacacion * $porcentajeVacaciones) / 100; // 4.17                                                
+                        $indemnizacion = ($ingresoBaseIndemnizacion * $porcentajeIndemnizacion) / 100; // 4.17    
+                        //Aportes                    
+                        $riesgos = ($ingresoBaseCotizacion * $porcentajeRiesgos)/100;        
+                        $pension = ($ingresoBaseCotizacion * $porcentajePension) / 100; 
+                        $salud = 0;         
+                        $caja = ($ingresoBaseCotizacion * $porcentajeCaja) / 100; //Porcentaje 4        
+                        $sena = 0;
+                        $icbf = 0;                                
+                        $salarioAporte = 0;
+                        if($arContrato->getSalarioIntegral() == 1) {
+                            $salarioAporte = ($ingresoBaseCotizacion * 70) / 100;
+                        } else {
+                            $salarioAporte = $ingresoBaseCotizacion;
+                        }
+
+                        if($salarioAporte > $salarioMinimo * 10) {
+                            $salud = ($ingresoBaseCotizacion * $porcentajeSalud) / 100;
+                            $sena = ($ingresoBaseCotizacion * 2) / 100;
+                            $icbf = ($ingresoBaseCotizacion * 3) / 100;
+                        }
+                        //12 aprendiz y 19 practicante        
+                        if($arContrato->getCodigoTipoCotizanteFk() == '19' || $arContrato->getCodigoTipoCotizanteFk() == '12') {            
+                            $salud = ($ingresoBaseCotizacion * $porcentajeSalud) / 100;
+                            $pension = 0;            
+                            $caja = 0;
+                            $cesantias = 0;
+                            $interesesCesantias = 0; 
+                            $primas = 0;
+                            $vacaciones = 0;                    
+                        }
+                        if($arContrato->getCodigoTipoCotizanteFk() == '12') {
+                            $riesgos = 0;
+                        }
+                        $ingresoBasePrestacion = round($ingresoBasePrestacion);
+                        $ingresoBaseCotizacion = round($ingresoBaseCotizacion);
+                        $cesantias = round($cesantias);                    
+                        $interesesCesantias = round($interesesCesantias);
+                        $primas = round($primas);
+                        $vacaciones = round($vacaciones);
+                        $indemnizacion = round($indemnizacion);
+                        $pension = round($pension); 
+                        $salud = round($salud);         
+                        $riesgos = round($riesgos);
+                        $caja = round($caja);
+                        $sena = round($sena);
+                        $icbf = round($icbf);
+                        
+                        $ingresoBasePrestacionTotal += $ingresoBasePrestacion;
+                        $ingresoBaseCotizacionTotal += $ingresoBaseCotizacion;
+                        $cesantiasTotal += $cesantias;                    
+                        $interesesCesantiasTotal += $interesesCesantias;
+                        $primasTotal += $primas;
+                        $vacacionesTotal += $vacaciones;
+                        $indemnizacionTotal += $indemnizacion;
+                        $pensionTotal += $pension; 
+                        $saludTotal += $salud;         
+                        $riesgosTotal += $riesgos;
+                        $cajaTotal += $caja;
+                        $senaTotal += $sena;
+                        $icbfTotal += $icbf;                    
+
+                        $arProvision = new \Brasa\RecursoHumanoBundle\Entity\RhuProvision();
+                        $arProvision->setEmpleadoRel($arEmpleadoAct);
+                        $arProvision->setContratoRel($arContrato);
+                        $arProvision->setAnio($arProvisionPeriodo->getAnio());
+                        $arProvision->setMes($arProvisionPeriodo->getMes());
+                        $arProvision->setProvisionPeriodoRel($arProvisionPeriodo);
+                        $arProvision->setVrSalario($arContrato->getVrSalarioPago());
+                        $arProvision->setVrIngresoBasePrestacion($ingresoBasePrestacion);
+                        $arProvision->setVrIngresoBaseCotizacion($ingresoBaseCotizacion);
+                        $arProvision->setVrCesantias($cesantias);
+                        $arProvision->setVrInteresesCesantias($interesesCesantias);
+                        $arProvision->setVrPrimas($primas);
+                        $arProvision->setVrVacaciones($vacaciones);
+                        $arProvision->setVrIndemnizacion($indemnizacion);
+                        $arProvision->setVrPension($pension);
+                        $arProvision->setVrSalud($salud);
+                        $arProvision->setVrRiesgos($riesgos);
+                        $arProvision->setVrCaja($caja);
+                        $arProvision->setVrSena($sena);
+                        $arProvision->setVrIcbf($icbf);
+                        $em->persist($arProvision);
                     }
-                    $arEmpleadoAct = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                    $arEmpleadoAct = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arEmpleado['codigoEmpleadoFk']);                                        
-                    $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
-                    $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arEmpleado['codigoContratoFk']);                    
-                    $porcentajeRiesgos = $arContrato->getClasificacionRiesgoRel()->getPorcentaje();
-                    $porcentajePension = $arContrato->getTipoPensionRel()->getPorcentajeEmpleador();                
-                    $porcentajeSalud = $arContrato->getTipoSaludRel()->getPorcentajeEmpleador();
-                    //Prestaciones
-                    if($arContrato->getSalarioIntegral() == 0) {
-                        $cesantias = ($ingresoBasePrestacion * $porcentajeCesantias) / 100; // Porcentaje 8.33                
-                        $interesesCesantias = ($cesantias * $porcentajeInteresesCesantias) / 100; // Porcentaje 1 sobre las cesantias                        
-                        $primas = ($ingresoBasePrestacion * $porcentajePrimas) / 100; // 8.33                               
-                    } else {
-                        $cesantias = 0;
-                        $interesesCesantias = 0;
-                        $primas = 0;
-                    }
-                    $vacaciones = ($ingresoBaseVacacion * $porcentajeVacaciones) / 100; // 4.17                                                
-                    $indemnizacion = ($ingresoBaseIndemnizacion * $porcentajeIndemnizacion) / 100; // 4.17    
-                    //Aportes                    
-                    $riesgos = ($ingresoBaseCotizacion * $porcentajeRiesgos)/100;        
-                    $pension = ($ingresoBaseCotizacion * $porcentajePension) / 100; 
-                    $salud = 0;         
-                    $caja = ($ingresoBaseCotizacion * $porcentajeCaja) / 100; //Porcentaje 4        
-                    $sena = 0;
-                    $icbf = 0;                                
-                    $salarioAporte = 0;
-                    if($arContrato->getSalarioIntegral() == 1) {
-                        $salarioAporte = ($ingresoBaseCotizacion * 70) / 100;
-                    } else {
-                        $salarioAporte = $ingresoBaseCotizacion;
-                    }
-                    
-                    if($salarioAporte > $salarioMinimo * 10) {
-                        $salud = ($ingresoBaseCotizacion * $porcentajeSalud) / 100;
-                        $sena = ($ingresoBaseCotizacion * 2) / 100;
-                        $icbf = ($ingresoBaseCotizacion * 3) / 100;
-                    }
-                    //12 aprendiz y 19 practicante        
-                    if($arContrato->getCodigoTipoCotizanteFk() == '19' || $arContrato->getCodigoTipoCotizanteFk() == '12') {            
-                        $salud = ($ingresoBaseCotizacion * $porcentajeSalud) / 100;
-                        $pension = 0;            
-                        $caja = 0;
-                        $cesantias = 0;
-                        $interesesCesantias = 0; 
-                        $primas = 0;
-                        $vacaciones = 0;                    
-                    }
-                    if($arContrato->getCodigoTipoCotizanteFk() == '12') {
-                        $riesgos = 0;
-                    }
-                                        
-                    $ingresoBasePrestacionTotal += $ingresoBasePrestacion;
-                    $ingresoBaseCotizacionTotal += $ingresoBaseCotizacion;
-                    $cesantiasTotal += $cesantias;                    
-                    $interesesCesantiasTotal += $interesesCesantias;
-                    $primasTotal += $primas;
-                    $vacacionesTotal += $vacaciones;
-                    $indemnizacionTotal += $indemnizacion;
-                    $pensionTotal += $pension; 
-                    $saludTotal += $salud;         
-                    $riesgosTotal += $riesgos;
-                    $cajaTotal += $caja;
-                    $senaTotal += $sena;
-                    $icbfTotal += $icbf;                    
-                    
-                    $arProvision = new \Brasa\RecursoHumanoBundle\Entity\RhuProvision();
-                    $arProvision->setEmpleadoRel($arEmpleadoAct);
-                    $arProvision->setContratoRel($arContrato);
-                    $arProvision->setAnio($arProvisionPeriodo->getAnio());
-                    $arProvision->setMes($arProvisionPeriodo->getMes());
-                    $arProvision->setProvisionPeriodoRel($arProvisionPeriodo);
-                    $arProvision->setVrSalario($arContrato->getVrSalarioPago());
-                    $arProvision->setVrIngresoBasePrestacion($ingresoBasePrestacion);
-                    $arProvision->setVrIngresoBaseCotizacion($ingresoBaseCotizacion);
-                    $arProvision->setVrCesantias($cesantias);
-                    $arProvision->setVrInteresesCesantias($interesesCesantias);
-                    $arProvision->setVrPrimas($primas);
-                    $arProvision->setVrVacaciones($vacaciones);
-                    $arProvision->setVrIndemnizacion($indemnizacion);
-                    $arProvision->setVrPension($pension);
-                    $arProvision->setVrSalud($salud);
-                    $arProvision->setVrRiesgos($riesgos);
-                    $arProvision->setVrCaja($caja);
-                    $arProvision->setVrSena($sena);
-                    $arProvision->setVrIcbf($icbf);
-                    $em->persist($arProvision);
+                    $arProvisionPeriodo->setVrIngresoBasePrestacion($ingresoBasePrestacionTotal);
+                    $arProvisionPeriodo->setVrIngresoBaseCotizacion($ingresoBaseCotizacionTotal);
+                    $arProvisionPeriodo->setVrCesantias($cesantiasTotal);
+                    $arProvisionPeriodo->setVrInteresesCesantias($interesesCesantiasTotal);
+                    $arProvisionPeriodo->setVrPrimas($primasTotal);
+                    $arProvisionPeriodo->setVrVacaciones($vacacionesTotal);
+                    $arProvisionPeriodo->setVrIndemnizacion($indemnizacionTotal); 
+                    $arProvisionPeriodo->setVrPension($pensionTotal);
+                    $arProvisionPeriodo->setVrSalud($saludTotal);
+                    $arProvisionPeriodo->setVrRiesgos($riesgosTotal);
+                    $arProvisionPeriodo->setVrCaja($cajaTotal);
+                    $arProvisionPeriodo->setVrSena($senaTotal);
+                    $arProvisionPeriodo->setVrIcbf($icbfTotal);                
+                    $arProvisionPeriodo->setEstadoGenerado(1);
+                    $em->persist($arProvisionPeriodo);
+                    $em->flush();                    
                 }
-                $arProvisionPeriodo->setVrIngresoBasePrestacion($ingresoBasePrestacionTotal);
-                $arProvisionPeriodo->setVrIngresoBaseCotizacion($ingresoBaseCotizacionTotal);
-                $arProvisionPeriodo->setVrCesantias($cesantiasTotal);
-                $arProvisionPeriodo->setVrInteresesCesantias($interesesCesantiasTotal);
-                $arProvisionPeriodo->setVrPrimas($primasTotal);
-                $arProvisionPeriodo->setVrVacaciones($vacacionesTotal);
-                $arProvisionPeriodo->setVrIndemnizacion($indemnizacionTotal); 
-                $arProvisionPeriodo->setVrPension($pensionTotal);
-                $arProvisionPeriodo->setVrSalud($saludTotal);
-                $arProvisionPeriodo->setVrRiesgos($riesgosTotal);
-                $arProvisionPeriodo->setVrCaja($cajaTotal);
-                $arProvisionPeriodo->setVrSena($senaTotal);
-                $arProvisionPeriodo->setVrIcbf($icbfTotal);                
-                $arProvisionPeriodo->setEstadoGenerado(1);
-                $em->persist($arProvisionPeriodo);
-                $em->flush();
                 return $this->redirect($this->generateUrl('brs_rhu_proceso_provision'));
             }
             if($request->request->get('OpDeshacer')) {
