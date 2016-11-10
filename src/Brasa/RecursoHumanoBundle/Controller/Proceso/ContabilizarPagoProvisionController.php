@@ -33,8 +33,6 @@ class ContabilizarPagoProvisionController extends Controller
                     $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
                     $arComprobanteContable = new \Brasa\ContabilidadBundle\Entity\CtbComprobante();                    
                     $arComprobanteContable = $em->getRepository('BrasaContabilidadBundle:CtbComprobante')->find($arConfiguracion->getCodigoComprobanteProvision());
-                    $arCentroCosto = new \Brasa\ContabilidadBundle\Entity\CtbCentroCosto();                    
-                    $arCentroCosto =$em->getRepository('BrasaContabilidadBundle:CtbCentroCosto')->find(1);                                               
                     $arProvisionCesantias = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracionProvision')->find(1);
                     $arProvisionCesantias2 = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracionProvision')->find(2);
                     $arProvisionInteresesCesantias = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracionProvision')->find(3);
@@ -62,6 +60,9 @@ class ContabilizarPagoProvisionController extends Controller
                         $arProvision = new \Brasa\RecursoHumanoBundle\Entity\RhuProvision();
                         $arProvision = $em->getRepository('BrasaRecursoHumanoBundle:RhuProvision')->find($codigo);
                         $tipoEmpleado = $arProvision->getEmpleadoRel()->getEmpleadoTipoRel()->getTipo();
+                        $arCentroCosto = $arProvision->getEmpleadoRel()->getCentroCostoContabilidadRel();
+                        //$arCentroCosto = new \Brasa\ContabilidadBundle\Entity\CtbCentroCosto();                    
+                        //$arCentroCosto = $em->getRepository('BrasaContabilidadBundle:CtbCentroCosto')->find(1);                                               
                         if($arProvision->getEstadoContabilizado() == 0) {
                             $arTercero = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arProvision->getEmpleadoRel()->getNumeroIdentificacion()));
                             if(count($arTercero) <= 0) {
