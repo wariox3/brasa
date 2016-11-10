@@ -71,7 +71,7 @@
                 <th>INICIO</th>
                 <th>TERMINA</th>
                 <th>SALARIO</th>
-                <th>NETO</th>
+                <th>S_PRIMA</th>                
                 <th>DÍAS</th>                
                 <th></th>
                 <th><input type="checkbox" name="ChkSeleccionarEmpleado" OnClick="ChequearTodosTabla(this, 'ChkSeleccionarDetalle[]');"/></th>
@@ -85,24 +85,11 @@
                 <td>{{ arProgramacionPagoDetalles.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{% if arProgramacionPagoDetalles.indefinido == 1 %} INDEFINIDO {% else %} {{ arProgramacionPagoDetalles.fechaHasta |date("Y/m/d")  }} {% endif %}</td>
                 <td style="text-align: right">{{ arProgramacionPagoDetalles.vrSalario | number_format(0, '.', ',') }}</td>
-                <td style="text-align: right">{{ arProgramacionPagoDetalles.vrNetoPagar | number_format(0, '.', ',') }}</td>                                                                                               
+                <td style="text-align: right">{{ arProgramacionPagoDetalles.vrSalarioPrima | number_format(0, '.', ',') }}</td>                
                 <td style="text-align: right">{{ arProgramacionPagoDetalles.dias | number_format(0, '.', ',') }}</td>                
                 <td><a href="javascript:abrirVentana3('{{ path('brs_rhu_programacion_pago_resumen_turno_ver', {'codigoProgramacionPagoDetalle': arProgramacionPagoDetalles.codigoProgramacionPagoDetallePk }) }}', 'VerDetalleSoportePago', 600, 1000)"><img src="{{ asset('imagenes/bootstrap/glyphicons_090_table.png') }}" width=20 height=20 title="Ver"></a></td>               
                 <td><input type="checkbox" name="ChkSeleccionarDetalle[]" value="{{ arProgramacionPagoDetalles.codigoProgramacionPagoDetallePk }}" /></td>
             </tr>
-                {% for arProgramacionPagoDetalleSedes in arProgramacionPagoDetalleSedes %}
-                    {% if arProgramacionPagoDetalleSedes.codigoProgramacionPagoDetalleFk == arProgramacionPagoDetalles.codigoProgramacionPagoDetallePk %}
-                        <tr>
-                            <td colspan="3"></td>
-                            <td colspan="4">{{ arProgramacionPagoDetalleSedes.sedeRel.nombre }}</td>
-                            <td style="text-align: right">{{ arProgramacionPagoDetalleSedes.horasPeriodo }}</td>
-                            <td></td>
-                            <td></td>
-                            <td style="text-align: right">{{ arProgramacionPagoDetalleSedes.porcentajeParticipacion | number_format(2, '.', ',') }}</td>
-                            <td><input type="checkbox" name="ChkSeleccionarSede[]" value="{{ arProgramacionPagoDetalleSedes.codigoProgramacionPagoDetalleSedePk }}" /></td>
-                        </tr>
-                    {% endif %}
-                {% endfor %}
             {% endfor %}
         </table>
         <!-- Botones Menu Items -->

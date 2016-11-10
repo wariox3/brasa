@@ -68,6 +68,11 @@ class RhuProgramacionPagoDetalle
      * @ORM\Column(name="vr_salario", type="float")
      */
     private $vrSalario = 0;    
+
+    /**
+     * @ORM\Column(name="vr_salario_prima", type="float")
+     */
+    private $vrSalarioPrima = 0;
     
     /**
      * @ORM\Column(name="fecha_desde", type="date", nullable=true)
@@ -1608,5 +1613,29 @@ class RhuProgramacionPagoDetalle
     public function getVrAjusteDevengado()
     {
         return $this->vrAjusteDevengado;
+    }
+
+    /**
+     * Set vrSalarioPrima
+     *
+     * @param float $vrSalarioPrima
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setVrSalarioPrima($vrSalarioPrima)
+    {
+        $this->vrSalarioPrima = $vrSalarioPrima;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalarioPrima
+     *
+     * @return float
+     */
+    public function getVrSalarioPrima()
+    {
+        return $this->vrSalarioPrima;
     }
 }

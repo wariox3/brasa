@@ -714,6 +714,82 @@ class Funciones {
         }
     }
 
+    public static function diasPrestaciones($dateFechaDesde, $dateFechaHasta) {
+        $objFunciones = new Funciones();
+        $intDias = 0;
+        $intAnioInicio = $dateFechaDesde->format('Y');
+        $intAnioFin = $dateFechaHasta->format('Y');
+        $intAnios = 0;
+        $intMeses = 0;
+        if($dateFechaHasta >= $dateFechaDesde) {
+            if($dateFechaHasta->format('d') == '31' && ($dateFechaHasta == $dateFechaDesde)){
+                $intDias = 0;
+            } else { 
+                if($intAnioInicio != $intAnioFin) {
+                    $intDiferenciaAnio = $intAnioFin - $intAnioInicio;            
+                    if(($intDiferenciaAnio) > 1) {
+                        $intAnios = $intDiferenciaAnio - 1;
+                        $intAnios = $intAnios * 12 * 30;                        
+                    }
+
+                    $dateFechaTemporal = date_create_from_format('Y-m-d H:i', $intAnioInicio . '-12-30' . "00:00");
+                    if($dateFechaDesde->format('n') != $dateFechaTemporal->format('n')) {                        
+                        $intMeses = $dateFechaTemporal->format('n') - $dateFechaDesde->format('n') - 1;
+                        $intDiasInicio = $objFunciones->diasPrestacionesMes($dateFechaDesde->format('j'), 1);
+                        $intDiasFinal = $objFunciones->diasPrestacionesMes($dateFechaTemporal->format('j'), 0);
+                        $intDias = $intDiasInicio + $intDiasFinal + ($intMeses * 30);
+                    } else {
+                        if($dateFechaTemporal->format('j') == $dateFechaDesde->format('j')) {
+                            $intDias = 0;
+                        } else {
+                            $intDias = 1 + ($dateFechaTemporal->format('j') - $dateFechaDesde->format('j'));                               
+                        }                
+                    }
+
+                    $dateFechaTemporal = date_create_from_format('Y-m-d H:i', $intAnioFin . '-01-01' . "00:00");
+                    if($dateFechaTemporal->format('n') != $dateFechaHasta->format('n')) {                        
+                        $intMeses = $dateFechaHasta->format('n') - $dateFechaTemporal->format('n') - 1;
+                        $intDiasInicio = $objFunciones->diasPrestacionesMes($dateFechaTemporal->format('j'), 1);
+                        $intDiasFinal = $objFunciones->diasPrestacionesMes($dateFechaHasta->format('j'), 0);
+                        $intDias += $intDiasInicio + $intDiasFinal + ($intMeses * 30);
+                    } else {
+                        $intDias += 1 + ($dateFechaHasta->format('j') - $dateFechaTemporal->format('j'));                               
+                    }
+                    $intDias += $intAnios;
+                } else {                                           
+                    if($dateFechaDesde->format('n') != $dateFechaHasta->format('n')) {                        
+                        $intMeses = $dateFechaHasta->format('n') - $dateFechaDesde->format('n') - 1;
+                        $intDiasInicio = $objFunciones->diasPrestacionesMes($dateFechaDesde->format('j'), 1);
+                        $intDiasFinal = $objFunciones->diasPrestacionesMes($dateFechaHasta->format('j'), 0);
+                        $intDias = $intDiasInicio + $intDiasFinal + ($intMeses * 30);
+                    } else {
+                        if($dateFechaHasta->format('j') == 31) {
+                            $intDias = ($dateFechaHasta->format('j') - $dateFechaDesde->format('j'));                                                                               
+                        } else {
+                            $intDias = 1 + ($dateFechaHasta->format('j') - $dateFechaDesde->format('j'));                                                                               
+                        }
+                        
+                    }                        
+                } 
+            }
+        } else {
+            $intDias = 0;
+        }
+        return $intDias;
+    }    
+    
+    public static function diasPrestacionesMes($intDia, $intDesde) {
+        $intDiasDevolver = 0;
+        if($intDesde == 1) {
+            $intDiasDevolver = 31 - $intDia;
+        } else {
+            $intDiasDevolver = $intDia;
+            if($intDia == 31) {
+                $intDiasDevolver =  30;
+            }
+        }          
+        return $intDiasDevolver;
+    }     
 }
 ?>
 

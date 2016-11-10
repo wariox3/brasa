@@ -284,12 +284,11 @@ class ProgramacionesPagoController extends Controller
                     $arProgramacionPago->setEmpleadosGenerados(1);
                     $em->persist($arProgramacionPago);
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
+                    return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle_prima', array('codigoProgramacionPago' => $codigoProgramacionPago)));
                 } else {
                     $objMensaje->Mensaje("error", "No puede generar empleados cuando la programacion esta generada", $this);
                 }
-            }            
-            
+            }                        
             if($form->get('BtnEliminarEmpleados')->isClicked()) {               
                     $arrSeleccionados = $request->request->get('ChkSeleccionarSede');
                     if(count($arrSeleccionados) > 0) {
@@ -315,14 +314,14 @@ class ProgramacionesPagoController extends Controller
                         }
                     }
                     $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
+                    return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle_prima', array('codigoProgramacionPago' => $codigoProgramacionPago)));
 
             }            
             if($form->get('BtnEliminarTodoEmpleados')->isClicked()) {
                 if ($arProgramacionPago->getEstadoGenerado() == 0 ){
                     $resultado = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->eliminarTodoEmpleados($codigoProgramacionPago);
                 }
-                return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
+                return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle_prima', array('codigoProgramacionPago' => $codigoProgramacionPago)));
             }
 
         }
@@ -750,7 +749,16 @@ class ProgramacionesPagoController extends Controller
             $arrBotonInactivarPagoAdicional['disabled'] = true;
             $arrBotonActualizarPagoAdicional['disabled'] = true;
             $arrBotonMarcar['disabled'] = true;
-        }         
+        }        
+        if($arProgramacionPago->getCodigoPagoTipoFk() == 2) {
+            $arrBotonActualizar['disabled'] = true;
+            $arrBotonActualizarHoras['disabled'] = true;
+            $arrBotonActualizarHorasSoportePago['disabled'] = true;            
+            $arrBotonEliminarPagoAdicional['disabled'] = true;            
+            $arrBotonInactivarPagoAdicional['disabled'] = true;
+            $arrBotonActualizarPagoAdicional['disabled'] = true;
+            $arrBotonMarcar['disabled'] = true;            
+        }
         $form = $this->createFormBuilder()             
             ->add('BtnActualizar', 'submit', $arrBotonActualizar)            
             ->add('BtnActualizarHoras', 'submit', $arrBotonActualizarHoras)

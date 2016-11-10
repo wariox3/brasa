@@ -305,6 +305,11 @@ class RhuConfiguracion
      */
     private $tipoPlanillaSso;
     
+    /**
+     * @ORM\Column(name="codigo_prima", type="integer")
+     */
+    private $codigoPrima;     
+    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadRiesgoProfesional", inversedBy="configuracionEntidadRiesgoProfesionalRel")
@@ -1731,5 +1736,29 @@ class RhuConfiguracion
     public function getEntidadRiesgoProfesionalRel()
     {
         return $this->entidadRiesgoProfesionalRel;
+    }
+
+    /**
+     * Set codigoPrima
+     *
+     * @param integer $codigoPrima
+     *
+     * @return RhuConfiguracion
+     */
+    public function setCodigoPrima($codigoPrima)
+    {
+        $this->codigoPrima = $codigoPrima;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPrima
+     *
+     * @return integer
+     */
+    public function getCodigoPrima()
+    {
+        return $this->codigoPrima;
     }
 }

@@ -101,51 +101,19 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                             $arPago->setContratoRel($arProgramacionPagoDetalle->getContratoRel());
                         }                        
                         $em->persist($arPago);
-                        $douSalarioMinimo = $arConfiguracion->getVrSalario();
-                        $intDias = $arProgramacionPagoDetalle->getDias();
-                        $intDiasContinuos = $arProgramacionPagoDetalle->getFechaDesde()->diff($arProgramacionPagoDetalle->getFechaHasta());
-                        $intDiasContinuos = $intDiasContinuos->format('%a');
-                        $intDiasContinuos += 1;                                                
-                        
-                        $floIbp = $em->getRepository('BrasaRecursoHumanoBundle:RhuIngresoBase')->devuelveIbpFecha($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoDetalle->getFechaDesdePago()->format('Y-m-d'), $arProgramacionPagoProcesar->getFechaHastaReal()->format('Y-m-d'), $arProgramacionPagoDetalle->getCodigoContratoFk());
-                        
-                        //$arrayCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->devuelveCostosFecha($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoDetalle->getFechaDesdePago()->format('Y-m-d'), $arProgramacionPagoDetalle->getFechaHasta()->format('Y-m-d'), $arProgramacionPagoDetalle->getCodigoContratoFk());
-                        //$floIbc = (float)$arrayCostos[0]['IBC'];
-                        $dateFechaUltimoPago = $arProgramacionPagoDetalle->getContratoRel()->getFechaUltimoPago();                        
-                        if($dateFechaUltimoPago < $arProgramacionPagoProcesar->getFechaHasta()) {
-                            $floVrDia = $arProgramacionPagoDetalle->getVrSalario() / 30;                                        
-                            $dateFechaDesde =  "";                            
-                            if($dateFechaUltimoPago <= $arProgramacionPagoProcesar->getFechaDesde()) {
-                                $dateFechaDesde = $arProgramacionPagoProcesar->getFechaDesde();                                
-                            } else {
-                                $dateFechaDesde = $dateFechaUltimoPago;                                
-                            }
-                            $intDiasIbcAdicional = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($dateFechaDesde, $arProgramacionPagoProcesar->getFechaHasta());                            
-                            $intDiasIbcAdicional = $intDiasIbcAdicional - 1;
-                            $floIbp +=  $intDiasIbcAdicional * $floVrDia;
-                            $arPago->setComentarios("Dado que se pagan las primas antes del periodo, se proyectan (" . $intDiasIbcAdicional . ") dias restantes con el salario");
-                        }
-                        if($arCentroCosto->getPeriodoPagoRel()->getContinuo() == 1) {
-                            $floSalarioPromedio = ($floIbp / $intDiasContinuos) * 30;
-                        } else {
-                            $floSalarioPromedio = ($floIbp / $intDias) * 30;
-                        }
-                                                            
-                        if(round($floSalarioPromedio) <=  $douSalarioMinimo * 2 ) {
-                            $floSalarioPromedio += $arConfiguracion->getVrAuxilioTransporte();
-                        }
-                        $floTotalPago = ($floSalarioPromedio * $intDias) / 360;
 
                         //Prima
-                        $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find(28);
+                        $douPrima = ($arProgramacionPagoDetalle->getVrSalarioPrima() * $arProgramacionPagoDetalle->getDias()) / 360;
+                        $douPrima = round($douPrima);
+                        $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($arConfiguracion->getCodigoPrima());
                         $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
                         $arPagoDetalle->setPagoRel($arPago);
                         $arPagoDetalle->setPagoConceptoRel($arPagoConcepto);
-                        $arPagoDetalle->setDetalle($intDias . " Dias de primas (IBC " . number_format($floIbp, 0, '.', ',') . " )");
-                        $arPagoDetalle->setVrPago($floTotalPago);
-                        $arPagoDetalle->setNumeroDias($intDias);
+                        $arPagoDetalle->setDetalle('');
+                        $arPagoDetalle->setVrPago($douPrima);
+                        $arPagoDetalle->setNumeroDias($arProgramacionPagoDetalle->getDias());
                         $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());
-                        $arPagoDetalle->setVrPagoOperado($floTotalPago * $arPagoConcepto->getOperacion());
+                        $arPagoDetalle->setVrPagoOperado($douPrima * $arPagoConcepto->getOperacion());
                         $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
                         $em->persist($arPagoDetalle);                                    
 
@@ -398,6 +366,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     }                    
                 }
             }
+            
             //Actualizar los contratos
             $arProgramacionPagoDetalles = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
             $arProgramacionPagoDetalles = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
@@ -409,19 +378,10 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         $arContrato->setFechaUltimoPago($arProgramacionPagoProcesar->getFechaHasta());
                     }
                     if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 2) {                        
-                        if($arProgramacionPagoProcesar->getFechaHasta()->format('md') == '1230') {
-                            $strAnio = $arProgramacionPagoProcesar->getFechaHasta()->format('Y');
-                            $strFecha = $strAnio + 1 . "/01/01";
-                        } else {
-                            $strAnio = $arProgramacionPagoProcesar->getFechaHasta()->format('Y');
-                            $strFecha = $strAnio . "/07/01";                            
-                        }
-                        $arContrato->setFechaUltimoPagoPrimas(date_create($strFecha));
+                        $arContrato->setFechaUltimoPagoPrimas($arProgramacionPagoProcesar->getFechaHasta());
                     }
-                    if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 3) { 
-                        $strAnio = $arProgramacionPagoProcesar->getFechaHasta()->format('Y');
-                        $strFecha = $strAnio + 1 . "/01/01";                        
-                        $arContrato->setFechaUltimoPagoCesantias(date_create($strFecha));
+                    if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 3) {                       
+                        $arContrato->setFechaUltimoPagoCesantias($arProgramacionPagoProcesar->getFechaHasta());
                     }   
                     $em->persist($arContrato);                            
                 }                        
@@ -700,6 +660,11 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         
         //Primas
         if($arProgramacionPago->getCodigoPagoTipoFk() == 2) {
+            $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
+            $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+            $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);
+            $salarioMinimo = $arConfiguracion->getVrSalario();
+            $auxilioTransporte = $arConfiguracion->getVrAuxilioTransporte();            
             $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuContrato c "
                 . "WHERE c.codigoCentroCostoFk = " . $arProgramacionPago->getCodigoCentroCostoFk()
                 . " AND c.fechaUltimoPagoPrimas < '" . $arProgramacionPago->getFechaHasta()->format('Y-m-d') . "' "                    
@@ -712,51 +677,56 @@ class RhuProgramacionPagoRepository extends EntityRepository {
             $query = $em->createQuery($dql);
             $arContratos = $query->getResult();
             foreach ($arContratos as $arContrato) {
+                $dateFechaDesde = $arContrato->getFechaUltimoPagoPrimas();
+                $dateFechaHasta = $arProgramacionPago->getFechaHasta();
+                $douSalario = $arContrato->getVrSalarioPago();
+                $intDiasPrima = 0;                                
+                $intDiasPrima = $objFunciones->diasPrestaciones($dateFechaDesde, $dateFechaHasta);    
+                $intDiasPrimaLiquidar = $intDiasPrima;
+                if($dateFechaDesde->format('m-d') == '06-30' || $dateFechaDesde->format('m-d') == '12-30') {
+                    $intDiasPrimaLiquidar = $intDiasPrimaLiquidar - 1;
+                }
+                $ibpPrimasInicial = $arContrato->getIbpPrimasInicial();                    
+                $ibpPrimas = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->ibp($dateFechaDesde->format('Y-m-d'), $dateFechaHasta->format('Y-m-d'), $arContrato->getCodigoContratoPk());                
+                $ibpPrimas += $ibpPrimasInicial;                                            
+                $salarioPromedioPrimas = 0;
+                if($arContrato->getCodigoSalarioTipoFk() == 2) {
+                     $salarioPromedioPrimas = ($ibpPrimas / $intDiasPrimaLiquidar) * 30;                                    
+                } else {
+                    if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
+                        $salarioPromedioPrimas = $douSalario + $auxilioTransporte;
+                    } else {
+                        $salarioPromedioPrimas = $douSalario;
+                    }                                                
+                }                    
+                /*if($arLiquidacion->getPorcentajeIbp() > 0) {
+                    $salarioPromedioPrimas = ($salarioPromedioPrimas * $arLiquidacion->getPorcentajeIbp())/100;
+                }
+                if($arLiquidacion->getLiquidarSalario() == true) {
+                    if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
+                        $salarioPromedioPrimas = $douSalario + $auxilioTransporte;
+                    } else {
+                        $salarioPromedioPrimas = $douSalario;
+                    }
+
+                }  
+                if($arLiquidacion->getVrSalarioPrimaPropuesto() > 0) {
+                    $salarioPromedioPrimas = $arLiquidacion->getVrSalarioPrimaPropuesto();
+                }*/                                            
+                
+                
                 $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
                 $arProgramacionPagoDetalle->setProgramacionPagoRel($arProgramacionPago);
                 $arProgramacionPagoDetalle->setEmpleadoRel($arContrato->getEmpleadoRel());
                 $arProgramacionPagoDetalle->setContratoRel($arContrato);
                 $arProgramacionPagoDetalle->setVrSalario($arContrato->getVrSalario());
-                $arProgramacionPagoDetalle->setIndefinido($arContrato->getIndefinido());
-                $dateFechaDesde =  "";
-                $dateFechaDesdePago =  "";
-                if($arContrato->getFechaUltimoPagoPrimas() <=  $arProgramacionPago->getFechaDesde() == true) {
-                    $dateFechaDesde = $arProgramacionPago->getFechaDesde();
-                    $dateFechaDesdePago = $arProgramacionPago->getFechaDesde();
-                    if($arContrato->getFechaDesde() >= $dateFechaDesde) {
-                        $dateFechaDesde = $arContrato->getFechaDesde();
-                        $dateFechaDesdePago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->fechaPrimerPago($arContrato->getCodigoContratoPk());
-                        if($dateFechaDesdePago) {
-                            $dateFechaDesdePago = date_create_from_format('Y-m-d H:i', $dateFechaDesdePago . "00:00");
-                        } else {
-                            $dateFechaDesdePago = $dateFechaDesde;                            
-                        }
-                    }
-                    
-                } else {
-                    $dateFechaDesde = $arContrato->getFechaUltimoPagoPrimas();
-                    $dateFechaDesdePago = $arContrato->getFechaUltimoPagoPrimas();
-                    $dateFechaDesdePago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->fechaPrimerPago($arContrato->getCodigoContratoPk());
-                    if($dateFechaDesdePago == "") {
-                        $dateFechaDesdePago = $arContrato->getFechaUltimoPagoPrimas()->format('Y-m-d');
-                        $dateFechaDesdePago = date_create_from_format('Y-m-d H:i', $dateFechaDesdePago . "00:00");                                            
-                    } else {
-                        $dateFechaDesdePago = date_create_from_format('Y-m-d H:i', $dateFechaDesdePago . "00:00");                                            
-                    }
-                    
-                }
-                $intDia = $dateFechaDesde->format('j');
-                $intDiasMes = 31 - $intDia;                
-                $intMes = $dateFechaDesde->format('n');                
-                $intMesFinal = $arProgramacionPago->getFechaHasta()->format('n');
-                $intMeses = $intMesFinal - $intMes;
-                $intDias = ($intMeses * 30) + $intDiasMes;
-                
+                $arProgramacionPagoDetalle->setVrSalarioPrima($salarioPromedioPrimas);
+                $arProgramacionPagoDetalle->setIndefinido($arContrato->getIndefinido());                
                 $arProgramacionPagoDetalle->setFechaDesde($dateFechaDesde);
                 $arProgramacionPagoDetalle->setFechaHasta($arProgramacionPago->getFechaHasta());
-                $arProgramacionPagoDetalle->setFechaDesdePago($dateFechaDesdePago);
-                $arProgramacionPagoDetalle->setDias($intDias);
-                $arProgramacionPagoDetalle->setDiasReales($intDias);
+                $arProgramacionPagoDetalle->setFechaDesdePago($dateFechaDesde);
+                $arProgramacionPagoDetalle->setDias($intDiasPrimaLiquidar);
+                $arProgramacionPagoDetalle->setDiasReales($intDiasPrimaLiquidar);
                 $em->persist($arProgramacionPagoDetalle);
                 $intNumeroEmpleados++;
                 
