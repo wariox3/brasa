@@ -32,6 +32,11 @@ class PagoConceptoController extends Controller
                 $this->listar();
                 $this->generarExcel();
             }
+            if($form->get('BtnExcelResumen')->isClicked()) {
+                $this->filtrarLista($form, $request);
+                $this->listar();
+                $this->generarResumenExcel();
+            }
             if($form->get('BtnGenerar')->isClicked()) {
                 $this->filtrarLista($form, $request);
                 $this->listar();
@@ -86,7 +91,8 @@ class PagoConceptoController extends Controller
             ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta))                
             ->add('BtnGenerar', 'submit', array('label'  => 'Filtrar'))                                        
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                                            
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))            
+            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+                ->add('BtnExcelResumen', 'submit', array('label'  => 'Excel resumen',))
             ->getForm();        
         return $form;
     }
@@ -250,6 +256,74 @@ class PagoConceptoController extends Controller
         $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('php://output');
         exit;
-    }    
+    }   
+    
+    private function generarResumenExcel() {
+        ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
+        $em = $this->getDoctrine()->getManager(); 
+        $session = $this->get('session');
+        $objPHPExcel = new \PHPExcel();
+        // Set document properties
+        $objPHPExcel->getProperties()->setCreator("EMPRESA")
+            ->setLastModifiedBy("EMPRESA")
+            ->setTitle("Office 2007 XLSX Test Document")
+            ->setSubject("Office 2007 XLSX Test Document")
+            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+            ->setKeywords("office 2007 openxml php")
+            ->setCategory("Test result file");
+        for($col = 'A'; $col !== 'G'; $col++) {
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                           
+        } 
+        for($col = 'E'; $col !== 'G'; $col++) {            
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }          
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        $objPHPExcel->setActiveSheetIndex(0)                    
+                    ->setCellValue('A1', 'IDENTIFICACIÓN')
+                    ->setCellValue('B1', 'EMPLEADO')
+                    ->setCellValue('C1', 'CODIGO')
+                    ->setCellValue('D1', 'CONCEPTO')                    
+                    ->setCellValue('E1', 'BONIFICACION')
+                    ->setCellValue('F1', 'DEDUCCION');
+
+        $i = 2;
+        $dql   = "SELECT cpc.codigoPagoConceptoFk as CodigoConcepto,cpc.numeroIdentificacion as Documento,cpc.nombreCorto as Nombre,cpc.nombreConcepto as Concepto,SUM(cpc.vrBonificacion) as Bonificacion,SUM(cpc.vrDeduccion) as Deduccion FROM BrasaRecursoHumanoBundle:RhuConsultaPagoConcepto cpc GROUP BY cpc.numeroIdentificacion, cpc.nombreCorto, cpc.codigoPagoConceptoFk,cpc.nombreConcepto";        
+        $query = $em->createQuery($dql);
+        $arConsultaPagoConceptos = new \Brasa\RecursoHumanoBundle\Entity\RhuConsultaPagoConcepto();
+        $arConsultaPagoConceptos = $query->getResult();
+        
+        foreach ($arConsultaPagoConceptos as $arConsultaPagoConcepto) {            
+            $objPHPExcel->setActiveSheetIndex(0)                    
+                    ->setCellValue('A' . $i, $arConsultaPagoConcepto['Documento'])
+                    ->setCellValue('B' . $i, $arConsultaPagoConcepto['Nombre'])
+                    ->setCellValue('C' . $i, $arConsultaPagoConcepto['CodigoConcepto'])
+                    ->setCellValue('D' . $i, $arConsultaPagoConcepto['Concepto'])
+                    ->setCellValue('E' . $i, $arConsultaPagoConcepto['Deduccion'])
+                    ->setCellValue('F' . $i, $arConsultaPagoConcepto['Bonificacion'])
+                    
+                    ;
+            $i++;
+        }
+
+        $objPHPExcel->getActiveSheet()->setTitle('ResumenconceptoPagoConsolidado');
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        // Redirect output to a client’s web browser (Excel2007)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="ResumenconceptoPagoConsolidado.xlsx"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter->save('php://output');
+        exit;
+    }
     
 }

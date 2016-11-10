@@ -14,5 +14,6 @@ class RhuConsultaPagoConceptoRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $dql   = "SELECT cpc FROM BrasaRecursoHumanoBundle:RhuConsultaPagoConcepto cpc WHERE cpc.codigoConsultaPagoConceptoPk <> 0";
         return $dql;
-    }     
+    }
+        
 }
