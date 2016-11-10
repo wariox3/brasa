@@ -923,8 +923,7 @@ class ProgramacionesPagoController extends Controller
                 $objPHPExcel->setActiveSheetIndex(0)
                         ->setCellValue('A' . $i, $arPago->getCodigoEmpleadoFk())
                         ->setCellValue('B' . $i, $arPago->getEmpleadoRel()->getNumeroIdentificacion())
-                        ->setCellValue('C' . $i, $arPago->getEmpleadoRel()->getNombreCorto())
-                        ->setCellValue('D' . $i, $arPago->getEmpleadoRel()->getBancoRel()->getNombre())
+                        ->setCellValue('C' . $i, $arPago->getEmpleadoRel()->getNombreCorto())                    
                         ->setCellValue('E' . $i, $arPago->getEmpleadoRel()->getCuenta())
                         ->setCellValue('F' . $i, $arPago->getFechaDesde()->format('Y/m/d'))
                         ->setCellValue('G' . $i, $arPago->getFechaHasta()->format('Y/m/d'))
@@ -932,6 +931,9 @@ class ProgramacionesPagoController extends Controller
                         ->setCellValue('I' . $i, $arPago->getVrDevengado())
                         ->setCellValue('J' . $i, $arPago->getVrDeducciones())
                         ->setCellValue('K' . $i, $arPago->getVrNeto());
+                if($arPago->getEmpleadoRel()->getCodigoBancoFk()) {
+                    $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D' . $i, $arPago->getEmpleadoRel()->getBancoRel()->getNombre());
+                }
                 $i++;
             }
             $objPHPExcel->getActiveSheet()->setTitle('Pagos');
