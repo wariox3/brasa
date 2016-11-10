@@ -63,6 +63,8 @@ class TurServicioDetalleRepository extends EntityRepository {
                     $intNumeroRegistros = $arrPedidoDetalles['numeroRegistros'];
                 }
                 if($intNumeroRegistros <= 0) {
+                    $strSql = "DELETE FROM tur_servicio_detalle_compuesto WHERE codigo_servicio_detalle_fk = " . $codigo;
+                    $em->getConnection()->executeQuery($strSql);                          
                     $arServicioDetalle = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($codigo);                
                     $em->remove($arServicioDetalle);                                      
                 }
