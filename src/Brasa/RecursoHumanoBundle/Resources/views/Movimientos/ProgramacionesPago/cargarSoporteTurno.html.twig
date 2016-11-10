@@ -16,7 +16,7 @@
             {% for arSoportePagoPeriodos in arSoportePagoPeriodos %}
             <tr>
                 <td>{{ arSoportePagoPeriodos.codigoSoportePagoPeriodoPk  }}</td>
-                <td>{{ arSoportePagoPeriodos.recursoGrupoRel.nombre | default('')  }}</td>
+                <td>{{ arSoportePagoPeriodos.centroCostoRel.nombre | default('')  }}</td>
                 <td>{{ arSoportePagoPeriodos.fechaDesde |date("Y/m/d")  }}</td>
                 <td>{{ arSoportePagoPeriodos.fechaHasta |date("Y/m/d")  }}</td>  
                 <td style="text-align: right">{{ arSoportePagoPeriodos.recursos | number_format(0, '.', ',') }}</td>

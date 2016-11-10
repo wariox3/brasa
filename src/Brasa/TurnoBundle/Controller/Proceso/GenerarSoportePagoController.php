@@ -305,6 +305,8 @@ class GenerarSoportePagoController extends Controller
                 
             }            
             if ($form->get('BtnGenerarProgramacionAlterna')->isClicked()) { 
+                set_time_limit(0);
+                ini_set("memory_limit", -1); 
                 $em->getRepository('BrasaTurnoBundle:TurSoportePago')->generarProgramacionAlterna($codigoSoportePagoPeriodo);
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago_detalle', array('codigoSoportePagoPeriodo' => $codigoSoportePagoPeriodo)));                                
             }    

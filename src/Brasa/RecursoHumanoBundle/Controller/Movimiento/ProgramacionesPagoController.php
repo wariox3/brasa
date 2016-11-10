@@ -275,30 +275,64 @@ class ProgramacionesPagoController extends Controller
         $paginator  = $this->get('knp_paginator');
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
-        $form = $this->createFormBuilder()
-            ->add('BtnGenerarEmpleados', 'submit', array('label'  => 'Generar empleados',))
-            ->getForm();
+        $form = $this->formularioDetallePrima($arProgramacionPago);
         $form->handleRequest($request);
         if($form->isValid()) {
             if($form->get('BtnGenerarEmpleados')->isClicked()) {
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->generarEmpleados($codigoProgramacionPago);
-                $arProgramacionPago->setEmpleadosGenerados(1);
-                $em->persist($arProgramacionPago);
-                $em->flush();
-                return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle_prima', array('codigoProgramacionPago' => $codigoProgramacionPago)));
+                if($arProgramacionPago->getEstadoGenerado() == 0) {
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->generarEmpleados($codigoProgramacionPago);
+                    $arProgramacionPago->setEmpleadosGenerados(1);
+                    $em->persist($arProgramacionPago);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
+                } else {
+                    $objMensaje->Mensaje("error", "No puede generar empleados cuando la programacion esta generada", $this);
+                }
+            }            
+            
+            if($form->get('BtnEliminarEmpleados')->isClicked()) {               
+                    $arrSeleccionados = $request->request->get('ChkSeleccionarSede');
+                    if(count($arrSeleccionados) > 0) {
+                        foreach ($arrSeleccionados AS $codigoProgramacionPagoSede) {
+                            $arProgramacionPagoDetalleSede = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalleSede();
+                            $arProgramacionPagoDetalleSede = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalleSede')->find($codigoProgramacionPagoSede);
+                            $em->remove($arProgramacionPagoDetalleSede);
+                        }
+                    }
+
+                    $arrSeleccionados = $request->request->get('ChkSeleccionarDetalle');
+                    if(count($arrSeleccionados) > 0) {
+                        foreach ($arrSeleccionados AS $codigo) {
+                            $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoDetalleFk' => $codigo));
+                            foreach ($arPagos as $arPago) {
+                                $strSql = "DELETE FROM rhu_pago_detalle WHERE codigo_pago_fk = " . $arPago->getCodigoPagoPk();                           
+                                $em->getConnection()->executeQuery($strSql);                    
+                                $em->remove($arPago);
+                            }                                                        
+                            $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
+                            $arProgramacionPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->find($codigo);
+                            $em->remove($arProgramacionPagoDetalle);
+                        }
+                    }
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
+
+            }            
+            if($form->get('BtnEliminarTodoEmpleados')->isClicked()) {
+                if ($arProgramacionPago->getEstadoGenerado() == 0 ){
+                    $resultado = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->eliminarTodoEmpleados($codigoProgramacionPago);
+                }
+                return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
             }
+
         }
         $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
         $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arProgramacionPago->getCodigoCentroCostoFk());
+        
         $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->listaDQL($codigoProgramacionPago));
-        $arProgramacionPagoDetalles = $paginator->paginate($query, $request->query->get('page', 1), 500);
-        if ($request->getMethod() == 'POST') {
-            $arrControles = $request->request->All();
-            $arrSeleccionados = $request->request->get('ChkSeleccionar');
-        }
-
+        $arProgramacionPagoDetalles = $paginator->paginate($query, $request->query->get('page', 1), 2000);
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/ProgramacionesPago:detallePrima.html.twig', array(
-                    'arCentroCosto' => $arCentroCosto,
+                    'arCentroCosto' => $arCentroCosto,                                        
                     'arProgramacionPagoDetalles' => $arProgramacionPagoDetalles,
                     'arProgramacionPago' => $arProgramacionPago,
                     'form' => $form->createView()
@@ -672,6 +706,32 @@ class ProgramacionesPagoController extends Controller
                     ->getForm();  
         return $form;
     }    
+    
+    private function formularioDetallePrima($arProgramacionPago) {
+        $arrBotonGenerarEmpleados = array('label' => 'Cargar contratos', 'disabled' => false);        
+        $arrBotonEliminarEmpleados = array('label' => 'Eliminar', 'disabled' => false);
+        $arrBotonEliminarTodoEmpleados = array('label' => 'Eliminar todo', 'disabled' => false);
+        //$arrBotonActualizarDetalle = array('label' => 'Actualizar detalle', 'disabled' => false);
+        if($arProgramacionPago->getEstadoGenerado() == 1) {            
+            $arrBotonGenerarEmpleados['disabled'] = true;                                            
+            $arrBotonEliminarTodoEmpleados['disabled'] = true;            
+            
+        }
+        if($arProgramacionPago->getEstadoPagado() == 1) {            
+            $arrBotonGenerarEmpleados['disabled'] = true;         
+            $arrBotonEliminarEmpleados['disabled'] = true;                                    
+            $arrBotonEliminarTodoEmpleados['disabled'] = true;
+            //$arrBotonActualizarDetalle['disabled'] = true;            
+            
+        }        
+        
+        $form = $this->createFormBuilder()                        
+                    ->add('BtnGenerarEmpleados', 'submit', $arrBotonGenerarEmpleados)                        
+                    ->add('BtnEliminarEmpleados', 'submit', $arrBotonEliminarEmpleados)
+                    ->add('BtnEliminarTodoEmpleados', 'submit', $arrBotonEliminarTodoEmpleados)                    
+                    ->getForm();  
+        return $form;
+    }        
 
     private function formularioVerReusmenTurno($arProgramacionPago) {                
         $arrBotonActualizar = array('label' => 'Actualizar', 'disabled' => false);

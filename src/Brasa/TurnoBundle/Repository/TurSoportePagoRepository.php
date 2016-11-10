@@ -437,6 +437,8 @@ class TurSoportePagoRepository extends EntityRepository {
         $arSoportePagoDetalle->setVacacion($arTurno->getVacacion());
         $arSoportePagoDetalle->setIngreso($arTurno->getIngreso());
         $arSoportePagoDetalle->setInduccion($arTurno->getInduccion());
+        
+        
         if($dateFecha->format('d') == 31 && $arSoportePagoPeriodo->getPagarDia31() == false) {
             $arSoportePagoDetalle->setDias(0);
             $arSoportePagoDetalle->setHoras(0);
@@ -463,9 +465,14 @@ class TurSoportePagoRepository extends EntityRepository {
         $arSoportePagoDetalle->setHorasExtrasFestivasNocturnas($arrHoras['horasExtrasFestivasNocturnas']);
         $arSoportePagoDetalle->setHorasDescanso($arrHoras['horasDescanso']);
         $arSoportePagoDetalle->setHorasNovedad($arrHoras['horasNovedad']);
+        
         if($strTurnoFijoNomina) {
             $arSoportePagoDetalle->setHorasDiurnas($arrHoras['horasDiurnas'] + $arrHoras['horasFestivasDiurnas']);
             $arSoportePagoDetalle->setHorasFestivasDiurnas(0);
+            if($dateFecha->format('d') == 31 && $arSoportePagoPeriodo->getPagarDia31() == false) {
+                $arSoportePagoDetalle->setHorasDiurnas(0);
+                $arSoportePagoDetalle->setHorasFestivasDiurnas(0);                
+            }
         }
         if($codigoProgramacionDetalle) {
             $arSoportePagoDetalle->setProgramacionDetalleRel($arProgramacionDetalle);
