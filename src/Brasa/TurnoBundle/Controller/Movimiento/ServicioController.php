@@ -612,7 +612,8 @@ class ServicioController extends Controller
     }
 
     private function filtrarRecurso($form) {       
-        $this->nombreRecurso = $form->get('TxtNombre')->getData();                       
+        $this->nombreRecurso = $form->get('TxtNombre')->getData();    
+        $this->codigoRecurso = $form->get('TxtCodigo')->getData(); 
     }    
     
     private function formularioFiltro() {
