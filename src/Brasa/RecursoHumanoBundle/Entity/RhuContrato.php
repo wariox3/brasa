@@ -23,6 +23,11 @@ class RhuContrato
     private $codigoContratoTipoFk;         
     
     /**
+     * @ORM\Column(name="codigo_contrato_clase_fk", type="integer", nullable=true)
+     */    
+    private $codigoContratoClaseFk;    
+    
+    /**
      * @ORM\Column(name="codigo_salario_tipo_fk", type="integer", nullable=true)
      */    
     private $codigoSalarioTipoFk;  
@@ -284,6 +289,12 @@ class RhuContrato
     protected $contratoTipoRel;     
 
     /**
+     * @ORM\ManyToOne(targetEntity="RhuContratoClase", inversedBy="contratosContratoClaseRel")
+     * @ORM\JoinColumn(name="codigo_contrato_clase_fk", referencedColumnName="codigo_contrato_clase_pk")
+     */
+    protected $contratoClaseRel;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuSalarioTipo", inversedBy="contratosSalarioTipoRel")
      * @ORM\JoinColumn(name="codigo_salario_tipo_fk", referencedColumnName="codigo_salario_tipo_pk")
      */
@@ -520,6 +531,30 @@ class RhuContrato
     public function getCodigoContratoTipoFk()
     {
         return $this->codigoContratoTipoFk;
+    }
+
+    /**
+     * Set codigoContratoClaseFk
+     *
+     * @param integer $codigoContratoClaseFk
+     *
+     * @return RhuContrato
+     */
+    public function setCodigoContratoClaseFk($codigoContratoClaseFk)
+    {
+        $this->codigoContratoClaseFk = $codigoContratoClaseFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoContratoClaseFk
+     *
+     * @return integer
+     */
+    public function getCodigoContratoClaseFk()
+    {
+        return $this->codigoContratoClaseFk;
     }
 
     /**
@@ -1000,6 +1035,30 @@ class RhuContrato
     public function getComentarios()
     {
         return $this->comentarios;
+    }
+
+    /**
+     * Set comentariosTerminacion
+     *
+     * @param string $comentariosTerminacion
+     *
+     * @return RhuContrato
+     */
+    public function setComentariosTerminacion($comentariosTerminacion)
+    {
+        $this->comentariosTerminacion = $comentariosTerminacion;
+
+        return $this;
+    }
+
+    /**
+     * Get comentariosTerminacion
+     *
+     * @return string
+     */
+    public function getComentariosTerminacion()
+    {
+        return $this->comentariosTerminacion;
     }
 
     /**
@@ -1603,6 +1662,30 @@ class RhuContrato
     }
 
     /**
+     * Set vrDevengadoPactado
+     *
+     * @param float $vrDevengadoPactado
+     *
+     * @return RhuContrato
+     */
+    public function setVrDevengadoPactado($vrDevengadoPactado)
+    {
+        $this->VrDevengadoPactado = $vrDevengadoPactado;
+
+        return $this;
+    }
+
+    /**
+     * Get vrDevengadoPactado
+     *
+     * @return float
+     */
+    public function getVrDevengadoPactado()
+    {
+        return $this->VrDevengadoPactado;
+    }
+
+    /**
      * Set empleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
@@ -1696,6 +1779,30 @@ class RhuContrato
     public function getContratoTipoRel()
     {
         return $this->contratoTipoRel;
+    }
+
+    /**
+     * Set contratoClaseRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContratoClase $contratoClaseRel
+     *
+     * @return RhuContrato
+     */
+    public function setContratoClaseRel(\Brasa\RecursoHumanoBundle\Entity\RhuContratoClase $contratoClaseRel = null)
+    {
+        $this->contratoClaseRel = $contratoClaseRel;
+
+        return $this;
+    }
+
+    /**
+     * Get contratoClaseRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuContratoClase
+     */
+    public function getContratoClaseRel()
+    {
+        return $this->contratoClaseRel;
     }
 
     /**
@@ -2678,53 +2785,5 @@ class RhuContrato
     public function getDisciplinariosContratoRel()
     {
         return $this->disciplinariosContratoRel;
-    }
-
-    /**
-     * Set comentariosTerminacion
-     *
-     * @param string $comentariosTerminacion
-     *
-     * @return RhuContrato
-     */
-    public function setComentariosTerminacion($comentariosTerminacion)
-    {
-        $this->comentariosTerminacion = $comentariosTerminacion;
-
-        return $this;
-    }
-
-    /**
-     * Get comentariosTerminacion
-     *
-     * @return string
-     */
-    public function getComentariosTerminacion()
-    {
-        return $this->comentariosTerminacion;
-    }
-
-    /**
-     * Set vrDevengadoPactado
-     *
-     * @param float $vrDevengadoPactado
-     *
-     * @return RhuContrato
-     */
-    public function setVrDevengadoPactado($vrDevengadoPactado)
-    {
-        $this->VrDevengadoPactado = $vrDevengadoPactado;
-
-        return $this;
-    }
-
-    /**
-     * Get vrDevengadoPactado
-     *
-     * @return float
-     */
-    public function getVrDevengadoPactado()
-    {
-        return $this->VrDevengadoPactado;
     }
 }

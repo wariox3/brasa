@@ -239,6 +239,7 @@ class ContratosController extends Controller
                                     $arContrato->setFechaUltimoPagoVacaciones($arContrato->getFechaDesde());
                                     $arContrato->setFactor($arContrato->getTipoTiempoRel()->getFactor());
                                     $arContrato->setFactorHorasDia($arContrato->getTipoTiempoRel()->getFactorHorasDia());
+                                    $arContrato->setContratoClaseRel($arContrato->getContratoTipoRel()->getContratoClaseRel());
                                     if($arContrato->getTipoTiempoRel()->getFactor() > 0) {
                                         $arContrato->setVrSalarioPago($arContrato->getVrSalario() / $arContrato->getTipoTiempoRel()->getFactor());
                                     } else {
@@ -329,6 +330,7 @@ class ContratosController extends Controller
                             $arContrato->setEmpleadoRel($arEmpleado);
                             $arContrato->setFactor($arContrato->getTipoTiempoRel()->getFactor());
                             $arContrato->setFactorHorasDia($arContrato->getTipoTiempoRel()->getFactorHorasDia());
+                            $arContrato->setContratoClaseRel($arContrato->getContratoTipoRel()->getContratoClaseRel());
                             if($arContrato->getTipoTiempoRel()->getFactor() > 0) {
                                 $arContrato->setVrSalarioPago($arContrato->getVrSalario() / $arContrato->getTipoTiempoRel()->getFactor());
                             } else {
