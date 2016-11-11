@@ -202,6 +202,9 @@ class PagoBancoController extends Controller
                     $objMensaje->Mensaje('error', 'El pago al banco debe estar autorizado ', $this);
                 }
             }
+            if ($form->get('BtnDetalleExcel')->isClicked()) {                
+                $this->generarDetalleExcel($codigoPagoBanco);
+            }
             
         }        
         $dql = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->listaDetalleDql($codigoPagoBanco);
@@ -529,6 +532,8 @@ class PagoBancoController extends Controller
     
     private function generarExcel() {
         ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
         $em = $this->getDoctrine()->getManager();        
         $objPHPExcel = new \PHPExcel();
         // Set document properties
@@ -581,8 +586,10 @@ class PagoBancoController extends Controller
         exit;
     }
 
-    private function generarDetalleExcel() {
+    private function generarDetalleExcel($codigoPagoBanco = '') {
         ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
         $em = $this->getDoctrine()->getManager();        
         $objPHPExcel = new \PHPExcel();
         // Set document properties
@@ -593,35 +600,50 @@ class PagoBancoController extends Controller
             ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
-        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        for($col = 'A'; $col !== 'K'; $col++) {
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                           
+        } 
+        for($col = 'J'; $col !== 'K'; $col++) {            
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }          
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
-                    ->setCellValue('B1', 'DESCRIPCIÓN')
-                    ->setCellValue('C1', 'CUENTA')
-                    ->setCellValue('D1', 'FECHA TRANSMISIÓN')
-                    ->setCellValue('E1', 'FECHA APLICACIÓN')
-                    ->setCellValue('F1', 'SECUENCIA');
+                    ->setCellValue('B1', 'PAG')
+                    ->setCellValue('C1', 'VAC')
+                    ->setCellValue('D1', 'LIQ')
+                    ->setCellValue('E1', 'S.S')
+                    ->setCellValue('F1', 'IDENTIFICACION')
+                    ->setCellValue('G1', 'EMPLEADO')
+                    ->setCellValue('H1', 'BANCO')
+                    ->setCellValue('I1', 'CUENTA')
+                    ->setCellValue('J1', 'PAGO');
                     
         $i = 2;
-        $query = $em->createQuery($this->strSqlLista);
-        $arPagoBancos = $query->getResult();
-        foreach ($arPagoBancos as $arPagoBanco) {
+        //$query = $em->createQuery($this->strSqlLista);
+        $arPagoBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
+        $arPagoBancoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->findBy(array('codigoPagoBancoFk' => $codigoPagoBanco));
+        //$arPagoBancos = $query->getResult();
+        foreach ($arPagoBancoDetalle as $arPagoBancoDetalle) {
             
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arPagoBanco->getCodigoPagoBancoPk())
-                    ->setCellValue('B' . $i, $arPagoBanco->getDescripcion())
-                    ->setCellValue('C' . $i, $arPagoBanco->getCuentaRel()->getNombre())
-                    ->setCellValue('D' . $i, $arPagoBanco->getFechaTrasmision())
-                    ->setCellValue('E' . $i, $arPagoBanco->getFechaAplicacion())
-                    ->setCellValue('F' . $i, $arPagoBanco->getSecuencia());
+                    ->setCellValue('A' . $i, $arPagoBancoDetalle->getCodigoPagoBancoDetallePk())
+                    ->setCellValue('B' . $i, $arPagoBancoDetalle->getCodigoPagoFk())
+                    ->setCellValue('C' . $i, $arPagoBancoDetalle->getCodigoVacacionFk())
+                    ->setCellValue('D' . $i, $arPagoBancoDetalle->getCodigoLiquidacionFk())
+                    ->setCellValue('E' . $i, $arPagoBancoDetalle->getCodigoPeriodoDetalleFk())
+                    ->setCellValue('F' . $i, $arPagoBancoDetalle->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('G' . $i, $arPagoBancoDetalle->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('H' . $i, $arPagoBancoDetalle->getBancoRel()->getNombre())
+                    ->setCellValue('I' . $i, $arPagoBancoDetalle->getEmpleadoRel()->getCuenta())
+                    ->setCellValue('J' . $i, $arPagoBancoDetalle->getVrPago());
             $i++;
         }
-        $objPHPExcel->getActiveSheet()->setTitle('PagoBancos');
+        $objPHPExcel->getActiveSheet()->setTitle('PagoBancosDetalles');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="PagoBancos.xlsx"');
+        header('Content-Disposition: attachment;filename="PagoBancosDetalles.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
@@ -679,6 +701,7 @@ class PagoBancoController extends Controller
                     ->add('BtnArchivoAvvillasOtros', 'submit', $arrBotonArchivoAvvillasOtros)
                     ->add('BtnArchivoDavivienda', 'submit', $arrBotonArchivoDavivienda)
                     ->add('BtnEliminarDetalle', 'submit', $arrBotonEliminarDetalle)
+                    ->add('BtnDetalleExcel', 'submit', array('label' => 'Excel'))
                     ->getForm();  
         return $form;
     }    
