@@ -65,6 +65,7 @@ class RhuLiquidacionRepository extends EntityRepository {
                     date_add($dateFechaUltimoPagoLiquidacion, date_interval_create_from_date_string('1 days'));                
                     $diasAdicionales = $this->diasPrestaciones($dateFechaUltimoPagoLiquidacion, $arLiquidacion->getFechaHasta());
                     $douIBPAdicional = ($arLiquidacion->getContratoRel()->getVrSalarioPago()/30) * $diasAdicionales;
+                    $douIBPAdicional = round($douIBPAdicional);
                     $arLiquidacion->setVrIngresoBasePrestacionAdicional($douIBPAdicional);                
                     $arLiquidacion->setDiasAdicionalesIBP($diasAdicionales);
                 } else {
@@ -80,9 +81,11 @@ class RhuLiquidacionRepository extends EntityRepository {
             if($arLiquidacion->getLiquidarCesantias() == 1) {                  
                 $dateFechaDesde = $arLiquidacion->getContratoRel()->getFechaUltimoPagoCesantias();            
                 $dateFechaHasta = $arLiquidacion->getContratoRel()->getFechaHasta();
-                $ibpCesantiasInicial = $arContrato->getIbpCesantiasInicial();                            
+                $ibpCesantiasInicial = $arContrato->getIbpCesantiasInicial();  
+                $ibpCesantiasInicial = round($ibpCesantiasInicial);
                 $ibpCesantias = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->ibp($dateFechaDesde->format('Y-m-d'), $dateFechaHasta->format('Y-m-d'), $arLiquidacion->getCodigoContratoFk());                
                 $ibpCesantias += $ibpCesantiasInicial+$douIBPAdicional;                  
+                $ibpCesantias = round($ibpCesantias);
                 $intDiasAusentismo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->diasAusentismo($dateFechaDesde->format('Y-m-d'), $dateFechaHasta->format('Y-m-d'), $arLiquidacion->getCodigoContratoFk());                            
                 $intDiasAusentismo += $arLiquidacion->getDiasAusentismoAdicional();
                 if($arLiquidacion->getEliminarAusentismo() > 0) {
@@ -111,11 +114,14 @@ class RhuLiquidacionRepository extends EntityRepository {
                 }
                 if($arLiquidacion->getVrSalarioCesantiasPropuesto() > 0) {
                     $salarioPromedioCesantias = $arLiquidacion->getVrSalarioCesantiasPropuesto();
-                }                
+                }        
+                $salarioPromedioCesantias = round($salarioPromedioCesantias);
                 $intDiasCesantias = $intDiasCesantias - $intDiasAusentismo;
-                $douCesantias = ($salarioPromedioCesantias * $intDiasCesantias) / 360;          
+                $douCesantias = ($salarioPromedioCesantias * $intDiasCesantias) / 360; 
+                $douCesantias = round($douCesantias);
                 $floPorcentajeIntereses = (($intDiasCesantias * 12) / 360)/100;
                 $douInteresesCesantias = $douCesantias * $floPorcentajeIntereses;
+                $douInteresesCesantias = round($douInteresesCesantias);
                 $arLiquidacion->setFechaUltimoPagoCesantias($dateFechaDesde);
                 $arLiquidacion->setDiasCesantias($intDiasCesantias);                
                 $arLiquidacion->setVrCesantias($douCesantias);
@@ -147,8 +153,10 @@ class RhuLiquidacionRepository extends EntityRepository {
                         $intDiasPrimaLiquidar = $intDiasPrimaLiquidar - 1;
                     }
                     $ibpPrimasInicial = $arContrato->getIbpPrimasInicial();                    
+                    $ibpPrimasInicial = round($ibpPrimasInicial);
                     $ibpPrimas = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->ibp($dateFechaDesde->format('Y-m-d'), $dateFechaHasta->format('Y-m-d'), $arLiquidacion->getCodigoContratoFk());                
                     $ibpPrimas += $ibpPrimasInicial + $douIBPAdicional;                                            
+                    $ibpPrimas = round($ibpPrimas);
                     if($arContrato->getCodigoSalarioTipoFk() == 2) {
                          $salarioPromedioPrimas = ($ibpPrimas / $intDiasPrimaLiquidar) * 30;                                    
                     } else {
@@ -172,7 +180,9 @@ class RhuLiquidacionRepository extends EntityRepository {
                     if($arLiquidacion->getVrSalarioPrimaPropuesto() > 0) {
                         $salarioPromedioPrimas = $arLiquidacion->getVrSalarioPrimaPropuesto();
                     }
+                    $salarioPromedioPrimas = round($salarioPromedioPrimas);
                     $douPrima = ($salarioPromedioPrimas * $intDiasPrimaLiquidar) / 360;                
+                    $douPrima = round($douPrima);
                     $arLiquidacion->setDiasPrimas($intDiasPrimaLiquidar);                    
                     $arLiquidacion->setVrPrima($douPrima);    
                     $arLiquidacion->setVrIngresoBasePrestacionPrimas($ibpPrimas);
@@ -221,10 +231,12 @@ class RhuLiquidacionRepository extends EntityRepository {
                     $intDiasAusentismo += $arLiquidacion->getDiasAusentismoAdicional();
                     if($arLiquidacion->getEliminarAusentismo() > 0) {
                         $intDiasAusentismo = 0;
-                    }                    
+                    }       
+                    $salarioVacaciones = round($salarioVacaciones);
                     $intDiasVacaciones = $this->diasPrestaciones($dateFechaDesde, $dateFechaHasta);                                
                     $intDiasVacacionesLiquidar = $intDiasVacaciones-$intDiasAusentismo;
                     $douVacaciones = ($salarioVacaciones * $intDiasVacacionesLiquidar) / 720;                                
+                    $douVacaciones = round($douVacaciones);
                     $arLiquidacion->setVrSalarioVacaciones($salarioVacaciones);
                     $arLiquidacion->setDiasVacaciones($intDiasVacacionesLiquidar);
                     $arLiquidacion->setDiasVacacionesAusentismo($intDiasAusentismo);
@@ -258,9 +270,11 @@ class RhuLiquidacionRepository extends EntityRepository {
             $floDeducciones += $arLiquidacionAdicional->getVrDeduccion();
             $floAdicionales += $arLiquidacionAdicional->getVrBonificacion();
         }
+        $floDeducciones = round($floDeducciones);
+        $floAdicionales = round($floAdicionales);
         $douTotal = $douCesantias + $douInteresesCesantias + $douPrima + $douVacaciones + $arLiquidacion->getVrIndemnizacion();
         $douTotal = $douTotal + $floAdicionales - $douAdicionalesPrima - $floDeducciones;
-        
+        $douTotal = round($douTotal);
         $arLiquidacion->setVrTotal($douTotal);
         $arLiquidacion->setVrSalario($douSalario);
         $arLiquidacion->setVrDeducciones($floDeducciones);
@@ -481,5 +495,25 @@ class RhuLiquidacionRepository extends EntityRepository {
         $dql   = "SELECT l FROM BrasaRecursoHumanoBundle:RhuLiquidacion l WHERE l.estadoContabilizado = 0 AND l.estadoPagoGenerado = 1 AND l.VrTotal > 0 ";       
         $dql .= " ORDER BY l.codigoLiquidacionPk DESC";
         return $dql;
+    }     
+    
+    public function contabilizadosDql($intNumeroDesde = 0, $intNumeroHasta = 0,$strDesde = "",$strHasta = "") {        
+        $em = $this->getEntityManager();
+        $dql   = "SELECT l FROM BrasaRecursoHumanoBundle:RhuLiquidacion l WHERE l.estadoContabilizado = 1 AND l.estadoPagoGenerado = 1";
+        if($intNumeroDesde != "" || $intNumeroDesde != 0) {
+            $dql .= " AND l.codigoLiquidacionPk >= " . $intNumeroDesde;
+        }
+        if($intNumeroHasta != "" || $intNumeroHasta != 0) {
+            $dql .= " AND l.codigoLiquidacionPk <= " . $intNumeroHasta;
+        }   
+        if($strDesde != "" || $strDesde != 0){
+            $dql .= " AND l.fechaHasta >='" . date_format($strDesde, ('Y-m-d')) . "'";
+        }
+        if($strHasta != "" || $strHasta != 0) {
+            $dql .= " AND l.fechaHasta <='" . date_format($strHasta, ('Y-m-d')) . "'";
+        }
+        $query = $em->createQuery($dql);
+        $arrayResultado = $query->getResult();
+        return $arrayResultado;
     }     
 }

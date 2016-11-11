@@ -31,8 +31,6 @@ class ContabilizarLiquidacionController extends Controller
                     $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
                     $arComprobanteContable = new \Brasa\ContabilidadBundle\Entity\CtbComprobante();                    
                     $arComprobanteContable = $em->getRepository('BrasaContabilidadBundle:CtbComprobante')->find($arConfiguracion->getCodigoComprobanteLiquidacion());
-                    $arCentroCosto = new \Brasa\ContabilidadBundle\Entity\CtbCentroCosto();                    
-                    $arCentroCosto =$em->getRepository('BrasaContabilidadBundle:CtbCentroCosto')->find(0);                           
                     $arCuenta = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracionCuenta')->find(1);
                     $codigoCuentaCesantias = $arCuenta->getCodigoCuentaFk();
                     $arCuenta = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracionCuenta')->find(2);
@@ -48,7 +46,8 @@ class ContabilizarLiquidacionController extends Controller
                     foreach ($arrSeleccionados AS $codigo) {                                     
                         $arLiquidacion = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
                         $arLiquidacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->find($codigo);
-                        if($arLiquidacion->getEstadoContabilizado() == 0) {
+                        if($arLiquidacion->getEstadoContabilizado() == 0) {                            
+                            $arCentroCosto = $arLiquidacion->getEmpleadoRel()->getCentroCostoContabilidadRel();                                                       
                             $arTercero = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arLiquidacion->getEmpleadoRel()->getNumeroIdentificacion()));
                             if(!$arTercero) {
                                 $arTercero = new \Brasa\ContabilidadBundle\Entity\CtbTercero();
@@ -72,8 +71,7 @@ class ContabilizarLiquidacionController extends Controller
                                 $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($codigoCuentaCesantias); 
                                 if($arCuenta) {
                                     $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                    $arRegistro->setComprobanteRel($arComprobanteContable);
-                                    //$arRegistro->setCentroCostoRel($arCentroCosto);
+                                    $arRegistro->setComprobanteRel($arComprobanteContable);                                    
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
                                     $arRegistro->setNumero($arLiquidacion->getCodigoLiquidacionPk());
@@ -90,8 +88,7 @@ class ContabilizarLiquidacionController extends Controller
                                 $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($codigoCuentaInteresesCesantias); 
                                 if($arCuenta) {
                                     $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                    $arRegistro->setComprobanteRel($arComprobanteContable);
-                                    //$arRegistro->setCentroCostoRel($arCentroCosto);
+                                    $arRegistro->setComprobanteRel($arComprobanteContable);                                    
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
                                     $arRegistro->setNumero($arLiquidacion->getCodigoLiquidacionPk());
@@ -108,8 +105,7 @@ class ContabilizarLiquidacionController extends Controller
                                 $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($codigoCuentaPrimas); 
                                 if($arCuenta) {
                                     $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                    $arRegistro->setComprobanteRel($arComprobanteContable);
-                                    //$arRegistro->setCentroCostoRel($arCentroCosto);
+                                    $arRegistro->setComprobanteRel($arComprobanteContable);                                    
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
                                     $arRegistro->setNumero($arLiquidacion->getCodigoLiquidacionPk());
@@ -126,8 +122,7 @@ class ContabilizarLiquidacionController extends Controller
                                 $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($codigoCuentaVacaciones); 
                                 if($arCuenta) {
                                     $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                    $arRegistro->setComprobanteRel($arComprobanteContable);
-                                    //$arRegistro->setCentroCostoRel($arCentroCosto);
+                                    $arRegistro->setComprobanteRel($arComprobanteContable);                                    
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
                                     $arRegistro->setNumero($arLiquidacion->getCodigoLiquidacionPk());
@@ -161,11 +156,14 @@ class ContabilizarLiquidacionController extends Controller
                             $arLiquidacionAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacionAdicionales();
                             $arLiquidacionAdicionales = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacionAdicionales')->findBy(array('codigoLiquidacionFk' => $codigo));
                             foreach ($arLiquidacionAdicionales as $arLiquidacionAdicional) {
+                                $arCuenta = new \Brasa\ContabilidadBundle\Entity\CtbCuenta();
                                 $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($arLiquidacionAdicional->getPagoConceptoRel()->getCodigoCuentaFk()); 
                                 if($arCuenta) {
                                     $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
                                     $arRegistro->setComprobanteRel($arComprobanteContable);
-                                    //$arRegistro->setCentroCostoRel($arCentroCosto);
+                                    if($arCuenta->getExigeCentroCostos()) {
+                                        $arRegistro->setCentroCostoRel($arCentroCosto);                                        
+                                    }                                    
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
                                     $arRegistro->setNumero($arLiquidacion->getCodigoLiquidacionPk());
@@ -186,8 +184,7 @@ class ContabilizarLiquidacionController extends Controller
                                 $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($codigoCuentaLiquidacion); 
                                 if($arCuenta) {
                                     $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                    $arRegistro->setComprobanteRel($arComprobanteContable);
-                                    //$arRegistro->setCentroCostoRel($arCentroCosto);
+                                    $arRegistro->setComprobanteRel($arComprobanteContable);                                    
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
                                     $arRegistro->setNumero($arLiquidacion->getCodigoLiquidacionPk());
@@ -228,4 +225,45 @@ class ContabilizarLiquidacionController extends Controller
         $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->pendientesContabilizarDql();  
     }                 
     
+    /**
+     * @Route("/rhu/proceso/descontabilizar/liquidacion/", name="brs_rhu_proceso_descontabilizar_liquidacion")
+     */    
+    public function descontabilizarLiquidacionAction() {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $session = $this->getRequest()->getSession(); 
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $form = $this->createFormBuilder()
+            ->add('numeroDesde', 'number', array('label'  => 'Numero desde'))
+            ->add('numeroHasta', 'number', array('label'  => 'Numero hasta'))
+            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                
+            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                                                            
+            ->add('BtnDescontabilizar', 'submit', array('label'  => 'Descontabilizar',))    
+            ->getForm();
+        $form->handleRequest($request);        
+        if ($form->isValid()) {             
+            if ($form->get('BtnDescontabilizar')->isClicked()) {
+                $intNumeroDesde = $form->get('numeroDesde')->getData();
+                $intNumeroHasta = $form->get('numeroHasta')->getData();
+                $dateFechaDesde = $form->get('fechaDesde')->getData();
+                $dateFechaHasta = $form->get('fechaHasta')->getData();
+                if($intNumeroDesde != "" || $intNumeroHasta != "" || $dateFechaDesde != "" || $dateFechaHasta != "") {
+                    $arRegistros = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
+                    $arRegistros = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->contabilizadosDql($intNumeroDesde,$intNumeroHasta,$dateFechaDesde,$dateFechaHasta);  
+                    foreach ($arRegistros as $codigoRegistro) {
+                        $arRegistro = new \Brasa\RecursoHumanoBundle\Entity\RhuLiquidacion();
+                        $arRegistro = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->find($codigoRegistro);
+                        $arRegistro->setEstadoContabilizado(0);                                                    
+                        $em->persist($arRegistro);    
+                    }
+                    $em->flush();
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                } else {
+                    $objMensaje->Mensaje('error', 'Debe seleccionar un filtro', $this);
+                }                               
+            }
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Procesos/Contabilizar:descontabilizarLiquidacion.html.twig', array(
+            'form' => $form->createView()));
+    }    
 }
