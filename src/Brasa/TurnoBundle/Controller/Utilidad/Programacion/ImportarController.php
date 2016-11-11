@@ -26,19 +26,17 @@ class ImportarController extends Controller
         $form->handleRequest($request);
         if($form->isValid()) {
             if($form->get('BtnCargar')->isClicked()) {
+                $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+                $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
                 $arUsuario = $this->get('security.context')->getToken()->getUser();
                 set_time_limit(0);
-                ini_set("memory_limit", -1);
-                $fecha = new \DateTime('now');
-                if($periodo != 0 && $periodo != "") {
-                    $arPagoAdicionalPeriodo = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicionalPeriodo();                                    
-                    $arPagoAdicionalPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicionalPeriodo')->find($periodo);            
-                    $fecha = $arPagoAdicionalPeriodo->getFecha();                    
-                }
+                ini_set("memory_limit", -1);                
+
                 
-                $form['attachment']->getData()->move($rutaTemporal->getRutaTemporal(), "archivo.xls");                
-                $ruta = $rutaTemporal->getRutaTemporal(). "archivo.xls";                
+                $form['attachment']->getData()->move($arConfiguracion->getRutaTemporal(), "archivo.xls");                
+                $ruta = $arConfiguracion->getRutaTemporal(). "archivo.xls";                
                 $arrCarga = array();
+                
                 $objPHPExcel = \PHPExcel_IOFactory::load($ruta);                
                 foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
                     $worksheetTitle     = $worksheet->getTitle();
@@ -66,7 +64,7 @@ class ImportarController extends Controller
                     }
                 }
                 $error = "";
-                foreach ($arrCarga as $carga) {
+                /*foreach ($arrCarga as $carga) {
                     $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
                     if($carga['concepto']) {
                         $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($carga['concepto']);                        
@@ -109,7 +107,7 @@ class ImportarController extends Controller
                     $em->flush();
                     echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
                 }
-                
+                */
                 
             } 
         }                 

@@ -13,7 +13,7 @@
                 <th>IDENTIFICACION</th>                
                 <th>EMPLEADO</th>                
                 <th>FECHA</th>
-                <th style="text-align: right">TOTAL</th>
+                <th>TOTAL</th>
                 <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
             </tr>
             {% for arLiquidaciones in arLiquidaciones %}
@@ -21,7 +21,7 @@
                 <td>{{ arLiquidaciones.codigoLiquidacionPk }} </td>
                 <td>{{ arLiquidaciones.empleadoRel.numeroIdentificacion  }}</td>
                 <td>{{ arLiquidaciones.empleadoRel.nombreCorto  }}</td>                
-                <td>{{ arLiquidaciones.fecha |date("Y/m/d")  }}</td>
+                <td>{{ arLiquidaciones.fechaHasta |date("Y/m/d")  }}</td>
                 <td style="text-align: right">{{ arLiquidaciones.VrTotal | number_format(2, '.', ',') }}</td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arLiquidaciones.codigoLiquidacionPk }}" /></td>
             </tr>
