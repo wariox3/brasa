@@ -96,6 +96,7 @@ class RhuVacacionRepository extends EntityRepository {
         if ($promedioRecargosNocturnos == null){
             $promedioRecargosNocturnos = 0;
         }
+        $promedioRecargosNocturnos = round($promedioRecargosNocturnos);
         $arVacacion->setVrPromedioRecargoNocturno($promedioRecargosNocturnos);
         if($arContrato->getCodigoSalarioTipoFk() == 1) {
             $floSalarioPromedio = $arContrato->getVrSalario();
@@ -118,12 +119,14 @@ class RhuVacacionRepository extends EntityRepository {
             $basePrestaciones = ($floTotalVacacionBrutoDisfrute * 70) / 100;
         }
         $douSalud = ($basePrestaciones * 4) / 100;
+        $douSalud = round($douSalud);
         $arVacacion->setVrSalud($douSalud);
         if ($basePrestaciones >= ($arConfiguracion->getVrSalario() * 4)){
             $douPension = ($basePrestaciones * 5) / 100;
         } else {
             $douPension = ($basePrestaciones * 4) / 100;
         }
+        $douPension = round($douPension);
         $arVacacion->setVrPension($douPension);                                   
         $floDeducciones = 0;
         $floBonificaciones = 0;        
@@ -136,13 +139,20 @@ class RhuVacacionRepository extends EntityRepository {
             if($arVacacionAdicional->getVrBonificacion() > 0) {
                 $floBonificaciones += $arVacacionAdicional->getVrBonificacion();
             }            
-        }               
+        }                  
+        $floBonificaciones = round($floBonificaciones);
+        $floDeducciones = round($floDeducciones);
+        $floSalario = round($floSalario);
+        $floSalarioPromedio = round($floSalarioPromedio);
+        $floTotalVacacionBruto = round($floTotalVacacionBruto);
         $promedioIbc = $floTotalVacacionBruto/$arVacacion->getDiasVacaciones();
+        $promedioIbc = round($promedioIbc);
         $arVacacion->setVrIbcPromedio($promedioIbc);
         $arVacacion->setVrBonificacion($floBonificaciones);
         $arVacacion->setVrDeduccion($floDeducciones);
         $arVacacion->setVrVacacionBruto($floTotalVacacionBruto);
         $floTotalVacacion = ($floTotalVacacionBruto+$floBonificaciones) - $floDeducciones - $arVacacion->getVrPension() - $arVacacion->getVrSalud();        
+        $floTotalVacacion = round($floTotalVacacion);
         $arVacacion->setVrVacacion($floTotalVacacion);        
         $arVacacion->setVrSalarioActual($floSalario);
         $arVacacion->setVrSalarioPromedio($floSalarioPromedio);
