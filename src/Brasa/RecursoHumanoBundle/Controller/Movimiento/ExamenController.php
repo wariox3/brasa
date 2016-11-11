@@ -316,8 +316,8 @@ class ExamenController extends Controller
                             $arExamenDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenDetalle();
                             $arExamenDetalle->setExamenTipoRel($arExamenTipo);
                             $arExamenDetalle->setExamenRel($arExamen);
-                            $arExamenDetalle->setFechaExamen(new \DateTime('now'));
-                            $arExamenDetalle->setFechaVence(new \DateTime('now'));
+                            $arExamenDetalle->setFechaExamen($arExamen->getFecha());
+                            $arExamenDetalle->setFechaVence($arExamen->getFecha());
                             $douPrecio = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenListaPrecio')->devuelvePrecio($arExamen->getCodigoEntidadExamenFk(), $codigoExamenTipo);
                             $arExamenDetalle->setVrPrecio($douPrecio);
                             $em->persist($arExamenDetalle);
