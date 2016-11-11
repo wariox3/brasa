@@ -31,13 +31,14 @@ class ImportarController extends Controller
                 $arUsuario = $this->get('security.context')->getToken()->getUser();
                 set_time_limit(0);
                 ini_set("memory_limit", -1);                
-
+                $error = "";
                 
                 $form['attachment']->getData()->move($arConfiguracion->getRutaTemporal(), "archivo.xls");                
                 $ruta = $arConfiguracion->getRutaTemporal(). "archivo.xls";                
-                $arrCarga = array();
+                $arrCargas = array();
                 
                 $objPHPExcel = \PHPExcel_IOFactory::load($ruta);                
+                //Cargar informacion
                 foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
                     $worksheetTitle     = $worksheet->getTitle();
                     $highestRow         = $worksheet->getHighestRow(); // e.g. 10
@@ -46,69 +47,67 @@ class ImportarController extends Controller
                     $nrColumns = ord($highestColumn) - 64;
                     for ($row = 2; $row <= $highestRow; ++ $row) {                        
                         $cell = $worksheet->getCellByColumnAndRow(0, $row);
-                        $concepto = $cell->getValue();
-                        $cell = $worksheet->getCellByColumnAndRow(1, $row);
-                        $identificacion = $cell->getValue();                       
-                        $cell = $worksheet->getCellByColumnAndRow(2, $row);
-                        $tipo = $cell->getValue();                                                
-                        $cell = $worksheet->getCellByColumnAndRow(3, $row);
-                        $valor = $cell->getValue();  
-                        $cell = $worksheet->getCellByColumnAndRow(4, $row);
-                        $detalle = $cell->getValue();                          
-                        $arrCarga[] = array(
-                            'concepto' => $concepto,
-                            'identificacion' => $identificacion,
-                            'tipo' => $tipo,
-                            'valor' => $valor,
-                            'detalle' => $detalle);
+                        $codigoRecurso = $cell->getValue();                        
+                        $arrTemporal = array('codigoRecurso' => $codigoRecurso);                                                
+                        for($i=1;$i<=31;$i++) {
+                            $cell = $worksheet->getCellByColumnAndRow($i, $row);
+                            $turno = $cell->getValue(); 
+                            $arrTemporal[$i] = $turno;                            
+                        }   
+                        $arrCargas[] = $arrTemporal;
                     }
                 }
-                $error = "";
-                /*foreach ($arrCarga as $carga) {
-                    $arPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoConcepto();
-                    if($carga['concepto']) {
-                        $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($carga['concepto']);                        
-                    } 
-                    $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
-                    if($carga['identificacion']) {
-                        $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $carga['identificacion']));    
-                    }                    
-                    if($arPagoConcepto) {
-                        if($arEmpleado) {
-                            $arPagoAdicional = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();                            
-                            $arPagoAdicional->setPagoConceptoRel($arPagoConcepto);
-                            $arPagoAdicional->setEmpleadoRel($arEmpleado);
-                            $arPagoAdicional->setPermanente(1);
-                            $arPagoAdicional->setValor($carga['valor']);
-                            $arPagoAdicional->setTipoAdicional($carga['tipo']);
-                            $arPagoAdicional->setDetalle($carga['detalle']);
-                            $arPagoAdicional->setModalidad(1);
-                            if($periodo != 0 && $periodo != "") {
-                                $arPagoAdicional->setPermanente(0);
-                                $arPagoAdicional->setModalidad(2);
-                                $arPagoAdicional->setCodigoPeriodoFk($periodo);
-                                $arPagoAdicional->setFecha($fecha);
-                            }
-                            $arPagoAdicional->setFechaCreacion(new \DateTime('now'));
-                            $arPagoAdicional->setFechaUltimaEdicion(new \DateTime('now'));                            
-                            $arPagoAdicional->setCodigoUsuario($arUsuario->getUserName());                            
-                            $em->persist($arPagoAdicional);                             
-                        } else {
-                            $error .= "Empleado" . $carga['identificacion'] . " no existe ";
-                        }                       
-                    } else {
-                        $error .= "Concepto" . $carga['concepto'] . " no existe ";
+                
+                //Validar
+                foreach ($arrCargas as $arrCarga) {
+                    for($i=1; $i<=31; $i++) {
+                        if(!$this->validarTurno($arrCarga[$i])) {
+                            $error . "El turno " . $arrCarga[$i] . " no existe";
+                        }
                     }                    
                 }
+                
                 if($error != "") {
-                    //echo "Error al cargar:" . $error;
                     $objMensaje->Mensaje('error', "Error al cargar:" . $error, $this);
                 } else {
+                    foreach ($arrCargas as $arrCarga) {
+                        $arProgramacionImportar = new \Brasa\TurnoBundle\Entity\TurProgramacionImportar();
+                        $arProgramacionImportar->setDia1($arrCarga[1]);
+                        $arProgramacionImportar->setDia2($arrCarga[2]);
+                        $arProgramacionImportar->setDia3($arrCarga[3]);
+                        $arProgramacionImportar->setDia4($arrCarga[4]);
+                        $arProgramacionImportar->setDia5($arrCarga[5]);
+                        $arProgramacionImportar->setDia6($arrCarga[6]);
+                        $arProgramacionImportar->setDia7($arrCarga[7]);
+                        $arProgramacionImportar->setDia8($arrCarga[8]);
+                        $arProgramacionImportar->setDia9($arrCarga[9]);
+                        $arProgramacionImportar->setDia10($arrCarga[10]);
+                        $arProgramacionImportar->setDia11($arrCarga[11]);
+                        $arProgramacionImportar->setDia12($arrCarga[12]);
+                        $arProgramacionImportar->setDia13($arrCarga[13]);
+                        $arProgramacionImportar->setDia14($arrCarga[14]);
+                        $arProgramacionImportar->setDia15($arrCarga[15]);
+                        $arProgramacionImportar->setDia16($arrCarga[16]);
+                        $arProgramacionImportar->setDia17($arrCarga[17]);
+                        $arProgramacionImportar->setDia18($arrCarga[18]);
+                        $arProgramacionImportar->setDia19($arrCarga[19]);
+                        $arProgramacionImportar->setDia20($arrCarga[20]);
+                        $arProgramacionImportar->setDia21($arrCarga[21]);
+                        $arProgramacionImportar->setDia22($arrCarga[22]);
+                        $arProgramacionImportar->setDia23($arrCarga[23]);
+                        $arProgramacionImportar->setDia24($arrCarga[24]);
+                        $arProgramacionImportar->setDia25($arrCarga[25]);
+                        $arProgramacionImportar->setDia26($arrCarga[26]);
+                        $arProgramacionImportar->setDia27($arrCarga[27]);
+                        $arProgramacionImportar->setDia28($arrCarga[28]);
+                        $arProgramacionImportar->setDia29($arrCarga[29]);
+                        $arProgramacionImportar->setDia30($arrCarga[30]);
+                        $arProgramacionImportar->setDia31($arrCarga[31]);
+                        $em->persist($arProgramacionImportar);
+                    }                    
                     $em->flush();
                     echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                
-                }
-                */
-                
+                }                                
             } 
         }                 
         $dql = $em->getRepository('BrasaTurnoBundle:TurProgramacionImportar')->listaDql();
@@ -127,4 +126,8 @@ class ImportarController extends Controller
         return $form;
     }        
 
+    private function validarTurno() {
+        
+        return true;
+    }
 }
