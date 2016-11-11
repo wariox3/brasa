@@ -31,8 +31,6 @@ class ContabilizarVacacionController extends Controller
                     $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
                     $arComprobanteContable = new \Brasa\ContabilidadBundle\Entity\CtbComprobante();                    
                     $arComprobanteContable = $em->getRepository('BrasaContabilidadBundle:CtbComprobante')->find($arConfiguracion->getCodigoComprobanteVacacion());
-                    $arCentroCosto = new \Brasa\ContabilidadBundle\Entity\CtbCentroCosto();                    
-                    $arCentroCosto =$em->getRepository('BrasaContabilidadBundle:CtbCentroCosto')->find(0);  
                     //Cuentas
                     $arCuenta = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracionCuenta')->find(7);
                     $codigoCuentaPagadas = $arCuenta->getCodigoCuentaFk();                    
@@ -48,6 +46,7 @@ class ContabilizarVacacionController extends Controller
                         $arVacacion = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
                         $arVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigo);
                         if($arVacacion->getEstadoContabilizado() == 0) {
+                            $arCentroCosto = $arVacacion->getEmpleadoRel()->getCentroCostoContabilidadRel();                                                       
                             $arTercero = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arVacacion->getEmpleadoRel()->getNumeroIdentificacion()));                            
                             if(!$arTercero) {
                                 $arTercero = new \Brasa\ContabilidadBundle\Entity\CtbTercero();
@@ -128,6 +127,9 @@ class ContabilizarVacacionController extends Controller
                                 if($arCuenta) {
                                     $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
                                     $arRegistro->setComprobanteRel($arComprobanteContable);
+                                    if($arCuenta->getExigeCentroCostos()) {
+                                        $arRegistro->setCentroCostoRel($arCentroCosto);                                        
+                                    }                                     
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
                                     $arRegistro->setNumero($arVacacion->getCodigoVacacionPk());
@@ -148,8 +150,7 @@ class ContabilizarVacacionController extends Controller
                                 $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($codigoCuentaVacacion); 
                                 if($arCuenta) {
                                     $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                    $arRegistro->setComprobanteRel($arComprobanteContable);
-                                    //$arRegistro->setCentroCostoRel($arCentroCosto);
+                                    $arRegistro->setComprobanteRel($arComprobanteContable);                                    
                                     $arRegistro->setCuentaRel($arCuenta);
                                     $arRegistro->setTerceroRel($arTercero);
                                     $arRegistro->setNumero($arVacacion->getCodigoVacacionPk());
@@ -189,5 +190,47 @@ class ContabilizarVacacionController extends Controller
         $em = $this->getDoctrine()->getManager();                
         $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->pendientesContabilizarDql();  
     }             
+    
+    /**
+     * @Route("/rhu/proceso/descontabilizar/vacacion/", name="brs_rhu_proceso_descontabilizar_vacacion")
+     */    
+    public function descontabilizarVacacionAction() {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $session = $this->getRequest()->getSession(); 
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $form = $this->createFormBuilder()
+            ->add('numeroDesde', 'number', array('label'  => 'Numero desde'))
+            ->add('numeroHasta', 'number', array('label'  => 'Numero hasta'))
+            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                
+            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                                                            
+            ->add('BtnDescontabilizar', 'submit', array('label'  => 'Descontabilizar',))    
+            ->getForm();
+        $form->handleRequest($request);        
+        if ($form->isValid()) {             
+            if ($form->get('BtnDescontabilizar')->isClicked()) {
+                $intNumeroDesde = $form->get('numeroDesde')->getData();
+                $intNumeroHasta = $form->get('numeroHasta')->getData();
+                $dateFechaDesde = $form->get('fechaDesde')->getData();
+                $dateFechaHasta = $form->get('fechaHasta')->getData();
+                if($intNumeroDesde != "" || $intNumeroHasta != "" || $dateFechaDesde != "" || $dateFechaHasta != "") {
+                    $arRegistros = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
+                    $arRegistros = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->contabilizadosDql($intNumeroDesde,$intNumeroHasta,$dateFechaDesde,$dateFechaHasta);  
+                    foreach ($arRegistros as $codigoRegistro) {
+                        $arRegistro = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
+                        $arRegistro = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find($codigoRegistro);
+                        $arRegistro->setEstadoContabilizado(0);                                                    
+                        $em->persist($arRegistro);    
+                    }
+                    $em->flush();
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                } else {
+                    $objMensaje->Mensaje('error', 'Debe seleccionar un filtro', $this);
+                }                               
+            }
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Procesos/Contabilizar:descontabilizarVacacion.html.twig', array(
+            'form' => $form->createView()));
+    } 
     
 }
