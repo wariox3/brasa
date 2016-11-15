@@ -1,5 +1,5 @@
 {% extends '::base.html.twig' %}
-{% block title %}Proyección costos - Soga App{% endblock %}
+{% block title %}Proyección costo prestaciones - Soga App{% endblock %}
 {% block content %}
 <div class="container">
     <script type="text/javascript">
@@ -7,7 +7,7 @@
             $('.date').datepicker({ dateFormat: 'yy-mm-dd' ,dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Deciembre" ], monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ]})  });
     </script>
     <div class="page-header">
-        <h3>Proyección de costos</h3>
+        <h3>Proyección de costos prestaciones</h3>
     </div>
     {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
             {{ form_errors(form) }}
@@ -43,13 +43,16 @@
                 <th>SALARIO</th>
                 <th>HASTA</th>
                 <th>VACACIONES</th>
+                <th>SALARIO</th>
                 <th>PRIMAS</th>
                 <th>DIAS</th>
                 <th>U.PAGO</th>                
+                <th>SALARIO</th>
                 <th>CESANTIAS</th>
                 <th>INTERESES</th>
                 <th>DIAS</th>
                 <th>U.PAGO</th>
+                <th>D.AUS</th>
             </tr>
             {% for arProyecciones in arProyecciones %}
             <tr>                
@@ -60,13 +63,16 @@
                 <td style="text-align: right">{{ arProyecciones.vrSalario | number_format(0, '.', ',') }}</td>
                 <td>{{ arProyecciones.fechaHasta |date('Y-m-d')  }}</td>                
                 <td style="text-align: right">{{ arProyecciones.vrVacaciones | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arProyecciones.vrSalarioPromedioPrimas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arProyecciones.vrPrimas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arProyecciones.diasPrima | number_format(0, '.', ',') }}</td>
                 <td>{{ arProyecciones.fechaDesdePrima |date('Y-m-d')  }}</td>                                
+                <td style="text-align: right">{{ arProyecciones.vrSalarioPromedioCesantias | number_format(0, '.', ',') }}</td>                
                 <td style="text-align: right">{{ arProyecciones.vrCesantias | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arProyecciones.vrInteresesCesantias | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arProyecciones.diasCesantias | number_format(0, '.', ',') }}</td>
                 <td>{{ arProyecciones.fechaDesdeCesantias |date('Y-m-d')  }}</td>                
+                <td style="text-align: right">{{ arProyecciones.diasAusentismo | number_format(0, '.', ',') }}</td>
             </tr>
             {% endfor %}
         </table>

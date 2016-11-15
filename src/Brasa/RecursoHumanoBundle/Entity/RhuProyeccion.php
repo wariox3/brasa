@@ -43,6 +43,11 @@ class RhuProyeccion
     private $dias = 0;     
 
     /**
+     * @ORM\Column(name="dias_ausentismo", type="integer")
+     */
+    private $diasAusentismo = 0;     
+    
+    /**
      * @ORM\Column(name="vr_salario", type="float")
      */
     private $vrSalario = 0;     
@@ -60,12 +65,17 @@ class RhuProyeccion
     /**
      * @ORM\Column(name="fecha_desde_prima", type="date", nullable=true)
      */    
-    private $fechaDesdePrima;    
+    private $fechaDesdePrima;            
     
     /**
      * @ORM\Column(name="vr_primas", type="float")
      */
     private $vrPrimas = 0;     
+    
+    /**
+     * @ORM\Column(name="vr_salario_promedio_primas", type="float")
+     */
+    private $vrSalarioPromedioPrimas = 0;     
     
     /**
      * @ORM\Column(name="dias_cesantias", type="integer")
@@ -88,6 +98,11 @@ class RhuProyeccion
     private $vrInteresesCesantias = 0;         
     
     /**
+     * @ORM\Column(name="vr_salario_promedio_cesantias", type="float")
+     */
+    private $vrSalarioPromedioCesantias = 0;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="proyeccionesEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
@@ -98,7 +113,6 @@ class RhuProyeccion
      * @ORM\JoinColumn(name="codigo_contrato_fk", referencedColumnName="codigo_contrato_pk")
      */
     protected $contratoRel;     
-
 
 
     /**
@@ -208,6 +222,54 @@ class RhuProyeccion
     }
 
     /**
+     * Set dias
+     *
+     * @param integer $dias
+     *
+     * @return RhuProyeccion
+     */
+    public function setDias($dias)
+    {
+        $this->dias = $dias;
+
+        return $this;
+    }
+
+    /**
+     * Get dias
+     *
+     * @return integer
+     */
+    public function getDias()
+    {
+        return $this->dias;
+    }
+
+    /**
+     * Set vrSalario
+     *
+     * @param float $vrSalario
+     *
+     * @return RhuProyeccion
+     */
+    public function setVrSalario($vrSalario)
+    {
+        $this->vrSalario = $vrSalario;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalario
+     *
+     * @return float
+     */
+    public function getVrSalario()
+    {
+        return $this->vrSalario;
+    }
+
+    /**
      * Set vrVacaciones
      *
      * @param float $vrVacaciones
@@ -232,6 +294,54 @@ class RhuProyeccion
     }
 
     /**
+     * Set diasPrima
+     *
+     * @param integer $diasPrima
+     *
+     * @return RhuProyeccion
+     */
+    public function setDiasPrima($diasPrima)
+    {
+        $this->diasPrima = $diasPrima;
+
+        return $this;
+    }
+
+    /**
+     * Get diasPrima
+     *
+     * @return integer
+     */
+    public function getDiasPrima()
+    {
+        return $this->diasPrima;
+    }
+
+    /**
+     * Set fechaDesdePrima
+     *
+     * @param \DateTime $fechaDesdePrima
+     *
+     * @return RhuProyeccion
+     */
+    public function setFechaDesdePrima($fechaDesdePrima)
+    {
+        $this->fechaDesdePrima = $fechaDesdePrima;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaDesdePrima
+     *
+     * @return \DateTime
+     */
+    public function getFechaDesdePrima()
+    {
+        return $this->fechaDesdePrima;
+    }
+
+    /**
      * Set vrPrimas
      *
      * @param float $vrPrimas
@@ -253,6 +363,78 @@ class RhuProyeccion
     public function getVrPrimas()
     {
         return $this->vrPrimas;
+    }
+
+    /**
+     * Set vrSalarioPromedioPrimas
+     *
+     * @param float $vrSalarioPromedioPrimas
+     *
+     * @return RhuProyeccion
+     */
+    public function setVrSalarioPromedioPrimas($vrSalarioPromedioPrimas)
+    {
+        $this->vrSalarioPromedioPrimas = $vrSalarioPromedioPrimas;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalarioPromedioPrimas
+     *
+     * @return float
+     */
+    public function getVrSalarioPromedioPrimas()
+    {
+        return $this->vrSalarioPromedioPrimas;
+    }
+
+    /**
+     * Set diasCesantias
+     *
+     * @param integer $diasCesantias
+     *
+     * @return RhuProyeccion
+     */
+    public function setDiasCesantias($diasCesantias)
+    {
+        $this->diasCesantias = $diasCesantias;
+
+        return $this;
+    }
+
+    /**
+     * Get diasCesantias
+     *
+     * @return integer
+     */
+    public function getDiasCesantias()
+    {
+        return $this->diasCesantias;
+    }
+
+    /**
+     * Set fechaDesdeCesantias
+     *
+     * @param \DateTime $fechaDesdeCesantias
+     *
+     * @return RhuProyeccion
+     */
+    public function setFechaDesdeCesantias($fechaDesdeCesantias)
+    {
+        $this->fechaDesdeCesantias = $fechaDesdeCesantias;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaDesdeCesantias
+     *
+     * @return \DateTime
+     */
+    public function getFechaDesdeCesantias()
+    {
+        return $this->fechaDesdeCesantias;
     }
 
     /**
@@ -352,146 +534,50 @@ class RhuProyeccion
     }
 
     /**
-     * Set dias
+     * Set vrSalarioPromedioCesantias
      *
-     * @param integer $dias
+     * @param float $vrSalarioPromedioCesantias
      *
      * @return RhuProyeccion
      */
-    public function setDias($dias)
+    public function setVrSalarioPromedioCesantias($vrSalarioPromedioCesantias)
     {
-        $this->dias = $dias;
+        $this->vrSalarioPromedioCesantias = $vrSalarioPromedioCesantias;
 
         return $this;
     }
 
     /**
-     * Get dias
-     *
-     * @return integer
-     */
-    public function getDias()
-    {
-        return $this->dias;
-    }
-
-    /**
-     * Set vrSalario
-     *
-     * @param float $vrSalario
-     *
-     * @return RhuProyeccion
-     */
-    public function setVrSalario($vrSalario)
-    {
-        $this->vrSalario = $vrSalario;
-
-        return $this;
-    }
-
-    /**
-     * Get vrSalario
+     * Get vrSalarioPromedioCesantias
      *
      * @return float
      */
-    public function getVrSalario()
+    public function getVrSalarioPromedioCesantias()
     {
-        return $this->vrSalario;
+        return $this->vrSalarioPromedioCesantias;
     }
 
     /**
-     * Set diasPrima
+     * Set diasAusentismo
      *
-     * @param integer $diasPrima
+     * @param integer $diasAusentismo
      *
      * @return RhuProyeccion
      */
-    public function setDiasPrima($diasPrima)
+    public function setDiasAusentismo($diasAusentismo)
     {
-        $this->diasPrima = $diasPrima;
+        $this->diasAusentismo = $diasAusentismo;
 
         return $this;
     }
 
     /**
-     * Get diasPrima
+     * Get diasAusentismo
      *
      * @return integer
      */
-    public function getDiasPrima()
+    public function getDiasAusentismo()
     {
-        return $this->diasPrima;
-    }
-
-    /**
-     * Set fechaDesdePrima
-     *
-     * @param \DateTime $fechaDesdePrima
-     *
-     * @return RhuProyeccion
-     */
-    public function setFechaDesdePrima($fechaDesdePrima)
-    {
-        $this->fechaDesdePrima = $fechaDesdePrima;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaDesdePrima
-     *
-     * @return \DateTime
-     */
-    public function getFechaDesdePrima()
-    {
-        return $this->fechaDesdePrima;
-    }
-
-    /**
-     * Set diasCesantias
-     *
-     * @param integer $diasCesantias
-     *
-     * @return RhuProyeccion
-     */
-    public function setDiasCesantias($diasCesantias)
-    {
-        $this->diasCesantias = $diasCesantias;
-
-        return $this;
-    }
-
-    /**
-     * Get diasCesantias
-     *
-     * @return integer
-     */
-    public function getDiasCesantias()
-    {
-        return $this->diasCesantias;
-    }
-
-    /**
-     * Set fechaDesdeCesantias
-     *
-     * @param \DateTime $fechaDesdeCesantias
-     *
-     * @return RhuProyeccion
-     */
-    public function setFechaDesdeCesantias($fechaDesdeCesantias)
-    {
-        $this->fechaDesdeCesantias = $fechaDesdeCesantias;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaDesdeCesantias
-     *
-     * @return \DateTime
-     */
-    public function getFechaDesdeCesantias()
-    {
-        return $this->fechaDesdeCesantias;
+        return $this->diasAusentismo;
     }
 }
