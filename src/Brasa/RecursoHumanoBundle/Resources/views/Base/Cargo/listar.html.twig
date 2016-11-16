@@ -38,7 +38,7 @@
                <tr>
                 <td>{{arCargos.codigoCargoPk}}</td>
                 <td>{{arCargos.nombre}}</td>
-                <td>{{arCargos.supervigilancia}}</td>
+                <td>{{arCargos.cargoSupervigilanciaRel.nombre | default('')}}</td>
                 <td><a href="{{ path('brs_rhu_base_cargo_nuevo',{'codigoCargoPk': arCargos.codigoCargoPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arCargos.codigoCargoPk }}" /></td>
             {%endfor%}

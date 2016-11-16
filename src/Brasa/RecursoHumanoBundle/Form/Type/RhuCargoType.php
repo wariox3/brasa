@@ -14,7 +14,10 @@ class RhuCargoType extends AbstractType
     {
         $builder
             ->add('nombre', 'text', array('required' => true))
-            ->add('supervigilancia', 'text', array('required' => false))    
+            ->add('cargoSupervigilanciaRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuCargoSupervigilancia',
+                        'property' => 'nombre',
+            ))    
             ->add('guardar', 'submit', array('label' => 'Guardar'));
     }
 

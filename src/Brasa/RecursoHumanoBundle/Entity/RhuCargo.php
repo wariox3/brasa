@@ -23,9 +23,9 @@ class RhuCargo
     private $nombre;
     
     /**
-     * @ORM\Column(name="supervigilancia", type="string", length=80, nullable=true)
+     * @ORM\Column(name="codigo_cargo_supervigilancia_fk", type="integer", nullable=true)
      */    
-    private $supervigilancia;
+    private $codigoCargoSupervigilanciaFk;
     
     /**
      * @ORM\OneToMany(targetEntity="RhuContrato", mappedBy="cargoRel")
@@ -76,8 +76,7 @@ class RhuCargo
      * @ORM\OneToMany(targetEntity="RhuSeleccion", mappedBy="cargoRel")
      */
     protected $seleccionesCargoRel;
-    
-    
+        
     /**
      * @ORM\OneToMany(targetEntity="RhuDisciplinario", mappedBy="cargoRel")
      */
@@ -98,9 +97,11 @@ class RhuCargo
      */
     protected $afiContratosCargoRel;    
     
-    
-
-    
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuCargoSupervigilancia", inversedBy="cargosCargoSupervigilanciaRel")
+     * @ORM\JoinColumn(name="codigo_cargo_supervigilancia_fk", referencedColumnName="codigo_cargo_supervigilancia_pk")
+     */
+    protected $cargoSupervigilanciaRel;
     /**
      * Constructor
      */
@@ -157,27 +158,27 @@ class RhuCargo
     }
 
     /**
-     * Set supervigilancia
+     * Set codigoCargoSupervigilanciaFk
      *
-     * @param string $supervigilancia
+     * @param integer $codigoCargoSupervigilanciaFk
      *
      * @return RhuCargo
      */
-    public function setSupervigilancia($supervigilancia)
+    public function setCodigoCargoSupervigilanciaFk($codigoCargoSupervigilanciaFk)
     {
-        $this->supervigilancia = $supervigilancia;
+        $this->codigoCargoSupervigilanciaFk = $codigoCargoSupervigilanciaFk;
 
         return $this;
     }
 
     /**
-     * Get supervigilancia
+     * Get codigoCargoSupervigilanciaFk
      *
-     * @return string
+     * @return integer
      */
-    public function getSupervigilancia()
+    public function getCodigoCargoSupervigilanciaFk()
     {
-        return $this->supervigilancia;
+        return $this->codigoCargoSupervigilanciaFk;
     }
 
     /**
@@ -654,5 +655,29 @@ class RhuCargo
     public function getAfiContratosCargoRel()
     {
         return $this->afiContratosCargoRel;
+    }
+
+    /**
+     * Set cargoSupervigilanciaRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuCargoSupervigilancia $cargoSupervigilanciaRel
+     *
+     * @return RhuCargo
+     */
+    public function setCargoSupervigilanciaRel(\Brasa\RecursoHumanoBundle\Entity\RhuCargoSupervigilancia $cargoSupervigilanciaRel = null)
+    {
+        $this->cargoSupervigilanciaRel = $cargoSupervigilanciaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get cargoSupervigilanciaRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuCargoSupervigilancia
+     */
+    public function getCargoSupervigilanciaRel()
+    {
+        return $this->cargoSupervigilanciaRel;
     }
 }

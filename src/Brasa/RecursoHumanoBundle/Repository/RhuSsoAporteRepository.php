@@ -57,9 +57,9 @@ class RhuSsoAporteRepository extends EntityRepository {
         $arrayResultado = $query->getResult();
         return $arrayResultado;*/
         $em = $this->getEntityManager();
-        $dql   = "SELECT a.mes, c.supervigilancia, COUNT(a.codigoAportePk) as numeroEmpleados, SUM(a.cotizacionSalud) as eps, SUM(a.cotizacionPension) as pension, SUM(a.cotizacionRiesgos) as arl, SUM(a.cotizacionCaja) as ccf, SUM(a.cotizacionSena) as sena, SUM(a.cotizacionIcbf) as icbf, SUM(a.ibcPension) as nomina FROM BrasaRecursoHumanoBundle:RhuSsoAporte a JOIN a.empleadoRel e JOIN a.cargoRel c "
+        $dql   = "SELECT a.mes, cs.nombre, COUNT(a.codigoAportePk) as numeroEmpleados, SUM(a.cotizacionSalud) as eps, SUM(a.cotizacionPension) as pension, SUM(a.cotizacionRiesgos) as arl, SUM(a.cotizacionCaja) as ccf, SUM(a.cotizacionSena) as sena, SUM(a.cotizacionIcbf) as icbf, SUM(a.ibcPension) as nomina FROM BrasaRecursoHumanoBundle:RhuSsoAporte a JOIN a.empleadoRel e JOIN a.cargoRel c LEFT JOIN c.cargoSupervigilanciaRel cs "
                 . "WHERE a.fechaDesde >= '" . $fechaDesde . "' AND a.fechaHasta <= '" . $fechaHasta . "' "
-                . "GROUP BY a.mes, c.supervigilancia";
+                . "GROUP BY a.mes, cs.nombre";
         $query = $em->createQuery($dql);
         $arrayResultado = $query->getResult();
         return $arrayResultado;

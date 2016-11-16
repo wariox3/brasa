@@ -151,10 +151,15 @@ class CargoController extends Controller
         $arCargos = new \Brasa\RecursoHumanoBundle\Entity\RhuCargo();
         $arCargos = $query->getResult();
         foreach ($arCargos as $arCargos) {
+            if ($arCargos->getCodigoCargoSupervigilanciaFk() != null){                
+                $supervigilancia = $arCargos->getCargoSupervigilanciaRel()->getNombre();
+            } else {
+                $supervigilancia = "";
+            }
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arCargos->getCodigoCargoPk())
                             ->setCellValue('B' . $i, $arCargos->getNombre())
-                            ->setCellValue('C' . $i, $arCargos->getSupervigilancia());
+                            ->setCellValue('C' . $i, $supervigilancia);
                     $i++;
                 }
 

@@ -44,7 +44,7 @@ class SupervigilanciaParafiscalesController extends Controller
                             $arSupervigilanciaParafiscales = new \Brasa\RecursoHumanoBundle\Entity\RhuSupervigilanciaParafiscales();
                             $arSupervigilanciaParafiscales->setMes($arAporte['mes']);
                             $arSupervigilanciaParafiscales->setEmpleados($arAporte['numeroEmpleados']);
-                            $arSupervigilanciaParafiscales->setCargo($arAporte['supervigilancia']);
+                            $arSupervigilanciaParafiscales->setCargo($arAporte['nombre']);
                             $arSupervigilanciaParafiscales->setVrEps($arAporte['eps']);
                             $arSupervigilanciaParafiscales->setVrPension($arAporte['pension']);
                             $arSupervigilanciaParafiscales->setVrArl($arAporte['arl']);
@@ -60,10 +60,10 @@ class SupervigilanciaParafiscalesController extends Controller
                 }
             }            
                         
-            if($form->get('BtnFiltrar')->isClicked()) {
+            /*if($form->get('BtnFiltrar')->isClicked()) {
                 //$this->filtrarLista($form);
                 $this->listar();
-            }
+            }*/
 
         }    
         $arSupervigilanciaParafiscales = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 40);        
@@ -76,7 +76,10 @@ class SupervigilanciaParafiscalesController extends Controller
     private function listar() {
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
-        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuSupervigilanciaParafiscales')->listaDql();
+        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuSupervigilanciaParafiscales')->listaDql(
+          $session->get('filtroIdentificacion')      
+                
+        );
     }    
 
     private function formularioLista() {
@@ -97,12 +100,12 @@ class SupervigilanciaParafiscalesController extends Controller
             $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
         }
         $form = $this->createFormBuilder()
-            ->add('centroCostoRel', 'entity', $arrayPropiedades)
-            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
+            //->add('centroCostoRel', 'entity', $arrayPropiedades)
+            //->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
             ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('BtnGenerar', 'submit', array('label'  => 'Generar'))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            //->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))            
             ->getForm();
         return $form;
@@ -112,8 +115,8 @@ class SupervigilanciaParafiscalesController extends Controller
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
         $controles = $request->request->get('form');
-        $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
-        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
+        //$session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
+        //$session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroDesde', $form->get('fechaDesde')->getData());
         $session->set('filtroHasta', $form->get('fechaHasta')->getData());
     }
