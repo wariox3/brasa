@@ -20,7 +20,12 @@ class RhuCargo
     /**
      * @ORM\Column(name="nombre", type="string", length=80, nullable=true)
      */    
-    private $nombre;          
+    private $nombre;
+    
+    /**
+     * @ORM\Column(name="supervigilancia", type="string", length=80, nullable=true)
+     */    
+    private $supervigilancia;
     
     /**
      * @ORM\OneToMany(targetEntity="RhuContrato", mappedBy="cargoRel")
@@ -95,6 +100,7 @@ class RhuCargo
     
     
 
+    
     /**
      * Constructor
      */
@@ -148,6 +154,30 @@ class RhuCargo
     public function getNombre()
     {
         return $this->nombre;
+    }
+
+    /**
+     * Set supervigilancia
+     *
+     * @param string $supervigilancia
+     *
+     * @return RhuCargo
+     */
+    public function setSupervigilancia($supervigilancia)
+    {
+        $this->supervigilancia = $supervigilancia;
+
+        return $this;
+    }
+
+    /**
+     * Get supervigilancia
+     *
+     * @return string
+     */
+    public function getSupervigilancia()
+    {
+        return $this->supervigilancia;
     }
 
     /**

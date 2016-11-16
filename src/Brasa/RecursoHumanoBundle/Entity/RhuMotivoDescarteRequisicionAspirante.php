@@ -8,14 +8,14 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="rhu_motivo_descarte_requisicion_aspirante")
  * @ORM\Entity(repositoryClass="Brasa\RecursoHumanoBundle\Repository\RhuMotivoDescarteRequisicionAspiranteRepository")
  */
-class RhuMotivoDescarteRequisicionAspitante
+class RhuMotivoDescarteRequisicionAspirante
 {
     /**
      * @ORM\Id
      * @ORM\Column(name="codigo_motivo_descarte_requisicion_aspirante_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoMotivoDescarteRequisicionAspitantePk;
+    private $codigoMotivoDescarteRequisicionAspirantePk;
     
     /**
      * @ORM\Column(name="nombre", type="string", length=60, nullable=true)
@@ -29,6 +29,8 @@ class RhuMotivoDescarteRequisicionAspitante
 
     
     
+    
+    
     /**
      * Constructor
      */
@@ -38,13 +40,13 @@ class RhuMotivoDescarteRequisicionAspitante
     }
 
     /**
-     * Get codigoMotivoDescarteRequisicionAspitantePk
+     * Get codigoMotivoDescarteRequisicionAspirantePk
      *
      * @return integer
      */
-    public function getCodigoMotivoDescarteRequisicionAspitantePk()
+    public function getCodigoMotivoDescarteRequisicionAspirantePk()
     {
-        return $this->codigoMotivoDescarteRequisicionAspitantePk;
+        return $this->codigoMotivoDescarteRequisicionAspirantePk;
     }
 
     /**
@@ -52,7 +54,7 @@ class RhuMotivoDescarteRequisicionAspitante
      *
      * @param string $nombre
      *
-     * @return RhuMotivoDescarteRequisicionAspitante
+     * @return RhuMotivoDescarteRequisicionAspirante
      */
     public function setNombre($nombre)
     {
@@ -76,7 +78,7 @@ class RhuMotivoDescarteRequisicionAspitante
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisicionAspirante $motivosDescartesseleccionRequisicionAspiranteRel
      *
-     * @return RhuMotivoDescarteRequisicionAspitante
+     * @return RhuMotivoDescarteRequisicionAspirante
      */
     public function addMotivosDescartesseleccionRequisicionAspiranteRel(\Brasa\RecursoHumanoBundle\Entity\RhuSeleccionRequisicionAspirante $motivosDescartesseleccionRequisicionAspiranteRel)
     {

@@ -35,7 +35,7 @@ class RhuSeleccionRequisicionAspirante
     /**
      * @ORM\Column(name="codigo_motivo_descarte_requisicion_aspirante_fk", type="integer", nullable=true)
      */    
-    private $codigoMotivoDescarteRequisicionAspitanteFk;
+    private $codigoMotivoDescarteRequisicionAspiranteFk;
     
     /**
      * @ORM\Column(name="fechaDescarte", type="datetime", nullable=true)
@@ -60,7 +60,7 @@ class RhuSeleccionRequisicionAspirante
     protected $aspiranteRel;
     
     /**
-     * @ORM\ManyToOne(targetEntity="RhuMotivoDescarteRequisicionAspitante", inversedBy="motivosDescartesseleccionRequisicionAspiranteRel")
+     * @ORM\ManyToOne(targetEntity="RhuMotivoDescarteRequisicionAspirante", inversedBy="motivosDescartesseleccionRequisicionAspiranteRel")
      * @ORM\JoinColumn(name="codigo_motivo_descarte_requisicion_aspirante_fk", referencedColumnName="codigo_motivo_descarte_requisicion_aspirante_pk")
      */
     protected $motivoDescarteRequisicionAspiranteRel;
@@ -68,6 +68,7 @@ class RhuSeleccionRequisicionAspirante
     
 
     
+
 
     /**
      * Get codigoSeleccionRequisicionAspirantePk
@@ -152,27 +153,27 @@ class RhuSeleccionRequisicionAspirante
     }
 
     /**
-     * Set codigoMotivoDescarteRequisicionAspitanteFk
+     * Set codigoMotivoDescarteRequisicionAspiranteFk
      *
-     * @param integer $codigoMotivoDescarteRequisicionAspitanteFk
+     * @param integer $codigoMotivoDescarteRequisicionAspiranteFk
      *
      * @return RhuSeleccionRequisicionAspirante
      */
-    public function setCodigoMotivoDescarteRequisicionAspitanteFk($codigoMotivoDescarteRequisicionAspitanteFk)
+    public function setCodigoMotivoDescarteRequisicionAspiranteFk($codigoMotivoDescarteRequisicionAspiranteFk)
     {
-        $this->codigoMotivoDescarteRequisicionAspitanteFk = $codigoMotivoDescarteRequisicionAspitanteFk;
+        $this->codigoMotivoDescarteRequisicionAspiranteFk = $codigoMotivoDescarteRequisicionAspiranteFk;
 
         return $this;
     }
 
     /**
-     * Get codigoMotivoDescarteRequisicionAspitanteFk
+     * Get codigoMotivoDescarteRequisicionAspiranteFk
      *
      * @return integer
      */
-    public function getCodigoMotivoDescarteRequisicionAspitanteFk()
+    public function getCodigoMotivoDescarteRequisicionAspiranteFk()
     {
-        return $this->codigoMotivoDescarteRequisicionAspitanteFk;
+        return $this->codigoMotivoDescarteRequisicionAspiranteFk;
     }
 
     /**
@@ -274,11 +275,11 @@ class RhuSeleccionRequisicionAspirante
     /**
      * Set motivoDescarteRequisicionAspiranteRel
      *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuMotivoDescarteRequisicionAspitante $motivoDescarteRequisicionAspiranteRel
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuMotivoDescarteRequisicionAspirante $motivoDescarteRequisicionAspiranteRel
      *
      * @return RhuSeleccionRequisicionAspirante
      */
-    public function setMotivoDescarteRequisicionAspiranteRel(\Brasa\RecursoHumanoBundle\Entity\RhuMotivoDescarteRequisicionAspitante $motivoDescarteRequisicionAspiranteRel = null)
+    public function setMotivoDescarteRequisicionAspiranteRel(\Brasa\RecursoHumanoBundle\Entity\RhuMotivoDescarteRequisicionAspirante $motivoDescarteRequisicionAspiranteRel = null)
     {
         $this->motivoDescarteRequisicionAspiranteRel = $motivoDescarteRequisicionAspiranteRel;
 
@@ -288,7 +289,7 @@ class RhuSeleccionRequisicionAspirante
     /**
      * Get motivoDescarteRequisicionAspiranteRel
      *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuMotivoDescarteRequisicionAspitante
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuMotivoDescarteRequisicionAspirante
      */
     public function getMotivoDescarteRequisicionAspiranteRel()
     {

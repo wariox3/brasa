@@ -54,12 +54,12 @@ class CargoController extends Controller
                 $this->listar();
                 $this->generarExcel();
             }
-            if($form->get('BtnPdf')->isClicked()) {
+            /*if($form->get('BtnPdf')->isClicked()) {
                 $this->filtrarLista($form);
                 $this->listar();
                 $objFormatoCargo = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCargo();
                 $objFormatoCargo->Generar($this, $this->strDqlLista);
-            }
+            }*/
             if($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrarLista($form);
                 $this->listar();
@@ -113,7 +113,7 @@ class CargoController extends Controller
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => "", 'required' => false))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnPdf', 'submit', array('label'  => 'Pdf',))    
+            //->add('BtnPdf', 'submit', array('label'  => 'Pdf',))    
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))                                            
             ->getForm();        
         return $form;
@@ -138,9 +138,14 @@ class CargoController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        for($col = 'A'; $col !== 'D'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
+        } 
         $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue('A1', 'CÓDIGO')
-            ->setCellValue('B1', 'NOMBRE');
+            ->setCellValue('B1', 'NOMBRE')
+            ->setCellValue('C1', 'SUPERVIGILANCIA')    ;
         $i = 2;
         $query = $em->createQuery($this->strDqlLista);
         $arCargos = new \Brasa\RecursoHumanoBundle\Entity\RhuCargo();
@@ -148,7 +153,8 @@ class CargoController extends Controller
         foreach ($arCargos as $arCargos) {
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arCargos->getCodigoCargoPk())
-                            ->setCellValue('B' . $i, $arCargos->getNombre());
+                            ->setCellValue('B' . $i, $arCargos->getNombre())
+                            ->setCellValue('C' . $i, $arCargos->getSupervigilancia());
                     $i++;
                 }
 

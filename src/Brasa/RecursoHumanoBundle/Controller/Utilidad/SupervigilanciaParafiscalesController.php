@@ -44,7 +44,7 @@ class SupervigilanciaParafiscalesController extends Controller
                             $arSupervigilanciaParafiscales = new \Brasa\RecursoHumanoBundle\Entity\RhuSupervigilanciaParafiscales();
                             $arSupervigilanciaParafiscales->setMes($arAporte['mes']);
                             $arSupervigilanciaParafiscales->setEmpleados($arAporte['numeroEmpleados']);
-                            $arSupervigilanciaParafiscales->setCargo($arAporte['nombre']);
+                            $arSupervigilanciaParafiscales->setCargo($arAporte['supervigilancia']);
                             $arSupervigilanciaParafiscales->setVrEps($arAporte['eps']);
                             $arSupervigilanciaParafiscales->setVrPension($arAporte['pension']);
                             $arSupervigilanciaParafiscales->setVrArl($arAporte['arl']);
@@ -132,7 +132,13 @@ class SupervigilanciaParafiscalesController extends Controller
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
-        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);   
+        for($col = 'A'; $col !== 'L'; $col++) {
+            $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                    
+        }
+        for($col = 'E'; $col !== 'P'; $col++) {            
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+        }
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIGO')
                     ->setCellValue('B1', 'MES')
