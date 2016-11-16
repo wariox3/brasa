@@ -69,6 +69,7 @@
                 <th></th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
             {% for arAspirantes in arAspirantes %}
             {% if arAspirantes.bloqueado == 1 %}
@@ -86,6 +87,11 @@
                 <td>{{ arAspirantes.zonaRel.nombre | default('') }}</td>
                 <td>{% if arAspirantes.reintegro == 1%} SI {% else %} NO {% endif %}</td>
                 <td><a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_movimiento_aspirante_aplicar', {'codigoAspirante': arAspirantes.codigoAspirantePk }) }}', 'Archivos', 500, 700)" >Aplicar</a></td>
+                {% if arAspirantes.bloqueado == 1 %}
+                    <td><a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_rhu_movimiento_aspirante_desbloquear', {'codigoAspirante': arAspirantes.codigoAspirantePk }) }}', 'Archivos', 500, 700)" >Desbloquear</a></td>
+                {% else %}
+                    <td></td>
+                {% endif%}
                 <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_movimiento_aspirante_historial', {'codigoAspirante': arAspirantes.codigoAspirantePk }) }}', 'Ver Historial', 600, 1000)"><img src="{{ asset('imagenes/bootstrap/glyphicons_090_table.png') }}" width=20 height=20 title="Ver"></a></td>               
                 <td style="text-align: center"><a href="{{ path('brs_rhu_movimiento_aspirante_nuevo', { 'codigoAspirante':  arAspirantes.codigoAspirantePk }) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_movimiento_aspirante_detalle', { 'codigoAspirante': arAspirantes.codigoAspirantePk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22 title="Detalles del registro"></a></td>

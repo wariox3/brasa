@@ -5845,6 +5845,11 @@ INSERT INTO `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tip
 INSERT INTO `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) VALUES('104','GENERAR PERIODO','PROCESO','AFILIACION');
 INSERT INTO `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) VALUES('105','ACTUALIZAR CLIENTE CARTERA','PROCESO','AFILIACION');
 INSERT INTO `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) VALUES('106','EXPORTAR SOPORTE PAGO VALORES NOMINA','PROCESO','TURNOS');
+insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) VALUES('107','PERIODO DETALLE','CONSULTA','AFILIACION');
+insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) VALUES('108','EMPLEADO GENERAL','CONSULTA','AFILIACION');
+insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) VALUES('109','CONTRATO GENERAL','CONSULTA','AFILIACION');
+insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) VALUES('110','DESBLOQUEAR ASPIRANTE','PROCESO','RECURSO HUMANO');
+insert into `seg_permiso_especial` (`codigo_permiso_especial_pk`, `nombre`, `tipo`, `modulo`) VALUES('111','ABRIR REQUISICION','PROCESO','RECURSO HUMANO');
 
 insert into `rhu_visita_tipo` (`codigo_visita_tipo_pk`, `nombre`) values('1','PERIODICO');
 insert into `rhu_visita_tipo` (`codigo_visita_tipo_pk`, `nombre`) values('2','INGRESO');

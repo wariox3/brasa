@@ -178,6 +178,50 @@ class AspiranteController extends Controller
             'form' => $form->createView()));
     }
     
+     /**
+     * @Route("/rhu/movimientos/aspirante/desbloquear/{codigoAspirante}", name="brs_rhu_movimiento_aspirante_desbloquear")
+     */
+    public function desbloquearAction($codigoAspirante) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();        
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $arAspirante = new \Brasa\RecursoHumanoBundle\Entity\RhuAspirante();
+        $arAspirante = $em->getRepository('BrasaRecursoHumanoBundle:RhuAspirante')->find($codigoAspirante);
+        if (!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(),110)){
+            $objMensaje->Mensaje("error", "No tiene permisos para desbloquear aspirantes, comuniquese con el administrador", $this);
+        }
+            $form = $this->createFormBuilder()
+                ->add('comentarios', 'textarea', array('data' =>$arAspirante->getComentarios() ,'required' => false))                          
+                ->add('BtnDesbloquear', 'submit', array('label'  => 'Desbloquear'))                              
+                ->add('BtnCancelar', 'submit', array('label'  => 'Cancelar'))
+                ->getForm();
+        
+        
+        
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            if (!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(),110)){
+            $objMensaje->Mensaje("error", "No tiene permisos para desbloquear aspirantes, comuniquese con el administrador", $this);
+            } else {
+                if($form->get('BtnDesbloquear')->isClicked()) {
+                    $arAspirante->setBloqueado(0);
+                    $arAspirante->setComentarios($form->get('comentarios')->getData());
+                    $em->persist($arAspirante);
+                    $em->flush();
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                     
+                } 
+                
+            } 
+            if($form->get('BtnCancelar')->isClicked()) {
+                    echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";                     
+            }
+        }
+
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/Aspirante:desbloquear.html.twig', array(
+            'arAspirante' => $arAspirante,
+            'form' => $form->createView()));
+    }
+    
     /**
      * @Route("/rhu/movimientos/aspirante/historial/{codigoAspirante}", name="brs_rhu_movimiento_aspirante_historial")
      */

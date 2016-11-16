@@ -137,6 +137,18 @@ class SeleccionRequisitoController extends Controller
                     $objMensaje->Mensaje('error', 'No se puede aprobar, la requisicion esta cerrada', $this);
                 }
             }
+            if($request->request->get('OpAbrir')) {
+                if($arRequisicion->getEstadoCerrado() == 1) {
+                    if (!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(),111)){
+                        $objMensaje->Mensaje("error", "No tiene permisos para abrir la requisicion, comuniquese con el administrador", $this);
+                    } else {
+                        $arRequisicion->setEstadoCerrado(0);
+                        $em->persist($arRequisicion);
+                        $em->flush();
+                        return $this->redirect($this->generateUrl('brs_rhu_seleccionrequisito_detalle', array('codigoSeleccionRequisito' => $codigoSeleccionRequisito)));
+                    }
+                }
+            }
             if($form->get('BtnExcelAspirante')->isClicked()) {
                 $objPHPExcel = new \PHPExcel();
                 ob_clean();
@@ -365,18 +377,18 @@ class SeleccionRequisitoController extends Controller
         $arrBotonAprobarDetalle = array('label' => 'Aprobar', 'disabled' => false);
         $arrBotonDesaprobarDetalle = array('label' => 'Desaprobar', 'disabled' => false);
         $arrBotonEliminarDetalle = array('label' => 'Eliminar', 'disabled' => false);
-        $arrBotonExcelAspirante = array('label' => 'Excel', 'disabled' => false);
+        $arrBotonExcelAspirante = array('label' => 'Excel', 'disabled' => false);        
         if($ar->getEstadoCerrado() == 1) {
             $arrBotonAprobarDetalle['disabled'] = true;
             $arrBotonDesaprobarDetalle['disabled'] = true;
-            $arrBotonEliminarDetalle['disabled'] = true;
+            $arrBotonEliminarDetalle['disabled'] = true;            
         }
         $form = $this->createFormBuilder()
             ->add('BtnImprimir', 'submit', $arrBotonImprimir)    
             ->add('BtnAprobarDetalle', 'submit', $arrBotonAprobarDetalle)
             ->add('BtnDesaprobarDetalle', 'submit', $arrBotonDesaprobarDetalle)
             ->add('BtnEliminarDetalle', 'submit', $arrBotonEliminarDetalle)
-            ->add('BtnExcelAspirante', 'submit', $arrBotonExcelAspirante)    
+            ->add('BtnExcelAspirante', 'submit', $arrBotonExcelAspirante)            
             ->getForm();        
         return $form;
     }    
