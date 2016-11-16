@@ -54,6 +54,9 @@ class FormatoVacaciones extends \FPDF_FPDF {
     public function EncabezadoDetalles() {
         $arVacaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
         $arVacaciones = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->find(self::$codigoVacacion);              
+        if($arVacaciones->getEstadoPagoGenerado() == 0) {
+            $this->Text(164, 38, "IMPRESION PREVIA");
+        }
         $intY = 40;
         //FILA 1
         $this->SetFont('Arial', 'B', 7);
