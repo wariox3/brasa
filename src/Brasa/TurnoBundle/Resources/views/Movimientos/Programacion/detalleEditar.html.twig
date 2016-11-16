@@ -47,12 +47,14 @@
         {{ form_errors(form) }}
 
         <table class="table table-striped table-bordered table-condensed">
+            <thead style="background-color:  #FFD800">
             <tr>
-                    {% for arrDiaSemana in arrDiaSemana %}
-                    <th>{{ arrDiaSemana.dia }}{{ arrDiaSemana.diaSemana }}</th>
-                    {% endfor %}
-                    <th>PD</th>
+                {% for arrDiaSemana in arrDiaSemana %}
+                <th{% if arrDiaSemana.festivo == 1  %} style="background-color:  #6b9311" {% endif %}>{{ arrDiaSemana.dia }}{{ arrDiaSemana.diaSemana }}</th>
+                {% endfor %}                    
             </tr>
+            </thead>
+            <tbody>
             {% set intRecurso = '' %}
             {% set deshabilitar15 = '' %}
             {% set deshabilitar30 = '' %}
@@ -152,10 +154,10 @@
                         <td>{{ arProgramacionDetalle.dia29  }}</td>
                         <td>{{ arProgramacionDetalle.dia30  }}</td>
                         <td>{{ arProgramacionDetalle.dia31  }}</td>                        
-                    {% endif %}
-                    <td>{{ arProgramacionDetalle.codigoPedidoDetalleFk  }}</td>
+                    {% endif %}                    
                 </tr>
             {% endfor %}
+            </tbody>
         </table>
         <div class="btn-group" style="float: left">
                 <div class="btn btn-default btn-sm">Registros <span class="badge">{{ arProgramacionDetalle.getTotalItemCount }}</span></div>
@@ -176,4 +178,10 @@
         {{ form_rest(form) }}
         {{ form_end(form) }}
     </div>
+  <script src="{{ asset('js/jquery.stickytableheaders.js') }}"></script>
+
+  <script>
+    var offset = $('.navbar').height();
+    $("html:not(.legacy) table").stickyTableHeaders({fixedOffset: offset});
+  </script>        
 {% endblock %}

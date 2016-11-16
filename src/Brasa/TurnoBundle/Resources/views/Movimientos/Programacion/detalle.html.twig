@@ -6,39 +6,7 @@
             e.preventDefault();
             $(this).tab('show');
         })
-    </script>
-    <script type="text/javascript">
-        //https://librosweb.es/libro/ajax/capitulo_7/la_primera_aplicacion.html
-        function validarTurno(control){
-            var codigoTurno = control.value;
-            if(codigoTurno !== '') {
-                var codigoProgramacionDetalle = control.name.substring(9);
-                var dia = parseInt(control.name.substring(6,8));
-                if(window.XMLHttpRequest) {
-                    peticion_http = new XMLHttpRequest();
-                }
-                peticion_http.onreadystatechange = function() {
-                    if (peticion_http.readyState == 4) {
-                        if (peticion_http.status == 200) {
-                            var respuesta = peticion_http.responseText;
-                            //alert(respuesta);
-                            if(respuesta == '1') {
-                                alert('El recurso ya tiene programado otro turno igual en el periodo');
-                                control.value = '';
-                            }
-                        }
-                    }
-                }
-                // Realizar peticion HTTP
-                var url = "{{path('brs_tur_validar_turno', {'codigoProgramacionDetalle': 'pd', 'dia': 'd0', 'codigoTurno': 'ct' })}}";
-                url = url.replace('pd', codigoProgramacionDetalle);
-                url = url.replace('d0', dia);
-                url = url.replace('ct', codigoTurno);
-                peticion_http.open('GET', url, true);
-                peticion_http.send(null);
-            }
-        }
-    </script>
+    </script>    
     <div class="container">
         <div class="page-header">
             <h3>Detalle programacion</h3>

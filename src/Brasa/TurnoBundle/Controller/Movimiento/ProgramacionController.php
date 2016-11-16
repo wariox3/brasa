@@ -220,7 +220,7 @@ class ProgramacionController extends Controller
             }
         }
         $strAnioMes = $arProgramacion->getFecha()->format('Y/m');
-        $arrDiaSemana = $objFunciones->diasMes($arProgramacion->getFecha(), $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($arProgramacion->getFecha()->format('Y-m-').'01', $arProgramacion->getFecha()->format('Y-m-').'31'));       
+        $arrDiaSemana = $objFunciones->diasMes($arProgramacion->getFecha(), $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($arProgramacion->getFecha()->format('Y-m-').'01', $arProgramacion->getFecha()->format('Y-m-').'31'));               
         $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
         $dql = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->listaDql($codigoProgramacion, $codigoPuesto, $codigoPedidoDetalle);            
         $arProgramacionDetalle = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 15);
