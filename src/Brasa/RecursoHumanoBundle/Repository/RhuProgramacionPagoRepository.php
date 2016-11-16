@@ -507,6 +507,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);        
         $arProgramacionPago->setInconsistencias(0);
+        //Nomina
         if($arProgramacionPago->getCodigoPagoTipoFk() == 1) {             
             $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuContrato c "
                     . "WHERE c.codigoCentroCostoFk = " . $arProgramacionPago->getCodigoCentroCostoFk()
@@ -698,23 +699,29 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     } else {
                         $salarioPromedioPrimas = $douSalario;
                     }                                                
-                }                    
-                /*if($arLiquidacion->getPorcentajeIbp() > 0) {
-                    $salarioPromedioPrimas = ($salarioPromedioPrimas * $arLiquidacion->getPorcentajeIbp())/100;
-                }
-                if($arLiquidacion->getLiquidarSalario() == true) {
-                    if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
-                        $salarioPromedioPrimas = $douSalario + $auxilioTransporte;
-                    } else {
-                        $salarioPromedioPrimas = $douSalario;
-                    }
-
-                }  
-                if($arLiquidacion->getVrSalarioPrimaPropuesto() > 0) {
-                    $salarioPromedioPrimas = $arLiquidacion->getVrSalarioPrimaPropuesto();
-                }*/                                            
-                
-                
+                }                                                                                
+                                               
+                if($arConfiguracion->getPrestacionesAplicaPorcentajeSalario()) {                            
+                    if($arContrato->getCodigoSalarioTipoFk() == 2) {            
+                        $porcentaje = 100;
+                        $intDiasLaborados = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($arContrato->getFechaDesde(), $dateFechaHasta);                                
+                        if($intDiasLaborados <= 30) {
+                            if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
+                                $salarioPromedioPrimas = $douSalario + $auxilioTransporte;
+                            } else {
+                                $salarioPromedioPrimas = $douSalario;
+                            } 
+                        } else {
+                            if($intDiasLaborados <= 120) {
+                                $porcentaje = $arConfiguracion->getPrestacionesPorcentajeSalario1();
+                            } else {
+                                $porcentaje = $arConfiguracion->getPrestacionesPorcentajeSalario2();
+                            }
+                        }
+                        $salarioPromedioPrimas = ($salarioPromedioPrimas * $porcentaje)/100;                                
+                    }                                                        
+                }                        
+                $salarioPromedioPrimas = round($salarioPromedioPrimas);                                                
                 $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
                 $arProgramacionPagoDetalle->setProgramacionPagoRel($arProgramacionPago);
                 $arProgramacionPagoDetalle->setEmpleadoRel($arContrato->getEmpleadoRel());

@@ -52,83 +52,127 @@ class ProyeccionController extends Controller
                         $arProyeccion->setFechaHasta($fechaHasta);
                         
                         //Cesantias
-                        $dateFechaDesde = $arContrato->getFechaUltimoPagoCesantias();   
-                        $dateFechaHastaCesantias = $arContrato->getFechaUltimoPago();
-                        $ibpCesantiasInicial = $arContrato->getIbpCesantiasInicial();                            
-                        $ibpCesantias = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->ibp($dateFechaDesde->format('Y-m-d'), $dateFechaHastaCesantias->format('Y-m-d'), $arContrato->getCodigoContratoPk());                
-                        $ibpCesantias += $ibpCesantiasInicial;                  
-                        $intDiasCesantias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($dateFechaDesde, $dateFechaHasta);                                                                 
-                        $intDiasCesantiasSalarioPromedio = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($dateFechaDesde, $dateFechaHastaCesantias);                                                                 
-                        $intDiasAusentismo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->diasAusentismo($dateFechaDesde->format('Y-m-d'), $dateFechaHastaCesantias->format('Y-m-d'), $arContrato->getCodigoContratoPk());                                                    
-                        if($arContrato->getCodigoSalarioTipoFk() == 2) {
-                            if($intDiasCesantiasSalarioPromedio > 0) {
-                                $salarioPromedioCesantias = ($ibpCesantias / $intDiasCesantiasSalarioPromedio) * 30;                                                                    
-                            } else {
+                        if($arContrato->getSalarioIntegral() == 0) {
+                            $dateFechaDesde = $arContrato->getFechaUltimoPagoCesantias();   
+                            $dateFechaHastaCesantias = $arContrato->getFechaUltimoPago();
+                            $ibpCesantiasInicial = $arContrato->getIbpCesantiasInicial();                            
+                            $ibpCesantias = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->ibp($dateFechaDesde->format('Y-m-d'), $dateFechaHastaCesantias->format('Y-m-d'), $arContrato->getCodigoContratoPk());                
+                            $ibpCesantias += $ibpCesantiasInicial;                  
+                            $intDiasCesantias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($dateFechaDesde, $dateFechaHasta);                                                                 
+                            $intDiasCesantiasSalarioPromedio = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($dateFechaDesde, $dateFechaHastaCesantias);                                                                 
+                            $intDiasAusentismo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->diasAusentismo($dateFechaDesde->format('Y-m-d'), $dateFechaHastaCesantias->format('Y-m-d'), $arContrato->getCodigoContratoPk());                                                    
+                            if($arContrato->getCodigoSalarioTipoFk() == 2) {
+                                if($intDiasCesantiasSalarioPromedio > 0) {
+                                    $salarioPromedioCesantias = ($ibpCesantias / $intDiasCesantiasSalarioPromedio) * 30;                                                                    
+                                } else {
+                                    if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
+                                        $salarioPromedioCesantias = $douSalario + $auxilioTransporte;
+                                    } else {
+                                        $salarioPromedioCesantias = $douSalario;
+                                    }                                  
+                                }                            
+                            } else {                                        
                                 if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
                                     $salarioPromedioCesantias = $douSalario + $auxilioTransporte;
                                 } else {
                                     $salarioPromedioCesantias = $douSalario;
-                                }                                  
-                            }                            
-                        } else {                                        
-                            if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
-                                $salarioPromedioCesantias = $douSalario + $auxilioTransporte;
-                            } else {
-                                $salarioPromedioCesantias = $douSalario;
-                            }                                            
-                        }                       
-                        $intDiasCesantias -= $intDiasAusentismo;
-                        $douCesantias = ($salarioPromedioCesantias * $intDiasCesantias) / 360;          
-                        $floPorcentajeIntereses = (($intDiasCesantias * 12) / 360)/100;
-                        $douInteresesCesantias = $douCesantias * $floPorcentajeIntereses;                                                                                                                        
-                        $arProyeccion->setDiasCesantias($intDiasCesantias);
-                        $arProyeccion->setVrCesantias($douCesantias);
-                        $arProyeccion->setVrSalarioPromedioCesantias($salarioPromedioCesantias);
-                        $arProyeccion->setVrInteresesCesantias($douInteresesCesantias);
-                        $arProyeccion->setFechaDesdeCesantias($dateFechaDesde);
-                        $arProyeccion->setDiasAusentismo($intDiasAusentismo);
+                                }                                            
+                            }        
+                            if($arConfiguracion->getPrestacionesAplicaPorcentajeSalario()) {                            
+                                if($arContrato->getCodigoSalarioTipoFk() == 2) {            
+                                    $porcentaje = 100;
+                                    $intDiasLaborados = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($arContrato->getFechaDesde(), $dateFechaHasta);                                
+                                    if($intDiasLaborados <= 30) {
+                                        if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
+                                            $salarioPromedioCesantias = $douSalario + $auxilioTransporte;
+                                        } else {
+                                            $salarioPromedioCesantias = $douSalario;
+                                        } 
+                                    } else {
+                                        if($intDiasLaborados <= 120) {
+                                            $porcentaje = $arConfiguracion->getPrestacionesPorcentajeSalario1();
+                                        } else {
+                                            $porcentaje = $arConfiguracion->getPrestacionesPorcentajeSalario2();
+                                        }
+                                    }
+                                    $salarioPromedioCesantias = ($salarioPromedioCesantias * $porcentaje)/100;                                
+                                }                                                        
+                            }                        
+                            $intDiasCesantias -= $intDiasAusentismo;
+                            $douCesantias = ($salarioPromedioCesantias * $intDiasCesantias) / 360;          
+                            $floPorcentajeIntereses = (($intDiasCesantias * 12) / 360)/100;
+                            $douInteresesCesantias = $douCesantias * $floPorcentajeIntereses;                                                                                                                        
+                            $arProyeccion->setDiasCesantias($intDiasCesantias);
+                            $arProyeccion->setVrCesantias($douCesantias);
+                            $arProyeccion->setVrSalarioPromedioCesantias($salarioPromedioCesantias);
+                            $arProyeccion->setVrInteresesCesantias($douInteresesCesantias);
+                            $arProyeccion->setFechaDesdeCesantias($dateFechaDesde);
+                            $arProyeccion->setDiasAusentismo($intDiasAusentismo);                            
+                        }
                         
                         //Primas  
-                        $dateFechaDesde = $arContrato->getFechaUltimoPagoPrimas();                        
-                        $dateFechaHastaPrimas = $arContrato->getFechaUltimoPago();
-                        $intDiasPrima = 0;                                        
-                        $intDiasPrima = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($dateFechaDesde, $dateFechaHasta);    
-                        $intDiasPrimaSalarioPromedio = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($dateFechaDesde, $dateFechaHastaPrimas);                            
-                        $intDiasPrimaLiquidar = $intDiasPrima;
-                        if($dateFechaDesde->format('m-d') == '06-30' || $dateFechaDesde->format('m-d') == '12-30') {
-                            $intDiasPrimaLiquidar -= 1;
-                            $intDiasPrimaSalarioPromedio -= 1;
-                        }
-                        $ibpPrimasInicial = $arContrato->getIbpPrimasInicial();                    
-                        $ibpPrimasInicial = round($ibpPrimasInicial);
-                        $ibpPrimas = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->ibp($dateFechaDesde->format('Y-m-d'), $dateFechaHastaPrimas->format('Y-m-d'), $arContrato->getCodigoContratoPk());                
-                        $ibpPrimas += $ibpPrimasInicial;                                            
-                        $ibpPrimas = round($ibpPrimas);
-                        if($arContrato->getCodigoSalarioTipoFk() == 2) {
-                            if($intDiasPrimaSalarioPromedio > 0) {
-                                $salarioPromedioPrimas = ($ibpPrimas / $intDiasPrimaSalarioPromedio) * 30;   
+                        if($arContrato->getSalarioIntegral() == 0) {
+                            $dateFechaDesde = $arContrato->getFechaUltimoPagoPrimas();                        
+                            $dateFechaHastaPrimas = $arContrato->getFechaUltimoPago();
+                            $intDiasPrima = 0;                                        
+                            $intDiasPrima = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($dateFechaDesde, $dateFechaHasta);    
+                            $intDiasPrimaSalarioPromedio = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($dateFechaDesde, $dateFechaHastaPrimas);                            
+                            $intDiasPrimaLiquidar = $intDiasPrima;
+                            if($dateFechaDesde->format('m-d') == '06-30' || $dateFechaDesde->format('m-d') == '12-30') {
+                                $intDiasPrimaLiquidar -= 1;
+                                $intDiasPrimaSalarioPromedio -= 1;
+                            }
+                            $ibpPrimasInicial = $arContrato->getIbpPrimasInicial();                    
+                            $ibpPrimasInicial = round($ibpPrimasInicial);
+                            $ibpPrimas = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->ibp($dateFechaDesde->format('Y-m-d'), $dateFechaHastaPrimas->format('Y-m-d'), $arContrato->getCodigoContratoPk());                
+                            $ibpPrimas += $ibpPrimasInicial;                                            
+                            $ibpPrimas = round($ibpPrimas);
+                            if($arContrato->getCodigoSalarioTipoFk() == 2) {
+                                if($intDiasPrimaSalarioPromedio > 0) {
+                                    $salarioPromedioPrimas = ($ibpPrimas / $intDiasPrimaSalarioPromedio) * 30;   
+                                } else {
+                                    if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
+                                        $salarioPromedioPrimas = $douSalario + $auxilioTransporte;
+                                    } else {
+                                        $salarioPromedioPrimas = $douSalario;
+                                    }                                
+                                }                                                         
                             } else {
                                 if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
                                     $salarioPromedioPrimas = $douSalario + $auxilioTransporte;
                                 } else {
                                     $salarioPromedioPrimas = $douSalario;
-                                }                                
-                            }                                                         
-                        } else {
-                            if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
-                                $salarioPromedioPrimas = $douSalario + $auxilioTransporte;
-                            } else {
-                                $salarioPromedioPrimas = $douSalario;
-                            }                                                
-                        }                     
-
-                        $salarioPromedioPrimas = round($salarioPromedioPrimas);
-                        $douPrima = ($salarioPromedioPrimas * $intDiasPrimaLiquidar) / 360;                
-                        $douPrima = round($douPrima);         
-                        $arProyeccion->setVrSalarioPromedioPrimas($salarioPromedioPrimas);
-                        $arProyeccion->setVrPrimas($douPrima);
-                        $arProyeccion->setDiasPrima($intDiasPrimaLiquidar);
-                        $arProyeccion->setFechaDesdePrima($dateFechaDesde);                                                
+                                }                                                
+                            }                     
+                            if($arConfiguracion->getPrestacionesAplicaPorcentajeSalario()) {                            
+                                if($arContrato->getCodigoSalarioTipoFk() == 2) {            
+                                    $porcentaje = 100;
+                                    $intDiasLaborados = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($arContrato->getFechaDesde(), $dateFechaHasta);                                
+                                    if($intDiasLaborados <= 30) {
+                                        if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
+                                            $salarioPromedioPrimas = $douSalario + $auxilioTransporte;
+                                        } else {
+                                            $salarioPromedioPrimas = $douSalario;
+                                        } 
+                                    } else {
+                                        if($intDiasLaborados <= 120) {
+                                            $porcentaje = $arConfiguracion->getPrestacionesPorcentajeSalario1();
+                                        } else {
+                                            $porcentaje = $arConfiguracion->getPrestacionesPorcentajeSalario2();
+                                        }
+                                    }
+                                    $salarioPromedioPrimas = ($salarioPromedioPrimas * $porcentaje)/100;                                
+                                }                                                        
+                            }                        
+                            $salarioPromedioPrimas = round($salarioPromedioPrimas);
+                            $douPrima = ($salarioPromedioPrimas * $intDiasPrimaLiquidar) / 360;                
+                            $douPrima = round($douPrima);         
+                            $arProyeccion->setVrSalarioPromedioPrimas($salarioPromedioPrimas);
+                            $arProyeccion->setVrPrimas($douPrima);
+                            $arProyeccion->setDiasPrima($intDiasPrimaLiquidar);
+                            $arProyeccion->setFechaDesdePrima($dateFechaDesde);                             
+                        }
+                                               
                         $em->persist($arProyeccion);
                     }         
                     $em->flush();                    

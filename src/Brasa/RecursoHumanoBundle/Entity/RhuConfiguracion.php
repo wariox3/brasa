@@ -310,6 +310,22 @@ class RhuConfiguracion
      */
     private $codigoPrima;     
     
+    /**
+     * Si en el pago de primas se aplica un porcentaje en el salario
+     * @ORM\Column(name="prestaciones_aplicar_porcentaje_salario", type="boolean")
+     */
+    private $prestacionesAplicaPorcentajeSalario = false;     
+
+    /**
+     * @ORM\Column(name="prestaciones_porcentaje_salario1", type="integer")
+     */    
+    private $prestacionesPorcentajeSalario1 = 0;    
+
+    /**
+     * @ORM\Column(name="prestaciones_porcentaje_salario2", type="integer")
+     */    
+    private $prestacionesPorcentajeSalario2 = 0;     
+    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadRiesgoProfesional", inversedBy="configuracionEntidadRiesgoProfesionalRel")
@@ -317,8 +333,6 @@ class RhuConfiguracion
      */
     protected $entidadRiesgoProfesionalRel;  
         
-
-    
 
     
 
@@ -1715,30 +1729,6 @@ class RhuConfiguracion
     }
 
     /**
-     * Set entidadRiesgoProfesionalRel
-     *
-     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel
-     *
-     * @return RhuConfiguracion
-     */
-    public function setEntidadRiesgoProfesionalRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel = null)
-    {
-        $this->entidadRiesgoProfesionalRel = $entidadRiesgoProfesionalRel;
-
-        return $this;
-    }
-
-    /**
-     * Get entidadRiesgoProfesionalRel
-     *
-     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional
-     */
-    public function getEntidadRiesgoProfesionalRel()
-    {
-        return $this->entidadRiesgoProfesionalRel;
-    }
-
-    /**
      * Set codigoPrima
      *
      * @param integer $codigoPrima
@@ -1760,5 +1750,101 @@ class RhuConfiguracion
     public function getCodigoPrima()
     {
         return $this->codigoPrima;
+    }
+
+    /**
+     * Set prestacionesAplicaPorcentajeSalario
+     *
+     * @param boolean $prestacionesAplicaPorcentajeSalario
+     *
+     * @return RhuConfiguracion
+     */
+    public function setPrestacionesAplicaPorcentajeSalario($prestacionesAplicaPorcentajeSalario)
+    {
+        $this->prestacionesAplicaPorcentajeSalario = $prestacionesAplicaPorcentajeSalario;
+
+        return $this;
+    }
+
+    /**
+     * Get prestacionesAplicaPorcentajeSalario
+     *
+     * @return boolean
+     */
+    public function getPrestacionesAplicaPorcentajeSalario()
+    {
+        return $this->prestacionesAplicaPorcentajeSalario;
+    }
+
+    /**
+     * Set prestacionesPorcentajeSalario1
+     *
+     * @param integer $prestacionesPorcentajeSalario1
+     *
+     * @return RhuConfiguracion
+     */
+    public function setPrestacionesPorcentajeSalario1($prestacionesPorcentajeSalario1)
+    {
+        $this->prestacionesPorcentajeSalario1 = $prestacionesPorcentajeSalario1;
+
+        return $this;
+    }
+
+    /**
+     * Get prestacionesPorcentajeSalario1
+     *
+     * @return integer
+     */
+    public function getPrestacionesPorcentajeSalario1()
+    {
+        return $this->prestacionesPorcentajeSalario1;
+    }
+
+    /**
+     * Set prestacionesPorcentajeSalario2
+     *
+     * @param integer $prestacionesPorcentajeSalario2
+     *
+     * @return RhuConfiguracion
+     */
+    public function setPrestacionesPorcentajeSalario2($prestacionesPorcentajeSalario2)
+    {
+        $this->prestacionesPorcentajeSalario2 = $prestacionesPorcentajeSalario2;
+
+        return $this;
+    }
+
+    /**
+     * Get prestacionesPorcentajeSalario2
+     *
+     * @return integer
+     */
+    public function getPrestacionesPorcentajeSalario2()
+    {
+        return $this->prestacionesPorcentajeSalario2;
+    }
+
+    /**
+     * Set entidadRiesgoProfesionalRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel
+     *
+     * @return RhuConfiguracion
+     */
+    public function setEntidadRiesgoProfesionalRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoProfesionalRel = null)
+    {
+        $this->entidadRiesgoProfesionalRel = $entidadRiesgoProfesionalRel;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadRiesgoProfesionalRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional
+     */
+    public function getEntidadRiesgoProfesionalRel()
+    {
+        return $this->entidadRiesgoProfesionalRel;
     }
 }
