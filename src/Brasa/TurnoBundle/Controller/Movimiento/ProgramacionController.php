@@ -192,9 +192,9 @@ class ProgramacionController extends Controller
     }
 
     /**
-     * @Route("/tur/movimiento/programacion/detalle/editar/{codigoPuesto}/{codigoProgramacion}/", name="brs_tur_movimiento_programacion_detalle_editar")
+     * @Route("/tur/movimiento/programacion/detalle/editar/{codigoPuesto}/{codigoPedidoDetalle}/{codigoProgramacion}/", name="brs_tur_movimiento_programacion_detalle_editar")
      */        
-    public function detalleEditarAction($codigoPuesto, $codigoProgramacion) {
+    public function detalleEditarAction($codigoPuesto, $codigoPedidoDetalle, $codigoProgramacion) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
@@ -222,11 +222,7 @@ class ProgramacionController extends Controller
         $strAnioMes = $arProgramacion->getFecha()->format('Y/m');
         $arrDiaSemana = $objFunciones->diasMes($arProgramacion->getFecha(), $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($arProgramacion->getFecha()->format('Y-m-').'01', $arProgramacion->getFecha()->format('Y-m-').'31'));       
         $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
-        if($codigoPuesto == 0) {
-            $dql = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->listaDql($codigoProgramacion, "");                        
-        } else {
-            $dql = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->listaDql($codigoProgramacion, $codigoPuesto);            
-        }
+        $dql = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->listaDql($codigoProgramacion, $codigoPuesto, $codigoPedidoDetalle);            
         $arProgramacionDetalle = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 15);
         return $this->render('BrasaTurnoBundle:Movimientos/Programacion:detalleEditar.html.twig', array(
                     'arProgramacion' => $arProgramacion,

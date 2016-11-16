@@ -6,16 +6,24 @@ use Doctrine\ORM\EntityRepository;
 
 class TurProgramacionDetalleRepository extends EntityRepository {
 
-    public function listaDql($codigoProgramacion = "", $codigoPuesto = "") {
-        $dql   = "SELECT pd FROM BrasaTurnoBundle:TurProgramacionDetalle pd WHERE pd.codigoProgramacionDetallePk <> 0 ";
-        
+    public function listaDql($codigoProgramacion = "", $codigoPuesto = "", $codigoPedidoDetalle = "") {        
+        $dql   = "SELECT pd FROM BrasaTurnoBundle:TurProgramacionDetalle pd WHERE pd.codigoProgramacionDetallePk <> 0 ";        
+        if($codigoPuesto == 0) {
+            $codigoPuesto = '';
+        }
+        if($codigoPedidoDetalle == 0) {
+            $codigoPedidoDetalle = '';
+        }        
         if($codigoProgramacion != '') {
             $dql .= " AND pd.codigoProgramacionFk = " . $codigoProgramacion . " ";  
         }  
         if($codigoPuesto != '') {
             $dql .= " AND pd.codigoPuestoFk = " . $codigoPuesto . " ";  
-        }        
-        $dql .= " ORDER BY pd.codigoPuestoFk";
+        }      
+        if($codigoPedidoDetalle != '') {
+            $dql .= " AND pd.codigoPedidoDetalleFk = " . $codigoPedidoDetalle . " ";  
+        }         
+        $dql .= " ORDER BY pd.codigoPuestoFk, pd.codigoPedidoDetalleFk";
         return $dql;
     } 
     

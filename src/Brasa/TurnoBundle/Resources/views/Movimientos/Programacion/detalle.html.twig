@@ -115,29 +115,55 @@
                                 <th{% if arrDiaSemana.festivo == 1  %} style="background-color:  #6b9311" {% endif %}>{{ arrDiaSemana.dia }}{{ arrDiaSemana.diaSemana }}</th>
                                 {% endfor %}
                             <th>HD</th>
-                            <th>HN</th>
-                            <th>PD</th>
+                            <th>HN</th>                            
                             <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
                         </tr>
                         </thead>
                         <tbody>
                         {% set intPuesto = '' %}
+                        {% set intPedidoDetalle = '' %}
+                        {% set floHorasDiurnasPedido = '' %}
+                        {% set floHorasNocturnasPedido = '' %}                                                
+                        {% set floHorasDiurnasProgramadasPedido = '' %}
+                        {% set floHorasNocturnasProgramadasPedido = '' %}
+                        {% set floHorasDiurnasProgramadas = '' %}
+                        {% set floHorasNocturnasProgramadas = '' %}                        
                         {% for arProgramacionDetalle in arProgramacionDetalle %}                            
-                            {% if intPuesto != arProgramacionDetalle.codigoPuestoFk or arProgramacionDetalle.codigoPuestoFk == '' %}                                
-                                 <tr>
-                                     <td id="suptipo" colspan="37"><b>{{ arProgramacionDetalle.puestoRel.nombre | default('') }}<b/>
+                            {% if (intPuesto != arProgramacionDetalle.codigoPuestoFk or intPedidoDetalle != arProgramacionDetalle.codigoPedidoDetalleFk) and intPuesto != '' %}                                                                                            
+                                <tr>
+                                    <td id="suptipo" colspan="33"></td>                                     
+                                    <td id="suptipo" colspan="1">{{ floHorasDiurnasProgramadas }}</td>                                     
+                                    <td id="suptipo" colspan="1">{{ floHorasNocturnasProgramadas }}</td>                                     
+                                    <td id="suptipo" colspan="1"></td>
+                                </tr>    
+                                {% set floHorasDiurnasProgramadas = 0 %} 
+                                {% set floHorasNocturnasProgramadas = 0 %}
+                            {% endif %}                            
+                            {% if (intPuesto != arProgramacionDetalle.codigoPuestoFk or arProgramacionDetalle.codigoPuestoFk == '') or (intPedidoDetalle != arProgramacionDetalle.codigoPedidoDetalleFk or arProgramacionDetalle.codigoPedidoDetalleFk == '') %}                                                                
+                                <tr >
+                                    <td id="suptipo" colspan="33" bgcolor= "#F2F5A9"><b>{{ arProgramacionDetalle.puestoRel.nombre | default('') }} [{{ arProgramacionDetalle.pedidoDetalleRel.conceptoServicioRel.nombre | default('') }} - H.D {{ arProgramacionDetalle.pedidoDetalleRel.horasDiurnas | default('') }}({{ arProgramacionDetalle.pedidoDetalleRel.horasDiurnasProgramadas | default('') }}) H.N {{ arProgramacionDetalle.pedidoDetalleRel.horasNocturnas | default('') }}({{ arProgramacionDetalle.pedidoDetalleRel.horasNocturnasProgramadas | default('') }})]<b/>
                                         {% if arProgramacion.estadoAutorizado == 0 %}
                                             {% if arProgramacionDetalle.codigoPuestoFk is not null %}
-                                                <a href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_programacion_detalle_editar', {'codigoPuesto': arProgramacionDetalle.codigoPuestoFk, 'codigoProgramacion': arProgramacion.codigoProgramacionPk }) }}', 'Editar puesto', 600, 1200)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar programacion puesto"></a>
+                                                <a href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_programacion_detalle_editar', {'codigoPuesto': arProgramacionDetalle.codigoPuestoFk, 'codigoPedidoDetalle': arProgramacionDetalle.codigoPedidoDetalleFk, 'codigoProgramacion': arProgramacion.codigoProgramacionPk }) }}', 'Editar puesto', 600, 1200)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar programacion puesto"></a>
                                             {% else %}
                                                 <b>SIN PUESTO (Error)<b/>
-                                                <a href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_programacion_detalle_editar', {'codigoPuesto': 0, 'codigoProgramacion': arProgramacion.codigoProgramacionPk }) }}', 'Editar puesto', 600, 1200)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar programacion puesto"></a>                                            
+                                                <a href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_programacion_detalle_editar', {'codigoPuesto': 0, 'codigoPedidoDetalle': 0, 'codigoProgramacion': arProgramacion.codigoProgramacionPk }) }}', 'Editar puesto', 600, 1200)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar programacion puesto"></a>                                            
                                             {% endif %}
                                         {% endif %}
-                                     </td>
-                                 </tr>
-                                 {% set intPuesto = arProgramacionDetalle.codigoPuestoFk %}
-                             {% endif %}
+                                     </td>                                                                        
+                                     <td id="suptipo" colspan="3" bgcolor= "#F2F5A9"><b>PED:{{ arProgramacionDetalle.codigoPedidoDetalleFk | default('') }}</b></td>
+                                             
+                                     
+                                </tr>   
+                                {% set intPuesto = arProgramacionDetalle.codigoPuestoFk %} 
+                                {% set intPedidoDetalle = arProgramacionDetalle.codigoPedidoDetalleFk %} 
+                                {% set floHorasDiurnasPedido = arProgramacionDetalle.pedidoDetalleRel.horasDiurnas %} 
+                                {% set floHorasNocturnasPedido = arProgramacionDetalle.pedidoDetalleRel.horasNocturnas %}                                 
+                                {% set floHorasDiurnasProgramadasPedido = arProgramacionDetalle.pedidoDetalleRel.horasDiurnasProgramadas %} 
+                                {% set floHorasNocturnasProgramadasPedido = arProgramacionDetalle.pedidoDetalleRel.horasNocturnasProgramadas %} 
+                            {% endif %}  
+                                {% set floHorasDiurnasProgramadas = floHorasDiurnasProgramadas + arProgramacionDetalle.horasDiurnas %} 
+                                {% set floHorasNocturnasProgramadas = floHorasNocturnasProgramadas + arProgramacionDetalle.horasNocturnas %}                                 
                                 <tr style='height: 10px' width="250" {% if arProgramacionDetalle.ajusteProgramacion == 1 %} class="danger" {% endif %}>
                                 <td><a href="javascript:abrirVentana3('{{ path('brs_tur_movimiento_programacion_detalle_resumen', {'codigoProgramacionDetalle': arProgramacionDetalle.codigoProgramacionDetallePk }) }}', 'pedidoDetalleResumen', 600, 900)">{{ arProgramacionDetalle.codigoProgramacionDetallePk }}</a><input type="hidden" name="LblCodigo[]" value="{{ arProgramacionDetalle.codigoProgramacionDetallePk }}"></td>
                                 {% if arProgramacionDetalle.codigoRecursoFk is not null %}
@@ -181,8 +207,7 @@
                                 <td>{{ arProgramacionDetalle.dia30  }}</td>
                                 <td>{{ arProgramacionDetalle.dia31  }}</td>
                                 <td style="text-align: right">{{ arProgramacionDetalle.horasDiurnas | number_format(1, '.', ',') }}</td>
-                                <td style="text-align: right">{{ arProgramacionDetalle.horasNocturnas | number_format(1, '.', ',') }}</td>
-                                <td>{{ arProgramacionDetalle.codigoPedidoDetalleFk  }}</td>
+                                <td style="text-align: right">{{ arProgramacionDetalle.horasNocturnas | number_format(1, '.', ',') }}</td>                                
                                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arProgramacionDetalle.codigoProgramacionDetallePk }}" /></td>
                             </tr>
                         {% endfor %}
