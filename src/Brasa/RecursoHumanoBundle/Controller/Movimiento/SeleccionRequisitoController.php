@@ -263,7 +263,7 @@ class SeleccionRequisitoController extends Controller
             ->add('comentarios', 'textarea', array('data' =>$arSeleccionRequisicionAspirante->getComentarios() ,'required' => true))                      
             ->add('fechaDescarte', 'date', array('label'  => 'Fecha', 'data' => new \DateTime('now')))
             ->add('motivoDescarteRequisicionAspiranteRel', 'entity', array(
-                'class' => 'BrasaRecursoHumanoBundle:RhuMotivoDescarteRequisicionAspitante',
+                'class' => 'BrasaRecursoHumanoBundle:RhuMotivoDescarteRequisicionAspirante',
                 'property' => 'nombre',
             ))
             ->add('bloqueado', 'checkbox', array('required'  => false))
