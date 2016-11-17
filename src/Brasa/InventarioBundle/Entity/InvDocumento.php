@@ -19,9 +19,9 @@ class InvDocumento
     private $codigoDocumentoPk;
 
     /**
-     * @ORM\Column(name="nombre_documento", type="string", length=50)
+     * @ORM\Column(name="nombre", type="string", length=50)
      */
-    private $nombreDocumento;
+    private $nombre;
 
     /**
      * @ORM\Column(name="codigo_documento_tipo_fk", type="integer")
@@ -36,12 +36,7 @@ class InvDocumento
     /**
      * @ORM\Column(name="codigo_documento_subtipo_fk", type="integer", nullable=true)
      */      
-    private $codigoDocumentoSubtipoFk;           
-    
-    /**
-     * @ORM\Column(name="codigo_comprobante_contable_fk", type="integer", nullable=true)
-     */     
-    private $codigoComprobanteContableFk;           
+    private $codigoDocumentoSubtipoFk;                        
 
     /**
      * @ORM\Column(name="operacion_inventario", type="smallint")
@@ -54,12 +49,7 @@ class InvDocumento
      * por ejemplo las facturas son negativas para inventario porque son
      * salidas pero su operacion comercial es positiva
      */          
-    private $operacionComercial = 0;    
-
-    /**
-     * @ORM\Column(name="factura_pos", type="boolean")
-     */          
-    private $facturaPOS = 0;    
+    private $operacionComercial = 0;       
     
     /**
      * @ORM\Column(name="genera_cartera", type="boolean")
@@ -193,15 +183,7 @@ class InvDocumento
      * @internal Para saber si el documento genera costo promedio
      * @ORM\Column(name="genera_costo_promedio", type="boolean")
      */          
-    private $generaCostoPromedio = 0;  
-    
-    /**
-     * @ORM\Column(name="tipo_tercero", type="smallint")
-     * 0 - Ninguno
-     * 1 - Cliente
-     * 2 - Proveedor
-     */          
-    private $tipoTercero = 0;    
+    private $generaCostoPromedio = 0;      
     
     
     /**
@@ -221,7 +203,6 @@ class InvDocumento
      */
     protected $movimientosDocumentoRel;
 
-  
     /**
      * Constructor
      */
@@ -241,27 +222,27 @@ class InvDocumento
     }
 
     /**
-     * Set nombreDocumento
+     * Set nombre
      *
-     * @param string $nombreDocumento
+     * @param string $nombre
      *
      * @return InvDocumento
      */
-    public function setNombreDocumento($nombreDocumento)
+    public function setNombre($nombre)
     {
-        $this->nombreDocumento = $nombreDocumento;
+        $this->nombre = $nombre;
 
         return $this;
     }
 
     /**
-     * Get nombreDocumento
+     * Get nombre
      *
      * @return string
      */
-    public function getNombreDocumento()
+    public function getNombre()
     {
-        return $this->nombreDocumento;
+        return $this->nombre;
     }
 
     /**
@@ -337,30 +318,6 @@ class InvDocumento
     }
 
     /**
-     * Set codigoComprobanteContableFk
-     *
-     * @param integer $codigoComprobanteContableFk
-     *
-     * @return InvDocumento
-     */
-    public function setCodigoComprobanteContableFk($codigoComprobanteContableFk)
-    {
-        $this->codigoComprobanteContableFk = $codigoComprobanteContableFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoComprobanteContableFk
-     *
-     * @return integer
-     */
-    public function getCodigoComprobanteContableFk()
-    {
-        return $this->codigoComprobanteContableFk;
-    }
-
-    /**
      * Set operacionInventario
      *
      * @param integer $operacionInventario
@@ -406,30 +363,6 @@ class InvDocumento
     public function getOperacionComercial()
     {
         return $this->operacionComercial;
-    }
-
-    /**
-     * Set facturaPOS
-     *
-     * @param boolean $facturaPOS
-     *
-     * @return InvDocumento
-     */
-    public function setFacturaPOS($facturaPOS)
-    {
-        $this->facturaPOS = $facturaPOS;
-
-        return $this;
-    }
-
-    /**
-     * Get facturaPOS
-     *
-     * @return boolean
-     */
-    public function getFacturaPOS()
-    {
-        return $this->facturaPOS;
     }
 
     /**
@@ -958,30 +891,6 @@ class InvDocumento
     public function getGeneraCostoPromedio()
     {
         return $this->generaCostoPromedio;
-    }
-
-    /**
-     * Set tipoTercero
-     *
-     * @param integer $tipoTercero
-     *
-     * @return InvDocumento
-     */
-    public function setTipoTercero($tipoTercero)
-    {
-        $this->tipoTercero = $tipoTercero;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoTercero
-     *
-     * @return integer
-     */
-    public function getTipoTercero()
-    {
-        return $this->tipoTercero;
     }
 
     /**

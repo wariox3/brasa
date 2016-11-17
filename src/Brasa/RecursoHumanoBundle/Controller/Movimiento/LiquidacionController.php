@@ -322,6 +322,7 @@ class LiquidacionController extends Controller
             ->add('liquidarSalario', 'checkbox', array('required'  => false, 'data' =>$arLiquidacion->getLiquidarSalario()))
             ->add('vrIndemnizacion', 'number', array('data' =>$arLiquidacion->getVrIndemnizacion() ,'required' => false))                      
             ->add('diasAusentismoAdicional', 'number', array('data' =>$arLiquidacion->getDiasAusentismoAdicional() ,'required' => false))                      
+            ->add('diasAusentismoPropuesto', 'number', array('data' =>$arLiquidacion->getDiasAusentismoPropuesto() ,'required' => false))                                      
             ->add('vrSalarioVacacionPropuesto', 'number', array('data' =>$arLiquidacion->getVrSalarioVacacionPropuesto() ,'required' => false))                      
             ->add('vrSalarioPrimaPropuesto', 'number', array('data' =>$arLiquidacion->getVrSalarioPrimaPropuesto() ,'required' => false))                                      
             ->add('vrSalarioCesantiasPropuesto', 'number', array('data' =>$arLiquidacion->getVrSalarioCesantiasPropuesto() ,'required' => false))                                      
@@ -334,6 +335,7 @@ class LiquidacionController extends Controller
             $porcentajeIbp = $form->get('porcentajeIbp')->getData();
             $vrIndemnizacion = $form->get('vrIndemnizacion')->getData();
             $diasAusentismoAdicional = $form->get('diasAusentismoAdicional')->getData();
+            $diasAusentismoPropuesto = $form->get('diasAusentismoPropuesto')->getData();
             $liquidarSalario = $form->get('liquidarSalario')->getData();
             $vrSalarioVacacionPropuesto = $form->get('vrSalarioVacacionPropuesto')->getData();
             $vrSalarioPrimaPropuesto = $form->get('vrSalarioPrimaPropuesto')->getData();
@@ -343,6 +345,7 @@ class LiquidacionController extends Controller
             $arLiquidacion->setLiquidarSalario($liquidarSalario);
             $arLiquidacion->setVrIndemnizacion($vrIndemnizacion);
             $arLiquidacion->setDiasAusentismoAdicional($diasAusentismoAdicional);
+            $arLiquidacion->setDiasAusentismoPropuesto($diasAusentismoPropuesto);
             $arLiquidacion->setVrSalarioVacacionPropuesto($vrSalarioVacacionPropuesto);
             $arLiquidacion->setVrSalarioPrimaPropuesto($vrSalarioPrimaPropuesto);
             $arLiquidacion->setVrSalarioCesantiasPropuesto($vrSalarioCesantiasPropuesto);

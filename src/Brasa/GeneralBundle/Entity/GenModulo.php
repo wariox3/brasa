@@ -52,7 +52,11 @@ class GenModulo
      * @ORM\Column(name="afiliacion", type="boolean")
      */    
     private $afiliacion = false;     
-    
+
+    /**     
+     * @ORM\Column(name="inventario", type="boolean")
+     */    
+    private $inventario = false;     
 
     /**
      * Get codigoModuloPk
@@ -230,5 +234,29 @@ class GenModulo
     public function getAfiliacion()
     {
         return $this->afiliacion;
+    }
+
+    /**
+     * Set inventario
+     *
+     * @param boolean $inventario
+     *
+     * @return GenModulo
+     */
+    public function setInventario($inventario)
+    {
+        $this->inventario = $inventario;
+
+        return $this;
+    }
+
+    /**
+     * Get inventario
+     *
+     * @return boolean
+     */
+    public function getInventario()
+    {
+        return $this->inventario;
     }
 }

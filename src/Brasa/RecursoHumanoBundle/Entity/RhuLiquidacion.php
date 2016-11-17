@@ -313,6 +313,11 @@ class RhuLiquidacion
     private $eliminarAusentismo = false;    
     
     /**
+     * @ORM\Column(name="dias_ausentismo_propuesto", type="integer")
+     */    
+    private $diasAusentismoPropuesto = 0;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="liquidacionesEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
@@ -1944,5 +1949,29 @@ class RhuLiquidacion
     public function getPagosBancosDetallesLiquidacionRel()
     {
         return $this->pagosBancosDetallesLiquidacionRel;
+    }
+
+    /**
+     * Set diasAusentismoPropuesto
+     *
+     * @param integer $diasAusentismoPropuesto
+     *
+     * @return RhuLiquidacion
+     */
+    public function setDiasAusentismoPropuesto($diasAusentismoPropuesto)
+    {
+        $this->diasAusentismoPropuesto = $diasAusentismoPropuesto;
+
+        return $this;
+    }
+
+    /**
+     * Get diasAusentismoPropuesto
+     *
+     * @return integer
+     */
+    public function getDiasAusentismoPropuesto()
+    {
+        return $this->diasAusentismoPropuesto;
     }
 }

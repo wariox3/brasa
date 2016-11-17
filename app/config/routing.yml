@@ -34,9 +34,9 @@ brasa_tesoreria:
     resource: "@BrasaTesoreriaBundle/Resources/config/routing.yml"
     prefix:   /
 
-brasa_inventario:
-    resource: "@BrasaInventarioBundle/Resources/config/routing.yml"
-    prefix:   /
+brasa_inventario_annotation:
+    resource: "@BrasaInventarioBundle/Controller"
+    type:     annotation
 
 brasa_seguridad:
     resource: "@BrasaSeguridadBundle/Resources/config/routing.yml"

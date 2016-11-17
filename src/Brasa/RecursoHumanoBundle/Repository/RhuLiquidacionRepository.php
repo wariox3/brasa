@@ -88,6 +88,9 @@ class RhuLiquidacionRepository extends EntityRepository {
                 $ibpCesantias = round($ibpCesantias);
                 $intDiasAusentismo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->diasAusentismo($dateFechaDesde->format('Y-m-d'), $dateFechaHasta->format('Y-m-d'), $arLiquidacion->getCodigoContratoFk());                            
                 $intDiasAusentismo += $arLiquidacion->getDiasAusentismoAdicional();
+                if($arLiquidacion->getDiasAusentismoPropuesto() > 0) {
+                    $intDiasAusentismo = $arLiquidacion->getDiasAusentismoPropuesto();
+                }
                 if($arLiquidacion->getEliminarAusentismo() > 0) {
                     $intDiasAusentismo = 0;
                 }
@@ -229,6 +232,9 @@ class RhuLiquidacionRepository extends EntityRepository {
                     }
                     $intDiasAusentismo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->diasAusentismo($dateFechaDesde->format('Y-m-d'), $dateFechaHasta->format('Y-m-d'), $arLiquidacion->getCodigoContratoFk());                                                
                     $intDiasAusentismo += $arLiquidacion->getDiasAusentismoAdicional();
+                    if($arLiquidacion->getDiasAusentismoPropuesto() > 0) {
+                        $intDiasAusentismo = $arLiquidacion->getDiasAusentismoPropuesto();
+                    }                    
                     if($arLiquidacion->getEliminarAusentismo() > 0) {
                         $intDiasAusentismo = 0;
                     }       

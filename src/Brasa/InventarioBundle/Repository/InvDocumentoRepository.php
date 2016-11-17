@@ -12,18 +12,9 @@ use Doctrine\ORM\EntityRepository;
  */
 class InvDocumentoRepository extends EntityRepository
 {
-    public function DevDocumentos()
-    {
-        $em = $this->getEntityManager();
-        $query = $em->createQueryBuilder()
-                ->select('d.codigoDocumentoPk,d.nombreDocumento')
-                ->from('BrasaInventarioBundle:InvDocumento', 'd')
-                ->orderBy('d.nombreDocumento');
-
-        $objQuery = $query->getQuery();
-        $arDocumentos = new \Brasa\InventarioBundle\Entity\InvDocumento();
-        $arDocumentos = $objQuery->getResult();
-        
-        return $arDocumentos;
+    public function listaDql() {
+        $dql   = "SELECT d FROM BrasaInventarioBundle:InvDocumento d WHERE d.codigoDocumentoPk <> 0";
+        $dql .= " ORDER BY d.codigoDocumentoPk";
+        return $dql;
     }
 }
