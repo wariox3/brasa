@@ -432,6 +432,19 @@ class VacacionesController extends Controller
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
+        $strNombreEmpleado = "";
+        if($session->get('filtroIdentificacion')) {
+            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $session->get('filtroIdentificacion')));
+            if($arEmpleado) {
+                $strNombreEmpleado = $arEmpleado->getNombreCorto();
+                $session->set('filtroRhuCodigoEmpleado', $arEmpleado->getCodigoEmpleadoPk());
+            }  else {
+                $session->set('filtroIdentificacion', null);
+                $session->set('filtroRhuCodigoEmpleado', null);
+            }
+        } else {
+            $session->set('filtroRhuCodigoEmpleado', null);
+        }
         $arrayPropiedades = array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
                 'query_builder' => function (EntityRepository $er) {
@@ -449,7 +462,8 @@ class VacacionesController extends Controller
         
         $form = $this->createFormBuilder()
             ->add('centroCostoRel', 'entity', $arrayPropiedades)
-            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
+            ->add('txtNumeroIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
+            ->add('txtNombreCorto', 'text', array('label'  => 'Nombre','data' => $strNombreEmpleado))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('estadoPagado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'),'data' => $session->get('filtroPagado')))
@@ -466,7 +480,7 @@ class VacacionesController extends Controller
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
         $session->set('filtroPagado', $controles['estadoPagado']);
         $session->set('filtroAutorizado', $controles['estadoAutorizado']);
-        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
+        $session->set('filtroIdentificacion', $form->get('txtNumeroIdentificacion')->getData());
     }    
     
     private function formularioDetalle($arVacacion) {
