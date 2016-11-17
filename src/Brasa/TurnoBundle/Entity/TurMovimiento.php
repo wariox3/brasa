@@ -31,10 +31,29 @@ class TurMovimiento
     /**
      * @ORM\Column(name="numero", type="integer")
      */    
-    private $numero = 0;    
+    private $numero = 0;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="TurDocumento", inversedBy="movimientosDocumentoRel")
+     * @ORM\JoinColumn(name="codigo_documento_fk", referencedColumnName="codigo_documento_pk")
+     */
+    protected $documentoRel;
+        
     
-                
+    /**
+     * @ORM\OneToMany(targetEntity="TurMovimientoDetalle", mappedBy="movimientoRel")
+     */
+    protected $movimientosDetallesMovimientoRel;
     
+
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->movimientosDetallesMovimientoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoMovimientoPk
@@ -116,5 +135,63 @@ class TurMovimiento
     public function getNumero()
     {
         return $this->numero;
+    }
+
+    /**
+     * Set documentoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurDocumento $documentoRel
+     *
+     * @return TurMovimiento
+     */
+    public function setDocumentoRel(\Brasa\TurnoBundle\Entity\TurDocumento $documentoRel = null)
+    {
+        $this->documentoRel = $documentoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get documentoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurDocumento
+     */
+    public function getDocumentoRel()
+    {
+        return $this->documentoRel;
+    }
+
+    /**
+     * Add movimientosDetallesMovimientoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurMovimientoDetalle $movimientosDetallesMovimientoRel
+     *
+     * @return TurMovimiento
+     */
+    public function addMovimientosDetallesMovimientoRel(\Brasa\TurnoBundle\Entity\TurMovimientoDetalle $movimientosDetallesMovimientoRel)
+    {
+        $this->movimientosDetallesMovimientoRel[] = $movimientosDetallesMovimientoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove movimientosDetallesMovimientoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurMovimientoDetalle $movimientosDetallesMovimientoRel
+     */
+    public function removeMovimientosDetallesMovimientoRel(\Brasa\TurnoBundle\Entity\TurMovimientoDetalle $movimientosDetallesMovimientoRel)
+    {
+        $this->movimientosDetallesMovimientoRel->removeElement($movimientosDetallesMovimientoRel);
+    }
+
+    /**
+     * Get movimientosDetallesMovimientoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMovimientosDetallesMovimientoRel()
+    {
+        return $this->movimientosDetallesMovimientoRel;
     }
 }

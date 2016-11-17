@@ -22,8 +22,22 @@ class TurBodega
      */
     
     private $nombre;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="TurMovimientoDetalle", mappedBy="bodegaRel")
+     */
+    protected $movimientosDetallesBodegaRel;
                                        
     
+
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->movimientosDetallesBodegaRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoBodegaPk
@@ -57,5 +71,39 @@ class TurBodega
     public function getNombre()
     {
         return $this->nombre;
+    }
+
+    /**
+     * Add movimientosDetallesBodegaRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurMovimientoDetalle $movimientosDetallesBodegaRel
+     *
+     * @return TurBodega
+     */
+    public function addMovimientosDetallesBodegaRel(\Brasa\TurnoBundle\Entity\TurMovimientoDetalle $movimientosDetallesBodegaRel)
+    {
+        $this->movimientosDetallesBodegaRel[] = $movimientosDetallesBodegaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove movimientosDetallesBodegaRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurMovimientoDetalle $movimientosDetallesBodegaRel
+     */
+    public function removeMovimientosDetallesBodegaRel(\Brasa\TurnoBundle\Entity\TurMovimientoDetalle $movimientosDetallesBodegaRel)
+    {
+        $this->movimientosDetallesBodegaRel->removeElement($movimientosDetallesBodegaRel);
+    }
+
+    /**
+     * Get movimientosDetallesBodegaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMovimientosDetallesBodegaRel()
+    {
+        return $this->movimientosDetallesBodegaRel;
     }
 }

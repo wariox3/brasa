@@ -28,7 +28,20 @@ class TurDocumento
      */    
     private $operacion = 0;
                                
+    /**
+     * @ORM\OneToMany(targetEntity="TurMovimiento", mappedBy="documentoRel")
+     */
+    protected $movimientosDocumentoRel;
+
     
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->movimientosDocumentoRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoDocumentoPk
@@ -86,5 +99,39 @@ class TurDocumento
     public function getOperacion()
     {
         return $this->operacion;
+    }
+
+    /**
+     * Add movimientosDocumentoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurMovimiento $movimientosDocumentoRel
+     *
+     * @return TurDocumento
+     */
+    public function addMovimientosDocumentoRel(\Brasa\TurnoBundle\Entity\TurMovimiento $movimientosDocumentoRel)
+    {
+        $this->movimientosDocumentoRel[] = $movimientosDocumentoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove movimientosDocumentoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurMovimiento $movimientosDocumentoRel
+     */
+    public function removeMovimientosDocumentoRel(\Brasa\TurnoBundle\Entity\TurMovimiento $movimientosDocumentoRel)
+    {
+        $this->movimientosDocumentoRel->removeElement($movimientosDocumentoRel);
+    }
+
+    /**
+     * Get movimientosDocumentoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMovimientosDocumentoRel()
+    {
+        return $this->movimientosDocumentoRel;
     }
 }

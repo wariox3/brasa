@@ -37,10 +37,22 @@ class TurMovimientoDetalle
     /**
      * @ORM\Column(name="costo", type="float")
      */
-    private $costo = 0;    
+    private $costo = 0;  
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurBodega", inversedBy="movimientosDetallesBodegaRel")
+     * @ORM\JoinColumn(name="codigo_bodega_fk", referencedColumnName="codigo_bodega_pk")
+     */
+    protected $bodegaRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="TurMovimiento", inversedBy="movimientosDetallesMovimientoRel")
+     * @ORM\JoinColumn(name="codigo_movimiento_fk", referencedColumnName="codigo_movimiento_pk")
+     */
+    protected $movimientoRel;
     
                 
-    
+        
 
     /**
      * Get codigoMovimientoDetallePk
@@ -146,5 +158,53 @@ class TurMovimientoDetalle
     public function getCosto()
     {
         return $this->costo;
+    }
+
+    /**
+     * Set bodegaRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurBodega $bodegaRel
+     *
+     * @return TurMovimientoDetalle
+     */
+    public function setBodegaRel(\Brasa\TurnoBundle\Entity\TurBodega $bodegaRel = null)
+    {
+        $this->bodegaRel = $bodegaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get bodegaRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurBodega
+     */
+    public function getBodegaRel()
+    {
+        return $this->bodegaRel;
+    }
+
+    /**
+     * Set movimientoRel
+     *
+     * @param \Brasa\TurnoBundle\Entity\TurMovimiento $movimientoRel
+     *
+     * @return TurMovimientoDetalle
+     */
+    public function setMovimientoRel(\Brasa\TurnoBundle\Entity\TurMovimiento $movimientoRel = null)
+    {
+        $this->movimientoRel = $movimientoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get movimientoRel
+     *
+     * @return \Brasa\TurnoBundle\Entity\TurMovimiento
+     */
+    public function getMovimientoRel()
+    {
+        return $this->movimientoRel;
     }
 }
