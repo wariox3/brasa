@@ -81,7 +81,7 @@
                 <th>TRA</th>
                 <th>LEG</th>
                 <th>DIAS</th>
-                <th>VALOR</th>
+                <th>COBRO</th>
                 <th>USUARIO</th>
                 <th style="text-align: center"></th>
                 <th></th>
@@ -101,7 +101,7 @@
                 <td>{% if arIncapacidades.estadoTranscripcion == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arIncapacidades.estadoLegalizado == 1 %} SI {% else %} NO {% endif %}</td>
                 <td style="text-align: right">{{ arIncapacidades.diasCobro | number_format(0, '.', ',') }}</td>                                            
-                <td style="text-align: right">{{ arIncapacidades.vrIncapacidad | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arIncapacidades.vrCobro | number_format(0, '.', ',') }}</td>
                 <td>{{ arIncapacidades.codigoUsuario  }}</td>
                 <td style="text-align: center"><a href="{{ path('brs_rhu_movimiento_incapacidad_nuevo', {'codigoIncapacidad': arIncapacidades.codigoIncapacidadPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arIncapacidades.codigoIncapacidadPk }}" /></td>

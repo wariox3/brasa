@@ -89,6 +89,7 @@ class IncapacidadController extends Controller
         if($codigoIncapacidad != 0) {
             $arIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->find($codigoIncapacidad);
         } else {
+            $arIncapacidad->setEstadoCobrar(true);
             $arIncapacidad->setFecha(new \DateTime('now'));
             $arIncapacidad->setFechaDesde(new \DateTime('now'));
             $arIncapacidad->setFechaHasta(new \DateTime('now'));                
@@ -123,7 +124,8 @@ class IncapacidadController extends Controller
                                                 $intDias = $arIncapacidad->getFechaDesde()->diff($arIncapacidad->getFechaHasta());
                                                 $intDias = $intDias->format('%a');
                                                 $intDias = $intDias + 1;
-                                                $intDiasCobro = $arIncapacidad->getDiasCobro();
+                                                $intDiasCobro = $this->diasCobro($intDias, $arIncapacidad->getEstadoProrroga(), $arIncapacidad->getIncapacidadTipoRel()->getTipo());
+                                                $arIncapacidad->setDiasCobro($intDiasCobro);
                                                 $arIncapacidad->setCantidad($intDias);                                                                                                                                    
                                                 $arIncapacidad->setEntidadSaludRel($arEmpleado->getEntidadSaludRel());
                                                 $floVrIncapacidad = 0;
@@ -146,6 +148,7 @@ class IncapacidadController extends Controller
                                                     $floVrIncapacidad = $intDiasCobro * $douVrDia;
                                                     $floVrIncapacidad = ($floVrIncapacidad * $douPorcentajePago)/100;                
                                                 }     
+                                                $arIncapacidad->setVrCobro($floVrIncapacidad);
                                                 $arIncapacidad->setVrIncapacidad($floVrIncapacidad);
                                                 $arIncapacidad->setVrSaldo($floVrIncapacidad);
                                                 $arIncapacidad->setCentroCostoRel($arEmpleado->getCentroCostoRel());
@@ -370,5 +373,28 @@ class IncapacidadController extends Controller
         $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('php://output');
         exit;
-    }     
+    }  
+    
+    private function diasCobro($diasIncapacidad = 0, $prorroga = false, $tipo = 1) {
+        $dias = 0;        
+        if($tipo == 1) {
+            if($prorroga == 0) {
+                if($diasIncapacidad >= 3) {
+                    $dias = $diasIncapacidad - 2;
+                }                
+            } else {
+                $dias = $diasIncapacidad;
+            }
+        }
+        if($tipo == 2) {
+            if($prorroga == 0) {
+                if($diasIncapacidad >= 2) {
+                    $dias = $diasIncapacidad - 1;
+                }                
+            } else {
+                $dias = $diasIncapacidad;
+            }
+        }        
+        return $dias;
+    }
 }

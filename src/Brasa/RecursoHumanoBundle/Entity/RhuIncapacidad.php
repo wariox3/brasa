@@ -68,6 +68,11 @@ class RhuIncapacidad
     private $diasCobro = 0;    
     
     /**
+     * @ORM\Column(name="vr_cobro", type="float")
+     */
+    private $vrCobro = 0;    
+    
+    /**
      * @ORM\Column(name="codigo_centro_costo_fk", type="integer", nullable=true)
      */    
     private $codigoCentroCostoFk;         
@@ -978,5 +983,29 @@ class RhuIncapacidad
     public function getDiasCobro()
     {
         return $this->diasCobro;
+    }
+
+    /**
+     * Set vrCobro
+     *
+     * @param float $vrCobro
+     *
+     * @return RhuIncapacidad
+     */
+    public function setVrCobro($vrCobro)
+    {
+        $this->vrCobro = $vrCobro;
+
+        return $this;
+    }
+
+    /**
+     * Get vrCobro
+     *
+     * @return float
+     */
+    public function getVrCobro()
+    {
+        return $this->vrCobro;
     }
 }
