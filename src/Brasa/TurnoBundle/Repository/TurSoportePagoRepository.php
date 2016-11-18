@@ -947,7 +947,8 @@ class TurSoportePagoRepository extends EntityRepository {
                     $horasExtraDia = 0;
                     $horasExtraNoche = 0;
                     $horasExtraFestivasDia = 0;
-                    $horasExtraFestivasNoche = 0;                    
+                    $horasExtraFestivasNoche = 0;   
+                    $horasRecargoNocturno = 0;
                     $totalHoras = $horasDia + $horasNoche + $horasFestivasDia + $horasFestivasNoche;
                     $horasPorCompensar = $horasTopeSoportePago - $totalHoras;
                     $horasTurno = 0;
@@ -959,6 +960,7 @@ class TurSoportePagoRepository extends EntityRepository {
                             $horasTurno += $arSoportePagoDetalle->getHoras();
                             $horasDia += $arSoportePagoDetalle->getHorasDiurnas() + $arSoportePagoDetalle->getHorasFestivasDiurnas() + $arSoportePagoDetalle->getHorasExtrasOrdinariasDiurnas() + $arSoportePagoDetalle->getHorasExtrasFestivasDiurnas();
                             $horasNoche += $arSoportePagoDetalle->getHorasNocturnas() + $arSoportePagoDetalle->getHorasFestivasNocturnas() + $arSoportePagoDetalle->getHorasExtrasOrdinariasNocturnas() + $arSoportePagoDetalle->getHorasExtrasFestivasNocturnas();
+                            $horasRecargoNocturno += $arSoportePagoDetalle->getHorasNocturnas();
                         } else {
                             $horasFestivasDia +=  $arSoportePagoDetalle->getHorasDiurnas() + $arSoportePagoDetalle->getHorasFestivasDiurnas();
                             $horasFestivasNoche +=  $arSoportePagoDetalle->getHorasNocturnas() + $arSoportePagoDetalle->getHorasFestivasNocturnas();                            
@@ -966,23 +968,35 @@ class TurSoportePagoRepository extends EntityRepository {
                             $horasExtraFestivasNoche +=  $arSoportePagoDetalle->getHorasExtrasOrdinariasNocturnas() + $arSoportePagoDetalle->getHorasExtrasFestivasNocturnas();
                         }
                     }
-                    $horasDia = $horasTopeSoportePago;
-                    $horasNoche = 0;
+                    $horasExtra = 0;                
                     if($horasTurno > $horasTopeSoportePago) {
                         $horasExtrasDiurnasSobrantes = $horasTurno - $horasTopeSoportePago;
-                        $horasExtraDia = $horasExtrasDiurnasSobrantes;                        
+                        $horasExtra = $horasExtrasDiurnasSobrantes;  
+                        $porDiurnas = ($horasDia*100) / $horasTurno;
+                        $porNocturna = ($horasNoche*100) / $horasTurno;
+                        $horasExtraDia = round(($horasExtra * $porDiurnas)/100);
+                        $horasExtraNoche = round(($horasExtra * $porNocturna)/100);                          
                     }
-                    
-                    if(($horasExtraDia + $horasExtraFestivasDia) > 26) {
-                        $auxilio = ($horasExtraDia + $horasExtraFestivasDia) - 26;                        
-                        $horasExtrasDiurnasSobrantes -= $auxilio;
-                        $horasExtraDia = $horasExtrasDiurnasSobrantes;
+                     
+                    $totalExtra = $horasExtra + $horasExtraFestivasDia + $horasExtraFestivasNoche;
+                    if($totalExtra > 26) {
+                        $diferencia = $totalExtra - 26;
+                        $horasExtra = $horasExtra - $diferencia; 
+                        $porDiurnas = ($horasDia*100) / $horasTurno;
+                        $porNocturna = ($horasNoche*100) / $horasTurno;
+                        $horasExtraDia = round(($horasExtra * $porDiurnas)/100);
+                        $horasExtraNoche = round(($horasExtra * $porNocturna)/100);                                                                                                
+                        
                         $salario = $arSoportePago->getVrSalario();
                         $vrDia = $salario / 30;
                         $vrHora = $vrDia / 8;
-                        $auxilio = ($vrHora * 1.25) * $auxilio;
-                        $auxilio = round($auxilio);
+                        $auxilio = ($vrHora * 1.25) * $horasExtraDia;
+                        $auxilio += ($vrHora * 1.75) * $horasExtraNoche;
+                        $auxilio += round($auxilio);
                     }
+                    $horasDia = $horasTopeSoportePago;
+                    $horasNoche = 0; 
+                    
                     $arSoportePagoAct = new \Brasa\TurnoBundle\Entity\TurSoportePago();
                     $arSoportePagoAct = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->find($arSoportePago->getCodigoSoportePagoPk());
                     $arSoportePagoAct->setHorasDiurnas($horasDia);
@@ -993,6 +1007,7 @@ class TurSoportePagoRepository extends EntityRepository {
                     $arSoportePagoAct->setHorasExtrasOrdinariasNocturnas($horasExtraNoche);
                     $arSoportePagoAct->setHorasExtrasFestivasDiurnas($horasExtraFestivasDia);
                     $arSoportePagoAct->setHorasExtrasFestivasNocturnas($horasExtraFestivasNoche);
+                    $arSoportePagoAct->setHorasRecargoNocturno($horasRecargoNocturno);
                     $arSoportePagoAct->setDiasPeriodoCompensar($diasPeriodoCompensar);
                     $arSoportePagoAct->setDiasPeriodoDescansoCompensar($descansoCompensacion);
                     $arSoportePagoAct->setVrAjusteCompensacion($auxilio);
