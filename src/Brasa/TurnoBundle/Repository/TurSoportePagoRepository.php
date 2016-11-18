@@ -986,13 +986,15 @@ class TurSoportePagoRepository extends EntityRepository {
                         $porNocturna = ($horasNoche*100) / $horasTurno;
                         $horasExtraDia = round(($horasExtra * $porDiurnas)/100);
                         $horasExtraNoche = round(($horasExtra * $porNocturna)/100);                                                                                                
+                        $horasDiferenciaDia = round(($diferencia * $porDiurnas)/100);
+                        $horasDiferenciaNoche = round(($diferencia * $porNocturna)/100);
                         
                         $salario = $arSoportePago->getVrSalario();
                         $vrDia = $salario / 30;
                         $vrHora = $vrDia / 8;
-                        $auxilio = ($vrHora * 1.25) * $horasExtraDia;
-                        $auxilio += ($vrHora * 1.75) * $horasExtraNoche;
-                        $auxilio += round($auxilio);
+                        $auxilio = ($vrHora * 1.25) * $horasDiferenciaDia;
+                        $auxilio += ($vrHora * 1.75) * $horasDiferenciaNoche;
+                        $auxilio = round($auxilio);
                     }
                     $horasDia = $horasTopeSoportePago;
                     $horasNoche = 0; 
