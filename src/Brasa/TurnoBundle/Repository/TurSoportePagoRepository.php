@@ -951,6 +951,7 @@ class TurSoportePagoRepository extends EntityRepository {
                     $totalHoras = $horasDia + $horasNoche + $horasFestivasDia + $horasFestivasNoche;
                     $horasPorCompensar = $horasTopeSoportePago - $totalHoras;
                     $horasTurno = 0;
+                    $auxilio = 0;
                     $arSoportePagoDetalles = new \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle();
                     $arSoportePagoDetalles = $em->getRepository('BrasaTurnoBundle:TurSoportePagoDetalle')->findBy(array('codigoSoportePagoFk' => $arSoportePago->getCodigoSoportePagoPk()));                    
                     foreach ($arSoportePagoDetalles as $arSoportePagoDetalle) {                        
@@ -974,7 +975,11 @@ class TurSoportePagoRepository extends EntityRepository {
                         $auxilio = ($horasExtraDia + $horasExtraFestivasDia) - 26;                        
                         $horasExtrasDiurnasSobrantes -= $auxilio;
                         $horasExtraDia = $horasExtrasDiurnasSobrantes;
-                        $auxilio = 0;
+                        $salario = $arSoportePago->getVrSalario();
+                        $vrDia = $salario / 30;
+                        $vrHora = $vrDia / 8;
+                        $auxilio = ($vrHora * 1.25) * $auxilio;
+                        $auxilio = round($auxilio);
                     }
                     $arSoportePagoAct = new \Brasa\TurnoBundle\Entity\TurSoportePago();
                     $arSoportePagoAct = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->find($arSoportePago->getCodigoSoportePagoPk());
@@ -988,6 +993,7 @@ class TurSoportePagoRepository extends EntityRepository {
                     $arSoportePagoAct->setHorasExtrasFestivasNocturnas($horasExtraFestivasNoche);
                     $arSoportePagoAct->setDiasPeriodoCompensar($diasPeriodoCompensar);
                     $arSoportePagoAct->setDiasPeriodoDescansoCompensar($descansoCompensacion);
+                    $arSoportePagoAct->setVrAjusteCompensacion($auxilio);
                     $horasDescansoRecurso = $horasDescansoSoportePago;
                     if($diasPeriodo == $arSoportePago->getNovedad()) {
                        $horasDescansoRecurso = 0;

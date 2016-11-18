@@ -123,6 +123,9 @@ class ProgramacionesPagoCargarSoporteTurnoController extends Controller
                                 $arProgramacionPagoDetalle->setVrAjusteDevengado($arSoportePago->getVrAjusteDevengadoPactado());
                             }
                         }
+                        if($arSoportePago->getVrAjusteCompensacion() > 0) {
+                            $arProgramacionPagoDetalle->setVrAjusteDevengado($arSoportePago->getVrAjusteCompensacion());
+                        }
 
                         $em->persist($arProgramacionPagoDetalle);                
                     }                

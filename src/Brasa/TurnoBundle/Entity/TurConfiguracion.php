@@ -117,6 +117,12 @@ class TurConfiguracion
     private $codigoFormatoProgramacion = 0;
     
     /**
+     * Determina el tipo de compensacion 1-Seracis, 2-Galaxia
+     * @ORM\Column(name="tipo_compensacion", type="integer")
+     */    
+    private $tipoCompensacion = 0;    
+    
+    /**
      * Set codigoConfiguracionPk
      *
      * @param integer $codigoConfiguracionPk
@@ -642,5 +648,29 @@ class TurConfiguracion
     public function getHabilitarProgramacionAlterna()
     {
         return $this->habilitarProgramacionAlterna;
+    }
+
+    /**
+     * Set tipoCompensacion
+     *
+     * @param integer $tipoCompensacion
+     *
+     * @return TurConfiguracion
+     */
+    public function setTipoCompensacion($tipoCompensacion)
+    {
+        $this->tipoCompensacion = $tipoCompensacion;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoCompensacion
+     *
+     * @return integer
+     */
+    public function getTipoCompensacion()
+    {
+        return $this->tipoCompensacion;
     }
 }

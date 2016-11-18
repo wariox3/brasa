@@ -49,7 +49,7 @@
                     <td><input type="hidden" name="LblCodigoGuia[]" value="{{ arPagoDetalles.codigoPagoDetallePk }}">{{ arPagoDetalles.codigoPagoConceptoFk }}</td>
                     <td>{{ arPagoDetalles.pagoConceptoRel.nombre | default('')}}</td>
                     <td style="text-align: right">{{ arPagoDetalles.porcentajeAplicado | number_format(0, '.', ',') }}</td>
-                    <td style="text-align: right">{{ arPagoDetalles.numeroHoras | number_format(0, '.', ',') }}</td>
+                    <td style="text-align: right">{{ arPagoDetalles.numeroHoras | number_format(1, '.', ',') }}</td>
                     <td style="text-align: right">{{ arPagoDetalles.numeroDias | number_format(0, '.', ',') }}</td>
                     <td style="text-align: right">{{ arPagoDetalles.vrHora | number_format(0, '.', ',') }}</td>
                     {% if arPagoDetalles.operacion == 1 %}
