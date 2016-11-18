@@ -202,6 +202,13 @@ class PagoBancoController extends Controller
                     $objMensaje->Mensaje('error', 'El pago al banco debe estar autorizado ', $this);
                 }
             }
+            if($form->get('BtnArchivoBogota')->isClicked()) {
+                if($arPagoBanco->getEstadoAutorizado() == 1) {
+                    $this->generarArchivoBogota($arPagoBanco);
+                } else {
+                    $objMensaje->Mensaje('error', 'El pago al banco debe estar autorizado ', $this);
+                }
+            }
             if ($form->get('BtnDetalleExcel')->isClicked()) {                
                 $this->generarDetalleExcel($codigoPagoBanco);
             }
@@ -680,7 +687,8 @@ class PagoBancoController extends Controller
         $arrBotonArchivoBancolombiaSap = array('label' => 'Bancolombia Sap', 'disabled' => false);
         $arrBotonArchivoAvvillasInterno = array('label' => 'Av Villas Interno', 'disabled' => false);
         $arrBotonArchivoAvvillasOtros = array('label' => 'Av Villas Otros', 'disabled' => false);
-        $arrBotonArchivoDavivienda = array('label' => 'Davivienda', 'disabled' => false);        
+        $arrBotonArchivoDavivienda = array('label' => 'Davivienda', 'disabled' => false);
+        $arrBotonArchivoBogota = array('label' => 'Bogota', 'disabled' => false);        
         if($ar->getEstadoAutorizado() == 1) {            
             $arrBotonAutorizar['disabled'] = true;
             $arrBotonEliminarDetalle['disabled'] = true;
@@ -700,6 +708,7 @@ class PagoBancoController extends Controller
                     ->add('BtnArchivoAvvillasInterno', 'submit', $arrBotonArchivoAvvillasInterno)
                     ->add('BtnArchivoAvvillasOtros', 'submit', $arrBotonArchivoAvvillasOtros)
                     ->add('BtnArchivoDavivienda', 'submit', $arrBotonArchivoDavivienda)
+                    ->add('BtnArchivoBogota', 'submit', $arrBotonArchivoBogota)
                     ->add('BtnEliminarDetalle', 'submit', $arrBotonEliminarDetalle)
                     ->add('BtnDetalleExcel', 'submit', array('label' => 'Excel'))
                     ->getForm();  
@@ -1027,6 +1036,107 @@ class PagoBancoController extends Controller
                 fputs($ar, "000051");// codigo banco
                 $duoValorNetoPagar = round($arPagoBancoDetalle->getVrPago()); // Valor transacción
                 fputs($ar, $this->RellenarNr($duoValorNetoPagar, "0", 16) . "00");
+                fputs($ar, "000000"); // talon
+                fputs($ar, "02"); // tipo identificacion
+                fputs($ar, "1"); // validacion ach
+                fputs($ar, "9999"); // resultado del proceso
+                fputs($ar, "0000000000000000000000000000000000000000"); // respuesta del proceso
+                fputs($ar, "000000000000000000"); // valor acumulado del cobro
+                fputs($ar, "00000000"); // fecha aplicacion
+                fputs($ar, "0000"); // oficina de recuado
+                fputs($ar, "0000"); // motivo
+                fputs($ar, "0000000"); // campos futuros
+                fputs($ar, "\n");                
+            }
+        }
+        //Fin cuerpo 
+        //Pie de pagina
+        fclose($ar);
+        $em->flush();
+                    
+        header('Content-Description: File Transfer');
+        header('Content-Type: text/csv; charset=ISO-8859-15');
+        header('Content-Disposition: attachment; filename='.basename($strArchivo));
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($strArchivo));
+        readfile($strArchivo);
+        exit;
+        
+        
+    }
+    
+    private function generarArchivoBogota ($arPagoBanco) {
+        $em = $this->getDoctrine()->getManager();
+        //$arPagoBanco = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco();
+        $arConfiguracionGeneral = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+        $strNombreArchivo = "pagoBancoBogota" . date('YmdHis') . ".txt";
+        $strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;                                            
+        ob_clean();
+        $ar = fopen($strArchivo,"a") or die("Problemas en la creacion del archivo plano");
+        ob_clean();
+        $strValorTotal = 0;
+        $arPagosBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
+        $arPagosBancoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->findBy(array ('codigoPagoBancoFk' => $arPagoBanco->getCodigoPagoBancoPk()));                        
+        foreach ($arPagosBancoDetalle AS $arPagoBancoDetalle) {
+            $strValorTotal += round($arPagoBancoDetalle->getVrPago());
+        }        
+        // Encabezado
+        $strTipoRegistro = "1";
+        $strFechaAplicacion = $arPagoBanco->getFechaAplicacion()->format('Ymd');
+        $espacios24 = "000000000000000000000000";        
+        $srtTipoCuenta = $arPagoBanco->getCuentaRel()->getTipo(); // tipo cuenta
+        if ($srtTipoCuenta == 'D'){
+            $srtTipoCuenta = 1;
+        } else {
+            $srtTipoCuenta = 2;
+        }
+        $espacios6 = "000000";        
+        $cuentaOrigen = $this->RellenarNr($arPagoBanco->getCuentaRel()->getCuenta(), "0", 11); // cuenta
+        $strNombreEmpresa = $this->RellenarNr2(utf8_decode(substr($arConfiguracionGeneral->getNombreEmpresa(), 0, 40)), " ", 40, "D");
+        $strNitEmpresa = $this->RellenarNr(utf8_decode($arConfiguracionGeneral->getNitEmpresa().$arConfiguracionGeneral->getDigitoVerificacionEmpresa()),"0",11); //nit
+        $strTipoMovimiento = "001";
+        $srtCodigoCiudadCuenta = "0001";
+        $strFechaProceso = $arPagoBanco->getFechaTrasmision()->format('Ymd');
+        $strCodigoOficina = "137";
+        $strTipoIdentificacion = "N";
+        $strEspacios129 = "                                                                                                                                 ";                        
+        //Fin encabezado
+        fputs($ar, $strTipoRegistro . $strFechaAplicacion . $espacios24 . $srtTipoCuenta . $espacios6 . $cuentaOrigen . $strNombreEmpresa . $strNitEmpresa . $strTipoMovimiento . $srtCodigoCiudadCuenta . $strFechaProceso . $strCodigoOficina . $strTipoIdentificacion . $strEspacios129 ."\n");
+        //Inicio cuerpo
+        foreach ($arPagosBancoDetalle AS $arPagoBancoDetalle) {
+            if($arPagoBancoDetalle->getVrPago() > 0) {
+                fputs($ar, "2"); //(1)Tipo registro
+                $tipoIdentificacion = $arPagoBancoDetalle->getEmpleadoRel()->getCodigoTipoIdentificacionFk();
+                if ($tipoIdentificacion == 13){
+                    $tipo = "C";
+                }
+                if ($tipoIdentificacion == 31){
+                    $tipo = "N";
+                }
+                if ($tipoIdentificacion == 22){
+                    $tipo = "E";
+                }
+                fputs($ar, $tipo); //(1)Tipo identificacion                           
+                fputs($ar, $this->RellenarNr($arPagoBancoDetalle->getEmpleadoRel()->getNumeroIdentificacion(), "0", 11)); //(15) identificacion del beneficiario           
+                fputs($ar, $this->RellenarNr2(utf8_decode(substr($arPagoBancoDetalle->getEmpleadoRel()->getNombreCorto(), 0, 40)), " ", 40, "D")); // nombre beneficiario
+                fputs($ar, "0");
+                $tipocuenta = $arPagoBancoDetalle->getEmpleadoRel()->getTipoCuenta();
+                if ($tipocuenta == "S"){
+                    $tipocuenta = 2;
+                } else {
+                    $tipocuenta = 1;
+                }                
+                fputs($ar, $this->RellenarNr2(utf8_decode(substr($arPagoBancoDetalle->getCuenta(), 0, 17)), " ", 17, "D")); // Nro cuenta destino
+                $duoValorNetoPagar = round($arPagoBancoDetalle->getVrPago()); // Valor transacción
+                fputs($ar, $this->RellenarNr($duoValorNetoPagar, "0", 16) . "00");
+                fputs($ar, "A"); // forma de pago abono                
+                fputs($ar, "000"); 
+                fputs($ar, "001"); // codigo compensacion del banco
+                
+                
                 fputs($ar, "000000"); // talon
                 fputs($ar, "02"); // tipo identificacion
                 fputs($ar, "1"); // validacion ach
