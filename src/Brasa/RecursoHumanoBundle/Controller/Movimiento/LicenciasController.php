@@ -63,11 +63,14 @@ class LicenciasController extends Controller
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();        
-        $arLicencia = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();       
+        $arLicencia = new \Brasa\RecursoHumanoBundle\Entity\RhuLicencia();
+        
         if($codigoLicencia == 0) {
             $arLicencia->setAfectaTransporte(1);
             $arLicencia->setFechaDesde(new \DateTime('now'));
             $arLicencia->setFechaHasta(new \DateTime('now'));                  
+        } else {
+            $arLicencia = $em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->find($codigoLicencia);
         }
         $form = $this->createForm(new RhuLicenciaType(), $arLicencia);                     
         $form->handleRequest($request);

@@ -5982,6 +5982,8 @@ INSERT INTO `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) 
 INSERT INTO `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) VALUES('128','PERIODO SEGURIDAD SOCIAL','MOVIMIENTO','AFILIACION');
 INSERT INTO `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) VALUES('129','NOVEDAD','MOVIMIENTO','AFILIACION');
 INSERT INTO `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) VALUES('130','FACTURA','MOVIMIENTO','AFILIACION');
+INSERT INTO `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) VALUES('131','MOTIVO CIERRE SELECCION','ADMINISTRACION','RECURSO HUMANO');
+INSERT INTO `seg_documento` (`codigo_documento_pk`, `nombre`, `tipo`, `modulo`) VALUES('132','MOTIVO DESCARTE ASPIRANTE','ADMINISTRACION','RECURSO HUMANO');
 
 INSERT INTO `seg_roles` (`codigo_rol_pk`, `nombre`) VALUES('ROLE_ADMIN','ADMINISTRADOR');
 INSERT INTO `seg_roles` (`codigo_rol_pk`, `nombre`) VALUES('ROLE_USER','USUARIO');
