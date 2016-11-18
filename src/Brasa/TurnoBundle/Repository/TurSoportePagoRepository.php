@@ -968,8 +968,10 @@ class TurSoportePagoRepository extends EntityRepository {
                     }
                     $horasDia = $horasTopeSoportePago;
                     $horasNoche = 0;
-                    $horasExtrasDiurnasSobrantes = $horasTurno - $horasTopeSoportePago;
-                    $horasExtraDia = $horasExtrasDiurnasSobrantes;
+                    if($horasTurno > $horasTopeSoportePago) {
+                        $horasExtrasDiurnasSobrantes = $horasTurno - $horasTopeSoportePago;
+                        $horasExtraDia = $horasExtrasDiurnasSobrantes;                        
+                    }
                     
                     if(($horasExtraDia + $horasExtraFestivasDia) > 26) {
                         $auxilio = ($horasExtraDia + $horasExtraFestivasDia) - 26;                        
