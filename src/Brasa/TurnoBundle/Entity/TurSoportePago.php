@@ -58,6 +58,11 @@ class TurSoportePago
     private $vrAjusteDevengadoPactado = 0;     
     
     /**
+     * @ORM\Column(name="vr_ajuste_compensacion", type="float")
+     */    
+    private $vrAjusteCompensacion = 0;     
+    
+    /**
      * @ORM\Column(name="vr_pago", type="float")
      */    
     private $vrPago = 0;    
@@ -1767,5 +1772,29 @@ class TurSoportePago
     public function getVrAjusteDevengadoPactado()
     {
         return $this->vrAjusteDevengadoPactado;
+    }
+
+    /**
+     * Set vrAjusteCompensacion
+     *
+     * @param float $vrAjusteCompensacion
+     *
+     * @return TurSoportePago
+     */
+    public function setVrAjusteCompensacion($vrAjusteCompensacion)
+    {
+        $this->vrAjusteCompensacion = $vrAjusteCompensacion;
+
+        return $this;
+    }
+
+    /**
+     * Get vrAjusteCompensacion
+     *
+     * @return float
+     */
+    public function getVrAjusteCompensacion()
+    {
+        return $this->vrAjusteCompensacion;
     }
 }

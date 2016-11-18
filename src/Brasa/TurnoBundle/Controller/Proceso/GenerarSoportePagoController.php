@@ -299,7 +299,7 @@ class GenerarSoportePagoController extends Controller
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago_detalle', array('codigoSoportePagoPeriodo' => $codigoSoportePagoPeriodo)));                                
             }                                 
             if ($form->get('BtnLiquidarCompensacion2')->isClicked()) { 
-                $em->getRepository('BrasaTurnoBundle:TurSoportePago')->compensar("", $codigoSoportePagoPeriodo);
+                $em->getRepository('BrasaTurnoBundle:TurSoportePago')->compensar("", $codigoSoportePagoPeriodo, 2);
                 $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->liquidar($codigoSoportePagoPeriodo);                                
                 return $this->redirect($this->generateUrl('brs_tur_proceso_generar_soporte_pago_detalle', array('codigoSoportePagoPeriodo' => $codigoSoportePagoPeriodo)));                
                 
@@ -398,6 +398,7 @@ class GenerarSoportePagoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones(); 
         $arSoportePago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
         $arSoportePago =  $em->getRepository('BrasaTurnoBundle:TurSoportePago')->find($codigoSoportePago);                                        
         $form = $this->formularioVer($arSoportePago->getSoportePagoPeriodoRel());
@@ -434,14 +435,7 @@ class GenerarSoportePagoController extends Controller
         }        
         $strAnio = $arSoportePago->getFechaDesde()->format('Y');
         $strMes = $arSoportePago->getFechaDesde()->format('m');
-        $strAnioMes = $arSoportePago->getFechaDesde()->format('Y/m');
-        $arrDiaSemana = array();
-        for($i = 1; $i <= 31; $i++) {
-            $strFecha = $strAnioMes . '/' . $i;
-            $dateFecha = date_create($strFecha);
-            $diaSemana = $this->devuelveDiaSemanaEspaniol($dateFecha);
-            $arrDiaSemana[$i] = array('dia' => $i, 'diaSemana' => $diaSemana);
-        }        
+        $arrDiaSemana = $objFunciones->diasMes($arSoportePago->getFechaDesde(), $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($arSoportePago->getFechaDesde()->format('Y-m-').'01', $arSoportePago->getFechaDesde()->format('Y-m-').'31'));       
         $arSoportePagoProgramacion = new \Brasa\TurnoBundle\Entity\TurSoportePagoProgramacion();
         $arSoportePagoProgramacion =  $em->getRepository('BrasaTurnoBundle:TurSoportePagoProgramacion')->findBy(array('codigoSoportePagoFk' => $arSoportePago->getCodigoSoportePagoPk()));                                
         $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();

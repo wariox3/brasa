@@ -15,8 +15,8 @@
         <table width="100%" class="table table-condensed table-bordered">
             <tr>           
                 {% for arrDiaSemana in arrDiaSemana %}
-                <th>{{ arrDiaSemana.dia }}{{ arrDiaSemana.diaSemana }}</th>
-                {% endfor %}
+                <th{% if arrDiaSemana.festivo == 1  %} style="background-color:  #6b9311" {% endif %}>{{ arrDiaSemana.dia }}{{ arrDiaSemana.diaSemana }}</th>
+                {% endfor %}                
             </tr>
             {% for arSoportePagoProgramacion in arSoportePagoProgramacion %}               
                 <tr>                    
@@ -58,8 +58,8 @@
             <tr>           
                 <th>ID</th>
                 {% for arrDiaSemana in arrDiaSemana %}
-                <th>{{ arrDiaSemana.dia }}{{ arrDiaSemana.diaSemana }}</th>
-                {% endfor %}
+                <th{% if arrDiaSemana.festivo == 1  %} style="background-color:  #6b9311" {% endif %}>{{ arrDiaSemana.dia }}{{ arrDiaSemana.diaSemana }}</th>
+                {% endfor %} 
             </tr>
             {% set intCodigoCliente = '' %}
             {% for arProgramacionDetalle in arProgramacionDetalle %}
@@ -190,9 +190,10 @@
                 <th>HEON</th>
                 <th>HEFD</th>
                 <th>HEFN</th>
+                <th>H</th>
             </tr>
             {% for arSoportesPagosDetalles in arSoportesPagosDetalles %}
-            <tr>
+            <tr {% if arSoportesPagosDetalles.festivo == 1 %} class="danger" {% endif %}>
                 <td>{{ arSoportesPagosDetalles.codigoSoportePagoDetallePk  }}</td>
                 <td>{{ arSoportesPagosDetalles.fecha |date("Y/m/d")  }}</td>                
                 <td>{{ arSoportesPagosDetalles.codigoTurnoFk  }} ({{ arSoportesPagosDetalles.turnoRel.horaDesde |date('H:i') }} - {{ arSoportesPagosDetalles.turnoRel.horaHasta |date('H:i') }})</td>
@@ -207,6 +208,7 @@
                 <td style="text-align: right">{{ arSoportesPagosDetalles.horasExtrasOrdinariasNocturnas | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagosDetalles.horasExtrasFestivasDiurnas | number_format(2, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportesPagosDetalles.horasExtrasFestivasNocturnas | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagosDetalles.horas | number_format(2, '.', ',') }}</td>
             </tr>
 
             {% endfor %}
