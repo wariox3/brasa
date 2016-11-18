@@ -504,7 +504,7 @@ class TurSoportePagoRepository extends EntityRepository {
                 $arSoportePagoDetalle->setHorasRecargoFestivoNocturno($arrHoras1['horasFestivasNocturnas']);
             } else {
                 $arSoportePagoDetalle->setDias(0);
-                $arSoportePagoDetalle->setHoras($arTurno->getHorasNomina());
+                $arSoportePagoDetalle->setHoras(0);
                 $arSoportePagoDetalle->setHorasDiurnas($arrHoras1['horasDiurnas']);
                 $arSoportePagoDetalle->setHorasNocturnas($arrHoras1['horasNocturnas']);
                 $arSoportePagoDetalle->setHorasFestivasDiurnas($arrHoras1['horasFestivasDiurnas']);
