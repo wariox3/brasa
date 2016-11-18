@@ -19,9 +19,9 @@ class InvDocumentoTipo
     private $codigoDocumentoTipoPk;
 
     /**
-     * @ORM\Column(name="nombre_documento_tipo", type="string", length=50)
+     * @ORM\Column(name="nombre", type="string", length=50)
      */
-    private $nombreDocumentoTipo;
+    private $nombre;
     
     /**
      * @ORM\OneToMany(targetEntity="InvMovimiento", mappedBy="documentoTipoRel")
@@ -54,27 +54,27 @@ class InvDocumentoTipo
     }
 
     /**
-     * Set nombreDocumentoTipo
+     * Set nombre
      *
-     * @param string $nombreDocumentoTipo
+     * @param string $nombre
      *
      * @return InvDocumentoTipo
      */
-    public function setNombreDocumentoTipo($nombreDocumentoTipo)
+    public function setNombre($nombre)
     {
-        $this->nombreDocumentoTipo = $nombreDocumentoTipo;
+        $this->nombre = $nombre;
 
         return $this;
     }
 
     /**
-     * Get nombreDocumentoTipo
+     * Get nombre
      *
      * @return string
      */
-    public function getNombreDocumentoTipo()
+    public function getNombre()
     {
-        return $this->nombreDocumentoTipo;
+        return $this->nombre;
     }
 
     /**
