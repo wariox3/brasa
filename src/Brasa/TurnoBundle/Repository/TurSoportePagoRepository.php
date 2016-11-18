@@ -940,6 +940,7 @@ class TurSoportePagoRepository extends EntityRepository {
                     $horasPeriodo =  $diasPeriodoCompensar * 8;                    
                     $horasDescansoSoportePago = $diasDescansoSoportePago * 8;                    
                     $horasTopeSoportePago = $horasPeriodo - ($descanso * 8);
+                    $descansoAuxilioTransporte = 0;
                     $horasDia = 0;
                     $horasNoche = 0;
                     $horasFestivasDia = 0;
@@ -967,6 +968,7 @@ class TurSoportePagoRepository extends EntityRepository {
                             $horasExtraFestivasDia +=  $arSoportePagoDetalle->getHorasExtrasOrdinariasDiurnas() + $arSoportePagoDetalle->getHorasExtrasFestivasDiurnas();
                             $horasExtraFestivasNoche +=  $arSoportePagoDetalle->getHorasExtrasOrdinariasNocturnas() + $arSoportePagoDetalle->getHorasExtrasFestivasNocturnas();
                         }
+                        $descansoAuxilioTransporte += $arSoportePagoDetalle->getDescanso();
                     }
                     $horasExtra = 0;                
                     if($horasTurno > $horasTopeSoportePago) {
@@ -999,7 +1001,7 @@ class TurSoportePagoRepository extends EntityRepository {
                     $horasDia = $horasTopeSoportePago;
                     $horasNoche = 0; 
                     
-                    $arSoportePagoAct = new \Brasa\TurnoBundle\Entity\TurSoportePago();
+                    $arSoportePagoAct = new \Brasa\TurnoBundle\Entity\TurSoportePago();                        
                     $arSoportePagoAct = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->find($arSoportePago->getCodigoSoportePagoPk());
                     $arSoportePagoAct->setHorasDiurnas($horasDia);
                     $arSoportePagoAct->setHorasNocturnas($horasNoche);
@@ -1013,6 +1015,8 @@ class TurSoportePagoRepository extends EntityRepository {
                     $arSoportePagoAct->setDiasPeriodoCompensar($diasPeriodoCompensar);
                     $arSoportePagoAct->setDiasPeriodoDescansoCompensar($descansoCompensacion);
                     $arSoportePagoAct->setVrAjusteCompensacion($auxilio);
+                    $diasAuxilioTransporte = $arSoportePagoAct->getDiasTransporte() - $descansoAuxilioTransporte;
+                    $arSoportePagoAct->setDiasTransporte($diasAuxilioTransporte);
                     $horasDescansoRecurso = $horasDescansoSoportePago;
                     if($diasPeriodo == $arSoportePago->getNovedad()) {
                        $horasDescansoRecurso = 0;
