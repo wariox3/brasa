@@ -1126,27 +1126,30 @@ class PagoBancoController extends Controller
                 $tipocuenta = $arPagoBancoDetalle->getEmpleadoRel()->getTipoCuenta();
                 if ($tipocuenta == "S"){
                     $tipocuenta = 2;
-                } else {
+                } 
+                if ($tipocuenta == "D"){
                     $tipocuenta = 1;
-                }                
+                }
+                fputs($ar, $tipocuenta);
                 fputs($ar, $this->RellenarNr2(utf8_decode(substr($arPagoBancoDetalle->getCuenta(), 0, 17)), " ", 17, "D")); // Nro cuenta destino
                 $duoValorNetoPagar = round($arPagoBancoDetalle->getVrPago()); // Valor transacción
                 fputs($ar, $this->RellenarNr($duoValorNetoPagar, "0", 16) . "00");
                 fputs($ar, "A"); // forma de pago abono                
                 fputs($ar, "000"); 
                 fputs($ar, "001"); // codigo compensacion del banco
-                
-                
-                fputs($ar, "000000"); // talon
-                fputs($ar, "02"); // tipo identificacion
-                fputs($ar, "1"); // validacion ach
-                fputs($ar, "9999"); // resultado del proceso
-                fputs($ar, "0000000000000000000000000000000000000000"); // respuesta del proceso
-                fputs($ar, "000000000000000000"); // valor acumulado del cobro
-                fputs($ar, "00000000"); // fecha aplicacion
-                fputs($ar, "0000"); // oficina de recuado
-                fputs($ar, "0000"); // motivo
-                fputs($ar, "0000000"); // campos futuros
+                fputs($ar, "0001"); // codigo ciudad del banco
+                fputs($ar, "ATEMPI   "); // informacion addenda
+                fputs($ar, " "); 
+                fputs($ar, $this->RellenarNr2(utf8_decode(substr($arPagoBancoDetalle->getPagoBancoRel()->getDescripcion(), 0, 70)), " ", 70, "D")); // nombre beneficiario
+                fputs($ar, "0"); 
+                fputs($ar, "0000000000"); //numero de factura o comprobante 
+                fputs($ar, "N");  // envio de la informacion
+                fputs($ar, "        "); // espacios en blanco
+                fputs($ar, "000000000000000000"); //valor libranza
+                fputs($ar, "           "); // numero libranza
+                fputs($ar, "           "); // espacios
+                fputs($ar, "N");  // indicador envio de mensaje
+                fputs($ar, "        "); // espacios                                
                 fputs($ar, "\n");                
             }
         }
