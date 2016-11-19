@@ -950,8 +950,7 @@ class TurSoportePagoRepository extends EntityRepository {
                     $horasExtraFestivasDia = 0;
                     $horasExtraFestivasNoche = 0;   
                     $horasRecargoNocturno = 0;
-                    $totalHoras = $horasDia + $horasNoche + $horasFestivasDia + $horasFestivasNoche;
-                    $horasPorCompensar = $horasTopeSoportePago - $totalHoras;
+                    $totalHoras = $horasDia + $horasNoche + $horasFestivasDia + $horasFestivasNoche;                    
                     $horasTurno = 0;
                     $auxilio = 0;
                     $arSoportePagoDetalles = new \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle();
@@ -978,6 +977,8 @@ class TurSoportePagoRepository extends EntityRepository {
                         $porNocturna = ($horasNoche*100) / $horasTurno;
                         $horasExtraDia = round(($horasExtra * $porDiurnas)/100);
                         $horasExtraNoche = round(($horasExtra * $porNocturna)/100);                          
+                    } else {
+                        $horasTopeSoportePago = $horasTurno;
                     }
                      
                     $totalExtra = $horasExtra + $horasExtraFestivasDia + $horasExtraFestivasNoche;
