@@ -108,6 +108,8 @@ class ProyeccionController extends Controller
                             $arProyeccion->setVrInteresesCesantias($douInteresesCesantias);
                             $arProyeccion->setFechaDesdeCesantias($dateFechaDesde);
                             $arProyeccion->setDiasAusentismo($intDiasAusentismo);                            
+                        } else {
+                            $arProyeccion->setFechaDesdeCesantias($dateFechaHasta);
                         }
                         
                         //Primas  
@@ -171,8 +173,10 @@ class ProyeccionController extends Controller
                             $arProyeccion->setVrPrimas($douPrima);
                             $arProyeccion->setDiasPrima($intDiasPrimaLiquidar);
                             $arProyeccion->setFechaDesdePrima($dateFechaDesde);                             
+                        } else {
+                            $arProyeccion->setFechaDesdePrima($dateFechaHasta);                                               
                         }
-                                               
+                        
                         $em->persist($arProyeccion);
                     }         
                     $em->flush();                    

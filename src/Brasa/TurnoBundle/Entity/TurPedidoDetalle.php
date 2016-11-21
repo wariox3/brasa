@@ -98,32 +98,32 @@ class TurPedidoDetalle
     private $dias = 0; 
     
     /**
-     * @ORM\Column(name="horas", type="integer")
+     * @ORM\Column(name="horas", type="float")
      */    
     private $horas = 0;    
 
     /**
-     * @ORM\Column(name="horas_diurnas", type="integer")
+     * @ORM\Column(name="horas_diurnas", type="float")
      */    
     private $horasDiurnas = 0;     
     
     /**
-     * @ORM\Column(name="horas_nocturnas", type="integer")
+     * @ORM\Column(name="horas_nocturnas", type="float")
      */    
     private $horasNocturnas = 0;     
 
     /**
-     * @ORM\Column(name="horas_programadas", type="integer")
+     * @ORM\Column(name="horas_programadas", type="float")
      */    
     private $horasProgramadas = 0;    
 
     /**
-     * @ORM\Column(name="horas_diurnas_programadas", type="integer")
+     * @ORM\Column(name="horas_diurnas_programadas", type="float")
      */    
     private $horasDiurnasProgramadas = 0;     
     
     /**
-     * @ORM\Column(name="horas_nocturnas_programadas", type="integer")
+     * @ORM\Column(name="horas_nocturnas_programadas", type="float")
      */    
     private $horasNocturnasProgramadas = 0; 
     
@@ -357,6 +357,7 @@ class TurPedidoDetalle
      */
     protected $costosRecursosDetallesPedidoDetalleRel;     
     
+
     /**
      * Constructor
      */
@@ -368,6 +369,7 @@ class TurPedidoDetalle
         $this->facturasDetallesPedidoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->soportesPagosDetallesPedidoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->costosServiciosPedidoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->costosRecursosDetallesPedidoDetalleRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -767,7 +769,7 @@ class TurPedidoDetalle
     /**
      * Set horas
      *
-     * @param integer $horas
+     * @param float $horas
      *
      * @return TurPedidoDetalle
      */
@@ -781,7 +783,7 @@ class TurPedidoDetalle
     /**
      * Get horas
      *
-     * @return integer
+     * @return float
      */
     public function getHoras()
     {
@@ -791,7 +793,7 @@ class TurPedidoDetalle
     /**
      * Set horasDiurnas
      *
-     * @param integer $horasDiurnas
+     * @param float $horasDiurnas
      *
      * @return TurPedidoDetalle
      */
@@ -805,7 +807,7 @@ class TurPedidoDetalle
     /**
      * Get horasDiurnas
      *
-     * @return integer
+     * @return float
      */
     public function getHorasDiurnas()
     {
@@ -815,7 +817,7 @@ class TurPedidoDetalle
     /**
      * Set horasNocturnas
      *
-     * @param integer $horasNocturnas
+     * @param float $horasNocturnas
      *
      * @return TurPedidoDetalle
      */
@@ -829,7 +831,7 @@ class TurPedidoDetalle
     /**
      * Get horasNocturnas
      *
-     * @return integer
+     * @return float
      */
     public function getHorasNocturnas()
     {
@@ -839,7 +841,7 @@ class TurPedidoDetalle
     /**
      * Set horasProgramadas
      *
-     * @param integer $horasProgramadas
+     * @param float $horasProgramadas
      *
      * @return TurPedidoDetalle
      */
@@ -853,7 +855,7 @@ class TurPedidoDetalle
     /**
      * Get horasProgramadas
      *
-     * @return integer
+     * @return float
      */
     public function getHorasProgramadas()
     {
@@ -863,7 +865,7 @@ class TurPedidoDetalle
     /**
      * Set horasDiurnasProgramadas
      *
-     * @param integer $horasDiurnasProgramadas
+     * @param float $horasDiurnasProgramadas
      *
      * @return TurPedidoDetalle
      */
@@ -877,7 +879,7 @@ class TurPedidoDetalle
     /**
      * Get horasDiurnasProgramadas
      *
-     * @return integer
+     * @return float
      */
     public function getHorasDiurnasProgramadas()
     {
@@ -887,7 +889,7 @@ class TurPedidoDetalle
     /**
      * Set horasNocturnasProgramadas
      *
-     * @param integer $horasNocturnasProgramadas
+     * @param float $horasNocturnasProgramadas
      *
      * @return TurPedidoDetalle
      */
@@ -901,7 +903,7 @@ class TurPedidoDetalle
     /**
      * Get horasNocturnasProgramadas
      *
-     * @return integer
+     * @return float
      */
     public function getHorasNocturnasProgramadas()
     {

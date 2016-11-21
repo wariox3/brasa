@@ -64,8 +64,7 @@
         </div>
         <table  class="table table-striped table-bordered table-condensed table-hover">
             <tr>
-                <th>{{ knp_pagination_sortable(arServicios, 'CÓDIGO', 'p.codigoServicioPk') }}</th>
-                <th>SOPORTE</th>
+                <th>{{ knp_pagination_sortable(arServicios, 'CÓDIGO', 'p.codigoServicioPk') }}</th>                
                 <th>NIT</th>
                 <th>CLIENTE</th>
                 <th>SECTOR</th>
@@ -81,8 +80,7 @@
             </tr>
             {% for arServicios in arServicios %}
             <tr>                
-                <td>{{ arServicios.codigoServicioPk  }}</td>
-                <td>{{ arServicios.soporte  }}</td>
+                <td>{{ arServicios.codigoServicioPk  }}</td>                
                 <td>{{ arServicios.clienteRel.nit  }}</td>  
                 <td>{{ arServicios.clienteRel.nombreCorto  }}</td>  
                 <td>{{ arServicios.sectorRel.nombre |default('')  }}</td>
