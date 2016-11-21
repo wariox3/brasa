@@ -212,7 +212,19 @@ class PagosController extends Controller
         if($session->get('filtroCodigoPagoTipo')) {
             $arrayPropiedadesTipo['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuPagoTipo", $session->get('filtroCodigoPagoTipo'));
         }
-        
+        $strNombreEmpleado = "";
+        if($session->get('filtroIdentificacion')) {
+            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $session->get('filtroIdentificacion')));
+            if($arEmpleado) {
+                $strNombreEmpleado = $arEmpleado->getNombreCorto();
+                $session->set('filtroRhuCodigoEmpleado', $arEmpleado->getCodigoEmpleadoPk());
+            }  else {
+                $session->set('filtroIdentificacion', null);
+                $session->set('filtroRhuCodigoEmpleado', null);
+            }
+        } else {
+            $session->set('filtroRhuCodigoEmpleado', null);
+        }
         
         $form = $this->createFormBuilder()                        
             ->add('centroCostoRel', 'entity', $arrayPropiedadesCentroCosto)
@@ -223,7 +235,8 @@ class PagosController extends Controller
             //->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => $strFechaHasta))                
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))                            
             ->add('TxtNumero', 'text', array('label'  => 'Numero','data' => $session->get('filtroPagoNumero')))                                                   
-            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))                                            
+            ->add('txtNumeroIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
+            ->add('txtNombreCorto', 'text', array('label'  => 'Nombre','data' => $strNombreEmpleado))
             ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnCorregirIbc', 'submit', array('label'  => 'Corregir ibc', 'disabled' => true))
@@ -251,7 +264,7 @@ class PagosController extends Controller
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);                
         $session->set('filtroCodigoPagoTipo', $controles['pagoTipoRel']);
-        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
+        $session->set('filtroIdentificacion', $form->get('txtNumeroIdentificacion')->getData());
         $this->intNumero = $form->get('TxtNumero')->getData();
         $dateFechaDesde = $form->get('fechaDesde')->getData();
         $dateFechaHasta = $form->get('fechaHasta')->getData();
