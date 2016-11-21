@@ -21,53 +21,25 @@ class MovimientoController extends Controller
         if ($form->isValid()) {                        
             if ($form->get('BtnEliminar')->isClicked()) {                
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
-                $em->getRepository('BrasaInventarioBundle:TurFactura')->eliminar($arrSeleccionados);
-                return $this->redirect($this->generateUrl('brs_tur_movimiento_factura'));  
-
-                /*set_time_limit(0);
-                ini_set("memory_limit", -1);
-                $arConfiguracion = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
-                $arConfiguracion = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
-                $arFacturas = new \Brasa\InventarioBundle\Entity\TurFactura();
-                $arFacturas = $em->getRepository('BrasaInventarioBundle:TurFactura')->findAll();
-                foreach ($arFacturas as $arFactura) {                    
-                    $arFacturaAct = new \Brasa\InventarioBundle\Entity\TurFactura();        
-                    $arFacturaAct = $em->getRepository('BrasaInventarioBundle:TurFactura')->find($arFactura->getCodigoFacturaPk());                     
-                    
-                    /*$porRetencionFuente = $arFactura->getFacturaServicioRel()->getPorRetencionFuente();
-                    $porBaseRetencionFuente = $arFactura->getFacturaServicioRel()->getPorBaseRetencionFuente();
-                    $baseRetencionFuente = ($arFacturaAct->getVrSubtotal() * $porBaseRetencionFuente) / 100;
-                    $retencionFuente = 0;
-                    if($baseRetencionFuente >= $arConfiguracion->getBaseRetencionFuente()) {
-                        $retencionFuente = ($baseRetencionFuente * $porRetencionFuente ) / 100;
-                    }               
-
-                    $totalNeto = $arFacturaAct->getVrSubtotal() + $arFacturaAct->getVrIva() - $arFacturaAct->getVrRetencionFuente();                    
-                    //$arFacturaAct->setVrBaseRetencionFuente($baseRetencionFuente);
-                    //$arFacturaAct->setVrRetencionFuente($retencionFuente);
-                    $arFacturaAct->setVrTotalNeto($totalNeto);
-                    $em->persist($arFacturaAct);    
-                    //echo "hola";
-                }
-                $em->flush();                                  
-                return $this->redirect($this->generateUrl('brs_tur_movimiento_factura'));  
-                */
+                $em->getRepository('BrasaInventarioBundle:InvDocumento')->eliminar($arrSeleccionados);
+                return $this->redirect($this->generateUrl('brs_inv_movimiento_movimiento_ingreso'));  
+                
                 
             }
-            if ($form->get('BtnFiltrar')->isClicked()) {
+            /*if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
                 $this->lista();
-            }
+            }*/
             if ($form->get('BtnExcel')->isClicked()) {
                 $this->filtrar($form);
                 $this->lista();
                 $this->generarExcel();
             }
-            if ($form->get('BtnInterfaz')->isClicked()) {
+            /*if ($form->get('BtnInterfaz')->isClicked()) {
                 $this->filtrar($form);
                 $this->lista();
                 $this->generarExcelInterfaz();
-            }            
+            }*/            
         }
 
         $arDocumentos = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
@@ -75,8 +47,7 @@ class MovimientoController extends Controller
             'arDocumentos' => $arDocumentos,
             'form' => $form->createView()));
     } 
-    
-    
+        
     private function lista() {
         $em = $this->getDoctrine()->getManager();
         $this->strListaDql =  $em->getRepository('BrasaInventarioBundle:InvDocumento')->listaDql();
@@ -88,6 +59,8 @@ class MovimientoController extends Controller
     
     private function formularioFiltro() {                        
         $form = $this->createFormBuilder()
+            ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
+            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))    
             ->getForm();
         return $form;
     }
