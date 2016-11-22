@@ -22,20 +22,10 @@ class InvDocumentoSubtipo
      * @ORM\Column(name="nombre", type="string", length=80)
      */        
     private $nombre;
-
-    /**
-     * @ORM\OneToMany(targetEntity="InvDocumento", mappedBy="documentoSubtipoRel")
-     */
-    protected $documentosDocumentoSubtipoRel;
+    
 
 
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->documentosDocumentoSubtipoRel = new \Doctrine\Common\Collections\ArrayCollection();
-    }
+    
 
     /**
      * Get codigoDocumentoSubtipoPk
@@ -69,39 +59,5 @@ class InvDocumentoSubtipo
     public function getNombre()
     {
         return $this->nombre;
-    }
-
-    /**
-     * Add documentosDocumentoSubtipoRel
-     *
-     * @param \Brasa\InventarioBundle\Entity\InvDocumento $documentosDocumentoSubtipoRel
-     *
-     * @return InvDocumentoSubtipo
-     */
-    public function addDocumentosDocumentoSubtipoRel(\Brasa\InventarioBundle\Entity\InvDocumento $documentosDocumentoSubtipoRel)
-    {
-        $this->documentosDocumentoSubtipoRel[] = $documentosDocumentoSubtipoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove documentosDocumentoSubtipoRel
-     *
-     * @param \Brasa\InventarioBundle\Entity\InvDocumento $documentosDocumentoSubtipoRel
-     */
-    public function removeDocumentosDocumentoSubtipoRel(\Brasa\InventarioBundle\Entity\InvDocumento $documentosDocumentoSubtipoRel)
-    {
-        $this->documentosDocumentoSubtipoRel->removeElement($documentosDocumentoSubtipoRel);
-    }
-
-    /**
-     * Get documentosDocumentoSubtipoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getDocumentosDocumentoSubtipoRel()
-    {
-        return $this->documentosDocumentoSubtipoRel;
     }
 }

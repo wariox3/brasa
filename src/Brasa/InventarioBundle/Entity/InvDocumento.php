@@ -191,18 +191,14 @@ class InvDocumento
      * @ORM\JoinColumn(name="codigo_documento_tipo_fk", referencedColumnName="codigo_documento_tipo_pk")
      */
     protected $documentoTipoRel;     
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="InvDocumentoSubtipo", inversedBy="documentosDocumentoSubtipoRel")
-     * @ORM\JoinColumn(name="codigo_documento_subtipo_fk", referencedColumnName="codigo_documento_subtipo_pk")
-     */
-    protected $documentoSubtipoRel; 
+         
     
     /**
      * @ORM\OneToMany(targetEntity="InvMovimiento", mappedBy="documentoRel")
      */
     protected $movimientosDocumentoRel;
 
+    
     /**
      * Constructor
      */
@@ -915,30 +911,6 @@ class InvDocumento
     public function getDocumentoTipoRel()
     {
         return $this->documentoTipoRel;
-    }
-
-    /**
-     * Set documentoSubtipoRel
-     *
-     * @param \Brasa\InventarioBundle\Entity\InvDocumentoSubtipo $documentoSubtipoRel
-     *
-     * @return InvDocumento
-     */
-    public function setDocumentoSubtipoRel(\Brasa\InventarioBundle\Entity\InvDocumentoSubtipo $documentoSubtipoRel = null)
-    {
-        $this->documentoSubtipoRel = $documentoSubtipoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get documentoSubtipoRel
-     *
-     * @return \Brasa\InventarioBundle\Entity\InvDocumentoSubtipo
-     */
-    public function getDocumentoSubtipoRel()
-    {
-        return $this->documentoSubtipoRel;
     }
 
     /**

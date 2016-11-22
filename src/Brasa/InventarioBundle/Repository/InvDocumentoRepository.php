@@ -17,19 +17,5 @@ class InvDocumentoRepository extends EntityRepository
         $dql .= " ORDER BY d.codigoDocumentoPk";
         return $dql;
     }
-    
-    public function eliminar($arrSeleccionados) {
-        $em = $this->getEntityManager();
-        if(count($arrSeleccionados) > 0) {
-            foreach ($arrSeleccionados AS $codigo) {
-                if($em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->numeroRegistros($codigo) <= 0) {
-                    $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigo);
-                    if($arFactura->getEstadoAutorizado() == 0 && $arFactura->getNumero() == 0) {
-                        $em->remove($arFactura);
-                    }
-                }
-            }
-            $em->flush();
-        }
-    }
+        
 }

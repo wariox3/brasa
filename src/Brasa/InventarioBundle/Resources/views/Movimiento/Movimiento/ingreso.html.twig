@@ -16,33 +16,23 @@
             <tr>
                 <th>CODIGO</th>
                 <th>NOMBRE</th>
-                <th></th>
-                <th></th>
+                <th></th>                
             </tr>
             {% for arDocumentos in arDocumentos %}
             <tr>                                             
                 <td>{{ arDocumentos.codigoDocumentoPk  }}</td>             
                 <td>{{ arDocumentos.nombre  }}</td>             
-                <td style="text-align: center"><a href="{{ path('brs_tur_movimiento_factura_detalle', { 'codigoFactura': arDocumentos.codigoDocumentoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                
-                <td align="center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arDocumentos.codigoDocumentoPk }}" /></td>
+                <td style="text-align: center"><a href="{{ path('brs_inv_movimiento_movimiento_lista', { 'codigoDocumento': arDocumentos.codigoDocumentoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>                                
             </tr>
             
             {% endfor %}
         </table> 
-        <div class="btn-group" style="float: left">
-        <div class="btn btn-default btn-sm">Registros <span class="badge">{{ arDocumentos.getTotalItemCount }}</span></div>                        
+        
     </div>
     <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
         {{ knp_pagination_render(arDocumentos) }}       
     </div>
-    <div class="btn-toolbar" style="float: right">              
-        <div class="btn-group">            
-            {{ form_widget(form.BtnExcel, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
-        </div>        
-        <div class="btn-group">
-            {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}</td>                   
-        </div>
-    </div>
+    
         {{ form_rest(form) }}
     {{ form_end(form) }}
 
