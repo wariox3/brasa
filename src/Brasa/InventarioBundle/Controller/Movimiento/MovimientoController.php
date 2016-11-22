@@ -3,6 +3,7 @@ namespace Brasa\InventarioBundle\Controller\Movimiento;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\InventarioBundle\Form\Type\InvMovimientoType;
+use Brasa\InventarioBundle\Form\Type\InvMovimientoDetalleType;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use PHPExcel_Style_Border;
@@ -38,9 +39,8 @@ class MovimientoController extends Controller
     /**
      * @Route("/inv/movimiento/movimiento/lista/{codigoDocumento}", name="brs_inv_movimiento_movimiento_lista")
      */    
-    public function movimientoAction($codigoDocumento) {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();        
+    public function movimientoAction(Request $request,$codigoDocumento) {
+        $em = $this->getDoctrine()->getManager();        
         $paginator  = $this->get('knp_paginator');
         $arDocumento = new \Brasa\InventarioBundle\Entity\InvDocumento();
         $arDocumento = $em->getRepository('BrasaInventarioBundle:InvDocumento')->find($codigoDocumento);
@@ -61,8 +61,7 @@ class MovimientoController extends Controller
     /**
      * @Route("/inv/movimiento/movimiento/nuevo/{codigoDocumento}/{codigoMovimiento}", name="brs_inv_movimiento_movimiento_nuevo")
      */    
-    public function nuevoAction($codigoDocumento, $codigoMovimiento = 0) {
-        $request = $this->getRequest();
+    public function nuevoAction(Request $request,$codigoDocumento, $codigoMovimiento = 0) {        
         $em = $this->getDoctrine()->getManager();
         $arDocumento = new \Brasa\InventarioBundle\Entity\InvDocumento();
         $arDocumento = $em->getRepository('BrasaInventarioBundle:InvDocumento')->find($codigoDocumento);
@@ -90,6 +89,121 @@ class MovimientoController extends Controller
             'form' => $form->createView()));
     }
     
+    /**
+     * @Route("/inv/movimiento/movimiento/detalle/{codigoMovimiento}", name="brs_inv_movimiento_movimiento_detalle")
+     */     
+    public function detalleAction(Request $request,$codigoMovimiento) {
+        $em = $this->getDoctrine()->getManager();        
+        $paginator  = $this->get('knp_paginator');
+        $objMensaje = $this->get('mensajes_brasa');
+        $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimiento();
+        $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->find($codigoMovimiento);
+        $form = $this->formularioDetalle($arMovimiento);
+        $form->handleRequest($request);
+        if($form->isValid()) {
+            /*if($form->get('BtnAutorizar')->isClicked()) { 
+                $arrControles = $request->request->All();
+                $this->actualizarDetalle($arrControles, $codigoPedido);                
+                $strResultado = $em->getRepository('BrasaTurnoBundle:TurPedido')->autorizar($codigoPedido);
+                if($strResultado != "") {
+                    $objMensaje->Mensaje("error", $strResultado, $this);
+                }
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_pedido_detalle', array('codigoPedido' => $codigoPedido)));                
+            }    
+            if($form->get('BtnAnular')->isClicked()) {                                 
+                $strResultado = $em->getRepository('BrasaTurnoBundle:TurPedido')->anular($codigoPedido);
+                if($strResultado != "") {
+                    $objMensaje->Mensaje("error", $strResultado, $this);
+                }
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_pedido_detalle', array('codigoPedido' => $codigoPedido)));                
+            }            
+            
+            if($form->get('BtnDesAutorizar')->isClicked()) {            
+                if($arPedido->getEstadoAutorizado() == 1) {
+                    $arPedido->setEstadoAutorizado(0);
+                    $em->persist($arPedido);
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_tur_movimiento_pedido_detalle', array('codigoPedido' => $codigoPedido)));                
+                }
+            }                                                            
+                       
+            if($form->get('BtnDetalleActualizar')->isClicked()) {                
+                $arrControles = $request->request->All();
+                $this->actualizarDetalle($arrControles, $codigoPedido);                                
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_pedido_detalle', array('codigoPedido' => $codigoPedido)));
+            }
+                        
+            if($form->get('BtnDetalleEliminar')->isClicked()) {   
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->eliminarSeleccionados($arrSeleccionados);
+                $em->getRepository('BrasaTurnoBundle:TurPedido')->liquidar($codigoPedido);
+                return $this->redirect($this->generateUrl('brs_tur_movimiento_pedido_detalle', array('codigoPedido' => $codigoPedido)));
+            }*/
+                                            
+            if($form->get('BtnImprimir')->isClicked()) {
+                if($arPedido->getEstadoAutorizado() == 1) {
+                    $objMovimiento = new \Brasa\InventarioBundle\Formatos\FormatoMovimiento();
+                    $objMovimiento->Generar($this, $codigoMovimiento);
+                } else {
+                    $objMensaje->Mensaje("error", "No puede imprimir el movimiento sin estar autorizada", $this);
+                }
+            }  
+            
+        }
+        
+        
+        $arMovimientosDetalles = new \Brasa\InventarioBundle\Entity\InvMovimientoDetalle();
+        $arMovimientosDetalles = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->FindBy(array('codigoMovimientoFk' => $codigoMovimiento));                
+        return $this->render('BrasaInventarioBundle:Movimiento/Movimiento:detalle.html.twig', array(                    
+                    'arMovimiento' => $arMovimiento,
+                    'arMovimientoDetalle' => $arMovimientosDetalles,
+                    'form' => $form->createView()
+                    ));
+    }
+    
+    /**
+     * @Route("/inv/movimiento/movimiento/detalle/nuevo/{codigoMovimiento}", name="brs_inv_movimiento_movimiento_detalle_nuevo")
+     */    
+    public function detalleNuevoAction(Request $request, $codigoMovimiento) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimiento();
+        $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->find($codigoMovimiento);
+        $arBodega = new \Brasa\InventarioBundle\Entity\InvBodega();
+        $arBodega = $em->getRepository('BrasaInventarioBundle:InvBodega')->find(1);
+        $form = $this->createFormBuilder()
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            if ($form->get('BtnGuardar')->isClicked()) {
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $arrControles = $request->request->All();
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigo) {
+                        $arItem = new \Brasa\InventarioBundle\Entity\InvItem();
+                        $arItem = $em->getRepository('BrasaInventarioBundle:InvItem')->find($codigo);
+                        $arMovimientoDetalle = new \Brasa\InventarioBundle\Entity\InvMovimientoDetalle();
+                        $arMovimientoDetalle->setVrPrecio($arItem->getVrPrecioPredeterminado());
+                        $arMovimientoDetalle->setCantidad($arItem->getCantidadDisponible());
+                        $arMovimientoDetalle->setMovimientoRel($arMovimiento);
+                        $arMovimientoDetalle->setItemRel($arItem);
+                        $arMovimientoDetalle->setBodegaRel($arBodega);
+                        $em->persist($arMovimientoDetalle);
+                    }
+                    $em->persist($arMovimientoDetalle);
+                    $em->flush();
+                }
+                
+            }
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+        }
+        $arItem = $em->getRepository('BrasaInventarioBundle:InvItem')->findAll();
+        return $this->render('BrasaInventarioBundle:Movimiento/Movimiento:detalleNuevo.html.twig', array(
+            'arItem' => $arItem,
+            'form' => $form->createView()));
+    }
+    
     private function lista() {
         $em = $this->getDoctrine()->getManager();
         $this->strListaDql =  $em->getRepository('BrasaInventarioBundle:InvDocumento')->listaDql();
@@ -103,6 +217,20 @@ class MovimientoController extends Controller
         $form = $this->createFormBuilder()
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))    
+            ->getForm();
+        return $form;
+    }
+    
+    private function formularioDetalle($ar) {
+        $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);
+        $arrBotonDesAutorizar = array('label' => 'Desautorizar', 'disabled' => false);
+        $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
+        $arrBotonEliminar = array('label' => 'Eliminar', 'disabled' => false);
+        $form = $this->createFormBuilder()
+            ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)                
+            ->add('BtnImprimir', 'submit', $arrBotonImprimir)            
+            ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)
+            ->add('BtnEliminarDetalle', 'submit', $arrBotonEliminar)    
             ->getForm();
         return $form;
     }

@@ -185,6 +185,7 @@ class InvMovimiento
      */
     protected $movimientosDescuentosFinancierosMovimientoRel;     
     
+    
     /**
      * Constructor
      */

@@ -24,7 +24,7 @@ class InvLote
     
     /**
      * @ORM\Id
-     * @ORM\Column(name="codigo_bodega_fk", type="integer")
+     * @ORM\Column(name="codigo_bodega_fk", type="string", length=10)
      */     
     private $codigoBodegaFk;
     
@@ -60,17 +60,20 @@ class InvLote
     protected $itemRel;        
     
     /**
-     * @ORM\ManyToOne(targetEntity="InvBodega", inversedBy="InvLote")
+     * @ORM\ManyToOne(targetEntity="InvBodega", inversedBy="lotesBodegaRel")
      * @ORM\JoinColumn(name="codigo_bodega_fk", referencedColumnName="codigo_bodega_pk")
      */
     protected $bodegaRel;    
     
 
 
+    
+
     /**
      * Set codigoItemFk
      *
      * @param integer $codigoItemFk
+     *
      * @return InvLote
      */
     public function setCodigoItemFk($codigoItemFk)
@@ -83,7 +86,7 @@ class InvLote
     /**
      * Get codigoItemFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoItemFk()
     {
@@ -94,6 +97,7 @@ class InvLote
      * Set loteFk
      *
      * @param string $loteFk
+     *
      * @return InvLote
      */
     public function setLoteFk($loteFk)
@@ -106,7 +110,7 @@ class InvLote
     /**
      * Get loteFk
      *
-     * @return string 
+     * @return string
      */
     public function getLoteFk()
     {
@@ -116,7 +120,8 @@ class InvLote
     /**
      * Set codigoBodegaFk
      *
-     * @param integer $codigoBodegaFk
+     * @param string $codigoBodegaFk
+     *
      * @return InvLote
      */
     public function setCodigoBodegaFk($codigoBodegaFk)
@@ -129,7 +134,7 @@ class InvLote
     /**
      * Get codigoBodegaFk
      *
-     * @return integer 
+     * @return string
      */
     public function getCodigoBodegaFk()
     {
@@ -140,6 +145,7 @@ class InvLote
      * Set existencia
      *
      * @param integer $existencia
+     *
      * @return InvLote
      */
     public function setExistencia($existencia)
@@ -152,7 +158,7 @@ class InvLote
     /**
      * Get existencia
      *
-     * @return integer 
+     * @return integer
      */
     public function getExistencia()
     {
@@ -163,6 +169,7 @@ class InvLote
      * Set cantidadRemisionada
      *
      * @param integer $cantidadRemisionada
+     *
      * @return InvLote
      */
     public function setCantidadRemisionada($cantidadRemisionada)
@@ -175,7 +182,7 @@ class InvLote
     /**
      * Get cantidadRemisionada
      *
-     * @return integer 
+     * @return integer
      */
     public function getCantidadRemisionada()
     {
@@ -186,6 +193,7 @@ class InvLote
      * Set cantidadReservada
      *
      * @param integer $cantidadReservada
+     *
      * @return InvLote
      */
     public function setCantidadReservada($cantidadReservada)
@@ -198,7 +206,7 @@ class InvLote
     /**
      * Get cantidadReservada
      *
-     * @return integer 
+     * @return integer
      */
     public function getCantidadReservada()
     {
@@ -209,6 +217,7 @@ class InvLote
      * Set cantidadDisponible
      *
      * @param integer $cantidadDisponible
+     *
      * @return InvLote
      */
     public function setCantidadDisponible($cantidadDisponible)
@@ -221,7 +230,7 @@ class InvLote
     /**
      * Get cantidadDisponible
      *
-     * @return integer 
+     * @return integer
      */
     public function getCantidadDisponible()
     {
@@ -232,6 +241,7 @@ class InvLote
      * Set fechaVencimiento
      *
      * @param \DateTime $fechaVencimiento
+     *
      * @return InvLote
      */
     public function setFechaVencimiento($fechaVencimiento)
@@ -244,7 +254,7 @@ class InvLote
     /**
      * Get fechaVencimiento
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getFechaVencimiento()
     {
@@ -255,6 +265,7 @@ class InvLote
      * Set itemRel
      *
      * @param \Brasa\InventarioBundle\Entity\InvItem $itemRel
+     *
      * @return InvLote
      */
     public function setItemRel(\Brasa\InventarioBundle\Entity\InvItem $itemRel = null)
@@ -267,7 +278,7 @@ class InvLote
     /**
      * Get itemRel
      *
-     * @return \Brasa\InventarioBundle\Entity\InvItem 
+     * @return \Brasa\InventarioBundle\Entity\InvItem
      */
     public function getItemRel()
     {
@@ -278,6 +289,7 @@ class InvLote
      * Set bodegaRel
      *
      * @param \Brasa\InventarioBundle\Entity\InvBodega $bodegaRel
+     *
      * @return InvLote
      */
     public function setBodegaRel(\Brasa\InventarioBundle\Entity\InvBodega $bodegaRel = null)
@@ -290,7 +302,7 @@ class InvLote
     /**
      * Get bodegaRel
      *
-     * @return \Brasa\InventarioBundle\Entity\InvBodega 
+     * @return \Brasa\InventarioBundle\Entity\InvBodega
      */
     public function getBodegaRel()
     {

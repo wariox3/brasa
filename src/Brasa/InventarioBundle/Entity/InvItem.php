@@ -101,8 +101,23 @@ class InvItem
     /**
      * @ORM\Column(name="materiaPrima", type="boolean")
      */    
-    private $materiaPrima = 0;             
+    private $materiaPrima = 0;
     
+/**
+     * @ORM\OneToMany(targetEntity="InvMovimientoDetalle", mappedBy="itemRel")
+     */
+    protected $itemsBodegaRel;    
+    
+
+    
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->itemsBodegaRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get codigoItemPk
@@ -520,5 +535,39 @@ class InvItem
     public function getMateriaPrima()
     {
         return $this->materiaPrima;
+    }
+
+    /**
+     * Add itemsBodegaRel
+     *
+     * @param \Brasa\InventarioBundle\Entity\InvMovimientoDetalle $itemsBodegaRel
+     *
+     * @return InvItem
+     */
+    public function addItemsBodegaRel(\Brasa\InventarioBundle\Entity\InvMovimientoDetalle $itemsBodegaRel)
+    {
+        $this->itemsBodegaRel[] = $itemsBodegaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove itemsBodegaRel
+     *
+     * @param \Brasa\InventarioBundle\Entity\InvMovimientoDetalle $itemsBodegaRel
+     */
+    public function removeItemsBodegaRel(\Brasa\InventarioBundle\Entity\InvMovimientoDetalle $itemsBodegaRel)
+    {
+        $this->itemsBodegaRel->removeElement($itemsBodegaRel);
+    }
+
+    /**
+     * Get itemsBodegaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getItemsBodegaRel()
+    {
+        return $this->itemsBodegaRel;
     }
 }

@@ -1,0 +1,93 @@
+{% extends '::base.html.twig' %}
+{% block title %}Movimiento detalle - Soga App{% endblock %}
+{% block content %}
+    <script>
+        $('#myTab a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+    </script>
+    <div class="container">
+        <div class="page-header">
+            <h3>Detalle movimiento</h3>
+        </div>
+        {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
+        {{ form_errors(form) }}
+        <div class="btn-toolbar" style="float:left">
+            <div class="btn-group">                                                    
+                {{ form_widget(form.BtnAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnDesAutorizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
+            </div>
+        </div>
+                    
+        <br /><br />
+        <!-- Encabezado Movimiento -->
+        <div class="panel panel-default">
+            <div class="panel-heading">Información</div>
+            <div class="panel-body">
+                <table width="100%" class="table table-condensed table-bordered">
+                    <tr>
+                        <td class="titulo">NUMERO:</td>
+                        <td class="td-in-well">{{ arMovimiento.numero }}</td>
+                        <td class="titulo">CODIGO</td>
+                        <td class="td-in-well">{{ arMovimiento.codigoMovimientoPk }}</td>
+                    </tr>                                                                                                 
+                    <tr>
+                        <td class="titulo">FECHA:</td>
+                        <td class="td-in-well">{{ arMovimiento.fecha |date("Y/m/d") }}</td>
+                        <td class="titulo" >DOCUMENTO:</td>
+                        <td class="td-in-well">{{ arMovimiento.documentoRel.nombre | default('') }}</td>
+                    </tr>                                                                                                                                                      
+                </table>
+            </div>
+        </div>
+
+        <!-- Fin Encabezado Movimiento -->
+
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#detalles" data-toggle="tab">Detalle</a></li>            
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane active" id="detalles">
+                <!-- Menu Encabezado Movimiento -->
+                <div id="detalles" style="width: 100%"><br>
+                    <table class="table table-striped table-bordered table-condensed">
+                        <tr>
+                            <th>CODIGO</th>
+                            <th>ITEM</th>
+                            <th>CANTIDAD</th>
+                            <th>PRECIO</th>                                                                                     
+                            <th></th>
+                        </tr>
+                        {% for arMovimientoDetalle in arMovimientoDetalle %}
+                            <tr>
+                                <td>{{ arMovimientoDetalle.codigoDetalleMovimientoPk  }}<input type="hidden" name="LblCodigo[]" value="{{ arMovimientoDetalle.codigoDetalleMovimientoPk }}"></td>
+                                <td>{{ arMovimientoDetalle.itemRel.nombre | default('')  }}</td> 
+                                <td>{{ arMovimientoDetalle.cantidad  }}</td>                                                                                                                                                                                                       
+                                <td style="text-align: right">{{ arMovimientoDetalle.vrPrecio | number_format(0, '.', ',') }}</td>                                                                
+                                <td align="center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arMovimientoDetalle.codigoDetalleMovimientoPk }}" /></td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                <div class="btn-toolbar" style="float: right">
+                    {% if arMovimiento.estadoAutorizado == 0 %}
+                        <div class="btn-group">
+                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_inv_movimiento_movimiento_detalle_nuevo', {'codigoMovimiento': arMovimiento.codigoMovimientoPk }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo</a>
+                        </div>
+                    {% endif %}                                   
+                    <div class="btn-group">
+                        {{ form_widget(form.BtnEliminarDetalle, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
+                    </div>
+                </div>
+            </div>            
+        </div>
+
+
+        {{ form_rest(form) }}
+        {{ form_end(form) }}
+        <a  class="btn btn-default btn-sm" href="{{ path('brs_inv_movimiento_movimiento_lista', {'codigoDocumento': arMovimiento.codigoDocumentoFk }) }}">Volver</a>
+    </div>
+{% endblock %}

@@ -28,7 +28,7 @@ class InvMovimientoDetalle
     private $codigoItemFk;    
 
     /**
-     * @ORM\Column(name="codigo_bodega_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_bodega_fk", type="string", length=10)
      */     
     private $codigoBodegaFk;
 
@@ -156,7 +156,22 @@ class InvMovimientoDetalle
      * @ORM\ManyToOne(targetEntity="InvMovimiento", inversedBy="movimientosDetallesMovimientoRel")
      * @ORM\JoinColumn(name="codigo_movimiento_fk", referencedColumnName="codigo_movimiento_pk")
      */
-    protected $movimientoRel;  
+    protected $movimientoRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="InvBodega", inversedBy="movimientosDetallesBodegaRel")
+     * @ORM\JoinColumn(name="codigo_bodega_fk", referencedColumnName="codigo_bodega_pk")
+     */
+    protected $bodegaRel;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="InvItem", inversedBy="itemsBodegaRel")
+     * @ORM\JoinColumn(name="codigo_item_fk", referencedColumnName="codigo_item_pk")
+     */
+    protected $itemRel;
+    
+
+
     
 
 
@@ -221,7 +236,7 @@ class InvMovimientoDetalle
     /**
      * Set codigoBodegaFk
      *
-     * @param integer $codigoBodegaFk
+     * @param string $codigoBodegaFk
      *
      * @return InvMovimientoDetalle
      */
@@ -235,7 +250,7 @@ class InvMovimientoDetalle
     /**
      * Get codigoBodegaFk
      *
-     * @return integer
+     * @return string
      */
     public function getCodigoBodegaFk()
     {
@@ -840,5 +855,53 @@ class InvMovimientoDetalle
     public function getMovimientoRel()
     {
         return $this->movimientoRel;
+    }
+
+    /**
+     * Set bodegaRel
+     *
+     * @param \Brasa\InventarioBundle\Entity\InvBodega $bodegaRel
+     *
+     * @return InvMovimientoDetalle
+     */
+    public function setBodegaRel(\Brasa\InventarioBundle\Entity\InvBodega $bodegaRel = null)
+    {
+        $this->bodegaRel = $bodegaRel;
+
+        return $this;
+    }
+
+    /**
+     * Get bodegaRel
+     *
+     * @return \Brasa\InventarioBundle\Entity\InvBodega
+     */
+    public function getBodegaRel()
+    {
+        return $this->bodegaRel;
+    }
+
+    /**
+     * Set itemRel
+     *
+     * @param \Brasa\InventarioBundle\Entity\InvItem $itemRel
+     *
+     * @return InvMovimientoDetalle
+     */
+    public function setItemRel(\Brasa\InventarioBundle\Entity\InvItem $itemRel = null)
+    {
+        $this->itemRel = $itemRel;
+
+        return $this;
+    }
+
+    /**
+     * Get itemRel
+     *
+     * @return \Brasa\InventarioBundle\Entity\InvItem
+     */
+    public function getItemRel()
+    {
+        return $this->itemRel;
     }
 }

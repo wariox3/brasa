@@ -13,8 +13,7 @@ class InvBodega
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="codigo_bodega_pk", type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Column(name="codigo_bodega_pk", type="string", length=10)     
      */
     private $codigoBodegaPk;
 
@@ -23,12 +22,48 @@ class InvBodega
      */
     private $nombre;
 
+    /**
+     * @ORM\OneToMany(targetEntity="InvMovimientoDetalle", mappedBy="bodegaRel")
+     */
+    protected $movimientosDetallesBodegaRel;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="InvLote", mappedBy="bodegaRel")
+     */
+    protected $lotesBodegaRel;
+    
 
+    
+    
+    
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->movimientosDetallesBodegaRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->lotesBodegaRel = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set codigoBodegaPk
+     *
+     * @param string $codigoBodegaPk
+     *
+     * @return InvBodega
+     */
+    public function setCodigoBodegaPk($codigoBodegaPk)
+    {
+        $this->codigoBodegaPk = $codigoBodegaPk;
+
+        return $this;
+    }
 
     /**
      * Get codigoBodegaPk
      *
-     * @return integer 
+     * @return string
      */
     public function getCodigoBodegaPk()
     {
@@ -39,6 +74,7 @@ class InvBodega
      * Set nombre
      *
      * @param string $nombre
+     *
      * @return InvBodega
      */
     public function setNombre($nombre)
@@ -51,10 +87,78 @@ class InvBodega
     /**
      * Get nombre
      *
-     * @return string 
+     * @return string
      */
     public function getNombre()
     {
         return $this->nombre;
+    }
+
+    /**
+     * Add movimientosDetallesBodegaRel
+     *
+     * @param \Brasa\InventarioBundle\Entity\InvMovimientoDetalle $movimientosDetallesBodegaRel
+     *
+     * @return InvBodega
+     */
+    public function addMovimientosDetallesBodegaRel(\Brasa\InventarioBundle\Entity\InvMovimientoDetalle $movimientosDetallesBodegaRel)
+    {
+        $this->movimientosDetallesBodegaRel[] = $movimientosDetallesBodegaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove movimientosDetallesBodegaRel
+     *
+     * @param \Brasa\InventarioBundle\Entity\InvMovimientoDetalle $movimientosDetallesBodegaRel
+     */
+    public function removeMovimientosDetallesBodegaRel(\Brasa\InventarioBundle\Entity\InvMovimientoDetalle $movimientosDetallesBodegaRel)
+    {
+        $this->movimientosDetallesBodegaRel->removeElement($movimientosDetallesBodegaRel);
+    }
+
+    /**
+     * Get movimientosDetallesBodegaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMovimientosDetallesBodegaRel()
+    {
+        return $this->movimientosDetallesBodegaRel;
+    }
+
+    /**
+     * Add lotesBodegaRel
+     *
+     * @param \Brasa\InventarioBundle\Entity\InvLote $lotesBodegaRel
+     *
+     * @return InvBodega
+     */
+    public function addLotesBodegaRel(\Brasa\InventarioBundle\Entity\InvLote $lotesBodegaRel)
+    {
+        $this->lotesBodegaRel[] = $lotesBodegaRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove lotesBodegaRel
+     *
+     * @param \Brasa\InventarioBundle\Entity\InvLote $lotesBodegaRel
+     */
+    public function removeLotesBodegaRel(\Brasa\InventarioBundle\Entity\InvLote $lotesBodegaRel)
+    {
+        $this->lotesBodegaRel->removeElement($lotesBodegaRel);
+    }
+
+    /**
+     * Get lotesBodegaRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLotesBodegaRel()
+    {
+        return $this->lotesBodegaRel;
     }
 }
