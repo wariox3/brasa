@@ -116,7 +116,8 @@ class RhuContratoType extends AbstractType
                     return $er->createQueryBuilder('c')
                     ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
-                'required' => true))                
+                'required' => true))   
+            ->add('turnoFijoOrdinario', 'checkbox', array('required'  => false))                                 
             ->add('guardar', 'submit');        
     }
  

@@ -264,6 +264,11 @@ class RhuContrato
      */
     private $VrDevengadoPactado = 0;     
     
+    /**     
+     * @ORM\Column(name="turnoFijoOrdinario", type="boolean")
+     */    
+    private $turnoFijoOrdinario = false;     
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="contratosEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
@@ -2785,5 +2790,29 @@ class RhuContrato
     public function getDisciplinariosContratoRel()
     {
         return $this->disciplinariosContratoRel;
+    }
+
+    /**
+     * Set turnoFijoOrdinario
+     *
+     * @param boolean $turnoFijoOrdinario
+     *
+     * @return RhuContrato
+     */
+    public function setTurnoFijoOrdinario($turnoFijoOrdinario)
+    {
+        $this->turnoFijoOrdinario = $turnoFijoOrdinario;
+
+        return $this;
+    }
+
+    /**
+     * Get turnoFijoOrdinario
+     *
+     * @return boolean
+     */
+    public function getTurnoFijoOrdinario()
+    {
+        return $this->turnoFijoOrdinario;
     }
 }
