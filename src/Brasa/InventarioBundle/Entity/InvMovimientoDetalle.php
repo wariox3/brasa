@@ -156,22 +156,13 @@ class InvMovimientoDetalle
      * @ORM\ManyToOne(targetEntity="InvMovimiento", inversedBy="movimientosDetallesMovimientoRel")
      * @ORM\JoinColumn(name="codigo_movimiento_fk", referencedColumnName="codigo_movimiento_pk")
      */
-    protected $movimientoRel;
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="InvBodega", inversedBy="movimientosDetallesBodegaRel")
-     * @ORM\JoinColumn(name="codigo_bodega_fk", referencedColumnName="codigo_bodega_pk")
-     */
-    protected $bodegaRel;
+    protected $movimientoRel;    
     
     /**
      * @ORM\ManyToOne(targetEntity="InvItem", inversedBy="itemsBodegaRel")
      * @ORM\JoinColumn(name="codigo_item_fk", referencedColumnName="codigo_item_pk")
      */
     protected $itemRel;
-    
-
-
     
 
 
@@ -855,30 +846,6 @@ class InvMovimientoDetalle
     public function getMovimientoRel()
     {
         return $this->movimientoRel;
-    }
-
-    /**
-     * Set bodegaRel
-     *
-     * @param \Brasa\InventarioBundle\Entity\InvBodega $bodegaRel
-     *
-     * @return InvMovimientoDetalle
-     */
-    public function setBodegaRel(\Brasa\InventarioBundle\Entity\InvBodega $bodegaRel = null)
-    {
-        $this->bodegaRel = $bodegaRel;
-
-        return $this;
-    }
-
-    /**
-     * Get bodegaRel
-     *
-     * @return \Brasa\InventarioBundle\Entity\InvBodega
-     */
-    public function getBodegaRel()
-    {
-        return $this->bodegaRel;
     }
 
     /**

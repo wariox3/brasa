@@ -265,7 +265,7 @@ class RhuContrato
     private $VrDevengadoPactado = 0;     
     
     /**     
-     * @ORM\Column(name="turnoFijoOrdinario", type="boolean")
+     * @ORM\Column(name="turno_fijo_ordinario", type="boolean")
      */    
     private $turnoFijoOrdinario = false;     
     
@@ -478,6 +478,7 @@ class RhuContrato
      */
     protected $disciplinariosContratoRel;     
     
+
     /**
      * Constructor
      */
@@ -1691,6 +1692,30 @@ class RhuContrato
     }
 
     /**
+     * Set turnoFijoOrdinario
+     *
+     * @param boolean $turnoFijoOrdinario
+     *
+     * @return RhuContrato
+     */
+    public function setTurnoFijoOrdinario($turnoFijoOrdinario)
+    {
+        $this->turnoFijoOrdinario = $turnoFijoOrdinario;
+
+        return $this;
+    }
+
+    /**
+     * Get turnoFijoOrdinario
+     *
+     * @return boolean
+     */
+    public function getTurnoFijoOrdinario()
+    {
+        return $this->turnoFijoOrdinario;
+    }
+
+    /**
      * Set empleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
@@ -2790,29 +2815,5 @@ class RhuContrato
     public function getDisciplinariosContratoRel()
     {
         return $this->disciplinariosContratoRel;
-    }
-
-    /**
-     * Set turnoFijoOrdinario
-     *
-     * @param boolean $turnoFijoOrdinario
-     *
-     * @return RhuContrato
-     */
-    public function setTurnoFijoOrdinario($turnoFijoOrdinario)
-    {
-        $this->turnoFijoOrdinario = $turnoFijoOrdinario;
-
-        return $this;
-    }
-
-    /**
-     * Get turnoFijoOrdinario
-     *
-     * @return boolean
-     */
-    public function getTurnoFijoOrdinario()
-    {
-        return $this->turnoFijoOrdinario;
     }
 }

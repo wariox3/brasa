@@ -21,28 +21,17 @@ class InvBodega
      * @ORM\Column(name="nombre", type="string", length=50)
      */
     private $nombre;
-
-    /**
-     * @ORM\OneToMany(targetEntity="InvMovimientoDetalle", mappedBy="bodegaRel")
-     */
-    protected $movimientosDetallesBodegaRel;
     
     /**
      * @ORM\OneToMany(targetEntity="InvLote", mappedBy="bodegaRel")
      */
     protected $lotesBodegaRel;
     
-
-    
-    
-    
-    
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->movimientosDetallesBodegaRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->lotesBodegaRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -92,40 +81,6 @@ class InvBodega
     public function getNombre()
     {
         return $this->nombre;
-    }
-
-    /**
-     * Add movimientosDetallesBodegaRel
-     *
-     * @param \Brasa\InventarioBundle\Entity\InvMovimientoDetalle $movimientosDetallesBodegaRel
-     *
-     * @return InvBodega
-     */
-    public function addMovimientosDetallesBodegaRel(\Brasa\InventarioBundle\Entity\InvMovimientoDetalle $movimientosDetallesBodegaRel)
-    {
-        $this->movimientosDetallesBodegaRel[] = $movimientosDetallesBodegaRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove movimientosDetallesBodegaRel
-     *
-     * @param \Brasa\InventarioBundle\Entity\InvMovimientoDetalle $movimientosDetallesBodegaRel
-     */
-    public function removeMovimientosDetallesBodegaRel(\Brasa\InventarioBundle\Entity\InvMovimientoDetalle $movimientosDetallesBodegaRel)
-    {
-        $this->movimientosDetallesBodegaRel->removeElement($movimientosDetallesBodegaRel);
-    }
-
-    /**
-     * Get movimientosDetallesBodegaRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getMovimientosDetallesBodegaRel()
-    {
-        return $this->movimientosDetallesBodegaRel;
     }
 
     /**
