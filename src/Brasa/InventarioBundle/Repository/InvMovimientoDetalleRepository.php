@@ -493,5 +493,30 @@ class InvMovimientoDetalleRepository extends EntityRepository {
                 ->groupBy('md.codigoItemFk, md.codigoBodegaFk, md.loteFk')                
                 ->getQuery();
         return $query->getResult();
-    }    
+    } 
+    
+    public function numeroRegistros($codigo) {        
+        $em = $this->getEntityManager();
+        $intNumeroRegistros = 0;
+        $dql   = "SELECT COUNT(md.codigoDetalleMovimientoPk) as numeroRegistros FROM BrasaInventarioBundle:InvMovimientoDetalle md "
+                . "WHERE md.codigoMovimientoFk = " . $codigo;
+        $query = $em->createQuery($dql);
+        $arrMovimientoDetalles = $query->getSingleResult(); 
+        if($arrMovimientoDetalles) {
+            $intNumeroRegistros = $arrMovimientoDetalles['numeroRegistros'];
+        }
+        return $intNumeroRegistros;
+    }
+    
+    public function eliminarSeleccionados($arrSeleccionados) {        
+        if(count($arrSeleccionados) > 0) {
+            $em = $this->getEntityManager();
+            foreach ($arrSeleccionados AS $codigo) {  
+                $arMovimientoDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->find($codigo);                                                                   
+                $em->remove($arMovimientoDetalle);                                                                          
+            }                                         
+            $em->flush();         
+        }
+        
+    }
 }

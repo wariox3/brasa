@@ -173,7 +173,13 @@ class InvMovimiento
      * @ORM\ManyToOne(targetEntity="InvDocumentoTipo", inversedBy="movimientosDocumentoTipoRel")
      * @ORM\JoinColumn(name="codigo_documento_tipo_fk", referencedColumnName="codigo_documento_tipo_pk")
      */
-    protected $documentoTipoRel;       
+    protected $documentoTipoRel; 
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="InvTercero", inversedBy="movimientosTerceroRel")
+     * @ORM\JoinColumn(name="codigo_tercero_fk", referencedColumnName="codigo_tercero_pk")
+     */
+    protected $terceroRel;
     
     /**
      * @ORM\OneToMany(targetEntity="InvMovimientoDetalle", mappedBy="movimientoRel")
@@ -184,6 +190,7 @@ class InvMovimiento
      * @ORM\OneToMany(targetEntity="InvMovimientoDescuentoFinanciero", mappedBy="movimientoRel")
      */
     protected $movimientosDescuentosFinancierosMovimientoRel;     
+    
     
     
     /**
@@ -947,6 +954,30 @@ class InvMovimiento
     public function getDocumentoTipoRel()
     {
         return $this->documentoTipoRel;
+    }
+
+    /**
+     * Set terceroRel
+     *
+     * @param \Brasa\InventarioBundle\Entity\InvTercero $terceroRel
+     *
+     * @return InvMovimiento
+     */
+    public function setTerceroRel(\Brasa\InventarioBundle\Entity\InvTercero $terceroRel = null)
+    {
+        $this->terceroRel = $terceroRel;
+
+        return $this;
+    }
+
+    /**
+     * Get terceroRel
+     *
+     * @return \Brasa\InventarioBundle\Entity\InvTercero
+     */
+    public function getTerceroRel()
+    {
+        return $this->terceroRel;
     }
 
     /**

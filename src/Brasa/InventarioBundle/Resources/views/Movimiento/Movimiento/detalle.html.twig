@@ -38,7 +38,13 @@
                         <td class="td-in-well">{{ arMovimiento.fecha |date("Y/m/d") }}</td>
                         <td class="titulo" >DOCUMENTO:</td>
                         <td class="td-in-well">{{ arMovimiento.documentoRel.nombre | default('') }}</td>
-                    </tr>                                                                                                                                                      
+                    </tr>
+                    <tr>
+                        <td class="titulo">TERCERO</td>
+                        <td class="td-in-well">{{ arMovimiento.terceroRel.nombreCorto | default('') }}</td></td>
+                        <td class="titulo" >AUTORIZADO:</td>
+                        <td class="td-in-well">{% if arMovimiento.estadoAutorizado == 1 %} SI {% else %} NO {% endif %}</td>
+                    </tr>
                 </table>
             </div>
         </div>
