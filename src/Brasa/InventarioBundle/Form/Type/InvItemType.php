@@ -11,15 +11,14 @@ class InvItemType extends AbstractType
     {
         $builder                  
             ->add('nombre', 'text', array('required' => true))            
-            ->add('vrCostoPredeterminado', 'number', array('required' => true))                
+            ->add('vrCostoPredeterminado', 'number', array('required' => false))                
             ->add('vrCostoPromedio', 'number', array('required' => true))                    
             ->add('vrPrecioPredeterminado', 'number', array('required' => true))                    
-            ->add('porcentajeIva', 'number', array('required' => true))                    
+            ->add('porcentajeIva', 'number', array('required' => false))                    
             ->add('cantidadExistencia', 'number', array('required' => true))                    
-            ->add('cantidadRemisionada', 'number', array('required' => true))                        
+            ->add('cantidadRemisionada', 'number', array('required' => false))                        
             ->add('cantidadDisponible', 'number', array('required' => true))                        
-            ->add('guardar', 'submit')
-            ->add('cancelar', 'submit', array('label'  => 'Cancelar'))
+            ->add('guardar', 'submit')            
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }
 

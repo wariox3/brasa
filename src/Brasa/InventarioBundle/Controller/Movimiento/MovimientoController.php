@@ -20,6 +20,9 @@ class MovimientoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioFiltro();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 134, 1)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));
+        }
         $form->handleRequest($request);
         $this->lista();
         if ($form->isValid()) {
@@ -94,13 +97,13 @@ class MovimientoController extends Controller
 
             if($form->get('guardarnuevo')->isClicked()) {
                 return $this->redirect($this->generateUrl('brs_inv_movimiento_movimiento_nuevo', array('codigoDocumento' => $codigoDocumento, 'codigoMovimiento' => 0 )));
-            } else {
-                
+            } else {                
                 return $this->redirect($this->generateUrl('brs_inv_movimiento_movimiento_lista', array('codigoDocumento' => $codigoDocumento)));
             }
         }
         return $this->render('BrasaInventarioBundle:Movimiento/Movimiento:nuevo.html.twig', array(
             'arMovimiento' => $arMovimiento,
+            'arDocumento' => $arDocumento,
             'form' => $form->createView()));
     }
 

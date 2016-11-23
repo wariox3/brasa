@@ -12,85 +12,17 @@ use Doctrine\ORM\EntityRepository;
  */
 class InvItemRepository extends EntityRepository {
 
-    /**
-     * Busca los productos que coincida con la descripcion enviada con el parametro
-     * @param string $strDescripcion La descripcion del producto a buscar
-     * @return query el resultado de la busqueda. 
-     */
-    public function BuscarDescripcionItem($strDescripcion) {
-        try {
-            $em = $this->getEntityManager();
-            $query = $em->createQueryBuilder()
-                    ->select('item')
-                    ->from('BrasaInventarioBundle:InvItem', 'item')
-                    ->where($em->createQueryBuilder()->expr()->like('item.descripcion', $em->createQueryBuilder()->expr()->literal('%' . $strDescripcion . '%')))
-                    ->orWhere($em->createQueryBuilder()->expr()->like('item.codigoItemPk', $em->createQueryBuilder()->expr()->literal('%' . $strDescripcion . '%')))
-                    ->getQuery();
-            $arResultado = $query->getResult();
-            return $arResultado;
-        } catch (Exception $e) {
-            return $e;
+    public function listaDql($strNombre = "", $strCodigo = "") {
+        $dql   = "SELECT i FROM BrasaInventarioBundle:InvItem i WHERE i.codigoItemPk <> 0";        
+        if($strCodigo != "") {
+            $dql .= " AND i.codigoItemPk = " . $strCodigo;
         }
-    }
-
-     /**
-     * Busca los productos que coincida con el codigo de barras enviado como parametro
-     * @param string $strDescripcion La descripcion del producto a buscar
-     * @return query el resultado de la busqueda. 
-     */
-    public function BuscarCodigoBarras($strCodigoBarras) {
-        try {
-            $em = $this->getEntityManager();
-            $query = $em->createQueryBuilder()
-                    ->select('item')
-                    ->from('BrasaGeneralBundle:Item', 'item')
-                    ->where($em->createQueryBuilder()->expr()->like('item.codigoBarras', $em->createQueryBuilder()->expr()->literal('%' . $strCodigoBarras . '%')))
-                    ->getQuery();
-            $arResultado = $query->getResult();
-            return $arResultado;
-        } catch (Exception $e) {
-            return $e;
-        }    
-    }
+        if($strNombre != "") {
+            $dql .= " AND i.nombre like '%" . $strNombre. "%'";
+        }
+        $dql .= " ORDER BY i.nombre ASC";
+        return $dql;
+    } 
     
-    public function ReiniciarExistencias() {
-        $em = $this->getEntityManager();
-        $dql = "UPDATE BrasaInventarioBundle:InvItem l SET l.cantidadExistencia = 0";
-        $query = $em->createQuery($dql);
-        $arItems = $query->getResult();
-        return $arItems;
-    }    
     
-     /**
-     * Devuelve la operacion para un movimiento de detalle segun el item y el documento
-     * @param integer $intOperacionDocumento operacion del documento
-     * @param integer $intItemServicio item de servicio
-     * @return integer Operacion de inventario. 
-     */
-    public function DevOperacionInventario($intOperacionDocumento, $intItemServicio) {
-        if($intOperacionDocumento != 0) {
-            if($intItemServicio == 1)                                         
-                return 0;
-            else
-                return $intOperacionDocumento;
-        }            
-    }    
-    
-    public function MoverExistencia($intItem, $intCantidad) {
-        $em = $this->getEntityManager();
-        $arItem = new \Brasa\InventarioBundle\Entity\InvItem();
-        $arItem = $em->getRepository('BrasaInventarioBundle:InvItem')->find($intItem);
-        $arItem->setCantidadExistencia($arItem->getCantidadExistencia() + $intCantidad);        
-        $em->persist($arItem);
-        $em->flush();        
-    }    
-
-    public function MoverRemision($intItem, $intCantidad) {
-        $em = $this->getEntityManager();
-        $arItem = new \Brasa\InventarioBundle\Entity\InvItem();
-        $arItem = $em->getRepository('BrasaInventarioBundle:InvItem')->find($intItem);
-        $arItem->setCantidadRemisionada($arItem->getCantidadRemisionada() + $intCantidad);        
-        $em->persist($arItem);
-        $em->flush();        
-    }    
 }

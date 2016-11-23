@@ -18,8 +18,7 @@ class InvMovimientoType extends AbstractType
                 'property' => 'nombreCorto',
                 'required' => true))    
             ->add('fecha', 'date', array('format' => 'yyyyMMdd'))            
-            ->add('guardar', 'submit')
-            ->add('cancelar', 'submit', array('label'  => 'Cancelar'))
+            ->add('guardar', 'submit')            
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }
 
