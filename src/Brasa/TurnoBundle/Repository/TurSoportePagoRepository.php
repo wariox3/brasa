@@ -233,8 +233,8 @@ class TurSoportePagoRepository extends EntityRepository {
         $dateFechaDesde = $arSoportePago->getFechaDesde();
         $dateFechaHasta = $arSoportePago->getFechaHasta();
         $turnoFijo = 0;
-        $arRecurso = $arSoportePago->getRecursoRel();
-        if($arRecurso->getCodigoTurnoFijoNominaFk()) {
+        $arRecurso = $arSoportePago->getRecursoRel();        
+        if($arSoportePago->getTurnoFijo()) {
             $turnoFijo = 1;
         }
         $arrTurnoFijo[] = null;
@@ -293,7 +293,7 @@ class TurSoportePagoRepository extends EntityRepository {
         $dateFechaHasta = $arSoportePago->getFechaHasta();
         $turnoFijo = 0;
         $arRecurso = $arSoportePago->getRecursoRel();
-        if($arRecurso->getCodigoTurnoFijoNominaFk()) {
+        if($arSoportePago->getTurnoFijo()) {
             $turnoFijo = 1;
         }
         $arrTurnoFijo[] = null;        
@@ -381,6 +381,7 @@ class TurSoportePagoRepository extends EntityRepository {
                     $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($arSoportePago->getRecursoRel()->getCodigoTurnoFijo31Fk());
                 }
             }
+            
         }
         if($arTurno->getDescanso() == 1) {
             if($strTurnoFijoDescanso) {
@@ -420,7 +421,11 @@ class TurSoportePagoRepository extends EntityRepository {
                 $arrHoras['horasDescanso'] = 8;
             }
         }
-
+        if($arTurno->getNovedad() == 0 && $arSoportePago->getTurnoFijo()) {
+            $arrHoras = $this->horasOrdinarias();
+            $arrHoras1 = $this->horasAnuladas();
+        }
+        
         $arSoportePagoDetalle = new \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle();
         $arSoportePagoDetalle->setSoportePagoPeriodoRel($arSoportePagoPeriodo);
         $arSoportePagoDetalle->setSoportePagoRel($arSoportePago);
@@ -1498,6 +1503,37 @@ class TurSoportePagoRepository extends EntityRepository {
         }               
         $em->flush();                    
         $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->liquidar($codigoSoportePagoPeriodo);                                                                             
+    }  
+    
+    public function horasOrdinarias() {
+        $arrHoras = array(
+            'horasDescanso' => 0,
+            'horasNovedad' => 0,
+            'horasDiurnas' => 8,
+            'horasNocturnas' => 0,
+            'horasExtrasDiurnas' => 0,
+            'horasExtrasNocturnas' => 0,
+            'horasFestivasDiurnas' => 0,
+            'horasFestivasNocturnas' => 0,
+            'horasExtrasFestivasDiurnas' => 0,
+            'horasExtrasFestivasNocturnas' => 0,
+            'horas' => 8); 
+        return $arrHoras;
+    }
+    public function horasAnuladas() {
+        $arrHoras = array(
+            'horasDescanso' => 0,
+            'horasNovedad' => 0,
+            'horasDiurnas' => 0,
+            'horasNocturnas' => 0,
+            'horasExtrasDiurnas' => 0,
+            'horasExtrasNocturnas' => 0,
+            'horasFestivasDiurnas' => 0,
+            'horasFestivasNocturnas' => 0,
+            'horasExtrasFestivasDiurnas' => 0,
+            'horasExtrasFestivasNocturnas' => 0,
+            'horas' => 0); 
+        return $arrHoras;
     }    
     
 }

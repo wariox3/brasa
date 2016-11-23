@@ -109,9 +109,12 @@ class GenerarSoportePagoController extends Controller
                                     }
                                      * 
                                      */
-                                    if($arRecurso->getCodigoTurnoFijoNominaFk()) {
-                                            $arSoportePago->setTurnoFijo(1);
-                                    }                      
+                                    /*if($arRecurso->getCodigoTurnoFijoNominaFk()) {
+                                       $arSoportePago->setTurnoFijo(1);
+                                    }*/      
+                                    if($arContrato->getTurnoFijoOrdinario()) {
+                                        $arSoportePago->setTurnoFijo(1);
+                                    }
                                     $em->persist($arSoportePago);                                                    
                                 }
                             }                                                    

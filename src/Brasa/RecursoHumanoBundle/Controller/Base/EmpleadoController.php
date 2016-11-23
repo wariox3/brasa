@@ -376,6 +376,7 @@ class EmpleadoController extends Controller
             ->add('estadoContratado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO')))    
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombre')))
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
+            ->add('TxtCodigo', 'text', array('data' => $session->get('filtroCodigoEmpleado')))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('BtnInterfaz', 'submit', array('label'  => 'Interfaz',))
             ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
@@ -394,6 +395,7 @@ class EmpleadoController extends Controller
         $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroEmpleadoActivo', $form->get('estadoActivo')->getData());
         $session->set('filtroEmpleadoContratado', $form->get('estadoContratado')->getData());
+        $session->set('filtroCodigoEmpleado', $form->get('TxtCodigo')->getData());
     }
 
     private function listar() {
@@ -405,7 +407,8 @@ class EmpleadoController extends Controller
                 $session->get('filtroEmpleadoActivo'),
                 $session->get('filtroIdentificacion'),
                 "",
-                $session->get('filtroEmpleadoContratado')
+                $session->get('filtroEmpleadoContratado'),
+                $session->get('filtroCodigoEmpleado')
                 );
     }
 

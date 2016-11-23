@@ -11,9 +11,12 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuEmpleadoRepository extends EntityRepository {
 
-    public function ListaDql($strNombre = "", $strCodigoCentroCosto = "", $boolMostrarActivos = 2, $strIdentificacion = "", $boolMostrarPagadosEntidadSalud = "", $boolMostrarContratados = 2) {
+    public function ListaDql($strNombre = "", $strCodigoCentroCosto = "", $boolMostrarActivos = 2, $strIdentificacion = "", $boolMostrarPagadosEntidadSalud = "", $boolMostrarContratados = 2, $codigo = "") {
         $em = $this->getEntityManager();
         $dql   = "SELECT e FROM BrasaRecursoHumanoBundle:RhuEmpleado e WHERE e.codigoEmpleadoPk <> 0";
+        if($codigo != "") {
+            $dql .= " AND e.codigoEmpleadoPk = " . $codigo;
+        }        
         if($strNombre != "" ) {
             $dql .= " AND e.nombreCorto LIKE '%" . $strNombre . "%'";
         }
