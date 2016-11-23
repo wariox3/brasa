@@ -79,7 +79,6 @@ class ProgramacionesPagoController extends Controller
                     return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_lista'));
                 }
             }
-
             if($form->get('BtnExcel')->isClicked()) {
                 $this->filtrarLista($form, $request);
                 $this->listar();

@@ -161,7 +161,54 @@
                 <td style="text-align: right">{{ arSoportePago.diasPeriodoCompensar | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arSoportePago.diasPeriodoDescansoCompensar | number_format(0, '.', ',') }}</td>                                
             </tr>            
-        </table>         
+        </table>  
+            
+        <table  class="table table-striped table-bordered table-condensed table-hover">
+            <tr>
+                <th>CODIGO</th>
+                <th>FECHA</th>                
+                <th>TURNO</th>
+                <th>DIAS</th>
+                <th>DESCANSO</th>
+                <th>HDS</th>
+                <th>HD</th>
+                <th>HN</th>
+                <th>HFD</th>
+                <th>HFN</th>
+                <th>HEOD</th>
+                <th>HEON</th>
+                <th>HEFD</th>
+                <th>HEFN</th>
+                <th>H</th>
+            </tr>
+            {% for arSoportesPagosDetalles in arSoportesPagosDetalles %}
+            <tr {% if arSoportesPagosDetalles.festivo == 1 %} class="danger" {% endif %}>
+                <td>{{ arSoportesPagosDetalles.codigoSoportePagoDetallePk  }}</td>
+                <td>{{ arSoportesPagosDetalles.fecha |date("Y/m/d")  }}</td>                
+                <td>{{ arSoportesPagosDetalles.codigoTurnoFk  }} ({{ arSoportesPagosDetalles.turnoRel.horaDesde |date('H:i') }} - {{ arSoportesPagosDetalles.turnoRel.horaHasta |date('H:i') }})</td>
+                <td style="text-align: right">{{ arSoportesPagosDetalles.dias | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagosDetalles.descanso | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagosDetalles.horasDescanso | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagosDetalles.horasDiurnas | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagosDetalles.horasNocturnas | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagosDetalles.horasFestivasDiurnas | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagosDetalles.horasFestivasNocturnas | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagosDetalles.horasExtrasOrdinariasDiurnas | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagosDetalles.horasExtrasOrdinariasNocturnas | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagosDetalles.horasExtrasFestivasDiurnas | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagosDetalles.horasExtrasFestivasNocturnas | number_format(2, '.', ',') }}</td>
+                <td style="text-align: right">{{ arSoportesPagosDetalles.horas | number_format(2, '.', ',') }}</td>
+            </tr>
+
+            {% endfor %}
+        </table>
+        <div class="btn-group" style="float: left">                
+                <div class="btn btn-default btn-sm">Registros <span class="badge">{{ arSoportesPagosDetalles.getTotalItemCount }}</span></div>
+        </div>
+        <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
+                {{ knp_pagination_render(arSoportesPagosDetalles) }}
+        </div>            
+            
     {{ form_rest(form) }}
     {{ form_end(form) }}
 </div>

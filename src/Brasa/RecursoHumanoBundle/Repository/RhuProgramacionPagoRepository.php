@@ -72,14 +72,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     }
                     $arProgramacionPagoProcesar->setEstadoGenerado(1);
                     $em->persist($arProgramacionPagoProcesar);
-                    $em->flush();
-
-                    //$em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->liquidar($codigoProgramacionPago);
-                    //$em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->generarPagoDetalleSede($codigoProgramacionPago);
-                    if($arProgramacionPagoProcesar->getNoGeneraPeriodo() == 0) {
-                        $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarProgramacionPago($arProgramacionPagoProcesar->getCodigoCentroCostoFk(), 1);
-                    }
-                    ini_set('memory_limit', '512m');
+                    $em->flush();                    
                 }
                 
                 //Prima
@@ -404,9 +397,14 @@ class RhuProgramacionPagoRepository extends EntityRepository {
             $arProgramacionPagoProcesar->setEstadoPagado(1);
             $em->persist($arProgramacionPagoProcesar);
             $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->liquidar($codigoProgramacionPago);
+            if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 1) {
+                if($arProgramacionPagoProcesar->getNoGeneraPeriodo() == 0) {
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->generarProgramacionPago($arProgramacionPagoProcesar->getCodigoCentroCostoFk(), 1);
+                }                   
+            }         
         }            
         $em->flush();   
-        set_time_limit(90);
+        
     }
 
     /**

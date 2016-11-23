@@ -152,6 +152,7 @@ class PagosController extends Controller
         }
        
         $arSoportePago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
+        $arSoportesPagoDetalle = new \Brasa\TurnoBundle\Entity\TurSoportePagoDetalle();
         $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
         $arSoportePagoProgramacion = new \Brasa\TurnoBundle\Entity\TurSoportePagoProgramacion();
         if($arPago->getCodigoSoportePagoFk()) {
@@ -162,6 +163,8 @@ class PagosController extends Controller
                 $arProgramacionDetalle =  $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('anio' => $strAnio, 'mes' => $strMes, 'codigoRecursoFk' => $arSoportePago->getCodigoRecursoFk()));                                                    
                 $arSoportePagoProgramacion =  $em->getRepository('BrasaTurnoBundle:TurSoportePagoProgramacion')->findBy(array('codigoSoportePagoFk' => $arPago->getCodigoSoportePagoFk()));                                                                                    
             }
+            $dql = $em->getRepository('BrasaTurnoBundle:TurSoportePagoDetalle')->listaDql("", $arPago->getCodigoSoportePagoFk());            
+            $arSoportesPagoDetalle = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 200);                    
         }        
         $strAnioMes = $arPago->getFechaDesde()->format('Y/m');
         $arrDiaSemana = array();
@@ -175,6 +178,7 @@ class PagosController extends Controller
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/Pagos:verResumenTurno.html.twig', array(                                    
             'arProgramacionDetalle' => $arProgramacionDetalle,  
             'arSoportePago' => $arSoportePago,
+            'arSoportesPagosDetalles' => $arSoportesPagoDetalle,
             'arPago' => $arPago,
             'arrDiaSemana' => $arrDiaSemana,
             'arSoportePagoProgramacion' => $arSoportePagoProgramacion,
