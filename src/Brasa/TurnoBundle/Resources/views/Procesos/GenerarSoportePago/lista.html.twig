@@ -49,6 +49,7 @@
                 <th></th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
             {% for arSoportePagoPeriodos in arSoportePagoPeriodos %}
             <tr>
@@ -78,7 +79,11 @@
                         <button class="btn btn-default btn-xs" type="submit" name="OpDesAprobarPagoNomina" value="{{ arSoportePagoPeriodos.codigoSoportePagoPeriodoPk }}">Des-aprobar pago nomina</button>
                     {% endif %}                    
                 </td>                
-                
+                {% if arSoportePagoPeriodos.estadoBloquearProgramacion == 0 %}
+                     <td><button class="btn btn-default btn-xs" type="submit" name="OpBloquearProgramacion" value="{{ arSoportePagoPeriodos.codigoSoportePagoPeriodoPk }}">Bloquear programacion</button></td>
+                {% else %}                            
+                     <td><button class="btn btn-default btn-xs" type="submit" name="OpDesBloquearProgramacion" value="{{ arSoportePagoPeriodos.codigoSoportePagoPeriodoPk }}">Desbloquear programacion</button></td>
+                {% endif %}                
                 <td>{% if arSoportePagoPeriodos.estadoGenerado == 1 and arSoportePagoPeriodos.estadoCerrado == 0 %}<button class="btn btn-default btn-xs" type="submit" name="OpCerrar" value="{{ arSoportePagoPeriodos.codigoSoportePagoPeriodoPk }}">Cerrar</button>{% endif %}</td>
                 <td>{% if arSoportePagoPeriodos.estadoGenerado == 0 %}<a href="{{ path('brs_tur_proceso_generar_soporte_pago_nuevo', {'codigoSoportePagoPeriodo': arSoportePagoPeriodos.codigoSoportePagoPeriodoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a>{% endif %}</td>
                 <td style="text-align: center"><a href="{{ path('brs_tur_proceso_generar_soporte_pago_detalle', { 'codigoSoportePagoPeriodo': arSoportePagoPeriodos.codigoSoportePagoPeriodoPk }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>
