@@ -168,6 +168,19 @@ class TurSoportePagoPeriodoRepository extends EntityRepository {
             }                         
         }
         
+        //Turnos retirado y sin retirar de recurso humano
+        foreach ($arSoportesPagoProcesar as $arSoportePago) {
+            if($arSoportePago->getRetiro() > 0) {                
+                $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+                $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arSoportePago->getCodigoContratoFk());
+                if($arContrato) {
+                    if($arContrato->getEstadoActivo() == 1) {
+                        $arrInconsistencias[] = array('inconsistencia' => "El contrato del empleado esta activo y tiene turnos de retiro (" . $arSoportePago->getRetiro() . ") en el soporte de pago", 'recurso' => $arSoportePago->getRecursoRel()->getNombreCorto(), 'numeroIdentificacion' => $arSoportePago->getRecursoRel()->getNumeroIdentificacion(), 'codigo'=> $arSoportePago->getRecursoRel()->getCodigoRecursoPk());                        
+                    }
+                }
+            }
+        }
+        
         if(count($arrInconsistencias) > 0) {  
             $arSoportePagoPeriodo->setInconsistencias(1);
             foreach ($arrInconsistencias as $arrInconsistencia) {

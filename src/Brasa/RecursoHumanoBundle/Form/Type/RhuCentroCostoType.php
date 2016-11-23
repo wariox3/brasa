@@ -60,6 +60,7 @@ class RhuCentroCostoType extends AbstractType
             ->add('descansoCompensacionDominicales', 'checkbox', array('required'  => false))                            
             ->add('descansoCompensacionFijo', 'checkbox', array('required'  => false))
             ->add('diasDescansoCompensacionFijo', 'number', array('required' => false))                              
+            ->add('generaSoportePago', 'checkbox', array('required'  => false))                            
             ->add('guardar', 'submit')
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }

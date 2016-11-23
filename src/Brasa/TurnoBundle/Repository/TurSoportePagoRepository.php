@@ -1524,6 +1524,7 @@ class TurSoportePagoRepository extends EntityRepository {
             'horas' => 8); 
         return $arrHoras;
     }
+    
     public function horasAnuladas() {
         $arrHoras = array(
             'horasDescanso' => 0,

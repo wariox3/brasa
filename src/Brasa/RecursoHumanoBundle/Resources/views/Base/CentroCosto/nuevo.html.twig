@@ -136,6 +136,13 @@
         <div class="panel-heading">Informacion programacion turnos</div>
         <div class="panel-body">                 
             <div class="form-group form-group-sm">
+                <label class="col-sm-3 control-label">Genera soporte pago:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.generaSoportePago) }}
+                    <p style="font-size: 0.8em;">* Indica si a este grupo de pago (centro costo) se le genera soporte de pago en turnos</p>
+                </div>
+            </div>             
+            <div class="form-group form-group-sm">
                 <label class="col-sm-3 control-label">Descanso ordinario:</label>
                 <div class="col-sm-9">
                         {{ form_widget(form.descansoOrdinario) }}

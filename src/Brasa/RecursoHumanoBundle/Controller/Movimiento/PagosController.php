@@ -153,6 +153,8 @@ class PagosController extends Controller
                             ->attach(\Swift_Attachment::fromPath($rutaArchivo));                
                         $this->get('mailer')->send($message); 
                         $objMensaje->Mensaje('informacion', "Se envio correctamente el correo a " . $correo, $this);
+                    } else {
+                        $objMensaje->Mensaje('error', "El empleado no tiene correo", $this);
                     }                  
             }
         }        
