@@ -13,7 +13,7 @@ class TurSoportePagoRepository extends EntityRepository {
 
     public function resumen($arSoportePagoPeriodo) {
         $em = $this->getEntityManager();
-        $arSoportePagoPeriodoActualizar = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
+        $arSoportePagoPeriodoActualizar = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();        
         $arSoportePagoPeriodoActualizar = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($arSoportePagoPeriodo->getCodigoSoportePagoPeriodoPk());
         $arSoportesPago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
         $arSoportesPago = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $arSoportePagoPeriodo->getCodigoSoportePagoPeriodoPk()));
@@ -67,8 +67,12 @@ class TurSoportePagoRepository extends EntityRepository {
                 if($arrayResultado[$i]['dias'] > $arSoportePagoPeriodoActualizar->getDiasPeriodo()) {
                     $arrayResultado[$i]['dias'] = $arSoportePagoPeriodoActualizar->getDiasPeriodo();
                 }
+                $diasTransporte = $arrayResultado[$i]['dias']+$arrayResultado[$i]['induccion'];
+                if($diasTransporte > $arSoportePagoPeriodoActualizar->getDiasPeriodo()) {
+                    $diasTransporte = $arSoportePagoPeriodoActualizar->getDiasPeriodo();
+                }
                 $arSoportePagoAct->setDias($arrayResultado[$i]['dias']);
-                $arSoportePagoAct->setDiasTransporte($arrayResultado[$i]['dias']+$arrayResultado[$i]['induccion']);
+                $arSoportePagoAct->setDiasTransporte($diasTransporte);
                 $arSoportePagoAct->setDescanso($arrayResultado[$i]['descanso']);
                 $arSoportePagoAct->setNovedad($arrayResultado[$i]['novedad']);
                 $arSoportePagoAct->setIncapacidad($arrayResultado[$i]['incapacidad']);

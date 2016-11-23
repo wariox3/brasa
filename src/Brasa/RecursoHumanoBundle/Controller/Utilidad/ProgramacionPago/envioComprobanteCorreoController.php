@@ -14,15 +14,18 @@ class envioComprobanteCorreoController extends Controller
     var $strDqlLista = "";
     
     /**
-     * @Route("/rhu/utilidades/programacion/pago/comprobante/correo/{codigoProgramacionPago}", name="brs_rhu_utilidades_programacion_pago_comprobante_correo")
+     * @Route("/rhu/utilidades/programacion/pago/comprobante/correo/{codigoProgramacionPago}/{codigoPago}", name="brs_rhu_utilidades_programacion_pago_comprobante_correo")
      */         
-    public function listaAction($codigoProgramacionPago = "") {
+    public function listaAction($codigoProgramacionPago = "", $codigoPago = "") {
+        $session = $this->get('session');
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         /*if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 75)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }*/        
+        $session->set('filtroRhuCodigoProgramacionPago', $codigoProgramacionPago); 
+        $session->set('filtroRhuCodigoPago', $codigoPago); 
         $form = $this->formularioLista();
         $form->handleRequest($request);
         if($form->isValid()) {
@@ -88,7 +91,8 @@ class envioComprobanteCorreoController extends Controller
         $session = $this->get('session');
                
         $form = $this->createFormBuilder()                  
-            ->add('numero','text', array('required'  => false, 'data' => ""))
+            ->add('codigoProgramacionPago','text', array('required'  => false, 'data' => $session->get('filtroRhuCodigoProgramacionPago')))
+            ->add('codigoPago','text', array('required'  => false, 'data' => $session->get('filtroRhuCodigoPago')))
             ->add('BtnEnviar', 'submit', array('label'  => 'Enviar'))    
             ->getForm();        
         return $form;

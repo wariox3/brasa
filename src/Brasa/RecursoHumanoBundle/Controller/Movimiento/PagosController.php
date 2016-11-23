@@ -106,6 +106,7 @@ class PagosController extends Controller
         $arPagoDetallesSede = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalleSede')->findBy(array('codigoPagoFk' => $codigoPago));        
         $form = $this->createFormBuilder()            
             ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))           
+            ->add('BtnEnviarCorreo', 'submit', array('label'  => 'Correo',))           
             ->getForm();
         $form->handleRequest($request);
         if($form->isValid()) {
@@ -124,6 +125,35 @@ class PagosController extends Controller
                     $objFormatoPago = new \Brasa\RecursoHumanoBundle\Formatos\PagoMasivo3();
                     $objFormatoPago->Generar($this, "", "", $codigoPago);                    
                 }
+            }
+            if($form->get('BtnEnviarCorreo')->isClicked()) {
+                $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+                $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);                
+                $codigoFormato = $arConfiguracion->getCodigoFormatoPago(); 
+                $ruta = $arConfiguracionGeneral->getRutaTemporal();
+                    if($codigoFormato <= 1) {
+                        $objFormatoPago = new \Brasa\RecursoHumanoBundle\Formatos\PagoMasivo1();
+                        $objFormatoPago->Generar($this, "", $ruta, $arPago->getCodigoPagoPk(), "", "", "", "", "", "");
+                    }   
+                    if($codigoFormato == 2) {
+                        $objFormatoPago = new \Brasa\RecursoHumanoBundle\Formatos\PagoMasivo2();
+                        $objFormatoPago->Generar($this, "", $ruta, $arPago->getCodigoPagoPk(), "", "", "", "", "", "");
+                    }  
+
+                    $correo = $arPago->getEmpleadoRel()->getCorreo();                                        
+                    $correoNomina = $arConfiguracion->getCorreoNomina();
+                    if($correo) {
+                        $rutaArchivo = $ruta."Pago".$arPago->getCodigoPagoPk().".pdf";
+                        $strMensaje = "Se adjunta comprobante de pago (sogaApp)";                
+                        $message = \Swift_Message::newInstance()
+                            ->setSubject('Comprobante de pago ')
+                            ->setFrom($correoNomina, "SogaApp" )
+                            ->setTo(strtolower($correo))
+                            ->setBody($strMensaje,'text/html')                            
+                            ->attach(\Swift_Attachment::fromPath($rutaArchivo));                
+                        $this->get('mailer')->send($message); 
+                        $objMensaje->Mensaje('informacion', "Se envio correctamente el correo a " . $correo, $this);
+                    }                  
             }
         }        
         

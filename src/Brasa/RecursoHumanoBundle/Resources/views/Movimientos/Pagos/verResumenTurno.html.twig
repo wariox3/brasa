@@ -201,13 +201,7 @@
             </tr>
 
             {% endfor %}
-        </table>
-        <div class="btn-group" style="float: left">                
-                <div class="btn btn-default btn-sm">Registros <span class="badge">{{ arSoportesPagosDetalles.getTotalItemCount }}</span></div>
-        </div>
-        <div class="btn-group btn-sm" style="float: left;margin-left: 0px;padding-top: 0px;">
-                {{ knp_pagination_render(arSoportesPagosDetalles) }}
-        </div>            
+        </table>         
             
     {{ form_rest(form) }}
     {{ form_end(form) }}
