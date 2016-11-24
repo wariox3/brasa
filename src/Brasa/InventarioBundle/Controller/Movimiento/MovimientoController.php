@@ -19,12 +19,12 @@ class MovimientoController extends Controller
     public function ingresoAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         $paginator  = $this->get('knp_paginator');
-        $form = $this->formularioFiltro();
+        $form = $this->formularioIngreso();
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 134, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));
         }
         $form->handleRequest($request);
-        $this->lista();
+        $this->listaIngreso();
         if ($form->isValid()) {
             /*if ($form->get('BtnInterfaz')->isClicked()) {
                 $this->filtrar($form);
@@ -42,12 +42,12 @@ class MovimientoController extends Controller
     /**
      * @Route("/inv/movimiento/movimiento/lista/{codigoDocumento}", name="brs_inv_movimiento_movimiento_lista")
      */
-    public function movimientoAction(Request $request,$codigoDocumento) {
+    public function listaAction(Request $request, $codigoDocumento) {
         $em = $this->getDoctrine()->getManager();
         $paginator  = $this->get('knp_paginator');
-        $arDocumento = new \Brasa\InventarioBundle\Entity\InvDocumento();
-        $arDocumento = $em->getRepository('BrasaInventarioBundle:InvDocumento')->find($codigoDocumento);
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $arDocumento = new \Brasa\InventarioBundle\Entity\InvDocumento();
+        $arDocumento = $em->getRepository('BrasaInventarioBundle:InvDocumento')->find($codigoDocumento);        
         $form = $this->formularioMovimiento($arDocumento);
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -201,7 +201,7 @@ class MovimientoController extends Controller
             'form' => $form->createView()));
     }
 
-    private function lista() {
+    private function listaIngreso() {
         $em = $this->getDoctrine()->getManager();
         $this->strListaDql =  $em->getRepository('BrasaInventarioBundle:InvDocumento')->listaDql();
     }
@@ -210,7 +210,7 @@ class MovimientoController extends Controller
 
     }
 
-    private function formularioMovimiento() {
+    private function formularioLista() {
         $form = $this->createFormBuilder()
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
@@ -239,14 +239,14 @@ class MovimientoController extends Controller
         return $form;
     }
 
-    private function formularioFiltro() {
+    private function formularioIngreso() {
         $form = $this->createFormBuilder()
 
             ->getForm();
         return $form;
     }
 
-    private function generarExcel($codigoDocumento) {
+    private function generarExcel() {
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
         $em = $this->getDoctrine()->getManager();
