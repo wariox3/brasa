@@ -26,7 +26,11 @@ class MovimientoController extends Controller
         $form->handleRequest($request);
         $this->listaIngreso();
         if ($form->isValid()) {
-            
+            if ($form->get('BtnFiltrar')->isClicked()) {
+                $this->filtrarIngreso($form);
+                $form = $this->formularioIngreso();
+                $this->listaIngreso();
+            }
         }
 
         $arDocumentos = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 40);
@@ -49,9 +53,14 @@ class MovimientoController extends Controller
         $this->lista();
         if ($form->isValid()) {
             if ($form->get('BtnExcel')->isClicked()) {
-                //$this->filtrarLista($form);
+                $this->filtrarLista($form);
                 $this->lista();
                 $this->generarExcel($codigoDocumento);
+            }
+            if ($form->get('BtnFiltrar')->isClicked()) {
+                $this->filtrarLista($form);
+                $form = $this->formularioLista();
+                $this->lista();
             }
             if ($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
@@ -198,18 +207,26 @@ class MovimientoController extends Controller
 
     private function listaIngreso() {
         $em = $this->getDoctrine()->getManager();
-        $this->strListaDql =  $em->getRepository('BrasaInventarioBundle:InvDocumento')->listaDql();
+        $session = $this->getRequest()->getSession();
+        $this->strListaDql =  $em->getRepository('BrasaInventarioBundle:InvDocumento')->listaDql(
+            $session->get('filtroCodigo'), 
+            $session->get('filtroNombre')
+            );
     }
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
-        $this->strListaDql =  $em->getRepository('BrasaInventarioBundle:InvMovimiento')->listaDql();
+        $session = $this->getRequest()->getSession();        
+        $this->strListaDql =  $em->getRepository('BrasaInventarioBundle:InvMovimiento')->listaDql(
+            $session->get('filtroCodigo'), 
+            $session->get('filtroNumero')
+            );
     }
 
     private function filtrarLista ($form) {
         $session = $this->getRequest()->getSession();        
-        $session->set('filtroCotizacionNumero', $form->get('TxtNumero')->getData());        
-        $session->set('filtroNit', $form->get('TxtNit')->getData());
+        $session->set('filtroCodigo', $form->get('TxtCodigo')->getData());        
+        $session->set('filtroNumero', $form->get('TxtNumero')->getData());
     }
     
     private function filtrarIngreso ($form) {
@@ -219,7 +236,11 @@ class MovimientoController extends Controller
     }
 
     private function formularioLista() {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()
+            ->add('TxtNumero', 'text', array('label'  => 'Numero'))
+            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCodigo')))    
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))    
@@ -249,6 +270,8 @@ class MovimientoController extends Controller
     }
 
     private function formularioIngreso() {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombre')))
             ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCodigo')))    
