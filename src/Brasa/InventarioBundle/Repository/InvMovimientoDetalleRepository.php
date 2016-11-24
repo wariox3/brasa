@@ -24,4 +24,13 @@ class InvMovimientoDetalleRepository extends EntityRepository
         }
         return $intNumeroRegistros;
     }
+    
+    public function consultaKardexDql($strCodigoItem = '') {
+        $dql   = "SELECT md FROM BrasaInventarioBundle:InvMovimientoDetalle md WHERE md.codigoDetalleMovimientoPk <> 0 ";        
+        if($strCodigoItem != "" ) {
+            $dql .= " AND md.codigoItemFk = " . $strCodigoItem;
+        }
+        //$dql .= " ORDER BY l.loteFk";
+        return $dql;
+    }
 }

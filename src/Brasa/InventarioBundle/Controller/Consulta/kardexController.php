@@ -5,12 +5,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 
-class disponibleController extends Controller
+class kardexController extends Controller
 {
     var $strListaDql = "";    
     
     /**
-     * @Route("/inv/consulta/disponible", name="brs_inv_consultas_disponible")
+     * @Route("/inv/consulta/kardex", name="brs_inv_consultas_kardex")
      */    
     public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();        
@@ -34,20 +34,17 @@ class disponibleController extends Controller
                 $this->generarExcel();
             }
         }
-        $arLote = new \Brasa\InventarioBundle\Entity\InvLote();
-        $arLote = $em->getRepository('BrasaInventarioBundle:InvLote')->findAll();
-        $query = $em->createQuery($this->strListaDql);        
-        $arResultados = $query->getResult();
-        $arLotes = $paginator->paginate($arResultados, $request->query->get('page', 1), 50);
-        return $this->render('BrasaInventarioBundle:Consultas/Lote:disponible.html.twig', array(
-            'arLotes' => $arLotes,                        
+        
+        $arkardex = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
+        return $this->render('BrasaInventarioBundle:Consultas/kardex:kardex.html.twig', array(
+            'arKardex' => $arkardex,                        
             'form' => $form->createView()));
     }        
     
     private function lista() {
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();        
-        $this->strListaDql =  $em->getRepository('BrasaInventarioBundle:InvLote')->consultaDisponibleDql(
+        $this->strListaDql =  $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->consultaKardexDql(
                 $session->get('filtroCodigoItem'));                    
     }
 
@@ -106,27 +103,27 @@ class disponibleController extends Controller
         
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
-        $arLotes = new \Brasa\InventarioBundle\Entity\InvLote();
-        $arLotes = $query->getResult();
-        foreach ($arLotes as $arLotes) {            
+        $arkardexs = new \Brasa\InventarioBundle\Entity\Invkardex();
+        $arkardexs = $query->getResult();
+        foreach ($arkardexs as $arkardexs) {            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arLotes->getItemRel()->getNombre())
-                    ->setCellValue('B' . $i, $arLotes->getLoteFk())
-                    ->setCellValue('C' . $i, $arLotes->getExistencia())
-                    ->setCellValue('D' . $i, $arLotes->getCantidadRemisionada())
-                    ->setCellValue('E' . $i, $arLotes->getCantidadDisponible())
-                    ->setCellValue('F' . $i, $arLotes->getFechaVencimiento()->format('Y/m/d'));                         
+                    ->setCellValue('A' . $i, $arkardexs->getItemRel()->getNombre())
+                    ->setCellValue('B' . $i, $arkardexs->getkardexFk())
+                    ->setCellValue('C' . $i, $arkardexs->getExistencia())
+                    ->setCellValue('D' . $i, $arkardexs->getCantidadRemisionada())
+                    ->setCellValue('E' . $i, $arkardexs->getCantidadDisponible())
+                    ->setCellValue('F' . $i, $arkardexs->getFechaVencimiento()->format('Y/m/d'));                         
             $i++;
         }                
         //$objPHPExcel->getActiveSheet()->getStyle('A1:AL1')->getFont()->setBold(true);        
         
         //$objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
         
-        $objPHPExcel->getActiveSheet()->setTitle('Lotes');
+        $objPHPExcel->getActiveSheet()->setTitle('kardexs');
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Lotes.xlsx"');
+        header('Content-Disposition: attachment;filename="kardexs.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
