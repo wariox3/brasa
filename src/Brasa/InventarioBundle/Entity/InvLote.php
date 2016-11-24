@@ -66,7 +66,6 @@ class InvLote
     protected $bodegaRel;    
     
 
-
     
 
     /**

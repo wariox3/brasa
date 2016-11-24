@@ -34,10 +34,13 @@ class disponibleController extends Controller
                 $this->generarExcel();
             }
         }
-
-        $arDisponible = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 50);
-        return $this->render('BrasaInventarioBundle:Consultas:disponible.html.twig', array(
-            'arDisponibles' => $arDisponible,                        
+        $arLote = new \Brasa\InventarioBundle\Entity\InvLote();
+        $arLote = $em->getRepository('BrasaInventarioBundle:InvLote')->findAll();
+        $query = $em->createQuery($this->strListaDql);        
+        $arResultados = $query->getResult();
+        $arDisponibles = $paginator->paginate($arResultados, $request->query->get('page', 1), 50);
+        return $this->render('BrasaInventarioBundle:Consultas/Lote:disponible.html.twig', array(
+            'arDisponibles' => $arDisponibles,                        
             'form' => $form->createView()));
     }        
     
