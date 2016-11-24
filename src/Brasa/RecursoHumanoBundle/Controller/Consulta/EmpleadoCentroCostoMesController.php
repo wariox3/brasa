@@ -32,10 +32,10 @@ class EmpleadoCentroCostoMesController extends Controller
                 $this->listar();
                 $this->generarExcel();
             }
-            if($form->get('BtnGenerar')->isClicked()) {
+            if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrarLista($form, $request);
                 $this->listar();
-            }
+            }            
         }
         $arEmpleadoCentroCosto = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 50);
         return $this->render('BrasaRecursoHumanoBundle:Consultas/Empleados:centroCostoMes.html.twig', array(
@@ -47,14 +47,16 @@ class EmpleadoCentroCostoMesController extends Controller
     private function listar() {
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
-        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoCentroCosto')->listaDql();
+        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoCentroCosto')->listaDql(
+                $session->get('filtroRhuAnio'),
+                $session->get('filtroRhuMes') );
     }
 
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->get('session');
         $form = $this->createFormBuilder()
-            ->add('BtnGenerar', 'submit', array('label'  => 'Filtrar'))
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->add('TxtAnio', 'text')
             ->add('TxtMes', 'text')
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
@@ -65,6 +67,8 @@ class EmpleadoCentroCostoMesController extends Controller
     private function filtrarLista($form, Request $request) {
         $em = $this->getDoctrine()->getManager();
         $session = $this->get('session');
+        $session->set('filtroRhuMes', $form->get('TxtMes')->getData());
+        $session->set('filtroRhuAnio', $form->get('TxtAnio')->getData());
     }
 
     private function generarExcel() {

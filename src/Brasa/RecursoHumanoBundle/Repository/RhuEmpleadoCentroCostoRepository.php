@@ -11,9 +11,15 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuEmpleadoCentroCostoRepository extends EntityRepository {
 
-    public function listaDql() {        
+    public function listaDql($anio = "", $mes = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT ecc FROM BrasaRecursoHumanoBundle:RhuEmpleadoCentroCosto ecc WHERE ecc.codigoEmpleadoCentroCostoPk <> 0";               
+        if($anio != "") {
+             $dql .= " AND ecc.anio = " . $anio;
+        }
+        if($mes != "") {
+             $dql .= " AND ecc.mes = " . $mes;
+        }        
         $dql .= " ORDER BY ecc.anio, ecc.mes DESC";
         return $dql;
     }

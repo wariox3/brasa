@@ -199,14 +199,14 @@ class CostoServicioController extends Controller
         $objPHPExcel->createSheet(1)->setTitle('CostoServicioDetalle')
                 ->setCellValue('A1', 'COD')
                 ->setCellValue('B1', 'CLIENTE')
-                ->setCellValue('C1', 'COD')
-                ->setCellValue('D1', 'PUESTO')
-                ->setCellValue('E1', 'C.COSTO')
-                ->setCellValue('F1', 'MODALIDAD')
-                ->setCellValue('G1', 'IDENTIFICACION')
-                ->setCellValue('H1', 'NOMBRE')
-                ->setCellValue('I1', 'C.COSTO')
-                ->setCellValue('J1', 'COSTO')
+                ->setCellValue('C1', 'CONCEPTO')
+                ->setCellValue('D1', 'COD')
+                ->setCellValue('E1', 'PUESTO')
+                ->setCellValue('F1', 'C.COSTO')
+                ->setCellValue('G1', 'MODALIDAD')
+                ->setCellValue('H1', 'IDENTIFICACION')
+                ->setCellValue('I1', 'NOMBRE')
+                ->setCellValue('J1', 'C.COSTO')                
                 ->setCellValue('K1', 'DS')
                 ->setCellValue('L1', 'D')
                 ->setCellValue('M1', 'N')
@@ -230,15 +230,19 @@ class CostoServicioController extends Controller
                 ->setCellValue('AE1', 'C.EFN')
                 ->setCellValue('AF1', 'C.RN')
                 ->setCellValue('AG1', 'C.RFD')
-                ->setCellValue('AH1', 'C.RFN');
+                ->setCellValue('AH1', 'C.RFN')                
+                ->setCellValue('AI1', 'NOM')
+                ->setCellValue('AJ1', 'SSO')
+                ->setCellValue('AK1', 'PRE')
+                ->setCellValue('AL1', 'COSTO');
 
         $objPHPExcel->setActiveSheetIndex(1); 
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(9); 
         $objPHPExcel->getActiveSheet(1)->getStyle('1')->getFont()->setBold(true);     
-        for($col = 'A'; $col !== 'AI'; $col++) {
+        for($col = 'A'; $col !== 'AM'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                  
         }            
-        for($col = 'J'; $col !== 'AI'; $col++) { 
+        for($col = 'J'; $col !== 'AM'; $col++) { 
             $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('right');                 
             $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
         }             
@@ -252,14 +256,14 @@ class CostoServicioController extends Controller
             $objPHPExcel->setActiveSheetIndex(1)
                     ->setCellValue('A' . $i, $arCostoRecursoDetalle->getCodigoClienteFk())
                     ->setCellValue('B' . $i, $arCostoRecursoDetalle->getClienteRel()->getNombreCorto())
-                    ->setCellValue('C' . $i, $arCostoRecursoDetalle->getCodigoPuestoFk())
-                    ->setCellValue('D' . $i, $arCostoRecursoDetalle->getPuestoRel()->getNombre())
-                    ->setCellValue('E' . $i, $arCostoRecursoDetalle->getPuestoRel()->getCodigoCentroCostoContabilidadFk())
-                    ->setCellValue('F' . $i, $arCostoRecursoDetalle->getPedidoDetalleRel()->getModalidadServicioRel()->getNombre())
-                    ->setCellValue('G' . $i, $arCostoRecursoDetalle->getRecursoRel()->getNumeroIdentificacion())
-                    ->setCellValue('H' . $i, $arCostoRecursoDetalle->getRecursoRel()->getNombreCorto())
-                    ->setCellValue('I' . $i, $arCostoRecursoDetalle->getRecursoRel()->getEmpleadoRel()->getCodigoCentroCostoContabilidadFk())
-                    ->setCellValue('J' . $i, $arCostoRecursoDetalle->getCosto())
+                    ->setCellValue('C' . $i, $arCostoRecursoDetalle->getPedidoDetalleRel()->getConceptoServicioRel()->getNombre())                    
+                    ->setCellValue('D' . $i, $arCostoRecursoDetalle->getCodigoPuestoFk())
+                    ->setCellValue('E' . $i, $arCostoRecursoDetalle->getPuestoRel()->getNombre())
+                    ->setCellValue('F' . $i, $arCostoRecursoDetalle->getPuestoRel()->getCodigoCentroCostoContabilidadFk())
+                    ->setCellValue('G' . $i, $arCostoRecursoDetalle->getPedidoDetalleRel()->getModalidadServicioRel()->getNombre())
+                    ->setCellValue('H' . $i, $arCostoRecursoDetalle->getRecursoRel()->getNumeroIdentificacion())
+                    ->setCellValue('I' . $i, $arCostoRecursoDetalle->getRecursoRel()->getNombreCorto())
+                    ->setCellValue('J' . $i, $arCostoRecursoDetalle->getRecursoRel()->getEmpleadoRel()->getCodigoCentroCostoContabilidadFk())                    
                     ->setCellValue('K' . $i, $arCostoRecursoDetalle->getHorasDescanso())
                     ->setCellValue('L' . $i, $arCostoRecursoDetalle->getHorasDiurnas())
                     ->setCellValue('M' . $i, $arCostoRecursoDetalle->getHorasNocturnas())
@@ -283,7 +287,11 @@ class CostoServicioController extends Controller
                     ->setCellValue('AE' . $i, $arCostoRecursoDetalle->getHorasExtrasFestivasNocturnasCosto())
                     ->setCellValue('AF' . $i, $arCostoRecursoDetalle->getHorasRecargoNocturnoCosto())
                     ->setCellValue('AG' . $i, $arCostoRecursoDetalle->getHorasRecargoFestivoDiurnoCosto())
-                    ->setCellValue('AH' . $i, $arCostoRecursoDetalle->getHorasRecargoFestivoNocturnoCosto());
+                    ->setCellValue('AH' . $i, $arCostoRecursoDetalle->getHorasRecargoFestivoNocturnoCosto())
+                    ->setCellValue('AI' . $i, $arCostoRecursoDetalle->getCostoNomina())
+                    ->setCellValue('AJ' . $i, $arCostoRecursoDetalle->getCostoSeguridadSocial())
+                    ->setCellValue('AK' . $i, $arCostoRecursoDetalle->getCostoPrestaciones())
+                    ->setCellValue('AL' . $i, $arCostoRecursoDetalle->getCosto());
             $i++;
         }           
         

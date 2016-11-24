@@ -191,6 +191,21 @@ class TurCostoRecursoDetalle
      * @ORM\Column(name="costo", type="float")
      */    
     private $costo = 0;     
+
+    /**
+     * @ORM\Column(name="costo_nomina", type="float")
+     */    
+    private $costoNomina = 0;    
+    
+    /**
+     * @ORM\Column(name="costo_seguridad_social", type="float")
+     */    
+    private $costoSeguridadSocial = 0;
+    
+    /**
+     * @ORM\Column(name="costo_prestaciones", type="float")
+     */    
+    private $costoPrestaciones = 0;    
     
     /**
      * @ORM\ManyToOne(targetEntity="TurRecurso", inversedBy="costosRecursosDetallesRecursoRel")
@@ -1160,5 +1175,77 @@ class TurCostoRecursoDetalle
     public function getClienteRel()
     {
         return $this->clienteRel;
+    }
+
+    /**
+     * Set costoSeguridadSocial
+     *
+     * @param float $costoSeguridadSocial
+     *
+     * @return TurCostoRecursoDetalle
+     */
+    public function setCostoSeguridadSocial($costoSeguridadSocial)
+    {
+        $this->costoSeguridadSocial = $costoSeguridadSocial;
+
+        return $this;
+    }
+
+    /**
+     * Get costoSeguridadSocial
+     *
+     * @return float
+     */
+    public function getCostoSeguridadSocial()
+    {
+        return $this->costoSeguridadSocial;
+    }
+
+    /**
+     * Set costoPrestaciones
+     *
+     * @param float $costoPrestaciones
+     *
+     * @return TurCostoRecursoDetalle
+     */
+    public function setCostoPrestaciones($costoPrestaciones)
+    {
+        $this->costoPrestaciones = $costoPrestaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get costoPrestaciones
+     *
+     * @return float
+     */
+    public function getCostoPrestaciones()
+    {
+        return $this->costoPrestaciones;
+    }
+
+    /**
+     * Set costoNomina
+     *
+     * @param float $costoNomina
+     *
+     * @return TurCostoRecursoDetalle
+     */
+    public function setCostoNomina($costoNomina)
+    {
+        $this->costoNomina = $costoNomina;
+
+        return $this;
+    }
+
+    /**
+     * Get costoNomina
+     *
+     * @return float
+     */
+    public function getCostoNomina()
+    {
+        return $this->costoNomina;
     }
 }

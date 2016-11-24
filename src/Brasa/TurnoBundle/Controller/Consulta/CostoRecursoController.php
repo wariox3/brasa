@@ -58,6 +58,7 @@ class CostoRecursoController extends Controller
         $dql = $em->getRepository('BrasaTurnoBundle:TurCostoRecursoDetalle')->listaDql($arCostoRecurso->getCodigoRecursoFk(), $arCostoRecurso->getAnio(), $arCostoRecurso->getMes());
         $arCostoRecursoDetalle = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 200);
         return $this->render('BrasaTurnoBundle:Consultas/Costo:verDetalleRecurso.html.twig', array(
+            'arCostoRecurso' => $arCostoRecurso,
             'arCostoRecursoDetalle' => $arCostoRecursoDetalle,                        
             'form' => $form->createView()));
     }

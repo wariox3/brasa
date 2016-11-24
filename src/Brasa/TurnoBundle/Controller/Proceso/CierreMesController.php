@@ -120,8 +120,11 @@ class CierreMesController extends Controller
                             $participacionRecurso = $peso / $pesoTotal;
                         }
                         $costoDetalle = $participacionRecurso * $costoRecurso;                        
-                                                
+                        $costoDetalleNomina =  $participacionRecurso * $devengado;
+                        $costoDetalleSeguridadSocial =  $participacionRecurso * $seguridadSocial;
+                        $costoDetallePrestaciones =  $participacionRecurso * $prestaciones;
                         $participacion = 0;
+                        
                         if($detalle['pDS'] > 0) {
                             $participacion = $detalle['pDS'] / $peso;
                         }
@@ -208,6 +211,9 @@ class CierreMesController extends Controller
                         $arCostoRecursoDetalle->setParticipacion($participacionRecurso * 100);
                         $arCostoRecursoDetalle->setPeso($peso);
                         $arCostoRecursoDetalle->setCosto($costoDetalle);
+                        $arCostoRecursoDetalle->setCostoNomina($costoDetalleNomina);
+                        $arCostoRecursoDetalle->setCostoSeguridadSocial($costoDetalleSeguridadSocial);
+                        $arCostoRecursoDetalle->setCostoPrestaciones($costoDetallePrestaciones);
                         $em->persist($arCostoRecursoDetalle);
                     }
                     $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($arrRecurso['codigo_recurso_fk']);
@@ -220,29 +226,11 @@ class CierreMesController extends Controller
                     $arCostoRecurso->setVrPrestaciones($prestaciones);
                     $arCostoRecurso->setVrAportesSociales($seguridadSocial);                    
                     $arCostoRecurso->setVrCostoTotal($costoRecurso);
-                    /*$horas = 0;
-                    $arProgramacionDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
-                    $arProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->findBy(array('codigoRecursoFk' => $arRecurso->getCodigoRecursoPk(), 'anio' => $arCierreMes->getAnio(), 'mes' => $arCierreMes->getMes()));                                            
-                    foreach ($arProgramacionDetalles as $arProgramacionDetalle) {
-                        $horas += $arProgramacionDetalle->getHoras(); 
-                    }                        
-                    $arCostoRecurso->setHoras($horas);
-                    $floVrHora = 0;
-                    if($horas > 0) {
-                        $floVrHora = $floTotal / $horas;
-                    }                 
-                    $arCostoRecurso->setVrHora($floVrHora);
-                     * 
-                     */
-                    $em->persist($arCostoRecurso);
-                    //Actualizar programaciones detalle                        
-                    //$query = $em->createQuery('update BrasaTurnoBundle:TurProgramacionDetalle pd set pd.vrHoraRecurso = ' . $floVrHora . ' where pd.codigoRecursoFk = ' . $arRecurso->getCodigoRecursoPk() . ' and pd.anio = ' . $arCierreMes->getAnio() . ' and pd.mes =' . $arCierreMes->getMes());
-                    //$query->execute();                                                                                                                                   
+                    $em->persist($arCostoRecurso);                                                                                                                              
                 }
                 $em->flush();
                 
-                //Asignar los centros de costos donde mas trabajo el recurso
-                
+                //Asignar los centros de costos donde mas trabajo el recurso                
                 foreach ($arrRecursos as $arrRecurso) {
                     $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                     $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arrRecurso['codigo_empleado_fk']);
