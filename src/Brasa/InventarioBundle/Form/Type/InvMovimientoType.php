@@ -9,14 +9,7 @@ class InvMovimientoType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder 
-             ->add('terceroRel', 'entity', array(
-                'class' => 'BrasaInventarioBundle:InvTercero',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('t')
-                    ->orderBy('t.nombreCorto', 'ASC');},
-                'property' => 'nombreCorto',
-                'required' => true))    
+        $builder                  
             ->add('fecha', 'date', array('format' => 'yyyyMMdd'))            
             ->add('guardar', 'submit')            
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));

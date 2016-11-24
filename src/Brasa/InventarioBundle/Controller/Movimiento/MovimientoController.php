@@ -84,6 +84,7 @@ class MovimientoController extends Controller
      */
     public function nuevoAction(Request $request,$codigoDocumento, $codigoMovimiento) {
         $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arDocumento = new \Brasa\InventarioBundle\Entity\InvDocumento();
         $arDocumento = $em->getRepository('BrasaInventarioBundle:InvDocumento')->find($codigoDocumento);
         $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimiento();
@@ -95,14 +96,26 @@ class MovimientoController extends Controller
         $form = $this->createForm(new InvMovimientoType, $arMovimiento);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $arMovimiento->setDocumentoRel($arDocumento);
-            $em->persist($arMovimiento);
-            $em->flush();
+            $arrControles = $request->request->All();
+            if($arrControles['txtNit'] != '') {
+                $arTercero = new \Brasa\InventarioBundle\Entity\InvTercero();
+                $arTercero = $em->getRepository('BrasaInventarioBundle:InvTercero')->findOneBy(array('nit' => $arrControles['txtNit']));                
+                if(count($arTercero) > 0) {
+                    $arMovimiento->setTerceroRel($arTercero);
+                    $arMovimiento->setDocumentoRel($arDocumento);
+                    $em->persist($arMovimiento);
+                    $em->flush();
 
-            if($form->get('guardarnuevo')->isClicked()) {
-                return $this->redirect($this->generateUrl('brs_inv_movimiento_movimiento_nuevo', array('codigoDocumento' => $codigoDocumento, 'codigoMovimiento' => 0 )));
-            } else {                
-                return $this->redirect($this->generateUrl('brs_inv_movimiento_movimiento_lista', array('codigoDocumento' => $codigoDocumento)));
+                    if($form->get('guardarnuevo')->isClicked()) {
+                        return $this->redirect($this->generateUrl('brs_inv_movimiento_movimiento_nuevo', array('codigoDocumento' => $codigoDocumento, 'codigoMovimiento' => 0 )));
+                    } else {                
+                        return $this->redirect($this->generateUrl('brs_inv_movimiento_movimiento_lista', array('codigoDocumento' => $codigoDocumento)));
+                    }
+                } else {
+                    $objMensaje->Mensaje("error", "El tercero no existe", $this);
+                  }
+            } else {
+                $objMensaje->Mensaje("error", "El tercero no existe", $this);
             }
         }
         return $this->render('BrasaInventarioBundle:Movimiento/Movimiento:nuevo.html.twig', array(

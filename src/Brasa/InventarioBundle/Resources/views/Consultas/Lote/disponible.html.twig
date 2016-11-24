@@ -1,0 +1,61 @@
+{% extends '::base.html.twig' %}
+{% block title %}Disponibles - Soga App{% endblock %}
+{% block content %}
+<script>
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>    
+<div class="container">
+    <div class="page-header">
+        <h3>Disponibles</h3>
+    </div>
+    {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
+        {{ form_errors(form) }}
+        <div class="panel panel-default">
+            <div class="panel-heading">Filtros de busqueda</div>
+            <div class="panel-body">
+                <div class="form-group form-group-sm">
+                    <label for="form_TxtCodigoItem" class="col-sm-2 control-label">Item:</label>
+                    <div class="col-sm-10">
+                        {{ form_widget(form.TxtCodigoItem) }}
+                    </div>
+                </div>    
+                <div class="form-group form-group-sm">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        {{ form_widget(form.BtnFiltrar, { 'attr': {'class': 'btn btn-default btn-sm', 'style':'float:right'} }) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+            <table class="table table-striped table-bordered table-condensed">
+            <tr>
+                <th>ITEM</th>
+                <th>LOTE</th>
+                <th>EXISTENCIA</th>
+                <th>CANTIDAD REMISIONADA</th>
+                <th>CANTIDAD DISPONIBLE</th>
+                <th>FECHA VEN</th>                                
+            </tr>
+            {% for arDisponibles in arDisponibles %}
+                <tr>                    
+                    <td>{{ arDisponibles.itemRel.nombre | default('')  }}</td>                       
+                    <td>{{ arDisponibles.codigoLoteFk  }}</td>
+                    <td align="Rigth">{{ arDisponibles.existencia  }}</td>
+                    <td align="Rigth">{{ arDisponibles.cantidadRemisionada  }}</td>
+                    <td align="Rigth">{{ arDisponibles.Disponible  }}</td>
+                    <td>{{ arDisponibles.fechaVencimiento  }}</td>                                       
+                </tr>
+            {% endfor %}
+        </table>
+
+        <!-- Botones Menu Items -->
+        <div class="btn-group" style="float: left">
+                <div class="btn btn-default btn-sm">Registros <span class="badge"></span></div>                        
+        </div>
+        <!-- Fin Botones Menu Items -->
+        {{ form_rest(form) }}
+    {{ form_end(form) }}
+
+</div>
+{% endblock %}

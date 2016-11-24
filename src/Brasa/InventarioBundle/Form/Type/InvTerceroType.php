@@ -24,7 +24,8 @@ class InvTerceroType extends AbstractType
             ->add('celular', 'text', array('required' => false))    
             ->add('fax', 'text', array('required' => false))        
             ->add('email', 'text', array('required' => false))            
-            ->add('BtnGuardar', 'submit', array('label' => 'Guardar'));
+            ->add('guardar', 'submit')            
+            ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }
 
     public function getName()

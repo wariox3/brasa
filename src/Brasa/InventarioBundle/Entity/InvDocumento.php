@@ -34,9 +34,9 @@ class InvDocumento
     private $abreviatura; 
     
     /**
-     * @ORM\Column(name="codigo_documento_subtipo_fk", type="integer", nullable=true)
+     * @ORM\Column(name="codigo_documento_clase_fk", type="integer", nullable=true)
      */      
-    private $codigoDocumentoSubtipoFk;                        
+    private $codigoDocumentoClaseFk;                        
 
     /**
      * @ORM\Column(name="operacion_inventario", type="smallint")
@@ -199,6 +199,7 @@ class InvDocumento
     protected $movimientosDocumentoRel;
 
     
+    
     /**
      * Constructor
      */
@@ -290,27 +291,27 @@ class InvDocumento
     }
 
     /**
-     * Set codigoDocumentoSubtipoFk
+     * Set codigoDocumentoClaseFk
      *
-     * @param integer $codigoDocumentoSubtipoFk
+     * @param integer $codigoDocumentoClaseFk
      *
      * @return InvDocumento
      */
-    public function setCodigoDocumentoSubtipoFk($codigoDocumentoSubtipoFk)
+    public function setCodigoDocumentoClaseFk($codigoDocumentoClaseFk)
     {
-        $this->codigoDocumentoSubtipoFk = $codigoDocumentoSubtipoFk;
+        $this->codigoDocumentoClaseFk = $codigoDocumentoClaseFk;
 
         return $this;
     }
 
     /**
-     * Get codigoDocumentoSubtipoFk
+     * Get codigoDocumentoClaseFk
      *
      * @return integer
      */
-    public function getCodigoDocumentoSubtipoFk()
+    public function getCodigoDocumentoClaseFk()
     {
-        return $this->codigoDocumentoSubtipoFk;
+        return $this->codigoDocumentoClaseFk;
     }
 
     /**

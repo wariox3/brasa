@@ -5,36 +5,33 @@ namespace Brasa\InventarioBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="inv_documento_subtipo")
- * @ORM\Entity(repositoryClass="Brasa\InventarioBundle\Repository\InvDocumentoSubtipoRepository")
+ * @ORM\Table(name="inv_documento_clase")
+ * @ORM\Entity(repositoryClass="Brasa\InventarioBundle\Repository\InvDocumentoClaseRepository")
  */
-class InvDocumentoSubtipo
+class InvDocumentoClase
 {   
     
     /**
      * @ORM\Id
-     * @ORM\Column(name="codigo_documento_subtipo_pk", type="integer")
+     * @ORM\Column(name="codigo_documento_clase_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */ 
-    private $codigoDocumentoSubtipoPk;
+    private $codigoDocumentoClasePk;
     
     /**
      * @ORM\Column(name="nombre", type="string", length=80)
      */        
-    private $nombre;
-    
-
-
-    
+    private $nombre;    
+        
 
     /**
-     * Get codigoDocumentoSubtipoPk
+     * Get codigoDocumentoClasePk
      *
      * @return integer
      */
-    public function getCodigoDocumentoSubtipoPk()
+    public function getCodigoDocumentoClasePk()
     {
-        return $this->codigoDocumentoSubtipoPk;
+        return $this->codigoDocumentoClasePk;
     }
 
     /**
@@ -42,7 +39,7 @@ class InvDocumentoSubtipo
      *
      * @param string $nombre
      *
-     * @return InvDocumentoSubtipo
+     * @return InvDocumentoClase
      */
     public function setNombre($nombre)
     {

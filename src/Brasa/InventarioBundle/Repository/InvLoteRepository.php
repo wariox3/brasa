@@ -12,6 +12,13 @@ use Doctrine\ORM\EntityRepository;
  */
 class InvLoteRepository extends EntityRepository {
 
-        
+   public function consultaDisponibleDql($strCodigoItem = '') {
+        $dql   = "SELECT l FROM BrasaInventarioBundle:InvLote l WHERE l.cantidadDisponible > 0";        
+        if($strCodigoItem != "" ) {
+            $dql .= " AND l.codigoItemFk = " . $strCodigoItem;
+        }
+        //$dql .= " ORDER BY l.loteFk";
+        return $dql;
+    }     
     
 }

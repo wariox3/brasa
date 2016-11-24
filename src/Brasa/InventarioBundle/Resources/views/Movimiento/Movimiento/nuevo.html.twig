@@ -1,4 +1,4 @@
-{% extends '::base_sin_menu.html.twig' %}
+{% extends '::base.html.twig' %}
 {% block title %}Movimiento nuevo - Soga App{% endblock %}
 {% block content %}
 <div class="container">
@@ -6,13 +6,27 @@
     <h3>Nuevo movimiento</h3>
     <div class="panel panel-default">
         <div class="panel-heading">Informacion general</div>
-        <div class="panel-body"> 
+        <div class="panel-body">
             <div class="form-group form-group-sm">
-                <label for="form_terceroRel" class="col-sm-3 control-label">Tercero:</label>
+                <label for="txtNit" class="col-sm-3 control-label">Tercero:</label>
                 <div class="col-sm-9">
-                    {{ form_widget(form.terceroRel, { 'attr': {'class': 'form-control'} }) }}                        
-                </div>                
-            </div>                                 
+                    <div class="row">
+                      <div class="col-lg-2">
+                        <div class="input-group">
+                            <input id="txtNit"  name="txtNit"  type="text" class="form-control" value="{{ arMovimiento.terceroRel.nit | default('')}}"/>
+                        </div>
+                      </div>
+                      <div class="col-lg-10">
+                        <div class="input-group">                                      
+                            <input id="txtNombreCorto"  name="txtNombreCorto"  type="text" class="form-control" value="{{ arTercero.terceroRel.nombreCorto | default('') }}" readOnly="ReadOnly" />
+                          <span class="input-group-btn">                                        
+                            <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_inv_buscar_tercero', { 'campoNit': 'txtNit', 'campoNombre': 'txtNombreCorto' }) }}', 'buscarTercero', 600, 900)">Buscar</a>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>                                             
             <div class="form-group form-group-sm">
                 <label for="form_fecha" class="col-sm-3 control-label">Fecha:</label>
                 <div class="col-sm-9">

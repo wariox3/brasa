@@ -214,7 +214,8 @@
                         <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">Inventario</a>
                             <ul class="dropdown-menu">
-                                <li><a href="{{ path('brs_inv_base_item') }}">Item</a></li>                                
+                                <li><a href="{{ path('brs_inv_base_item') }}">Item</a></li>
+                                <li><a href="{{ path('brs_inv_base_tercero') }}">Tercero</a></li>                                
                             </ul>
                         </li>
                         {% endif %}
@@ -459,6 +460,14 @@
                                 </li>
                             </ul>
                         </li>
+                        {% endif %}
+                        {% if arModulo.inventario == 1 %}
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1" href="#">Inventario</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ path('brs_inv_consultas_disponible') }}">Disponibles</a></li>
+                            </ul>
+                        </li>        
                         {% endif %}
                         {% if arModulo.afiliacion == 1 %}
                         <li class="dropdown-submenu">

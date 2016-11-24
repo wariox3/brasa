@@ -21,7 +21,7 @@ class TerceroController extends Controller
      */
     public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 133, 1)) {
+        if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 135, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));
         }
         $paginator  = $this->get('knp_paginator');
@@ -93,13 +93,13 @@ class TerceroController extends Controller
     private function lista() {
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaInventarioBundle:InvTercero')->listaDQL(
-                $this->strNombre,
-                $this->strCodigo
+                $this->strNit,
+                $this->strNombre
                 );
     }
 
     private function filtrar ($form) {
-        $this->strCodigo = $form->get('TxtCodigo')->getData();
+        $this->strNit = $form->get('TxtNit')->getData();
         $this->strNombre = $form->get('TxtNombre')->getData();
         $this->lista();
     }
@@ -107,7 +107,7 @@ class TerceroController extends Controller
     private function formularioFiltro() {
         $form = $this->createFormBuilder()
             ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $this->strNombre))
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->strCodigo))
+            ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $this->strNit))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
@@ -132,21 +132,12 @@ class TerceroController extends Controller
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true); 
         for($col = 'A'; $col !== 'O'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                           
-        }
-        for($col = 'C'; $col !== 'F'; $col++) {
-                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
-                    $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
-                }
+        }        
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIG0')
-                    ->setCellValue('B1', 'NOMBRE')
-                    ->setCellValue('C1', 'COSTO PREDETERMINADO')
-                    ->setCellValue('D1', 'COSTO PROMEDIO')
-                    ->setCellValue('E1', 'PRECIO PREDETERMINADO')
-                    ->setCellValue('F1', '% IVA')
-                    ->setCellValue('G1', 'CANTIDAD EXISTENCIA')
-                    ->setCellValue('H1', 'CANTIDAD REMISIONADA')
-                    ->setCellValue('I1', 'CANTIDAD DISPONIBLE');
+                    ->setCellValue('B1', 'NIT')
+                    ->setCellValue('C1', 'DV')
+                    ->setCellValue('D1', 'NOMBRE');
 
         $i = 2;
 
@@ -157,14 +148,9 @@ class TerceroController extends Controller
         foreach ($arTerceros as $arTercero) {
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arTercero->getCodigoTerceroPk())
-                    ->setCellValue('B' . $i, $arTercero->getNombre())
-                    ->setCellValue('C' . $i, $arTercero->getVrCostoPredeterminado())
-                    ->setCellValue('D' . $i, $arTercero->getVrCostoPromedio())
-                    ->setCellValue('E' . $i, $arTercero->getVrPrecioPredeterminado())
-                    ->setCellValue('F' . $i, $arTercero->getPorcentajeIva())
-                    ->setCellValue('G' . $i, $arTercero->getCantidadExistencia())
-                    ->setCellValue('H' . $i, $arTercero->getCantidadRemisionada())
-                    ->setCellValue('I' . $i, $arTercero->getCantidadDisponible());
+                    ->setCellValue('B' . $i, $arTercero->getNit())
+                    ->setCellValue('C' . $i, $arTercero->getDigitoVerificacion())
+                    ->setCellValue('D' . $i, $arTercero->getNombreCorto());
             $i++;
         }
 
