@@ -62,6 +62,7 @@ class AfiPeriodoRepository extends EntityRepository {
         $arContratos = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->contratosPeriodo($arPeriodo->getFechaDesde()->format('Y/m/d'), $arPeriodo->getFechaHasta()->format('Y/m/d'), $arPeriodo->getCodigoClienteFk());      
         $numeroContratos = count($arContratos);
         foreach($arContratos as $arContrato) {
+            
             //$arContrato = new \Brasa\AfiliacionBundle\Entity\AfiContrato();            
             $porcentajeIcbf = 3;
             $porcentajeSena = 2;

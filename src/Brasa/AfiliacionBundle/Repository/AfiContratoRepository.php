@@ -205,7 +205,7 @@ class AfiContratoRepository extends EntityRepository {
     public function contratosPeriodo($fechaDesde = "", $fechaHasta = "", $codigoCliente = "") {        
         $em = $this->getEntityManager();
         $dql   = "SELECT c FROM BrasaAfiliacionBundle:AfiContrato c "
-                ." WHERE (c.fechaHasta >= '" . $fechaDesde . "' OR c.indefinido = 1) "
+                ." WHERE (c.fechaHasta >= '" . $fechaDesde . "' AND c.indefinido = 1) "
                 . "AND c.fechaDesde <= '" . $fechaHasta . "' AND c.codigoClienteFk=" . $codigoCliente;
         $query = $em->createQuery($dql);        
         $arContratos = $query->getResult();        

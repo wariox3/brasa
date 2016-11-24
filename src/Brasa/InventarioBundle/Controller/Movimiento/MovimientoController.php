@@ -26,11 +26,7 @@ class MovimientoController extends Controller
         $form->handleRequest($request);
         $this->listaIngreso();
         if ($form->isValid()) {
-            /*if ($form->get('BtnInterfaz')->isClicked()) {
-                $this->filtrar($form);
-                $this->lista();
-                $this->generarExcelInterfaz();
-            }*/
+            
         }
 
         $arDocumentos = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 40);
@@ -48,12 +44,13 @@ class MovimientoController extends Controller
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arDocumento = new \Brasa\InventarioBundle\Entity\InvDocumento();
         $arDocumento = $em->getRepository('BrasaInventarioBundle:InvDocumento')->find($codigoDocumento);        
-        $form = $this->formularioMovimiento($arDocumento);
+        $form = $this->formularioLista($arDocumento);
         $form->handleRequest($request);
+        $this->lista();
         if ($form->isValid()) {
             if ($form->get('BtnExcel')->isClicked()) {
-                //$this->filtrar($form);
-                //$this->lista();
+                //$this->filtrarLista($form);
+                $this->lista();
                 $this->generarExcel($codigoDocumento);
             }
             if ($form->get('BtnEliminar')->isClicked()) {
@@ -65,10 +62,8 @@ class MovimientoController extends Controller
                     return $this->redirect($this->generateUrl('brs_inv_movimiento_movimiento_lista', array('codigoDocumento' => $codigoDocumento)));
                 }
             }
-        }
-        $arMovimientos = new \Brasa\InventarioBundle\Entity\InvMovimiento();
-        $arMovimientos = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->findBy(array('codigoDocumentoFk' => $codigoDocumento));
-        $arMovimientos = $paginator->paginate($arMovimientos, $this->get('request')->query->get('page', 1),40);
+        }        
+        $arMovimientos = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 40);
         return $this->render('BrasaInventarioBundle:Movimiento/Movimiento:lista.html.twig', array(
             'arMovimientos' => $arMovimientos,
             'arDocumento' => $arDocumento,
@@ -205,15 +200,29 @@ class MovimientoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $this->strListaDql =  $em->getRepository('BrasaInventarioBundle:InvDocumento')->listaDql();
     }
+    
+    private function lista() {
+        $em = $this->getDoctrine()->getManager();
+        $this->strListaDql =  $em->getRepository('BrasaInventarioBundle:InvMovimiento')->listaDql();
+    }
 
-    private function filtrar ($form) {
-
+    private function filtrarLista ($form) {
+        $session = $this->getRequest()->getSession();        
+        $session->set('filtroCotizacionNumero', $form->get('TxtNumero')->getData());        
+        $session->set('filtroNit', $form->get('TxtNit')->getData());
+    }
+    
+    private function filtrarIngreso ($form) {
+        $session = $this->getRequest()->getSession();        
+        $session->set('filtroCodigo', $form->get('TxtCodigo')->getData());
+        $session->set('filtroNombre', $form->get('TxtNombre')->getData());                  
     }
 
     private function formularioLista() {
         $form = $this->createFormBuilder()
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))    
             ->getForm();
         return $form;
     }
@@ -241,7 +250,9 @@ class MovimientoController extends Controller
 
     private function formularioIngreso() {
         $form = $this->createFormBuilder()
-
+            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombre')))
+            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCodigo')))    
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))    
             ->getForm();
         return $form;
     }
