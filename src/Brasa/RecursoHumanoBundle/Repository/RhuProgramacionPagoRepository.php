@@ -244,18 +244,25 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         $em = $this->getEntityManager();
         set_time_limit(0);
         $numeroPagos = 0;
-        $douNeto = 0;        
+        $douNetoTotal = 0;        
         $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
         $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);        
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
         $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
         $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));        
-        foreach ($arPagos as $arPago) {
-            $douNeto += $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->Liquidar($arPago->getCodigoPagoPk(), $arConfiguracion);
+        foreach ($arPagos as $arPago) {            
+            $douNeto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->Liquidar($arPago->getCodigoPagoPk(), $arConfiguracion);
+            $douNetoTotal += $douNeto;
+            if($arPago->getCodigoProgramacionPagoDetalleFk()) {
+                $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();                
+                $arProgramacionPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->find($arPago->getCodigoProgramacionPagoDetalleFk());
+                $arProgramacionPagoDetalle->setVrNetoPagar($douNeto);
+                $em->persist($arProgramacionPagoDetalle);
+            }
             $numeroPagos++;
         }
-        $arProgramacionPago->setVrNeto($douNeto);
+        $arProgramacionPago->setVrNeto($douNetoTotal);
         $arProgramacionPago->setNumeroEmpleados($numeroPagos);
         $em->persist($arProgramacionPago);
         $em->flush();
@@ -263,6 +270,34 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         return true;
     }
 
+    /**
+     * Valida si se puede pagar la programacion
+     *
+     * @author		Mario Estrada
+     *
+     * @param integer	Codigo de la programacion de pago
+     */
+    public function validarPagar($codigoProgramacionPago) {       
+        $em = $this->getEntityManager(); 
+        $errores = "";
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
+        $arProgramacionPagoProcesar = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
+        $arProgramacionPagoProcesar = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
+        if($arProgramacionPagoProcesar->getEstadoGenerado() == 1) {
+            $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
+            $arPagos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findBy(array('codigoProgramacionPagoFk' => $codigoProgramacionPago));
+            foreach ($arPagos as $arPago) { 
+                if($arPago->getVrNeto() < 0) {
+                    if($errores == "") {
+                       $errores = "No se puede pagar la programacion porque existen pagos negativos"; 
+                    }
+                }
+            }                                                             
+        }                    
+        return $errores;
+    }    
+    
     /**
      * Paga la programacion pago, este proceso no se puede deshacer
      *
@@ -405,8 +440,8 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         }            
         $em->flush();   
         
-    }
-
+    }    
+    
     /**
      * Listar las programaciones de pago segun parametros
      *

@@ -53,7 +53,13 @@ class ProgramacionesPagoController extends Controller
             }
             if($request->request->get('OpPagar')) {
                 $codigoProgramacionPago = $request->request->get('OpPagar');
-                $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->pagar($codigoProgramacionPago);
+                $inconsistencias = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->validarPagar($codigoProgramacionPago);
+                if($inconsistencias == "") {
+                    $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->pagar($codigoProgramacionPago);
+                } else {
+                    $objMensaje->Mensaje("error", $inconsistencias, $this);
+                }
+                
                 return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_lista'));
             }
             if($request->request->get('OpExcelDetalle')) {
@@ -164,8 +170,7 @@ class ProgramacionesPagoController extends Controller
                     }
                     return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
                 }
-            }                        
-            
+            }                                    
             if($form->get('BtnEliminarEmpleados')->isClicked()) {               
                     $arrSeleccionados = $request->request->get('ChkSeleccionarSede');
                     if(count($arrSeleccionados) > 0) {
@@ -193,43 +198,13 @@ class ProgramacionesPagoController extends Controller
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
 
-            }            
+            }               
             if($form->get('BtnEliminarTodoEmpleados')->isClicked()) {
                 if ($arProgramacionPago->getEstadoGenerado() == 0 ){
                     $resultado = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->eliminarTodoEmpleados($codigoProgramacionPago);
                 }
                 return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
             }
-            /*if ($form->get('BtnActualizarDetalle')->isClicked()) {
-                $arrControles = $request->request->All();
-                if ($arProgramacionPago->getEstadoPagado() == 0 ){
-                    
-                    foreach ($arrControles['LblCodigo'] as $intCodigo) {
-                        $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
-                        $arProgramacionPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->find($intCodigo);
-                        if(count($arProgramacionPagoDetalle) > 0) {
-                    
-                            if($arrControles['TxtHorasNocturnas'.$intCodigo] != "") {
-                                $arProgramacionPagoDetalle->setHorasNocturnas($arrControles['TxtHorasNocturnas'.$intCodigo]);
-                                
-                                $em->persist($arProgramacionPagoDetalle);
-                            }
-                            if($arrControles['TxtHorasFestivasDiurnas'.$intCodigo] != "") {
-                                $arProgramacionPagoDetalle->setHorasNocturnas($arrControles['TxtHorasFestivasDiurnas'.$intCodigo]);
-                                
-                                $em->persist($arProgramacionPagoDetalle);
-                            }
-                            
-                        }
-                        
-                        
-                    }
-                    //$em->persist($arProgramacionPagoDetalle);
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle', array('codigoProgramacionPago' => $codigoProgramacionPago)));
-                }
-            }*/
-
         }
         $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
         $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arProgramacionPago->getCodigoCentroCostoFk());

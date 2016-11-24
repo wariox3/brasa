@@ -720,7 +720,12 @@ class RhuEmpleado
      * @ORM\OneToMany(targetEntity="RhuCambioTipoContrato", mappedBy="empleadoRel")
      */
     protected $cambiosTiposContratosEmpleadoRel;
-       
+
+    /**
+     * @ORM\OneToMany(targetEntity="RhuReclamo", mappedBy="empleadoRel")
+     */
+    protected $reclamosEmpleadoRel;     
+    
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\TurnoBundle\Entity\TurPuesto", inversedBy="rhuEmpleadosPuestoRel")
      * @ORM\JoinColumn(name="codigo_puesto_fk", referencedColumnName="codigo_puesto_pk")
@@ -4447,5 +4452,39 @@ class RhuEmpleado
     public function getVisitasEmpleadoRel()
     {
         return $this->visitasEmpleadoRel;
+    }
+
+    /**
+     * Add reclamosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuReclamo $reclamosEmpleadoRel
+     *
+     * @return RhuEmpleado
+     */
+    public function addReclamosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuReclamo $reclamosEmpleadoRel)
+    {
+        $this->reclamosEmpleadoRel[] = $reclamosEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove reclamosEmpleadoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuReclamo $reclamosEmpleadoRel
+     */
+    public function removeReclamosEmpleadoRel(\Brasa\RecursoHumanoBundle\Entity\RhuReclamo $reclamosEmpleadoRel)
+    {
+        $this->reclamosEmpleadoRel->removeElement($reclamosEmpleadoRel);
+    }
+
+    /**
+     * Get reclamosEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getReclamosEmpleadoRel()
+    {
+        return $this->reclamosEmpleadoRel;
     }
 }
