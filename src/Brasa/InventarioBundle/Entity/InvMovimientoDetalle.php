@@ -28,7 +28,7 @@ class InvMovimientoDetalle
     private $codigoItemFk;    
 
     /**
-     * @ORM\Column(name="codigo_bodega_fk", type="string", length=10)
+     * @ORM\Column(name="codigo_bodega_fk", type="string", length=10, nullable=true)
      */     
     private $codigoBodegaFk;
 

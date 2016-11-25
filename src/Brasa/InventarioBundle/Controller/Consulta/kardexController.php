@@ -10,7 +10,7 @@ class kardexController extends Controller
     var $strListaDql = "";    
     
     /**
-     * @Route("/inv/consulta/kardex", name="brs_inv_consultas_kardex")
+     * @Route("/inv/consulta/kardex", name="brs_inv_consulta_kardex")
      */    
     public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();        

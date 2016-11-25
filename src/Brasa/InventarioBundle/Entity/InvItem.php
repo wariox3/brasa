@@ -99,17 +99,14 @@ class InvItem
     private $servicio = 0;              
 
     /**
-     * @ORM\Column(name="materiaPrima", type="boolean")
+     * @ORM\Column(name="materia_prima", type="boolean")
      */    
     private $materiaPrima = 0;
     
-/**
+    /**
      * @ORM\OneToMany(targetEntity="InvMovimientoDetalle", mappedBy="itemRel")
      */
     protected $itemsBodegaRel;    
-    
-
-    
     
     /**
      * Constructor

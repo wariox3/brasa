@@ -10,7 +10,7 @@ class disponibleController extends Controller
     var $strListaDql = "";    
     
     /**
-     * @Route("/inv/consulta/disponible", name="brs_inv_consultas_disponible")
+     * @Route("/inv/consulta/disponible", name="brs_inv_consulta_disponible")
      */    
     public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();        
@@ -18,7 +18,6 @@ class disponibleController extends Controller
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }
         $paginator  = $this->get('knp_paginator');
-        //$this->filtrarFecha = TRUE;
         $form = $this->formularioFiltro();
         $form->handleRequest($request);
         $this->lista();                
@@ -34,8 +33,6 @@ class disponibleController extends Controller
                 $this->generarExcel();
             }
         }
-        $arLote = new \Brasa\InventarioBundle\Entity\InvLote();
-        $arLote = $em->getRepository('BrasaInventarioBundle:InvLote')->findAll();
         $query = $em->createQuery($this->strListaDql);        
         $arResultados = $query->getResult();
         $arLotes = $paginator->paginate($arResultados, $request->query->get('page', 1), 50);
@@ -138,8 +135,6 @@ class disponibleController extends Controller
         $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('php://output');
         exit;
-    } 
-    
-
+    }    
 
 }

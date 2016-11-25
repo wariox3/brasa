@@ -109,7 +109,7 @@ class MovimientoController extends Controller
                     if($form->get('guardarnuevo')->isClicked()) {
                         return $this->redirect($this->generateUrl('brs_inv_movimiento_movimiento_nuevo', array('codigoDocumento' => $codigoDocumento, 'codigoMovimiento' => 0 )));
                     } else {                
-                        return $this->redirect($this->generateUrl('brs_inv_movimiento_movimiento_lista', array('codigoDocumento' => $codigoDocumento)));
+                        return $this->redirect($this->generateUrl('brs_inv_movimiento_movimiento_detalle', array('codigoMovimiento' => $arMovimiento->getCodigoMovimientoPk())));
                     }
                 } else {
                     $objMensaje->Mensaje("error", "El tercero no existe", $this);
@@ -184,8 +184,6 @@ class MovimientoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimiento();
         $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->find($codigoMovimiento);
-        $arBodega = new \Brasa\InventarioBundle\Entity\InvBodega();
-        $arBodega = $em->getRepository('BrasaInventarioBundle:InvBodega')->find(1);
         $form = $this->createFormBuilder()
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
             ->getForm();
@@ -202,8 +200,7 @@ class MovimientoController extends Controller
                         $arMovimientoDetalle->setVrPrecio($arItem->getVrPrecioPredeterminado());
                         $arMovimientoDetalle->setCantidad($arItem->getCantidadDisponible());
                         $arMovimientoDetalle->setMovimientoRel($arMovimiento);
-                        $arMovimientoDetalle->setItemRel($arItem);
-                        $arMovimientoDetalle->setCodigoBodegaFk($arBodega->getCodigoBodegaPk());
+                        $arMovimientoDetalle->setItemRel($arItem);                        
                         $em->persist($arMovimientoDetalle);
                     }
                     $em->persist($arMovimientoDetalle);
@@ -231,15 +228,15 @@ class MovimientoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();        
         $this->strListaDql =  $em->getRepository('BrasaInventarioBundle:InvMovimiento')->listaDql(
-            $session->get('filtroCodigo'), 
-            $session->get('filtroNumero')
+            $session->get('filtroInvCodigoMovimiento'), 
+            $session->get('filtroInvNumeroMovimiento')
             );
     }
 
     private function filtrarLista ($form) {
         $session = $this->getRequest()->getSession();        
-        $session->set('filtroCodigo', $form->get('TxtCodigo')->getData());        
-        $session->set('filtroNumero', $form->get('TxtNumero')->getData());
+        $session->set('filtroInvCodigoMovimiento', $form->get('TxtCodigo')->getData());        
+        $session->set('filtroInvNumeroMovimiento', $form->get('TxtNumero')->getData());
     }
     
     private function filtrarIngreso ($form) {
@@ -252,8 +249,8 @@ class MovimientoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()
-            ->add('TxtNumero', 'text', array('label'  => 'Numero'))
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCodigo')))    
+            ->add('TxtNumero', 'text', array('label'  => 'Numero','data' => $session->get('filtroInvNumeroMovimiento')))
+            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $session->get('filtroInvCodigoMovimiento')))    
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))    
