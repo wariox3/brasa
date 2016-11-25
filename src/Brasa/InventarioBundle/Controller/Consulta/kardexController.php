@@ -35,9 +35,9 @@ class kardexController extends Controller
             }
         }
         
-        $arkardex = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
+        $arMovimientoDetalles = $paginator->paginate($em->createQuery($this->strListaDql), $request->query->get('page', 1), 20);
         return $this->render('BrasaInventarioBundle:Consultas/kardex:kardex.html.twig', array(
-            'arKardex' => $arkardex,                        
+            'arKardex' => $arMovimientoDetalles,                        
             'form' => $form->createView()));
     }        
     
@@ -86,38 +86,35 @@ class kardexController extends Controller
             ->setSubject("Office 2007 XLSX Test Document")
             ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
             ->setKeywords("office 2007 openxml php")
-            ->setCategory("Test result file");
-        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(9); 
+            ->setCategory("Test result file");        
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
         for($col = 'A'; $col !== 'AZ'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
             $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('left');                
-        }                        
+        }
+        for($col = 'D'; $col !== 'E'; $col++) {
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('rigth'); 
+            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
+            
+        }
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'ITEM')
-                    ->setCellValue('B1', 'LOTE')
-                    ->setCellValue('C1', 'EXISTENCIA')
-                    ->setCellValue('D1', 'CANT REMISIONADA')
-                    ->setCellValue('E1', 'CANT DISPONIBLE')
-                    ->setCellValue('F1', 'FECHA VEN');
+                    ->setCellValue('A1', 'CODIGO')
+                    ->setCellValue('B1', 'ITEM')
+                    ->setCellValue('C1', 'CANTIDAD')
+                    ->setCellValue('D1', 'PRECIO');
         
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
-        $arkardexs = new \Brasa\InventarioBundle\Entity\Invkardex();
-        $arkardexs = $query->getResult();
-        foreach ($arkardexs as $arkardexs) {            
+        $arkardex = new \Brasa\InventarioBundle\Entity\InvMovimientoDetalle();
+        $arkardex = $query->getResult();
+        foreach ($arkardex as $arkardex) {            
             $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A' . $i, $arkardexs->getItemRel()->getNombre())
-                    ->setCellValue('B' . $i, $arkardexs->getkardexFk())
-                    ->setCellValue('C' . $i, $arkardexs->getExistencia())
-                    ->setCellValue('D' . $i, $arkardexs->getCantidadRemisionada())
-                    ->setCellValue('E' . $i, $arkardexs->getCantidadDisponible())
-                    ->setCellValue('F' . $i, $arkardexs->getFechaVencimiento()->format('Y/m/d'));                         
+                    ->setCellValue('A' . $i, $arkardex->getCodigoDetalleMovimientoPk())
+                    ->setCellValue('B' . $i, $arkardex->getItemRel()->getNombre())
+                    ->setCellValue('C' . $i, $arkardex->getCantidad())
+                    ->setCellValue('D' . $i, $arkardex->getVrPrecio());                         
             $i++;
-        }                
-        //$objPHPExcel->getActiveSheet()->getStyle('A1:AL1')->getFont()->setBold(true);        
-        
-        //$objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+        }                        
         
         $objPHPExcel->getActiveSheet()->setTitle('kardexs');
         $objPHPExcel->setActiveSheetIndex(0);

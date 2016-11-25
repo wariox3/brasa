@@ -30,7 +30,7 @@ class InvMovimientoDetalleRepository extends EntityRepository
         if($strCodigoItem != "" ) {
             $dql .= " AND md.codigoItemFk = " . $strCodigoItem;
         }
-        //$dql .= " ORDER BY l.loteFk";
+        $dql .= " ORDER BY md.codigoItemFk";
         return $dql;
     }
 }

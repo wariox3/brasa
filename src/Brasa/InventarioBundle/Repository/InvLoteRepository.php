@@ -17,7 +17,7 @@ class InvLoteRepository extends EntityRepository {
         if($strCodigoItem != "" ) {
             $dql .= " AND l.codigoItemFk = " . $strCodigoItem;
         }
-        //$dql .= " ORDER BY l.loteFk";
+        $dql .= " ORDER BY l.loteFk";
         return $dql;
     }     
     
