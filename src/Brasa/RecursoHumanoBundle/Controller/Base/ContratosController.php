@@ -418,8 +418,8 @@ class ContratosController extends Controller
             $codigoMotivoContrato = $formContrato->get('terminacionContratoRel')->getData();            
             $arMotivoTerminacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuMotivoTerminacionContrato')->find($codigoMotivoContrato);           
             $comentarioTerminacion = $formContrato->get('comentarioTerminacion')->getData();            
-            if($dateFechaHasta >= $arContrato->getFechaUltimoPago()) {
-                if ($em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(),11)){
+            if($dateFechaHasta >= $arContrato->getFechaUltimoPago() || $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(),11)) {
+                if ($em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(),113)){
                     if($em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->validarCierreContrato($dateFechaHasta, $arContrato->getCodigoEmpleadoFk())) {
                         if($em->getRepository('BrasaRecursoHumanoBundle:RhuLicencia')->validarCierreContrato($dateFechaHasta, $arContrato->getCodigoEmpleadoFk())) {
                             if ($registrosDotacionesPendientes <= 0){
