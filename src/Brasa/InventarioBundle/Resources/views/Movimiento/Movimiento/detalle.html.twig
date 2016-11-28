@@ -63,15 +63,23 @@
                         <tr>
                             <th>CODIGO</th>
                             <th>ITEM</th>
+                            <th>LOTE</th>
+                            <th>BODEGA</th>
                             <th>CANTIDAD</th>
                             <th>PRECIO</th>                                                                                     
                             <th></th>
                         </tr>
                         {% for arMovimientoDetalle in arMovimientoDetalle %}
                             <tr>
-                                <td>{{ arMovimientoDetalle.codigoDetalleMovimientoPk  }}<input type="hidden" name="LblCodigo[]" value="{{ arMovimientoDetalle.codigoDetalleMovimientoPk }}"></td>
+                                <td>{{ arMovimientoDetalle.codigoDetalleMovimientoPk  }}</td>
                                 <td>{{ arMovimientoDetalle.itemRel.nombre | default('')  }}</td> 
-                                <td>{{ arMovimientoDetalle.cantidad  }}</td>                                                                                                                                                                                                       
+                                <td>{{ arMovimientoDetalle.loteFk  }}</td>
+                                <td>{{ arMovimientoDetalle.codigoBodegaFk  }}</td>                                
+                                {% if arMovimiento.estadoAutorizado == 0 %}
+                                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad[]" value="{{ arMovimientoDetalle.cantidad  }}" size="10" style="text-align: right; width:60px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                
+                                {% else %}
+                                    <td style="text-align: right">{{ arMovimientoDetalle.cantidad | number_format(0, '.', ',') }}</td> 
+                                {% endif %}                                                                
                                 <td style="text-align: right">{{ arMovimientoDetalle.vrPrecio | number_format(0, '.', ',') }}</td>                                                                
                                 <td align="center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arMovimientoDetalle.codigoDetalleMovimientoPk }}" /></td>
                             </tr>
@@ -83,7 +91,10 @@
                         <div class="btn-group">
                             <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_inv_movimiento_movimiento_detalle_nuevo', {'codigoMovimiento': arMovimiento.codigoMovimientoPk }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo</a>
                         </div>
-                    {% endif %}                                   
+                    {% endif %}
+                    <div class="btn-group">
+                        {{ form_widget(form.BtnDetalleActualizar, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                    </div>                     
                     <div class="btn-group">
                         {{ form_widget(form.BtnEliminarDetalle, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                     </div>

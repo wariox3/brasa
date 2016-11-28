@@ -45,5 +45,15 @@ class InvMovimientoRepository extends EntityRepository {
         }
         return $respuesta;
     }
+    
+    public function autorizar($codigoMovimiento) {
+        $em = $this->getEntityManager();
+        $respuesta = "";                
+        $validarCantidad = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->validarCantidad($codigoMovimiento);
+        if($validarCantidad > 0) {
+            $respuesta = "Existen detalles con cantidad en cero";
+        }        
+        return $respuesta;
+    }
         
 }

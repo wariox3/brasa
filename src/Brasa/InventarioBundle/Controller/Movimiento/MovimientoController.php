@@ -138,9 +138,10 @@ class MovimientoController extends Controller
         if($form->isValid()) {
             if($form->get('BtnAutorizar')->isClicked()) {
                 if($arMovimiento->getEstadoAutorizado() == 0) {
-                    $arMovimiento->setEstadoAutorizado(1);
-                    $em->persist($arMovimiento);
-                    $em->flush();
+                    $respuesta = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->autorizar($codigoMovimiento);
+                    if($respuesta != "") {
+                        $objMensaje->Mensaje("error", $respuesta, $this);
+                    }                   
                     return $this->redirect($this->generateUrl('brs_inv_movimiento_movimiento_detalle', array('codigoMovimiento' => $codigoMovimiento)));
                 }
             }
@@ -152,6 +153,11 @@ class MovimientoController extends Controller
                     return $this->redirect($this->generateUrl('brs_inv_movimiento_movimiento_detalle', array('codigoMovimiento' => $codigoMovimiento)));
                 }
             }
+            if($form->get('BtnDetalleActualizar')->isClicked()) {                
+                $arrControles = $request->request->All();
+                //$this->actualizarDetalle($arrControles, $codigoMovimiento);                                
+                return $this->redirect($this->generateUrl('brs_inv_movimiento_movimiento_detalle', array('codigoMovimiento' => $codigoMovimiento)));
+            }            
             if($form->get('BtnEliminarDetalle')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->eliminarSeleccionados($arrSeleccionados);                
@@ -262,10 +268,12 @@ class MovimientoController extends Controller
         $arrBotonAutorizar = array('label' => 'Autorizar', 'disabled' => false);
         $arrBotonDesAutorizar = array('label' => 'Desautorizar', 'disabled' => false);
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);
+        $arrBotonDetalleActualizar = array('label' => 'Actualizar', 'disabled' => false);
         $arrBotonEliminar = array('label' => 'Eliminar', 'disabled' => false);
         if($ar->getEstadoAutorizado() == 1) {
             $arrBotonAutorizar['disabled'] = true;
             $arrBotonEliminar['disabled'] = true;
+            $arrBotonDetalleActualizar['disabled'] = true;
         } else {
             $arrBotonDesAutorizar['disabled'] = true;
             $arrBotonImprimir['disabled'] = true;
@@ -275,6 +283,7 @@ class MovimientoController extends Controller
             ->add('BtnImprimir', 'submit', $arrBotonImprimir)
             ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)
             ->add('BtnEliminarDetalle', 'submit', $arrBotonEliminar)
+            ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
             ->getForm();
         return $form;
     }

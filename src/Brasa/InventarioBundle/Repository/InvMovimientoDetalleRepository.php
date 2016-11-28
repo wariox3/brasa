@@ -33,4 +33,17 @@ class InvMovimientoDetalleRepository extends EntityRepository
         $dql .= " ORDER BY md.codigoItemFk";
         return $dql;
     }
+    
+    public function validarCantidad($codigoMovimiento) {
+        $em = $this->getEntityManager();
+        $intNumeroRegistros = 0;
+        $dql   = "SELECT COUNT(md.codigoDetalleMovimientoPk) as numeroRegistros FROM BrasaInventarioBundle:InvMovimientoDetalle md "
+                . "WHERE md.codigoMovimientoFk = " . $codigoMovimiento . " AND md.cantidad <= 0";
+        $query = $em->createQuery($dql);
+        $arrMovimientoDetalles = $query->getSingleResult(); 
+        if($arrMovimientoDetalles) {
+            $intNumeroRegistros = $arrMovimientoDetalles['numeroRegistros'];
+        }
+        return $intNumeroRegistros;     
+    }
 }
