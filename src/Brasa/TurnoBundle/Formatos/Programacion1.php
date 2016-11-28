@@ -133,7 +133,7 @@ class Programacion1 extends \FPDF_FPDF {
         $this->SetFont('', 'B', 7);
 
         //creamos la cabecera de la tabla.
-        $w = array(10, 30, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5);
+        $w = array(10, 50, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -176,7 +176,7 @@ class Programacion1 extends \FPDF_FPDF {
                             if(count($arTurno) > 0) {
                                 if($arTurno->getNovedad() == 0 && $arTurno->getDescanso() == 0) {
                                     $pdf->Cell(15, 4, $arrTurno['turno'], 1, 0, 'L');
-                                    $pdf->Cell(50, 4, $arTurno->getNombre(), 1, 0, 'L');
+                                    $pdf->Cell(30, 4, $arTurno->getNombre(), 1, 0, 'L');
                                     $pdf->Cell(15, 4, $arTurno->getHoraDesde()->format('H:s'), 1, 0, 'L');
                                     $pdf->Cell(15, 4, $arTurno->getHoraHasta()->format('H:s'), 1, 0, 'L');
                                     $pdf->Ln();                     
