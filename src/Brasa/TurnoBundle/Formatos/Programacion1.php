@@ -176,7 +176,7 @@ class Programacion1 extends \FPDF_FPDF {
                             if(count($arTurno) > 0) {
                                 if($arTurno->getNovedad() == 0 && $arTurno->getDescanso() == 0) {
                                     $pdf->Cell(15, 4, $arrTurno['turno'], 1, 0, 'L');
-                                    $pdf->Cell(30, 4, $arTurno->getNombre(), 1, 0, 'L');
+                                    $pdf->Cell(50, 4, $arTurno->getNombre(), 1, 0, 'L');
                                     $pdf->Cell(15, 4, $arTurno->getHoraDesde()->format('H:s'), 1, 0, 'L');
                                     $pdf->Cell(15, 4, $arTurno->getHoraHasta()->format('H:s'), 1, 0, 'L');
                                     $pdf->Ln();                     
@@ -202,9 +202,9 @@ class Programacion1 extends \FPDF_FPDF {
             
             $pdf->Cell(10, 4, $arProgramacionDetalle->getCodigoRecursoFk(), 1, 0, 'L');
             if($arProgramacionDetalle->getCodigoRecursoFk()) {
-                $pdf->Cell(30, 4, substr($arProgramacionDetalle->getRecursoRel()->getNombreCorto(), 0,17), 1, 0, 'L');
+                $pdf->Cell(50, 4, substr($arProgramacionDetalle->getRecursoRel()->getNombreCorto(), 0,17), 1, 0, 'L');
             } else {
-                $pdf->Cell(30, 4, "", 1, 0, 'L');
+                $pdf->Cell(50, 4, "", 1, 0, 'L');
             }            
 
             $pdf->Cell(5, 4, $arProgramacionDetalle->getDia1(), 1, 0, 'L');
