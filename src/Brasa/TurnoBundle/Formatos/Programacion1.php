@@ -192,17 +192,17 @@ class Programacion1 extends \FPDF_FPDF {
                 }                 
                 if($arProgramacionDetalle->getCodigoPuestoFk()) { 
                     //$codigoPuesto = $arProgramacionDetalle->getCodigoPuestoFk();                    
-                    $pdf->Cell(195, 4, utf8_decode($arProgramacionDetalle->getPuestoRel()->getNombre()), 1, 0, 'L');
+                    $pdf->Cell(115, 4, utf8_decode($arProgramacionDetalle->getPuestoRel()->getNombre()), 1, 0, 'L');
                     $pdf->Ln();            
                     $pdf->SetAutoPageBreak(true, 15);                    
                 } else {                    
-                    $pdf->Cell(195, 4, "", 1, 0, 'L');
+                    $pdf->Cell(115, 4, "", 1, 0, 'L');
                 }                 
             }            
             
             $pdf->Cell(10, 4, $arProgramacionDetalle->getCodigoRecursoFk(), 1, 0, 'L');
             if($arProgramacionDetalle->getCodigoRecursoFk()) {
-                $pdf->Cell(50, 4, substr($arProgramacionDetalle->getRecursoRel()->getNombreCorto(), 0,17), 1, 0, 'L');
+                $pdf->Cell(50, 4, substr($arProgramacionDetalle->getRecursoRel()->getNombreCorto(), 0,30), 1, 0, 'L');
             } else {
                 $pdf->Cell(50, 4, "", 1, 0, 'L');
             }            
