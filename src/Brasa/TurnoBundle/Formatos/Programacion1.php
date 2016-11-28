@@ -200,7 +200,7 @@ class Programacion1 extends \FPDF_FPDF {
                 }                 
             }            
             
-            $pdf->Cell(10, 4, $arProgramacionDetalle->getCodigoProgramacionDetallePk(), 1, 0, 'L');
+            $pdf->Cell(10, 4, $arProgramacionDetalle->getCodigoRecursoFk(), 1, 0, 'L');
             if($arProgramacionDetalle->getCodigoRecursoFk()) {
                 $pdf->Cell(30, 4, substr($arProgramacionDetalle->getRecursoRel()->getNombreCorto(), 0,17), 1, 0, 'L');
             } else {
