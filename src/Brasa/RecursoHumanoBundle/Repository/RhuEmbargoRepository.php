@@ -11,9 +11,15 @@ use Doctrine\ORM\EntityRepository;
  */
 class RhuEmbargoRepository extends EntityRepository {
     
-    public function listaDql() {        
+    public function listaDql($numero = "", $numeroIdentificacion = "" ) {        
         $em = $this->getEntityManager();
-        $dql   = "SELECT e FROM BrasaRecursoHumanoBundle:RhuEmbargo e WHERE e.codigoEmbargoPk <> 0";               
+        $dql   = "SELECT e FROM BrasaRecursoHumanoBundle:RhuEmbargo e JOIN e.empleadoRel em WHERE e.codigoEmbargoPk <> 0";
+        if($numeroIdentificacion != "" ) {
+            $dql .= " AND em.numeroIdentificacion LIKE '%" . $numeroIdentificacion . "%'";
+        }
+        if($numero != "" ) {
+            $dql .= " AND e.numero = " . $numero;
+        }
         $dql .= " ORDER BY e.codigoEmbargoPk DESC";
         return $dql;
     }                    

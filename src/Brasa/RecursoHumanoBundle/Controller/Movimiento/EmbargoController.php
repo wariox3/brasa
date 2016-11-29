@@ -106,8 +106,23 @@ class EmbargoController extends Controller
 
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();        
-        $form = $this->createFormBuilder()                                    
+        $session = $this->getRequest()->getSession();
+        $strNombreEmpleado = "";
+        if($session->get('filtroIdentificacion')) {
+            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->findOneBy(array('numeroIdentificacion' => $session->get('filtroIdentificacion')));
+            if($arEmpleado) {
+                $strNombreEmpleado = $arEmpleado->getNombreCorto();
+                $session->set('filtroRhuCodigoEmpleado', $arEmpleado->getCodigoEmpleadoPk());
+            }  else {
+                $session->set('filtroIdentificacion', null);
+                $session->set('filtroRhuCodigoEmpleado', null);
+            }
+        } else {
+            $session->set('filtroRhuCodigoEmpleado', null);
+        }          
+        $form = $this->createFormBuilder()
+            ->add('txtNumeroIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
+            ->add('txtNombreCorto', 'text', array('label'  => 'Nombre','data' => $strNombreEmpleado))    
             ->add('TxtNumero', 'text', array('label'  => 'Numero','data' => $session->get('filtroEmbargoNumero')))                                                                                
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))            
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
@@ -119,15 +134,19 @@ class EmbargoController extends Controller
     private function listar() {
         $em = $this->getDoctrine()->getManager();                
         $session = $this->getRequest()->getSession();
-        $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmbargo')->listaDQL(                   
+        $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmbargo')->listaDQL(
+                $session->get('filtroEmbargoNumero'),
+                $session->get('filtroIdentificacion')
                 );  
     }         
     
     private function filtrarLista($form) {
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
-        $controles = $request->request->get('form');        
+        $controles = $request->request->get('form');
+        $session->set('filtroIdentificacion', $form->get('txtNumeroIdentificacion')->getData());        
         $session->set('filtroEmbargoNumero', $form->get('TxtNumero')->getData());
+        
     }         
     
     private function generarExcel() {

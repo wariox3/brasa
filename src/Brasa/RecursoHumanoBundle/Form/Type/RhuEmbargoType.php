@@ -18,7 +18,7 @@ class RhuEmbargoType extends AbstractType
                 'property' => 'nombre',
                 'required' => true))                 
             ->add('numero', 'text', array('required' => false))   
-            ->add('valor', 'number', array('required' => false))   
+            ->add('valor', 'number', array('required' => true))   
             ->add('porcentaje', 'number', array('required' => false))                               
             ->add('valorFijo', 'checkbox', array('required'  => false))                
             ->add('porcentajeDevengado', 'checkbox', array('required'  => false))                
