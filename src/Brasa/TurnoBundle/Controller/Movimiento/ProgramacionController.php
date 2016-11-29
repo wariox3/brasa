@@ -210,7 +210,7 @@ class ProgramacionController extends Controller
             if($form->get('BtnGuardar')->isClicked()) {
                 if($arProgramacion->getEstadoAutorizado() == 0) {
                     $arrControles = $request->request->All();
-                    $resultado = $this->actualizarDetalle($arrControles); 
+                    $resultado = $this->actualizarDetalle($arrControles, $codigoPedidoDetalle); 
                     if($resultado == false) {
                         $em->flush();
                         $em->getRepository('BrasaTurnoBundle:TurProgramacion')->liquidar($codigoProgramacion);
@@ -647,222 +647,223 @@ class ProgramacionController extends Controller
         exit;
     }       
 
-    private function actualizarDetalle ($arrControles) {
+    private function actualizarDetalle ($arrControles, $codigoPedidoDetalle) {
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $error = false;
         $arConfiguracion = $em->getRepository('BrasaTurnoBundle:TurConfiguracion')->find(1);
+        $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();        
+        $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigoPedidoDetalle);                                                                           
         $validarHoras = $arConfiguracion->getValidarHorasProgramacion();
         $intIndice = 0;
         $boolTurnosSobrepasados = false;
-        foreach ($arrControles['LblCodigo'] as $intCodigo) {
-            if($intCodigo == 19355) {
-                echo "hola";
+        $arrTotalHoras = $this->horasControles($arrControles);
+        $horasDiurnasPendientes = $arPedidoDetalle->getHorasDiurnas() - ($arPedidoDetalle->getHorasDiurnasProgramadas() - $arrTotalHoras['horasDiurnasProgramacion']);        
+        $horasDiurnasRestantes = $horasDiurnasPendientes - $arrTotalHoras['horasDiurnas'];
+        $horasNocturnasPendientes = $arPedidoDetalle->getHorasNocturnas() - ($arPedidoDetalle->getHorasNocturnasProgramadas() - $arrTotalHoras['horasNocturnasProgramacion']);        
+        $horasNocturnasRestantes = $horasNocturnasPendientes - $arrTotalHoras['horasNocturnas'];        
+        if($validarHoras) {
+            if($horasDiurnasRestantes < 0) {
+                $error = TRUE;        
+                $objMensaje->Mensaje("error", "Las horas diurnas de los turnos ingresadas [" . $arrTotalHoras['horasDiurnas'] . "], superan las horas del pedido disponibles para programar [" . $horasDiurnasPendientes . "]", $this);                
             }
-            $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
-            $arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->find($intCodigo);
-            $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
-            $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($arProgramacionDetalle->getCodigoPedidoDetalleFk());                                                   
-            $validar = $this->validarHoras($intCodigo, $arrControles);             
-            if($validar['validado']) {
-                $horasDiurnasPendientes = $arPedidoDetalle->getHorasDiurnas() - ($arPedidoDetalle->getHorasDiurnasProgramadas() - $arProgramacionDetalle->getHorasDiurnas());
-                $horasNocturnasPendientes = $arPedidoDetalle->getHorasNocturnas() - ($arPedidoDetalle->getHorasNocturnasProgramadas() - $arProgramacionDetalle->getHorasNocturnas());
-                if($horasDiurnasPendientes >= $validar['horasDiurnas'] || $validarHoras == false ) {
-                    if($horasNocturnasPendientes >= $validar['horasNocturnas'] || $validarHoras == false) {
-                        $horasDiurnasProgramadas = ($arPedidoDetalle->getHorasDiurnasProgramadas() - $arProgramacionDetalle->getHorasDiurnas()) + $validar['horasDiurnas'];                
-                        $horasNocturnasProgramadas = ($arPedidoDetalle->getHorasNocturnasProgramadas() - $arProgramacionDetalle->getHorasNocturnas()) + $validar['horasNocturnas'];                
-                        $horasProgramadas = $horasDiurnasProgramadas + $horasNocturnasProgramadas;
-                        $arPedidoDetalle->setHorasDiurnasProgramadas($horasDiurnasProgramadas);
-                        $arPedidoDetalle->setHorasNocturnasProgramadas($horasNocturnasProgramadas);
-                        $arPedidoDetalle->setHorasProgramadas($horasProgramadas);                                          
-                        $em->persist($arPedidoDetalle);                                                                           
-                        if($arProgramacionDetalle->getPeriodoBloqueo() == 0) {
-                            if($arrControles['TxtRecurso'.$intCodigo] != '') {
-                                $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
-                                $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($arrControles['TxtRecurso'.$intCodigo]);
-                                if($arRecurso) {
-                                    $arProgramacionDetalle->setRecursoRel($arRecurso);
-                                }
-                            } else {
-                                $arProgramacionDetalle->setRecursoRel(NULL);
-                            }                
-                        }            
+            if($horasNocturnasRestantes < 0) {
+                $error = TRUE;        
+                $objMensaje->Mensaje("error", "Las horas nocturnas de los turnos ingresadas [" . $arrTotalHoras['horasNocturnas'] . "], superan las horas del pedido disponibles para programar [" . $horasNocturnasPendientes . "]", $this);                
+            }            
+        }        
+        if($error == FALSE) {
+            foreach ($arrControles['LblCodigo'] as $intCodigo) {
+                $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
+                $arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->find($intCodigo);
+                $validar = $this->validarHoras($intCodigo, $arrControles);             
+                if($validar['validado']) {                                                                                                              
+                    if($arProgramacionDetalle->getPeriodoBloqueo() == 0) {
+                        if($arrControles['TxtRecurso'.$intCodigo] != '') {
+                            $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
+                            $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($arrControles['TxtRecurso'.$intCodigo]);
+                            if($arRecurso) {
+                                $arProgramacionDetalle->setRecursoRel($arRecurso);
+                            }
+                        } else {
+                            $arProgramacionDetalle->setRecursoRel(NULL);
+                        }                
+                    }            
 
-                        if($arrControles['TxtDia01D'.$intCodigo] != '') {
-                            $arProgramacionDetalle->setDia1($arrControles['TxtDia01D'.$intCodigo]);                                            
-                        } else {
-                            $arProgramacionDetalle->setDia1(null);
-                        }                                    
-                        if($arrControles['TxtDia02D'.$intCodigo] != '') {
-                            $arProgramacionDetalle->setDia2($arrControles['TxtDia02D'.$intCodigo]);                                            
-                        } else {
-                            $arProgramacionDetalle->setDia2(null);
-                        }
-                        if($arrControles['TxtDia03D'.$intCodigo] != '') {
-                            $arProgramacionDetalle->setDia3($arrControles['TxtDia03D'.$intCodigo]);                                            
-                        } else {
-                            $arProgramacionDetalle->setDia3(null);
-                        }
-                        if($arrControles['TxtDia04D'.$intCodigo] != '') {
-                            $arProgramacionDetalle->setDia4($arrControles['TxtDia04D'.$intCodigo]);                                            
-                        } else {
-                            $arProgramacionDetalle->setDia4(null);
-                        }
-                        if($arrControles['TxtDia05D'.$intCodigo] != '') {
-                            $arProgramacionDetalle->setDia5($arrControles['TxtDia05D'.$intCodigo]);                                            
-                        } else {
-                            $arProgramacionDetalle->setDia5(null);
-                        }
-                        if($arrControles['TxtDia06D'.$intCodigo] != '') {
-                            $arProgramacionDetalle->setDia6($arrControles['TxtDia06D'.$intCodigo]);                                            
-                        } else {
-                            $arProgramacionDetalle->setDia6(null);
-                        }
-                        if($arrControles['TxtDia07D'.$intCodigo] != '') {
-                            $arProgramacionDetalle->setDia7($arrControles['TxtDia07D'.$intCodigo]);                                            
-                        } else {
-                            $arProgramacionDetalle->setDia7(null);
-                        }
-                        if($arrControles['TxtDia08D'.$intCodigo] != '') {
-                            $arProgramacionDetalle->setDia8($arrControles['TxtDia08D'.$intCodigo]);                                            
-                        } else {
-                            $arProgramacionDetalle->setDia8(null);
-                        }
-                        if($arrControles['TxtDia09D'.$intCodigo] != '') {
-                            $arProgramacionDetalle->setDia9($arrControles['TxtDia09D'.$intCodigo]);                                            
-                        } else {
-                            $arProgramacionDetalle->setDia9(null);
-                        }
-                        if($arrControles['TxtDia10D'.$intCodigo] != '') {
-                            $arProgramacionDetalle->setDia10($arrControles['TxtDia10D'.$intCodigo]);                                            
-                        } else {
-                            $arProgramacionDetalle->setDia10(null);
-                        }
-                        if($arrControles['TxtDia11D'.$intCodigo] != '') {
-                            $arProgramacionDetalle->setDia11($arrControles['TxtDia11D'.$intCodigo]);                                            
-                        } else {
-                            $arProgramacionDetalle->setDia11(null);
-                        }
-                        if($arrControles['TxtDia12D'.$intCodigo] != '') {
-                            $arProgramacionDetalle->setDia12($arrControles['TxtDia12D'.$intCodigo]);                                            
-                        } else {
-                            $arProgramacionDetalle->setDia12(null);
-                        }
-                        if($arrControles['TxtDia13D'.$intCodigo] != '') {
-                            $arProgramacionDetalle->setDia13($arrControles['TxtDia13D'.$intCodigo]);                                            
-                        } else {
-                            $arProgramacionDetalle->setDia13(null);
-                        }
-                        if($arrControles['TxtDia14D'.$intCodigo] != '') {
-                            $arProgramacionDetalle->setDia14($arrControles['TxtDia14D'.$intCodigo]);                                            
-                        } else {
-                            $arProgramacionDetalle->setDia14(null);
-                        }
-                        if($arrControles['TxtDia15D'.$intCodigo] != '') {
-                            $arProgramacionDetalle->setDia15($arrControles['TxtDia15D'.$intCodigo]);                                            
-                        } else {
-                            $arProgramacionDetalle->setDia15(null);
-                        }
-                        if($arrControles['TxtDia16D'.$intCodigo] != '') {
-                            $arProgramacionDetalle->setDia16($arrControles['TxtDia16D'.$intCodigo]);                                            
-                        } else {
-                            $arProgramacionDetalle->setDia16(null);
-                        }
-                        if($arrControles['TxtDia17D'.$intCodigo] != '') {
-                            $arProgramacionDetalle->setDia17($arrControles['TxtDia17D'.$intCodigo]);                                            
-                        } else {
-                            $arProgramacionDetalle->setDia17(null);
-                        }
-                        if($arrControles['TxtDia18D'.$intCodigo] != '') {
-                            $arProgramacionDetalle->setDia18($arrControles['TxtDia18D'.$intCodigo]);                                            
-                        } else {
-                            $arProgramacionDetalle->setDia18(null);
-                        }
-                        if($arrControles['TxtDia19D'.$intCodigo] != '') {
-                            $arProgramacionDetalle->setDia19($arrControles['TxtDia19D'.$intCodigo]);                                            
-                        } else {
-                            $arProgramacionDetalle->setDia19(null);
-                        }
-                        if($arrControles['TxtDia20D'.$intCodigo] != '') {
-                            $arProgramacionDetalle->setDia20($arrControles['TxtDia20D'.$intCodigo]);                                            
-                        } else {
-                            $arProgramacionDetalle->setDia20(null);
-                        }
-                        if($arrControles['TxtDia21D'.$intCodigo] != '') {
-                            $arProgramacionDetalle->setDia21($arrControles['TxtDia21D'.$intCodigo]);                                            
-                        } else {
-                            $arProgramacionDetalle->setDia21(null);
-                        }
-                        if($arrControles['TxtDia22D'.$intCodigo] != '') {
-                            $arProgramacionDetalle->setDia22($arrControles['TxtDia22D'.$intCodigo]);                                            
-                        } else {
-                            $arProgramacionDetalle->setDia22(null);
-                        }
-                        if($arrControles['TxtDia23D'.$intCodigo] != '') {
-                            $arProgramacionDetalle->setDia23($arrControles['TxtDia23D'.$intCodigo]);                                            
-                        } else {
-                            $arProgramacionDetalle->setDia23(null);
-                        }
-                        if($arrControles['TxtDia24D'.$intCodigo] != '') {
-                            $arProgramacionDetalle->setDia24($arrControles['TxtDia24D'.$intCodigo]);                                            
-                        } else {
-                            $arProgramacionDetalle->setDia24(null);
-                        }
-                        if($arrControles['TxtDia25D'.$intCodigo] != '') {
-                            $arProgramacionDetalle->setDia25($arrControles['TxtDia25D'.$intCodigo]);                                            
-                        } else {
-                            $arProgramacionDetalle->setDia25(null);
-                        }
-                        if($arrControles['TxtDia26D'.$intCodigo] != '') {
-                            $arProgramacionDetalle->setDia26($arrControles['TxtDia26D'.$intCodigo]);                                            
-                        } else {
-                            $arProgramacionDetalle->setDia26(null);
-                        }
-                        if($arrControles['TxtDia27D'.$intCodigo] != '') {
-                            $arProgramacionDetalle->setDia27($arrControles['TxtDia27D'.$intCodigo]);                                            
-                        } else {
-                            $arProgramacionDetalle->setDia27(null);
-                        }
-                        if($arrControles['TxtDia28D'.$intCodigo] != '') {
-                            $arProgramacionDetalle->setDia28($arrControles['TxtDia28D'.$intCodigo]);                                            
-                        } else {
-                            $arProgramacionDetalle->setDia28(null);
-                        }
-                        if($arrControles['TxtDia29D'.$intCodigo] != '') {
-                            $arProgramacionDetalle->setDia29($arrControles['TxtDia29D'.$intCodigo]);                                            
-                        } else {
-                            $arProgramacionDetalle->setDia29(null);
-                        }
-                        if($arrControles['TxtDia30D'.$intCodigo] != '') {
-                            $arProgramacionDetalle->setDia30($arrControles['TxtDia30D'.$intCodigo]);                                            
-                        } else {
-                            $arProgramacionDetalle->setDia30(null);
-                        }
-                        if($arrControles['TxtDia31D'.$intCodigo] != '') {
-                            $arProgramacionDetalle->setDia31($arrControles['TxtDia31D'.$intCodigo]);                                            
-                        } else {
-                            $arProgramacionDetalle->setDia31(null);
-                        }                        
-                        $arProgramacionDetalle->setHorasDiurnas($validar['horasDiurnas']);
-                        $arProgramacionDetalle->setHorasNocturnas($validar['horasNocturnas']);
-                        $arProgramacionDetalle->setHoras($validar['horasDiurnas']+$validar['horasNocturnas']);
-                        $em->persist($arProgramacionDetalle);        
+                    if($arrControles['TxtDia01D'.$intCodigo] != '') {
+                        $arProgramacionDetalle->setDia1($arrControles['TxtDia01D'.$intCodigo]);                                            
                     } else {
-                        $error = true;
-                        $objMensaje->Mensaje("error", "Horas nocturnas superan las horas del pedido disponibles para programar detalle " . $intCodigo, $this);
+                        $arProgramacionDetalle->setDia1(null);
+                    }                                    
+                    if($arrControles['TxtDia02D'.$intCodigo] != '') {
+                        $arProgramacionDetalle->setDia2($arrControles['TxtDia02D'.$intCodigo]);                                            
+                    } else {
+                        $arProgramacionDetalle->setDia2(null);
                     }
+                    if($arrControles['TxtDia03D'.$intCodigo] != '') {
+                        $arProgramacionDetalle->setDia3($arrControles['TxtDia03D'.$intCodigo]);                                            
+                    } else {
+                        $arProgramacionDetalle->setDia3(null);
+                    }
+                    if($arrControles['TxtDia04D'.$intCodigo] != '') {
+                        $arProgramacionDetalle->setDia4($arrControles['TxtDia04D'.$intCodigo]);                                            
+                    } else {
+                        $arProgramacionDetalle->setDia4(null);
+                    }
+                    if($arrControles['TxtDia05D'.$intCodigo] != '') {
+                        $arProgramacionDetalle->setDia5($arrControles['TxtDia05D'.$intCodigo]);                                            
+                    } else {
+                        $arProgramacionDetalle->setDia5(null);
+                    }
+                    if($arrControles['TxtDia06D'.$intCodigo] != '') {
+                        $arProgramacionDetalle->setDia6($arrControles['TxtDia06D'.$intCodigo]);                                            
+                    } else {
+                        $arProgramacionDetalle->setDia6(null);
+                    }
+                    if($arrControles['TxtDia07D'.$intCodigo] != '') {
+                        $arProgramacionDetalle->setDia7($arrControles['TxtDia07D'.$intCodigo]);                                            
+                    } else {
+                        $arProgramacionDetalle->setDia7(null);
+                    }
+                    if($arrControles['TxtDia08D'.$intCodigo] != '') {
+                        $arProgramacionDetalle->setDia8($arrControles['TxtDia08D'.$intCodigo]);                                            
+                    } else {
+                        $arProgramacionDetalle->setDia8(null);
+                    }
+                    if($arrControles['TxtDia09D'.$intCodigo] != '') {
+                        $arProgramacionDetalle->setDia9($arrControles['TxtDia09D'.$intCodigo]);                                            
+                    } else {
+                        $arProgramacionDetalle->setDia9(null);
+                    }
+                    if($arrControles['TxtDia10D'.$intCodigo] != '') {
+                        $arProgramacionDetalle->setDia10($arrControles['TxtDia10D'.$intCodigo]);                                            
+                    } else {
+                        $arProgramacionDetalle->setDia10(null);
+                    }
+                    if($arrControles['TxtDia11D'.$intCodigo] != '') {
+                        $arProgramacionDetalle->setDia11($arrControles['TxtDia11D'.$intCodigo]);                                            
+                    } else {
+                        $arProgramacionDetalle->setDia11(null);
+                    }
+                    if($arrControles['TxtDia12D'.$intCodigo] != '') {
+                        $arProgramacionDetalle->setDia12($arrControles['TxtDia12D'.$intCodigo]);                                            
+                    } else {
+                        $arProgramacionDetalle->setDia12(null);
+                    }
+                    if($arrControles['TxtDia13D'.$intCodigo] != '') {
+                        $arProgramacionDetalle->setDia13($arrControles['TxtDia13D'.$intCodigo]);                                            
+                    } else {
+                        $arProgramacionDetalle->setDia13(null);
+                    }
+                    if($arrControles['TxtDia14D'.$intCodigo] != '') {
+                        $arProgramacionDetalle->setDia14($arrControles['TxtDia14D'.$intCodigo]);                                            
+                    } else {
+                        $arProgramacionDetalle->setDia14(null);
+                    }
+                    if($arrControles['TxtDia15D'.$intCodigo] != '') {
+                        $arProgramacionDetalle->setDia15($arrControles['TxtDia15D'.$intCodigo]);                                            
+                    } else {
+                        $arProgramacionDetalle->setDia15(null);
+                    }
+                    if($arrControles['TxtDia16D'.$intCodigo] != '') {
+                        $arProgramacionDetalle->setDia16($arrControles['TxtDia16D'.$intCodigo]);                                            
+                    } else {
+                        $arProgramacionDetalle->setDia16(null);
+                    }
+                    if($arrControles['TxtDia17D'.$intCodigo] != '') {
+                        $arProgramacionDetalle->setDia17($arrControles['TxtDia17D'.$intCodigo]);                                            
+                    } else {
+                        $arProgramacionDetalle->setDia17(null);
+                    }
+                    if($arrControles['TxtDia18D'.$intCodigo] != '') {
+                        $arProgramacionDetalle->setDia18($arrControles['TxtDia18D'.$intCodigo]);                                            
+                    } else {
+                        $arProgramacionDetalle->setDia18(null);
+                    }
+                    if($arrControles['TxtDia19D'.$intCodigo] != '') {
+                        $arProgramacionDetalle->setDia19($arrControles['TxtDia19D'.$intCodigo]);                                            
+                    } else {
+                        $arProgramacionDetalle->setDia19(null);
+                    }
+                    if($arrControles['TxtDia20D'.$intCodigo] != '') {
+                        $arProgramacionDetalle->setDia20($arrControles['TxtDia20D'.$intCodigo]);                                            
+                    } else {
+                        $arProgramacionDetalle->setDia20(null);
+                    }
+                    if($arrControles['TxtDia21D'.$intCodigo] != '') {
+                        $arProgramacionDetalle->setDia21($arrControles['TxtDia21D'.$intCodigo]);                                            
+                    } else {
+                        $arProgramacionDetalle->setDia21(null);
+                    }
+                    if($arrControles['TxtDia22D'.$intCodigo] != '') {
+                        $arProgramacionDetalle->setDia22($arrControles['TxtDia22D'.$intCodigo]);                                            
+                    } else {
+                        $arProgramacionDetalle->setDia22(null);
+                    }
+                    if($arrControles['TxtDia23D'.$intCodigo] != '') {
+                        $arProgramacionDetalle->setDia23($arrControles['TxtDia23D'.$intCodigo]);                                            
+                    } else {
+                        $arProgramacionDetalle->setDia23(null);
+                    }
+                    if($arrControles['TxtDia24D'.$intCodigo] != '') {
+                        $arProgramacionDetalle->setDia24($arrControles['TxtDia24D'.$intCodigo]);                                            
+                    } else {
+                        $arProgramacionDetalle->setDia24(null);
+                    }
+                    if($arrControles['TxtDia25D'.$intCodigo] != '') {
+                        $arProgramacionDetalle->setDia25($arrControles['TxtDia25D'.$intCodigo]);                                            
+                    } else {
+                        $arProgramacionDetalle->setDia25(null);
+                    }
+                    if($arrControles['TxtDia26D'.$intCodigo] != '') {
+                        $arProgramacionDetalle->setDia26($arrControles['TxtDia26D'.$intCodigo]);                                            
+                    } else {
+                        $arProgramacionDetalle->setDia26(null);
+                    }
+                    if($arrControles['TxtDia27D'.$intCodigo] != '') {
+                        $arProgramacionDetalle->setDia27($arrControles['TxtDia27D'.$intCodigo]);                                            
+                    } else {
+                        $arProgramacionDetalle->setDia27(null);
+                    }
+                    if($arrControles['TxtDia28D'.$intCodigo] != '') {
+                        $arProgramacionDetalle->setDia28($arrControles['TxtDia28D'.$intCodigo]);                                            
+                    } else {
+                        $arProgramacionDetalle->setDia28(null);
+                    }
+                    if($arrControles['TxtDia29D'.$intCodigo] != '') {
+                        $arProgramacionDetalle->setDia29($arrControles['TxtDia29D'.$intCodigo]);                                            
+                    } else {
+                        $arProgramacionDetalle->setDia29(null);
+                    }
+                    if($arrControles['TxtDia30D'.$intCodigo] != '') {
+                        $arProgramacionDetalle->setDia30($arrControles['TxtDia30D'.$intCodigo]);                                            
+                    } else {
+                        $arProgramacionDetalle->setDia30(null);
+                    }
+                    if($arrControles['TxtDia31D'.$intCodigo] != '') {
+                        $arProgramacionDetalle->setDia31($arrControles['TxtDia31D'.$intCodigo]);                                            
+                    } else {
+                        $arProgramacionDetalle->setDia31(null);
+                    }                        
+                    $arProgramacionDetalle->setHorasDiurnas($validar['horasDiurnas']);
+                    $arProgramacionDetalle->setHorasNocturnas($validar['horasNocturnas']);
+                    $arProgramacionDetalle->setHoras($validar['horasDiurnas']+$validar['horasNocturnas']);
+                    $em->persist($arProgramacionDetalle);                                                                      
                 } else {
                     $error = true;
-                    $objMensaje->Mensaje("error", "Horas diurnas superan las horas del pedido disponibles para programar detalle " . $intCodigo, $this);                
-                }                
-            } else {
-                $error = true;
-                $objMensaje->Mensaje("error", $validar['mensaje'], $this);                
+                    $objMensaje->Mensaje("error", $validar['mensaje'], $this);                
+                }
+                if($error) {
+                    break;
+                }
             }
-            if($error) {
-                break;
-            }
-        }           
+            $horasProgramadasDiurnasPedidoTotales = ($arPedidoDetalle->getHorasDiurnasProgramadas() - $arrTotalHoras['horasDiurnasProgramacion']) + $arrTotalHoras['horasDiurnas'];
+            $horasProgramadasNocturnasPedidoTotales = ($arPedidoDetalle->getHorasNocturnasProgramadas() - $arrTotalHoras['horasNocturnasProgramacion']) + $arrTotalHoras['horasNocturnas'];
+            $arPedidoDetalle->setHorasDiurnasProgramadas($horasProgramadasDiurnasPedidoTotales);
+            $arPedidoDetalle->setHorasNocturnasProgramadas($horasProgramadasNocturnasPedidoTotales);
+            $arPedidoDetalle->setHorasProgramadas($horasProgramadasDiurnasPedidoTotales+$horasProgramadasNocturnasPedidoTotales);                                          
+            $em->persist($arPedidoDetalle);             
+        }                
         return $error;
     }
 
@@ -908,5 +909,41 @@ class ProgramacionController extends Controller
         $arrDetalle['horasNocturnas'] = $horasNocturnas;
         return $arrDetalle;
     }
+    
+    private function horasControles($arrControles) {       
+        $em = $this->getDoctrine()->getManager();
+        $arrDetalle = array('validado' => true, 'horasDiurnas' => 0, 'horasNocturnas' => 0, 'horasDiurnasProgramacion' => 0, 'horasNocturnasProgramacion' => 0,  'mensaje' => '');
+        $horasDiurnas = 0;
+        $horasNocturnas = 0;
+        $horasDiurnasProgramacion = 0;
+        $horasNocturnasProgramacion = 0;        
+        foreach ($arrControles['LblCodigo'] as $codigo) {
+            for($i=1; $i<=31; $i++) {
+                $dia = $i;
+                if(strlen($dia) < 2) {
+                    $dia = "0" . $i;
+                }
+                if($arrControles['TxtDia'.$dia.'D'.$codigo] != '') {
+                    $arrTurno = $this->validarTurno($arrControles['TxtDia'.$dia.'D'.$codigo]);                                        
+                    if($arrTurno['errado'] == true) {
+                        $arrDetalle['validado'] = false;
+                        $arrDetalle['mensaje'] = "Turno " . $arrControles['TxtDia'.$dia.'D'.$codigo] . " no esta creado";
+                        break;
+                    }
+                    $horasDiurnas += $arrTurno['horasDiurnas'];
+                    $horasNocturnas += $arrTurno['horasNocturnas'];                        
+                }            
+            }
+            $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
+            $arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->find($codigo);
+            $horasDiurnasProgramacion += $arProgramacionDetalle->getHorasDiurnas();
+            $horasNocturnasProgramacion += $arProgramacionDetalle->getHorasNocturnas();             
+        }
+        $arrDetalle['horasDiurnas'] = $horasDiurnas;
+        $arrDetalle['horasNocturnas'] = $horasNocturnas;
+        $arrDetalle['horasDiurnasProgramacion'] = $horasDiurnasProgramacion;
+        $arrDetalle['horasNocturnasProgramacion'] = $horasNocturnasProgramacion;        
+        return $arrDetalle;
+    }    
 
 }

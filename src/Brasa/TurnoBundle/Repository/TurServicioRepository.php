@@ -186,6 +186,7 @@ class TurServicioRepository extends EntityRepository {
                     }
                 }
                 $douCostoCalculado = $arServicioDetalle->getCantidad() * $arServicioDetalle->getConceptoServicioRel()->getVrCosto();
+                $douCostoCalculado = round($douCostoCalculado);
                 $douHoras = ($intHorasRealesDiurnas + $intHorasRealesNocturnas ) * $arServicioDetalle->getCantidad();
                 $arServicioDetalleActualizar = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
                 $arServicioDetalleActualizar = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($arServicioDetalle->getCodigoServicioDetallePk());
@@ -207,12 +208,15 @@ class TurServicioRepository extends EntityRepository {
                     $precio = $arServicioDetalleActualizar->getVrPrecioAjustado();
                 } else {
                     $floVrServicio = $floVrMinimoServicio * $arServicioDetalle->getCantidad();                
-                }
-                $subTotalDetalle = $floVrServicio;
+                }                
+                $subTotalDetalle = round($floVrServicio);
                 $baseAiuDetalle = $subTotalDetalle*10/100;
+                $baseAiuDetalle = round($baseAiuDetalle);
                 $ivaDetalle = $baseAiuDetalle*16/100;
+                $ivaDetalle = round($ivaDetalle);
                 $totalDetalle = $subTotalDetalle + $ivaDetalle;
-
+                $totalDetalle = round($totalDetalle);
+                
                 $arServicioDetalleActualizar->setVrSubtotal($subTotalDetalle);
                 $arServicioDetalleActualizar->setVrBaseAiu($baseAiuDetalle);
                 $arServicioDetalleActualizar->setVrIva($ivaDetalle);

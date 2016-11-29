@@ -117,9 +117,13 @@ class TurFacturaRepository extends EntityRepository {
             $arFacturasDetalleAct = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
             $arFacturasDetalleAct = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->find($arFacturaDetalle->getCodigoFacturaDetallePk());
             $subtotalDetalle = $arFacturaDetalle->getVrPrecio() * $arFacturaDetalle->getCantidad();
+            $subtotalDetalle = round($subtotalDetalle);
             $baseIvaDetalle = ($subtotalDetalle * $arFacturaDetalle->getPorBaseIva()) / 100;
+            $baseIvaDetalle = round($baseIvaDetalle);
             $ivaDetalle = ($baseIvaDetalle * $arFacturaDetalle->getPorIva()) / 100;
+            $ivaDetalle = round($ivaDetalle);
             $totalDetalle = $subtotalDetalle + $ivaDetalle;
+            $totalDetalle = round($totalDetalle);
             $arFacturasDetalleAct->setOperacion($arFactura->getOperacion());
             $arFacturasDetalleAct->setSubtotal($subtotalDetalle);
             $arFacturasDetalleAct->setSubtotalOperado($subtotalDetalle * $arFacturasDetalleAct->getOperacion());
@@ -138,11 +142,11 @@ class TurFacturaRepository extends EntityRepository {
         $porRetencionFuente = $arFactura->getFacturaServicioRel()->getPorRetencionFuente();
         $porBaseRetencionFuente = $arFactura->getFacturaServicioRel()->getPorBaseRetencionFuente();
         $baseRetencionFuente = ($subtotal * $porBaseRetencionFuente) / 100;
-        
+        $baseRetencionFuente = round($baseRetencionFuente);
         if($baseRetencionFuente >= $arConfiguracion->getBaseRetencionFuente()) {
             $retencionFuente = ($baseRetencionFuente * $porRetencionFuente ) / 100;
         }
-
+        $retencionFuente = round($retencionFuente);
         $totalNeto = $subtotal + $iva - $retencionFuente;
         $arFactura->setVrBaseAIU($baseIva);
         $arFactura->setVrBaseRetencionFuente($baseRetencionFuente);
