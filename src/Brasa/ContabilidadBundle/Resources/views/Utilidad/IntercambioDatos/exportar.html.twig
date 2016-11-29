@@ -19,9 +19,9 @@
                     <div class="col-sm-4">
                         {{ form_widget(form.TxtComprobante, { 'attr': {'class': 'form-control'} }) }}
                     </div>
-                    <label class="col-sm-2 control-label">Numero:</label>
+                    <label class="col-sm-2 control-label"></label>
                     <div class="col-sm-4">                  
-                        {{ form_widget(form.TxtNumero, { 'attr': {'class': 'form-control'} }) }}
+                        
                     </div>                    
                 </div>                                        
                 <div class="form-group form-group-sm">  
@@ -29,9 +29,9 @@
                     <div class="col-sm-4">
                         {{ form_widget(form.fechaDesde, {'attr': {'maxlength' : 10} }) }}
                     </div>
-                    <label class="col-sm-2 control-label"></label>
+                    <label class="col-sm-2 control-label">Numero desde:</label>
                     <div class="col-sm-4">                  
-                        
+                        {{ form_widget(form.TxtNumeroDesde, { 'attr': {'class': 'form-control'} }) }}
                     </div>                    
                 </div>
                 <div class="form-group form-group-sm">  
@@ -39,9 +39,9 @@
                     <div class="col-sm-4">
                         {{ form_widget(form.fechaHasta, {'attr': {'maxlength' : 10} }) }}
                     </div>
-                    <label class="col-sm-2 control-label"></label>
+                    <label class="col-sm-2 control-label">Numero hasta:</label>
                     <div class="col-sm-4">                  
-                        
+                        {{ form_widget(form.TxtNumeroHasta, { 'attr': {'class': 'form-control'} }) }}
                     </div>                    
                 </div> 
                 <div class="form-group form-group-sm">  

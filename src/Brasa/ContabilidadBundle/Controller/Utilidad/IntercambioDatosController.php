@@ -26,77 +26,6 @@ class IntercambioDatosController extends Controller
         $this->listar();
         if ($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
-            /*
-            if($form->get('BtnExportar')->isClicked()) {
-                set_time_limit(0);
-                ini_set("memory_limit", -1);
-                if(count($arrSeleccionados) > 0) {
-                    foreach ($arrSeleccionados as $codigoRegistro) {                        
-                        $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();
-                        $arRegistro = $em->getRepository('BrasaContabilidadBundle:CtbRegistro')->find($codigoRegistro);
-                        $arRegistroExportar = new \Brasa\ContabilidadBundle\Entity\CtbRegistroExportar();
-                        $arRegistroExportar->setFecha($arRegistro->getFecha());
-                        $arRegistroExportar->setComprobante($arRegistro->getCodigoComprobanteFk());
-                        $arRegistroExportar->setNumero($arRegistro->getNumero());
-                        $arRegistroExportar->setNumeroReferencia($arRegistro->getNumeroReferencia());
-                        $arRegistroExportar->setCuenta($arRegistro->getCodigoCuentaFk());
-                        $arRegistroExportar->setDebito($arRegistro->getDebito());
-                        $arRegistroExportar->setCredito($arRegistro->getCredito());
-                        if($arRegistro->getCodigoTerceroFk()) {
-                            $arRegistroExportar->setNit($arRegistro->getTerceroRel()->getNumeroIdentificacion());
-                            $arRegistroExportar->setDigitoVerificacion($arRegistro->getTerceroRel()->getDigitoVerificacion());                                                    
-                        }
-                        $arRegistroExportar->setCentroCosto($arRegistro->getCodigoCentroCostoFk());                        
-                        
-                        if($arRegistro->getDebito() > 0) {
-                            $arRegistroExportar->setTipo(1);
-                        } else {
-                            $arRegistroExportar->setTipo(2);
-                        }
-                        $arRegistroExportar->setBase($arRegistro->getBase());
-                        $arRegistroExportar->setDescripcionContable($arRegistro->getDescripcionContable());
-                        $em->persist($arRegistroExportar);
-                        $arRegistro->setExportado(1);
-                    }
-                    $em->flush();
-                }
-            } 
-            
-            if($form->get('BtnExportarTodo')->isClicked()) {
-                set_time_limit(0);
-                ini_set("memory_limit", -1);
-                $query = $em->createQuery($this->strDqlLista)->setMaxResults(5000);
-                $arRegistros = $query->getResult();
-                foreach ($arRegistros as $arRegistro) {
-                    $arRegistroExportar = new \Brasa\ContabilidadBundle\Entity\CtbRegistroExportar();
-                    $arRegistroExportar->setFecha($arRegistro->getFecha());
-                    $arRegistroExportar->setComprobante($arRegistro->getCodigoComprobanteFk());
-                    $arRegistroExportar->setNumero($arRegistro->getNumero());
-                    $arRegistroExportar->setNumeroReferencia($arRegistro->getNumeroReferencia());
-                    $arRegistroExportar->setCuenta($arRegistro->getCodigoCuentaFk());
-                    $arRegistroExportar->setDebito($arRegistro->getDebito());
-                    $arRegistroExportar->setCredito($arRegistro->getCredito());
-                    if($arRegistro->getCodigoTerceroFk()) {
-                        $arRegistroExportar->setNit($arRegistro->getTerceroRel()->getNumeroIdentificacion());
-                        $arRegistroExportar->setDigitoVerificacion($arRegistro->getTerceroRel()->getDigitoVerificacion());                                                    
-                    }
-                    $arRegistroExportar->setCentroCosto($arRegistro->getCodigoCentroCostoFk());
-
-                    if($arRegistro->getDebito() > 0) {
-                        $arRegistroExportar->setTipo(1);
-                    } else {
-                        $arRegistroExportar->setTipo(2);
-                    }
-                    $arRegistroExportar->setBase($arRegistro->getBase());
-                    $arRegistroExportar->setDescripcionContable($arRegistro->getDescripcionContable());
-                    $em->persist($arRegistroExportar);
-                    $arRegistro->setExportado(1);                    
-                }
-                $em->flush();
-            }
-           
-             * 
-             */ 
             if($form->get('BtnGenerarIlimitada')->isClicked()) {
                 
                 $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);                                    
@@ -148,7 +77,7 @@ class IntercambioDatosController extends Controller
             if($form->get('BtnGenerarOfimatica')->isClicked()) {
                 $this->filtrar($form, $request);
                 $this->listar();
-                $this->generarExcelInterfaceOfimatica();
+                //$this->generarExcelInterfaceOfimatica();
             }            
         }
         
@@ -167,9 +96,10 @@ class IntercambioDatosController extends Controller
             $strFechaDesde = $session->get('filtroCtbRegistroFechaDesde');
             $strFechaHasta = $session->get('filtroCtbRegistroFechaHasta');
         }        
-        $this->strDqlLista =  $em->getRepository('BrasaContabilidadBundle:CtbRegistro')->listaDQL(
+        $this->strDqlLista =  $em->getRepository('BrasaContabilidadBundle:CtbRegistro')->listaExportarDQL(
                     $session->get('filtroCtbCodigoComprobante'),    
-                    $session->get('filtroCtbNumero'),
+                    $session->get('filtroCtbNumeroDesde'),
+                    $session->get('filtroCtbNumeroHasta'),
                     "",
                     $strFechaDesde,
                     $strFechaHasta
@@ -178,7 +108,8 @@ class IntercambioDatosController extends Controller
     
     private function filtrar($form, Request $request) {
         $session = $this->get('session');                
-        $session->set('filtroCtbNumero', $form->get('TxtNumero')->getData());                        
+        $session->set('filtroCtbNumeroDesde', $form->get('TxtNumeroDesde')->getData());                        
+        $session->set('filtroCtbNumeroDesde', $form->get('TxtNumeroHasta')->getData());                        
         $session->set('filtroCtbCodigoComprobante', $form->get('TxtComprobante')->getData());
         $dateFechaDesde = $form->get('fechaDesde')->getData();
         $dateFechaHasta = $form->get('fechaHasta')->getData();
@@ -204,12 +135,12 @@ class IntercambioDatosController extends Controller
         $dateFechaHasta = date_create($strFechaHasta);
         
         $form = $this->createFormBuilder()
-            ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCtbNumero')))            
+            ->add('TxtNumeroDesde', 'text', array('data' => $session->get('filtroCtbNumeroDesde')))            
+            ->add('TxtNumeroHasta', 'text', array('data' => $session->get('filtroCtbNumeroHasta')))            
             ->add('TxtComprobante', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCtbCodigoComprobante')))                
             ->add('fechaDesde','date', array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde))                
             ->add('fechaHasta','date',  array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta))                                                            
-            ->add('filtrarFecha', 'checkbox', array('required'  => false, 'data' => $session->get('filtroCtbRegistroFiltrarFecha')))                                         
-            
+            ->add('filtrarFecha', 'checkbox', array('required'  => false, 'data' => $session->get('filtroCtbRegistroFiltrarFecha')))                                                     
             ->add('BtnGenerarOfimatica', 'submit', array('label'  => 'Ofimatica',))    
             ->add('BtnGenerarIlimitada', 'submit', array('label'  => 'Ilimitada',))                
             ->getForm();

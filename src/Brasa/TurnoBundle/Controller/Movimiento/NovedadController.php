@@ -355,8 +355,10 @@ class NovedadController extends Controller
                     ->setCellValue('B1', 'TIPO')
                     ->setCellValue('C1', 'DESDE')                
                     ->setCellValue('D1', 'HASTA')
-                    ->setCellValue('E1', 'RECURSO')
-                    ->setCellValue('F1', 'APLICADA');
+                    ->setCellValue('E1', 'CODIGO')
+                    ->setCellValue('F1', 'DOCUMENTO')
+                    ->setCellValue('G1', 'RECURSO')
+                    ->setCellValue('H1', 'APLICADA');
 
         $i = 2;
         $query = $em->createQuery($this->strListaDql);
@@ -369,8 +371,10 @@ class NovedadController extends Controller
                     ->setCellValue('B' . $i, $arNovedad->getNovedadTipoRel()->getNombre())
                     ->setCellValue('C' . $i, $arNovedad->getFechaDesde()->format('Y/m/d'))
                     ->setCellValue('D' . $i, $arNovedad->getFechaHasta()->format('Y/m/d'))
-                    ->setCellValue('E' . $i, $arNovedad->getRecursoRel()->getNombreCorto())
-                    ->setCellValue('F' . $i, $objFunciones->devuelveBoolean($arNovedad->getEstadoAplicada()));          
+                    ->setCellValue('E' . $i, $arNovedad->getCodigoRecursoFk())
+                    ->setCellValue('F' . $i, $arNovedad->getRecursoRel()->getNumeroIdentificacion())
+                    ->setCellValue('G' . $i, $arNovedad->getRecursoRel()->getNombreCorto())
+                    ->setCellValue('H' . $i, $objFunciones->devuelveBoolean($arNovedad->getEstadoAplicada()));          
             $i++;
         }
 

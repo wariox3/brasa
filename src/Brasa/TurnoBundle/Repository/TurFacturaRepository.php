@@ -39,14 +39,16 @@ class TurFacturaRepository extends EntityRepository {
         return $dql;
     }
 
-    public function listaFechaDql($strFechaDesde = "", $strFechaHasta = "") {
+    public function listaFechaDql($fechaDesde = "", $fechaHasta = "", $numeroDesde = "", $numeroHasta = "") {
         $dql   = "SELECT f FROM BrasaTurnoBundle:TurFactura f WHERE f.codigoFacturaPk <> 0";
-        if($strFechaDesde != "") {
-            $dql .= " AND f.fecha >= '" . $strFechaDesde . " 00:00:00'";
+        if($numeroDesde != "" && $numeroHasta != "") {            
+            $dql .= " AND f.numero >= " . $numeroDesde . " AND f.numero <= " . $numeroHasta;            
+        } 
+        if($fechaDesde != "" && $fechaHasta != "") {            
+            $dql .= " AND f.fecha >= '" . $fechaDesde->format('Y-m-d') . " 00:00:00' AND f.fecha <= '" . $fechaHasta->format('Y-m-d') . " 23:59:59'";                            
         }
-        if($strFechaHasta != "") {
-            $dql .= " AND f.fecha <= '" . $strFechaHasta . " 23:59:59'";
-        }
+
+        
         $dql .= " ORDER BY f.codigoFacturaTipoFk, f.fecha DESC, f.numero DESC";
         return $dql;
     }    
