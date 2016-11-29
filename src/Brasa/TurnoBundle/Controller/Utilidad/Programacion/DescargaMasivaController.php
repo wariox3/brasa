@@ -39,11 +39,19 @@ class DescargaMasivaController extends Controller
                 $arProgramaciones = $query->getResult();
                 $strRuta = $strRutaGeneral . "ProgramacionesTurno/";
                 if(!file_exists($strRuta)) {
-                    mkdir($strRuta, 0777);
+                    mkdir($strRuta, 0777);                    
                 }
-                foreach ($arProgramaciones as $arProgramacion) {                                        
-                    $objFormatoProgramacion = new \Brasa\TurnoBundle\Formatos\FormatoProgramacion();
-                    $objFormatoProgramacion->Generar($this, $arProgramacion->getCodigoProgramacionPk(), $strRuta);
+                $arConfiguracion = $em->getRepository('BrasaTurnoBundle:TurConfiguracion')->find(1);
+                $codigoFormato = $arConfiguracion->getCodigoFormatoProgramacion();                
+                foreach ($arProgramaciones as $arProgramacion) {   
+                    if($codigoFormato <= 1) {
+                        $objProgramacion = new \Brasa\TurnoBundle\Formatos\Programacion1();
+                        $objProgramacion->Generar($this, $arProgramacion->getCodigoProgramacionPk(), $strRuta);                    
+                    }
+                    if($codigoFormato == 2) {
+                        $objProgramacion = new \Brasa\TurnoBundle\Formatos\Programacion2();
+                        $objProgramacion->Generar($this, $arProgramacion->getCodigoProgramacionPk(), $strRuta);                    
+                    }                     
                 }            
                 $strRutaZip = $strRutaGeneral . 'ProgramacionesTurno.zip';
                 $this->comprimir($strRuta, $strRutaZip);                                                

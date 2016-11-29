@@ -634,9 +634,6 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 $arProgramacionPagoDetalle->setFechaHastaPago($dateFechaHasta);
                 $arProgramacionPagoDetalle->setFechaDesde($arContrato->getFechaDesde());
                 $arProgramacionPagoDetalle->setFechaHasta($dateFechaHasta);
-
-                $arProgramacionPagoDetalle->setDias($intDiasDevolver);
-                $arProgramacionPagoDetalle->setDiasReales($intDiasDevolver);
                 
                 $floValorDia = $arContrato->getVrSalarioPago() / 30;       
                 $floValorHora = $floValorDia / $arContrato->getFactorHorasDia();   
@@ -667,7 +664,13 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 $intDiasIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->diasIncapacidadPeriodo($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta(), $arContrato->getCodigoEmpleadoFk());                
                 if($intDiasIncapacidad > 0) {                                        
                     $arProgramacionPagoDetalle->setDiasIncapacidad($intDiasIncapacidad);
-                }                
+                }     
+                
+                $diasNovedad = $intDiasIncapacidad + $intDiasLicencia + $intDiasVacaciones;
+                $dias = $intDiasDevolver - $diasNovedad;
+                $arProgramacionPagoDetalle->setDias($dias);
+                $arProgramacionPagoDetalle->setDiasReales($intDiasDevolver);                
+                
                 $horasNovedad = ($intDiasIncapacidad + $intDiasLicencia + $intDiasVacaciones) * 8;
                 $horasDiurnas = ($intDiasDevolver * $arContrato->getFactorHorasDia()) - $horasNovedad;
                 $arProgramacionPagoDetalle->setHorasPeriodo($horasDiurnas);
@@ -918,10 +921,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
             } else {
                 $intDiasDevolver += $intDiasInhabilesFebrero;
             }                    
-        }
-
-        $arProgramacionPagoDetalle->setDias($intDiasDevolver);
-        $arProgramacionPagoDetalle->setDiasReales($intDiasDevolver);
+        }        
 
         $floValorDia = $arContrato->getVrSalarioPago() / 30;       
         $floValorHora = $floValorDia / $arContrato->getFactorHorasDia();   
@@ -952,7 +952,12 @@ class RhuProgramacionPagoRepository extends EntityRepository {
         $intDiasIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuIncapacidad')->diasIncapacidadPeriodo($arProgramacionPago->getFechaDesde(), $arProgramacionPago->getFechaHasta(), $arContrato->getCodigoEmpleadoFk());                
         if($intDiasIncapacidad > 0) {                                        
             $arProgramacionPagoDetalle->setDiasIncapacidad($intDiasIncapacidad);
-        }                
+        }  
+        $diasNovedad = $intDiasIncapacidad + $intDiasLicencia + $intDiasVacaciones;
+        $dias = $intDiasDevolver - $diasNovedad;
+        $arProgramacionPagoDetalle->setDias($dias);
+        $arProgramacionPagoDetalle->setDiasReales($intDiasDevolver);
+        
         $horasNovedad = ($intDiasIncapacidad + $intDiasLicencia + $intDiasVacaciones) * 8;
         $horasDiurnas = ($intDiasDevolver * $arContrato->getFactorHorasDia()) - $horasNovedad;
         $arProgramacionPagoDetalle->setHorasPeriodo($horasDiurnas);
