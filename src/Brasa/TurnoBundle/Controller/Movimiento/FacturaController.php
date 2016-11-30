@@ -869,7 +869,7 @@ class FacturaController extends Controller
                     ->setCellValue('E' . $i, PHPExcel_Shared_Date::PHPToExcel( gmmktime(0,0,0,$arFactura->getFechaVence()->format('m'),$arFactura->getFechaVence()->format('d'),$arFactura->getFechaVence()->format('Y'))))                                        
                     ->setCellValue('F' . $i, $arFactura->getClienteRel()->getNit()."-".$arFactura->getClienteRel()->getDigitoVerificacion())
                     ->setCellValue('G' . $i, "13050501")
-                    ->setCellValue('H' . $i, ($arFactura->getVrTotalNeto() * $arFactura->getOperacion()))
+                    ->setCellValue('H' . $i, round($arFactura->getVrTotalNeto() * $arFactura->getOperacion()))
                     ->setCellValue('I' . $i, 0);
             $i++;
         }
