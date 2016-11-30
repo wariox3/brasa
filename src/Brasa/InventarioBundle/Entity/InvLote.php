@@ -29,9 +29,9 @@ class InvLote
     private $codigoBodegaFk;
     
     /**
-     * @ORM\Column(name="existencia", type="integer")
+     * @ORM\Column(name="cantidad_existencia", type="integer")
      */            
-    private $existencia = 0;
+    private $cantidadExistencia = 0;
 
     /**
      * @ORM\Column(name="cantidad_remisionada", type="integer")
@@ -64,8 +64,6 @@ class InvLote
      * @ORM\JoinColumn(name="codigo_bodega_fk", referencedColumnName="codigo_bodega_pk")
      */
     protected $bodegaRel;    
-    
-
     
 
     /**
@@ -141,27 +139,27 @@ class InvLote
     }
 
     /**
-     * Set existencia
+     * Set cantidadExistencia
      *
-     * @param integer $existencia
+     * @param integer $cantidadExistencia
      *
      * @return InvLote
      */
-    public function setExistencia($existencia)
+    public function setCantidadExistencia($cantidadExistencia)
     {
-        $this->existencia = $existencia;
+        $this->cantidadExistencia = $cantidadExistencia;
 
         return $this;
     }
 
     /**
-     * Get existencia
+     * Get cantidadExistencia
      *
      * @return integer
      */
-    public function getExistencia()
+    public function getCantidadExistencia()
     {
-        return $this->existencia;
+        return $this->cantidadExistencia;
     }
 
     /**

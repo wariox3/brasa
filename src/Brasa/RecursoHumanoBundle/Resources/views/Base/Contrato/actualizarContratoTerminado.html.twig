@@ -67,7 +67,24 @@
                 </div>
             </div>                
         </div>
-    </div>                   
+    </div>       
+    <div class="panel panel-default">
+        <div class="panel-heading">Informacion turnos</div>
+        <div class="panel-body">
+            <div class="form-group form-group-sm">
+                <label class="col-sm-3 control-label">Turno fijo ordinario:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(formActualizar.turnoFijoOrdinario) }}
+                </div>
+            </div>            
+            <div class="form-group form-group-sm">
+                <label class="col-sm-3 control-label">Devengado pactado:</label>
+                <div class="col-sm-9">
+                        {{ form_widget(formActualizar.vrDevengadoPactado, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>    
+        </div>
+    </div>                
     <div class="modal-footer">              
         {{ form_widget(formActualizar.BtnGuardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}            
     </div>    

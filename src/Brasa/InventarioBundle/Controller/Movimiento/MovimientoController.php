@@ -85,7 +85,7 @@ class MovimientoController extends Controller
     public function nuevoAction(Request $request,$codigoDocumento, $codigoMovimiento) {
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        $arDocumento = new \Brasa\InventarioBundle\Entity\InvDocumento();
+        $arDocumento = new \Brasa\InventarioBundle\Entity\InvDocumento();        
         $arDocumento = $em->getRepository('BrasaInventarioBundle:InvDocumento')->find($codigoDocumento);
         $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimiento();
         if($codigoMovimiento != 0) {
@@ -103,6 +103,7 @@ class MovimientoController extends Controller
                 if(count($arTercero) > 0) {
                     $arMovimiento->setTerceroRel($arTercero);
                     $arMovimiento->setDocumentoRel($arDocumento);
+                    $arMovimiento->setOperacionInventario($arDocumento->getOperacionInventario());
                     $em->persist($arMovimiento);
                     $em->flush();
 
@@ -131,7 +132,7 @@ class MovimientoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $paginator  = $this->get('knp_paginator');
         $objMensaje = $this->get('mensajes_brasa');
-        $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimiento();
+        $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimiento();        
         $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->find($codigoMovimiento);
         $form = $this->formularioDetalle($arMovimiento);
         $form->handleRequest($request);
@@ -141,6 +142,8 @@ class MovimientoController extends Controller
                     $respuesta = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->autorizar($codigoMovimiento);
                     if($respuesta != "") {
                         $objMensaje->Mensaje("error", $respuesta, $this);
+                    } else {
+                        $em->flush();
                     }                   
                     return $this->redirect($this->generateUrl('brs_inv_movimiento_movimiento_detalle', array('codigoMovimiento' => $codigoMovimiento)));
                 }
@@ -203,10 +206,9 @@ class MovimientoController extends Controller
                         $arItem = new \Brasa\InventarioBundle\Entity\InvItem();
                         $arItem = $em->getRepository('BrasaInventarioBundle:InvItem')->find($codigo);
                         $arMovimientoDetalle = new \Brasa\InventarioBundle\Entity\InvMovimientoDetalle();
-                        $arMovimientoDetalle->setVrPrecio($arItem->getVrPrecioPredeterminado());
-                        $arMovimientoDetalle->setCantidad($arItem->getCantidadDisponible());
                         $arMovimientoDetalle->setMovimientoRel($arMovimiento);
                         $arMovimientoDetalle->setItemRel($arItem);                        
+                        $arMovimientoDetalle->setOperacionInventario($arMovimiento->getOperacionInventario());
                         $em->persist($arMovimientoDetalle);
                     }
                     $em->persist($arMovimientoDetalle);

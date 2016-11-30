@@ -126,6 +126,21 @@
             </table>
             </div>
         </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">Información contrato (Turnos)</div>
+            <div class="panel-body">
+            <table width="100%" class="table table-condensed table-bordered">
+                <tr>
+                    <td class="titulo">TURNO FIJO ORDINARIO:</td>
+                    <td class="td-in-well">{% if arContrato.turnoFijoOrdinario == 1 %} SI {% else %} NO{% endif %}</td>
+                    <td class="titulo">DEVENGADO PACTADO:</td>
+                    <td class="td-in-well-numerico" align="right">{{ arContrato.vrDevengadoPactado | number_format(2, '.', ',') }}</td>
+                    <td class="titulo"></td>
+                    <td class="td-in-well"></td>
+                </tr>                      
+            </table>
+            </div>
+        </div>                
         <a name="marcador"></a>
         <ul class="nav nav-tabs">
             <li class="active"><a href="#cambiosalario" data-toggle="tab">Cambio salario</a></li>

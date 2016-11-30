@@ -164,6 +164,11 @@ class InvMovimiento
     private $estadoContabilizado = false;             
     
     /**
+     * @ORM\Column(name="operacion_inventario", type="bigint")
+     */    
+    private $operacionInventario = 0;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="InvDocumento", inversedBy="movimientosDocumentoRel")
      * @ORM\JoinColumn(name="codigo_documento_fk", referencedColumnName="codigo_documento_pk")
      */
@@ -1046,5 +1051,29 @@ class InvMovimiento
     public function getMovimientosDescuentosFinancierosMovimientoRel()
     {
         return $this->movimientosDescuentosFinancierosMovimientoRel;
+    }
+
+    /**
+     * Set operacionInventario
+     *
+     * @param integer $operacionInventario
+     *
+     * @return InvMovimiento
+     */
+    public function setOperacionInventario($operacionInventario)
+    {
+        $this->operacionInventario = $operacionInventario;
+
+        return $this;
+    }
+
+    /**
+     * Get operacionInventario
+     *
+     * @return integer
+     */
+    public function getOperacionInventario()
+    {
+        return $this->operacionInventario;
     }
 }

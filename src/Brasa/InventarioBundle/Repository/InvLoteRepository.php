@@ -12,13 +12,30 @@ use Doctrine\ORM\EntityRepository;
  */
 class InvLoteRepository extends EntityRepository {
 
-   public function consultaDisponibleDql($strCodigoItem = '') {
+    public function consultaDisponibleDql($strCodigoItem = '') {
         $dql   = "SELECT l FROM BrasaInventarioBundle:InvLote l WHERE l.cantidadDisponible > 0";        
         if($strCodigoItem != "" ) {
             $dql .= " AND l.codigoItemFk = " . $strCodigoItem;
         }
         $dql .= " ORDER BY l.loteFk";
         return $dql;
-    }     
+    }
     
+    public function afectar($tipo, $operacion, $codigoItem, $codigoLote, $codigoBodega, $cantidad) {
+        $em = $this->getEntityManager();
+        $arLote = new \Brasa\InventarioBundle\Entity\InvLote();
+        $arLote = $em->getRepository('BrasaInventarioBundle:InvLote')->find(array('codigoItemFk' => $codigoItem,'loteFk' => $codigoLote,'codigoBodegaFk' => $codigoBodega));
+        if(!$arLote) {
+           $arItem = $em->getRepository('BrasaInventarioBundle:InvItem')->find($codigoItem);
+           $arBodega = $em->getRepository('BrasaInventarioBundle:InvBodega')->find($codigoBodega);
+           $arLote = new \Brasa\InventarioBundle\Entity\InvLote();
+           $arLote->setItemRel($arItem);
+           $arLote->setBodegaRel($arBodega);
+           $arLote->setCodigoBodegaFk($codigoBodega);
+        } 
+        $cantidad = $operacion * $cantidad; 
+        $cantidad += $arLote->getCantidadExistencia();
+        $arLote->setCantidadExistencia($cantidad);
+        $em->persist($arLote);
+    }        
 }

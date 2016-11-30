@@ -48,12 +48,36 @@ class InvMovimientoRepository extends EntityRepository {
     
     public function autorizar($codigoMovimiento) {
         $em = $this->getEntityManager();
-        $respuesta = "";                
+        $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimiento();
+        $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->find($codigoMovimiento);
+        $respuesta = $this->validarIngreso($codigoMovimiento);
+        if($respuesta == "") {
+            $dql   = "SELECT md.codigoBodegaFk, md.codigoItemFk, md.loteFk, md.codigoBodegaFk, md.operacionInventario, md.cantidad FROM BrasaInventarioBundle:InvMovimientoDetalle md "
+                    . "WHERE md.codigoMovimientoFk = " . $codigoMovimiento;
+            $query = $em->createQuery($dql);
+            $arrMovimientoDetalles = $query->getResult();
+            foreach ($arrMovimientoDetalles as $arrMovimientoDetalle) {
+                $em->getRepository('BrasaInventarioBundle:InvLote')->afectar(1, $arrMovimientoDetalle['operacionInventario'], $arrMovimientoDetalle['codigoItemFk'], $arrMovimientoDetalle['loteFk'], $arrMovimientoDetalle['codigoBodegaFk'], $arrMovimientoDetalle['cantidad']);
+            }
+        }
+        return $respuesta;
+    }
+    
+    public function validarIngreso($codigoMovimiento) {
+        $em = $this->getEntityManager();
+        $respuesta = "";
         $validarCantidad = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->validarCantidad($codigoMovimiento);
         if($validarCantidad > 0) {
             $respuesta = "Existen detalles con cantidad en cero";
-        }        
-        return $respuesta;
+        }  
+        $validarLote = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->validarLote($codigoMovimiento);
+        if($validarLote > 0) {
+            $respuesta = "Existen detalles sin lote";
+        }         
+        $validarBodega = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->validarBodega($codigoMovimiento);
+        if($validarBodega > 0) {
+            $respuesta = "Existen detalles sin bodega o con codigo de bodega incorrecta";
+        }
+        return $respuesta;        
     }
-        
 }
