@@ -216,7 +216,7 @@ class TurPedidoRepository extends EntityRepository {
                 }
                 $douHoras = ($intHorasRealesDiurnas + $intHorasRealesNocturnas ) * $arPedidoDetalle->getCantidad();                                                
                 $douCostoCalculado = $arPedidoDetalle->getCantidad() * $arPedidoDetalle->getConceptoServicioRel()->getVrCosto();            
-                $douCostoCalculado = round($douCostoCalculado);
+                $douCostoCalculado = $douCostoCalculado;
                 $arPedidoDetalleActualizar = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();        
                 $arPedidoDetalleActualizar = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($arPedidoDetalle->getCodigoPedidoDetallePk());                         
                 $arConfiguracionNomina = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
@@ -231,7 +231,7 @@ class TurPedidoRepository extends EntityRepository {
                     $precio = ($intHorasRealesDiurnas * $floVrHoraDiurna) + ($intHorasRealesNocturnas * $floVrHoraNocturna);    
                 }
 
-                $precio = round($precio);
+                $precio = $precio;
                 $floVrMinimoServicio = $precio;
 
                 $floVrServicio = 0;
@@ -242,14 +242,14 @@ class TurPedidoRepository extends EntityRepository {
                 } else {
                     $floVrServicio = $floVrMinimoServicio * $arPedidoDetalle->getCantidad();                
                 }
-                $subTotalDetalle = round($floVrServicio);
+                $subTotalDetalle = $floVrServicio;
                 $subtotalGeneral += $subTotalDetalle;
                 $baseAiuDetalle = $subTotalDetalle*10/100;
-                $baseAiuDetalle = round($baseAiuDetalle);
+                $baseAiuDetalle = $baseAiuDetalle;
                 $ivaDetalle = $baseAiuDetalle*16/100;
-                $ivaDetalle = round($ivaDetalle);
+                $ivaDetalle = $ivaDetalle;
                 $totalDetalle = $subTotalDetalle + $ivaDetalle;
-                $totalDetalle = round($totalDetalle);
+                $totalDetalle = $totalDetalle;
                 $arPedidoDetalleActualizar->setVrSubtotal($subTotalDetalle);
                 $arPedidoDetalleActualizar->setVrBaseAiu($baseAiuDetalle);
                 $arPedidoDetalleActualizar->setVrIva($ivaDetalle);
@@ -303,13 +303,13 @@ class TurPedidoRepository extends EntityRepository {
         $arPedido->setVrTotalOtros($floSubTotalConceptos);
         $arPedido->setVrTotalCosto($douTotalCostoCalculado);
         $subtotal = $subtotalGeneral + $floSubTotalConceptos;
-        $subtotal = round($subtotal);
+        $subtotal = $subtotal;
         $baseAiu = $subtotal*10/100;
-        $baseAiu = round($baseAiu);
+        $baseAiu = $baseAiu;
         $iva = $baseAiu*16/100;
-        $iva = round($iva);
+        $iva = $iva;
         $total = $subtotal + $iva;
-        $total = round($total);
+        $total = $total;
         $arPedido->setVrSubtotal($subtotal);
         $arPedido->setVrBaseAiu($baseAiu);
         $arPedido->setVrIva($iva);

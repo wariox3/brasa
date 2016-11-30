@@ -186,7 +186,7 @@ class TurServicioRepository extends EntityRepository {
                     }
                 }
                 $douCostoCalculado = $arServicioDetalle->getCantidad() * $arServicioDetalle->getConceptoServicioRel()->getVrCosto();
-                $douCostoCalculado = round($douCostoCalculado);
+                $douCostoCalculado = $douCostoCalculado;
                 $douHoras = ($intHorasRealesDiurnas + $intHorasRealesNocturnas ) * $arServicioDetalle->getCantidad();
                 $arServicioDetalleActualizar = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
                 $arServicioDetalleActualizar = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($arServicioDetalle->getCodigoServicioDetallePk());
@@ -198,7 +198,7 @@ class TurServicioRepository extends EntityRepository {
                 $floVrHoraNocturna = ((($floValorBaseServicioMes * 40.3) / 100)/30)/8;            
 
                 $precio = ($intHorasRealesDiurnas * $floVrHoraDiurna) + ($intHorasRealesNocturnas * $floVrHoraNocturna);
-                $precio = round($precio);
+                $precio = $precio;
                 $floVrMinimoServicio = $precio;
 
                 $floVrServicio = 0;
@@ -209,13 +209,13 @@ class TurServicioRepository extends EntityRepository {
                 } else {
                     $floVrServicio = $floVrMinimoServicio * $arServicioDetalle->getCantidad();                
                 }                
-                $subTotalDetalle = round($floVrServicio);
+                $subTotalDetalle = $floVrServicio;
                 $baseAiuDetalle = $subTotalDetalle*10/100;
-                $baseAiuDetalle = round($baseAiuDetalle);
+                $baseAiuDetalle = $baseAiuDetalle;
                 $ivaDetalle = $baseAiuDetalle*16/100;
-                $ivaDetalle = round($ivaDetalle);
+                $ivaDetalle = $ivaDetalle;
                 $totalDetalle = $subTotalDetalle + $ivaDetalle;
-                $totalDetalle = round($totalDetalle);
+                $totalDetalle = $totalDetalle;
                 
                 $arServicioDetalleActualizar->setVrSubtotal($subTotalDetalle);
                 $arServicioDetalleActualizar->setVrBaseAiu($baseAiuDetalle);
