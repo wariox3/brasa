@@ -71,14 +71,14 @@
                         </tr>
                         {% for arMovimientoDetalle in arMovimientoDetalle %}
                             <tr>
-                                <td>{{ arMovimientoDetalle.codigoDetalleMovimientoPk  }}</td>
+                                <td>{{ arMovimientoDetalle.codigoDetalleMovimientoPk  }}<input type="hidden" name="LblCodigo[]" value="{{ arMovimientoDetalle.codigoDetalleMovimientoPk }}"></td>
                                 <td>{{ arMovimientoDetalle.itemRel.nombre | default('')  }}</td> 
                                
                                 {% if arMovimiento.estadoAutorizado == 0 %}
-                                    <td><input class="input-grid" type="text" name="TxtLote[]" value="{{ arMovimientoDetalle.loteFk  }}" size="30" style="width:110px" onclick="this.select()"/></td>                                                
-                                    <td><input class="input-grid" type="text" name="TxtBodega[]" value="{{ arMovimientoDetalle.codigoBodegaFk  }}" size="6" style="width:30px" onclick="this.select()"/></td>                                                
-                                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad[]" value="{{ arMovimientoDetalle.cantidad  }}" size="10" style="text-align: right; width:60px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                
-                                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtCosto[]" value="{{ arMovimientoDetalle.vrCosto  }}" size="10" style="text-align: right; width:60px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                
+                                    <td><input class="input-grid" type="text" name="TxtLote[{{ arMovimientoDetalle.codigoDetalleMovimientoPk }}]" value="{{ arMovimientoDetalle.loteFk  }}" size="30" style="width:110px" onclick="this.select()" onBlur="javascript:this.value=this.value.toUpperCase()"/></td>                                                
+                                    <td><input class="input-grid" type="text" name="TxtBodega[{{ arMovimientoDetalle.codigoDetalleMovimientoPk }}]" value="{{ arMovimientoDetalle.codigoBodegaFk  }}" size="6" style="width:30px" onclick="this.select()"/><a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_inv_buscar_bodega', { 'campoCodigo': 'TxtBodega[]' }) }}', 'buscarTercero', 600, 900)">Buscar</a></td>                                                
+                                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtCantidad[{{ arMovimientoDetalle.codigoDetalleMovimientoPk }}]" value="{{ arMovimientoDetalle.cantidad  }}" size="10" style="text-align: right; width:60px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                
+                                    <td style="text-align: right"><input class="input-grid" type="text" name="TxtCosto[{{ arMovimientoDetalle.codigoDetalleMovimientoPk }}]" value="{{ arMovimientoDetalle.vrCosto  }}" size="10" style="text-align: right; width:60px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                
                                 {% else %}
                                     <td>{{ arMovimientoDetalle.loteFk  }}</td>
                                     <td>{{ arMovimientoDetalle.codigoBodegaFk  }}</td>                                 

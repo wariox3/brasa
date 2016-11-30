@@ -155,7 +155,7 @@ class MovimientoController extends Controller
             }
             if($form->get('BtnDetalleActualizar')->isClicked()) {                
                 $arrControles = $request->request->All();
-                //$this->actualizarDetalle($arrControles, $codigoMovimiento);                                
+                $this->actualizarDetalle($arrControles);                                
                 return $this->redirect($this->generateUrl('brs_inv_movimiento_movimiento_detalle', array('codigoMovimiento' => $codigoMovimiento)));
             }            
             if($form->get('BtnEliminarDetalle')->isClicked()) {
@@ -348,4 +348,26 @@ class MovimientoController extends Controller
         exit;
     }
 
+    private function actualizarDetalle($arrControles) {
+        $em = $this->getDoctrine()->getManager();
+        $intIndice = 0;        
+        if(isset($arrControles['LblCodigo'])) {
+            foreach ($arrControles['LblCodigo'] as $codigo) {
+                $arMovimientoDetalle = new \Brasa\InventarioBundle\Entity\InvMovimientoDetalle();                
+                $arMovimientoDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->find($codigo);
+                $lote = $arrControles['TxtLote'][$codigo];
+                $bodega = $arrControles['TxtBodega'][$codigo];
+                $cantidad = $arrControles['TxtCantidad'][$codigo];
+                $costo = $arrControles['TxtCosto'][$codigo];
+                $arMovimientoDetalle->setLoteFk($lote);
+                $arMovimientoDetalle->setCodigoBodegaFk($bodega);
+                $arMovimientoDetalle->setCantidad($cantidad);
+                $arMovimientoDetalle->setVrCosto($costo);
+                $em->persist($arMovimientoDetalle);
+            }
+            $em->flush();                
+            //$em->getRepository('BrasaTurnoBundle:TurServicio')->liquidar($codigoServicio);             
+        } 
+    }    
+    
 }
