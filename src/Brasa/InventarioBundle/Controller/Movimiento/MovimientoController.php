@@ -224,10 +224,7 @@ class MovimientoController extends Controller
     private function listaIngreso() {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $this->strListaDql =  $em->getRepository('BrasaInventarioBundle:InvDocumento')->listaDql(
-            $session->get('filtroCodigo'), 
-            $session->get('filtroNombre')
-            );
+        $this->strListaDql =  $em->getRepository('BrasaInventarioBundle:InvDocumento')->listaDql();
     }
     
     private function lista() {
@@ -243,13 +240,7 @@ class MovimientoController extends Controller
         $session = $this->getRequest()->getSession();        
         $session->set('filtroInvCodigoMovimiento', $form->get('TxtCodigo')->getData());        
         $session->set('filtroInvNumeroMovimiento', $form->get('TxtNumero')->getData());
-    }
-    
-    private function filtrarIngreso ($form) {
-        $session = $this->getRequest()->getSession();        
-        $session->set('filtroCodigo', $form->get('TxtCodigo')->getData());
-        $session->set('filtroNombre', $form->get('TxtNombre')->getData());                  
-    }
+    }        
 
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
@@ -292,9 +283,6 @@ class MovimientoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombre')))
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCodigo')))    
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))    
             ->getForm();
         return $form;
     }

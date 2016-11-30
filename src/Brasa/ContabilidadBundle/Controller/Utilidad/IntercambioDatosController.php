@@ -77,7 +77,7 @@ class IntercambioDatosController extends Controller
             if($form->get('BtnGenerarOfimatica')->isClicked()) {
                 $this->filtrar($form, $request);
                 $this->listar();
-                //$this->generarExcelInterfaceOfimatica();
+                $this->generarExcelInterfaceOfimatica();
             }            
         }
         
@@ -109,7 +109,7 @@ class IntercambioDatosController extends Controller
     private function filtrar($form, Request $request) {
         $session = $this->get('session');                
         $session->set('filtroCtbNumeroDesde', $form->get('TxtNumeroDesde')->getData());                        
-        $session->set('filtroCtbNumeroDesde', $form->get('TxtNumeroHasta')->getData());                        
+        $session->set('filtroCtbNumeroHasta', $form->get('TxtNumeroHasta')->getData());                        
         $session->set('filtroCtbCodigoComprobante', $form->get('TxtComprobante')->getData());
         $dateFechaDesde = $form->get('fechaDesde')->getData();
         $dateFechaHasta = $form->get('fechaHasta')->getData();
