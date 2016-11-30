@@ -63,7 +63,13 @@
                 <td>{{ arContratos.fechaUltimoPagoVacaciones |date("Y/m/d")  }}</td>
                 <td style="text-align: right">{{ arContratos.vrSalario | number_format(2, '.', ',') }}</td>
                 <td>{% if arContratos.estadoActivo == 1%}SI{% else %}NO{% endif %}</td>
-                <td><button class="btn btn-default btn-xs" type="submit" name="OpImprimir" value="{{ arContratos.codigoContratoPk }}">Imprimir</button></td>
+                <td>
+                    {% if  arContratos.estadoActivo == 1 %}
+                        <a class="btn btn-default btn-xs" id="{{ path('brs_rhu_utilidades_carta_laboralparametros', { 'codigoContrato': arContratos.codigoContratoPk }) }}" style="float:left">Imprimir</a>
+                    {% else  %}
+                        <button class="btn btn-default btn-xs" type="submit" name="OpImprimir" value="{{ arContratos.codigoContratoPk }}">Imprimir</button>
+                    {% endif %}    
+                </td>
             </tr>
             {% endfor %}
         </table>

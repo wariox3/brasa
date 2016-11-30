@@ -9,8 +9,14 @@ class FormatoCarta extends \FPDF_FPDF {
     public static $fechaProceso;
     public static $fechaOpcional;
     public static $codigoContrato;
+    public static $booleamSalario; //carta laboral
+    public static $booleamPromedioIbp; //carta laboral
+    public static $booleamPromedioNoPrestacional; //carta laboral
+    public static $salarioSugerido; //carta laboral
+    public static $promedioIbpSugerido; //carta laboral
+    public static $promedioNoPrestacionalSugerido; //carta laboral
     
-    public function Generar($miThis, $codigoTipoCarta,$fechaProceso,$fechaOpcional,$codigoContrato) {        
+    public function Generar($miThis, $codigoTipoCarta,$fechaProceso,$fechaOpcional,$codigoContrato,$booleamSalario,$booleamPromedioIbp,$booleamPromedioNoPrestacional,$salarioSugerido,$promedioIbpSugerido,$promedioNoPrestacionalSugerido) {        
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
         $request = $miThis->getRequest();
@@ -21,6 +27,12 @@ class FormatoCarta extends \FPDF_FPDF {
         self::$fechaProceso = $fechaProceso;
         self::$fechaOpcional = $fechaOpcional;
         self::$codigoContrato = $codigoContrato;
+        self::$booleamSalario = $booleamSalario; //carta laboral
+        self::$booleamPromedioIbp = $booleamPromedioIbp; //carta laboral
+        self::$booleamPromedioNoPrestacional = $booleamPromedioNoPrestacional; //carta laboral
+        self::$salarioSugerido = $salarioSugerido; //carta laboral        
+        self::$promedioIbpSugerido = $promedioIbpSugerido; //carta laboral
+        self::$promedioNoPrestacionalSugerido = $promedioNoPrestacionalSugerido; //carta laboral
         $pdf = new FormatoCarta();
         $pdf->AliasNbPages();
         $pdf->AddPage();
@@ -203,6 +215,72 @@ class FormatoCarta extends \FPDF_FPDF {
         $patron19 = '/#j/';
         $patron20 = '/#k/';
         
+        if (self::$codigoTipoCarta == 5){
+            //salario
+            if (self::$booleamSalario == FALSE && self::$salarioSugerido == null){
+                $sustitucion9 == $sustitucion9;
+            }
+            if (self::$booleamSalario == TRUE && self::$salarioSugerido == null){
+                $sustitucion9 == $sustitucion9;
+            }
+            if (self::$booleamSalario == FALSE && self::$salarioSugerido != null){
+                $salarioLetras = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->numtoletras(self::$salarioSugerido);
+                $sustitucion9 = $salarioLetras." $(";
+                $sustitucion9 .= number_format(self::$salarioSugerido, 2,'.',',');
+                $sustitucion9 .= ")";
+            }
+            if (self::$booleamSalario == TRUE && self::$salarioSugerido != null){
+                $salarioLetras = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->numtoletras(self::$salarioSugerido);
+                $sustitucion9 = $salarioLetras." $(";
+                $sustitucion9 .= number_format(self::$salarioSugerido, 2,'.',',');
+                $sustitucion9 .= ")";
+            }
+            //promedio ibc
+            if (self::$booleamPromedioIbp == FALSE && self::$promedioIbpSugerido == null){
+                $salarioLetras = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->numtoletras(0);
+                $sustitucion11 = $salarioLetras." $(";
+                $sustitucion11 .= number_format(0, 2,'.',',');
+                $sustitucion11 .= ")";
+            }
+            if (self::$booleamPromedioIbp == TRUE && self::$promedioIbpSugerido == null){
+                $sustitucion11 == $sustitucion11;
+            }
+            if (self::$booleamPromedioIbp == FALSE && self::$promedioIbpSugerido != null){
+                $salarioLetras = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->numtoletras(self::$promedioIbpSugerido);
+                $sustitucion11 = $salarioLetras." $(";
+                $sustitucion11 .= number_format(self::$promedioIbpSugerido, 2,'.',',');
+                $sustitucion11 .= ")";
+            }
+            if (self::$booleamPromedioIbp == TRUE && self::$promedioIbpSugerido != null){
+                $salarioLetras = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->numtoletras(self::$promedioIbpSugerido);
+                $sustitucion11 = $salarioLetras." $(";
+                $sustitucion11 .= number_format(self::$promedioIbpSugerido, 2,'.',',');
+                $sustitucion11 .= ")";
+            }
+            //promedio no prestacional
+            if (self::$booleamPromedioNoPrestacional == FALSE && self::$promedioNoPrestacionalSugerido == null){
+                $salarioLetras = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->numtoletras(0);
+                $sustitucion13 = $salarioLetras." $(";
+                $sustitucion13 .= number_format(0, 2,'.',',');
+                $sustitucion13 .= ")";
+            }
+            if (self::$booleamPromedioNoPrestacional == TRUE && self::$promedioNoPrestacionalSugerido == null){
+                $sustitucion13 == $sustitucion13;
+            }
+            if (self::$booleamPromedioNoPrestacional == FALSE && self::$promedioNoPrestacionalSugerido != null){
+                $salarioLetras = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->numtoletras(self::$promedioNoPrestacionalSugerido);
+                $sustitucion13 = $salarioLetras." $(";
+                $sustitucion13 .= number_format(self::$promedioNoPrestacionalSugerido, 2,'.',',');
+                $sustitucion13 .= ")";
+            }
+            if (self::$booleamPromedioNoPrestacional == TRUE && self::$promedioNoPrestacionalSugerido != null){
+                $salarioLetras = self::$em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->numtoletras(self::$promedioNoPrestacionalSugerido);
+                $sustitucion13 = $salarioLetras." $(";
+                $sustitucion13 .= number_format(self::$promedioNoPrestacionalSugerido, 2,'.',',');
+                $sustitucion13 .= ")";
+            }
+            
+        }
         $cadenaCambiada = preg_replace($patron1, $sustitucion1, $cadena);
         $cadenaCambiada = preg_replace($patron2, $sustitucion2, $cadenaCambiada);
         $cadenaCambiada = preg_replace($patron3, $sustitucion3, $cadenaCambiada);

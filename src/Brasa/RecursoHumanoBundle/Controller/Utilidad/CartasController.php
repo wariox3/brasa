@@ -49,7 +49,7 @@ class CartasController extends Controller
                         $fechaOpcional = $form->get('fechaOpcional')->getData();
                         $codigoContrato = $arEmpleado->getCodigoContratoActivoFk();
                         $objFormatoCarta = new \Brasa\RecursoHumanoBundle\Formatos\FormatoCarta();
-                        $objFormatoCarta->Generar($this, $codigoCartaTipo, $fechaProceso, $fechaOpcional, $codigoContrato);
+                        $objFormatoCarta->Generar($this, $codigoCartaTipo, $fechaProceso, $fechaOpcional, $codigoContrato,"","","","","","");
                     } else {
                         $objMensaje->Mensaje("error", "El empleado no tiene contrato activo", $this);
                     }
