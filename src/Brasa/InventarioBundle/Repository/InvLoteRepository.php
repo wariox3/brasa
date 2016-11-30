@@ -29,8 +29,11 @@ class InvLoteRepository extends EntityRepository {
            $arItem = $em->getRepository('BrasaInventarioBundle:InvItem')->find($codigoItem);
            $arBodega = $em->getRepository('BrasaInventarioBundle:InvBodega')->find($codigoBodega);
            $arLote = new \Brasa\InventarioBundle\Entity\InvLote();
+           $arLote->setCodigoItemFk($codigoItem);
            $arLote->setItemRel($arItem);
+           $arLote->setCodigoBodegaFk($codigoBodega);
            $arLote->setBodegaRel($arBodega);
+           $arLote->setLoteFk($codigoLote);
            $arLote->setCodigoBodegaFk($codigoBodega);
         } 
         $cantidad = $operacion * $cantidad; 
