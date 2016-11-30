@@ -9,7 +9,14 @@ class InvItemType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder                  
+        $builder     
+            ->add('marcaRel', 'entity', array(
+                'class' => 'BrasaInventarioBundle:InvMarca',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('m')
+                    ->orderBy('m.nombre', 'ASC');},
+                'property' => 'nombre',
+                'required' => true))                 
             ->add('nombre', 'text', array('required' => true))            
             ->add('porcentajeIva', 'number', array('required' => false))
             ->add('vrCostoPredeterminado', 'number', array('required' => false))                                                                        

@@ -8,19 +8,25 @@
         <div class="panel-heading">Informacion general</div>
         <div class="panel-body"> 
             <div class="form-group form-group-sm">
-                <label for="form_nombre" class="col-sm-3 control-label">Nombre:</label>
+                <label class="col-sm-3 control-label">Nombre:</label>
                 <div class="col-sm-9">
                     {{ form_widget(form.nombre, { 'attr': {'class': 'form-control'} }) }}                        
                 </div>                
-            </div>                                 
+            </div>  
             <div class="form-group form-group-sm">
-                <label for="form_porcentajeIva" class="col-sm-3 control-label">% iva</label>
+                <label class="col-sm-3 control-label">Marca:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.marcaRel, { 'attr': {'class': 'form-control'} }) }}                        
+                </div>                
+            </div>                
+            <div class="form-group form-group-sm">
+                <label class="col-sm-3 control-label">% iva</label>
                 <div class="col-sm-9">
                     {{ form_widget(form.porcentajeIva, { 'attr': {'class': 'form-control'} }) }}                        
                 </div>                
             </div>                
             <div class="form-group form-group-sm">
-                <label for="form_vrCostoPredeterminado" class="col-sm-3 control-label">Costo pred:</label>
+                <label class="col-sm-3 control-label">Costo pred:</label>
                 <div class="col-sm-9">
                     {{ form_widget(form.vrCostoPredeterminado, { 'attr': {'class': 'form-control'} }) }}                        
                 </div>                

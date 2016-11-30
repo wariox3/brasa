@@ -104,16 +104,22 @@ class InvItem
     private $materiaPrima = 0;
     
     /**
+     * @ORM\ManyToOne(targetEntity="InvMarca", inversedBy="itemesMarcaRel")
+     * @ORM\JoinColumn(name="codigo_marca_fk", referencedColumnName="codigo_marca_pk")
+     */
+    protected $marcaRel;    
+    
+    /**
      * @ORM\OneToMany(targetEntity="InvMovimientoDetalle", mappedBy="itemRel")
      */
-    protected $itemsBodegaRel;    
-    
+    protected $movimientosDetallesItemRel;    
+       
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->itemsBodegaRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->movimientosDetallesItemRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -535,36 +541,60 @@ class InvItem
     }
 
     /**
-     * Add itemsBodegaRel
+     * Set marcaRel
      *
-     * @param \Brasa\InventarioBundle\Entity\InvMovimientoDetalle $itemsBodegaRel
+     * @param \Brasa\InventarioBundle\Entity\InvMarca $marcaRel
      *
      * @return InvItem
      */
-    public function addItemsBodegaRel(\Brasa\InventarioBundle\Entity\InvMovimientoDetalle $itemsBodegaRel)
+    public function setMarcaRel(\Brasa\InventarioBundle\Entity\InvMarca $marcaRel = null)
     {
-        $this->itemsBodegaRel[] = $itemsBodegaRel;
+        $this->marcaRel = $marcaRel;
 
         return $this;
     }
 
     /**
-     * Remove itemsBodegaRel
+     * Get marcaRel
      *
-     * @param \Brasa\InventarioBundle\Entity\InvMovimientoDetalle $itemsBodegaRel
+     * @return \Brasa\InventarioBundle\Entity\InvMarca
      */
-    public function removeItemsBodegaRel(\Brasa\InventarioBundle\Entity\InvMovimientoDetalle $itemsBodegaRel)
+    public function getMarcaRel()
     {
-        $this->itemsBodegaRel->removeElement($itemsBodegaRel);
+        return $this->marcaRel;
     }
 
     /**
-     * Get itemsBodegaRel
+     * Add movimientosDetallesItemRel
+     *
+     * @param \Brasa\InventarioBundle\Entity\InvMovimientoDetalle $movimientosDetallesItemRel
+     *
+     * @return InvItem
+     */
+    public function addMovimientosDetallesItemRel(\Brasa\InventarioBundle\Entity\InvMovimientoDetalle $movimientosDetallesItemRel)
+    {
+        $this->movimientosDetallesItemRel[] = $movimientosDetallesItemRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove movimientosDetallesItemRel
+     *
+     * @param \Brasa\InventarioBundle\Entity\InvMovimientoDetalle $movimientosDetallesItemRel
+     */
+    public function removeMovimientosDetallesItemRel(\Brasa\InventarioBundle\Entity\InvMovimientoDetalle $movimientosDetallesItemRel)
+    {
+        $this->movimientosDetallesItemRel->removeElement($movimientosDetallesItemRel);
+    }
+
+    /**
+     * Get movimientosDetallesItemRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getItemsBodegaRel()
+    public function getMovimientosDetallesItemRel()
     {
-        return $this->itemsBodegaRel;
+        return $this->movimientosDetallesItemRel;
     }
 }

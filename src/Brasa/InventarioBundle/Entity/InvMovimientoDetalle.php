@@ -159,7 +159,7 @@ class InvMovimientoDetalle
     protected $movimientoRel;    
     
     /**
-     * @ORM\ManyToOne(targetEntity="InvItem", inversedBy="itemsBodegaRel")
+     * @ORM\ManyToOne(targetEntity="InvItem", inversedBy="movimientosDetallesItemRel")
      * @ORM\JoinColumn(name="codigo_item_fk", referencedColumnName="codigo_item_pk")
      */
     protected $itemRel;

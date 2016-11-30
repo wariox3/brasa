@@ -20,23 +20,22 @@ class InvMarca
     private $codigoMarcaPk;
 
     /**
-     * @ORM\Column(name="nombre_marca", type="string", length=255)
+     * @ORM\Column(name="nombre", type="string", length=100)
      * @Assert\NotNull()(message="Debe escribir un nombre de marca")
      */
-    private $nombreMarca;
+    private $nombre;
 
     /**
      * @ORM\OneToMany(targetEntity="InvItem", mappedBy="marcaRel")
      */
-    protected $itemsRel;
-
+    protected $itemesMarcaRel; 
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->itemsRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->itemesMarcaRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -50,60 +49,60 @@ class InvMarca
     }
 
     /**
-     * Set nombreMarca
+     * Set nombre
      *
-     * @param string $nombreMarca
+     * @param string $nombre
      *
      * @return InvMarca
      */
-    public function setNombreMarca($nombreMarca)
+    public function setNombre($nombre)
     {
-        $this->nombreMarca = $nombreMarca;
+        $this->nombre = $nombre;
 
         return $this;
     }
 
     /**
-     * Get nombreMarca
+     * Get nombre
      *
      * @return string
      */
-    public function getNombreMarca()
+    public function getNombre()
     {
-        return $this->nombreMarca;
+        return $this->nombre;
     }
 
     /**
-     * Add itemsRel
+     * Add itemesMarcaRel
      *
-     * @param \Brasa\InventarioBundle\Entity\InvItem $itemsRel
+     * @param \Brasa\InventarioBundle\Entity\InvItem $itemesMarcaRel
      *
      * @return InvMarca
      */
-    public function addItemsRel(\Brasa\InventarioBundle\Entity\InvItem $itemsRel)
+    public function addItemesMarcaRel(\Brasa\InventarioBundle\Entity\InvItem $itemesMarcaRel)
     {
-        $this->itemsRel[] = $itemsRel;
+        $this->itemesMarcaRel[] = $itemesMarcaRel;
 
         return $this;
     }
 
     /**
-     * Remove itemsRel
+     * Remove itemesMarcaRel
      *
-     * @param \Brasa\InventarioBundle\Entity\InvItem $itemsRel
+     * @param \Brasa\InventarioBundle\Entity\InvItem $itemesMarcaRel
      */
-    public function removeItemsRel(\Brasa\InventarioBundle\Entity\InvItem $itemsRel)
+    public function removeItemesMarcaRel(\Brasa\InventarioBundle\Entity\InvItem $itemesMarcaRel)
     {
-        $this->itemsRel->removeElement($itemsRel);
+        $this->itemesMarcaRel->removeElement($itemesMarcaRel);
     }
 
     /**
-     * Get itemsRel
+     * Get itemesMarcaRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getItemsRel()
+    public function getItemesMarcaRel()
     {
-        return $this->itemsRel;
+        return $this->itemesMarcaRel;
     }
 }
