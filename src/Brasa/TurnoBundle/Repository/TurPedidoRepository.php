@@ -231,7 +231,7 @@ class TurPedidoRepository extends EntityRepository {
                     $precio = ($intHorasRealesDiurnas * $floVrHoraDiurna) + ($intHorasRealesNocturnas * $floVrHoraNocturna);    
                 }
 
-                $precio = $precio;
+                $precio = round($precio);
                 $floVrMinimoServicio = $precio;
 
                 $floVrServicio = 0;
