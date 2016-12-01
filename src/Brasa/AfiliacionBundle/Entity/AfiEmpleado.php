@@ -66,7 +66,7 @@ class AfiEmpleado
     private $celular; 
     
     /**
-     * @ORM\Column(name="direccion", type="string", length=30, nullable=true)
+     * @ORM\Column(name="direccion", type="string", length=80, nullable=true)
      */    
     private $direccion; 
     
@@ -192,10 +192,6 @@ class AfiEmpleado
      * @ORM\OneToMany(targetEntity="AfiNovedad", mappedBy="empleadoRel")
      */
     protected $novedadesEmpleadoRel;
-    
-    
-    
-
     /**
      * Constructor
      */
