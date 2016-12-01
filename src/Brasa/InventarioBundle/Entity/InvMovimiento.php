@@ -31,7 +31,7 @@ class InvMovimiento
     /**
      * @ORM\Column(name="numero", type="integer", nullable=true)
      */    
-    private $numero;
+    private $numero = 0;
     
     /**
      * @ORM\Column(name="fecha", type="datetime", nullable=true)
@@ -196,8 +196,7 @@ class InvMovimiento
      */
     protected $movimientosDescuentosFinancierosMovimientoRel;     
     
-    
-    
+   
     /**
      * Constructor
      */
@@ -914,6 +913,30 @@ class InvMovimiento
     }
 
     /**
+     * Set operacionInventario
+     *
+     * @param integer $operacionInventario
+     *
+     * @return InvMovimiento
+     */
+    public function setOperacionInventario($operacionInventario)
+    {
+        $this->operacionInventario = $operacionInventario;
+
+        return $this;
+    }
+
+    /**
+     * Get operacionInventario
+     *
+     * @return integer
+     */
+    public function getOperacionInventario()
+    {
+        return $this->operacionInventario;
+    }
+
+    /**
      * Set documentoRel
      *
      * @param \Brasa\InventarioBundle\Entity\InvDocumento $documentoRel
@@ -1051,29 +1074,5 @@ class InvMovimiento
     public function getMovimientosDescuentosFinancierosMovimientoRel()
     {
         return $this->movimientosDescuentosFinancierosMovimientoRel;
-    }
-
-    /**
-     * Set operacionInventario
-     *
-     * @param integer $operacionInventario
-     *
-     * @return InvMovimiento
-     */
-    public function setOperacionInventario($operacionInventario)
-    {
-        $this->operacionInventario = $operacionInventario;
-
-        return $this;
-    }
-
-    /**
-     * Get operacionInventario
-     *
-     * @return integer
-     */
-    public function getOperacionInventario()
-    {
-        return $this->operacionInventario;
     }
 }

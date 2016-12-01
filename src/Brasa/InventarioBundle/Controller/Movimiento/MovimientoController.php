@@ -171,8 +171,16 @@ class MovimientoController extends Controller
             }
             if($form->get('BtnImprimir')->isClicked()) {                                
                 if($arMovimiento->getEstadoAutorizado() == 1) {
+                    if($arMovimiento->getEstadoImpreso() == 0) {
+                        $respuesta = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->imprimir($codigoMovimiento);
+                        if($respuesta != "") {
+                            $objMensaje->Mensaje("error", $respuesta, $this);
+                        } else {                        
+                            $em->flush();
+                        }                        
+                    }
                     $objMovimiento = new \Brasa\InventarioBundle\Formatos\FormatoMovimiento();
-                    $objMovimiento->Generar($this, $codigoMovimiento);
+                    $objMovimiento->Generar($this, $codigoMovimiento);                        
                 } else {
                     $objMensaje->Mensaje("error", "No puede imprimir el movimiento sin estar autorizada", $this);
                 }

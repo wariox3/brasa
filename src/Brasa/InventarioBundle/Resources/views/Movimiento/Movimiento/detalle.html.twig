@@ -9,7 +9,7 @@
     </script>
     <div class="container">
         <div class="page-header">
-            <h3>Detalle movimiento</h3>
+            <h3>Detalle movimiento </h3>
         </div>
         {{ form_start(form, { 'attr': {'class': 'form-horizontal', 'novalidate': 'novalidate'} }) }}
         {{ form_errors(form) }}
@@ -20,7 +20,10 @@
                 {{ form_widget(form.BtnImprimir, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}                
             </div>
         </div>
-                    
+        <div style="float:right">
+            {% if arMovimiento.estadoImpreso == 1 %}<span class="label label-default">Impreso</span>{% endif %}
+            {% if arMovimiento.estadoAutorizado == 1 %}<span class="label label-default">Autorizado</span>{% endif %}
+        </div>                    
         <br /><br />
         <!-- Encabezado Movimiento -->
         <div class="panel panel-default">
@@ -42,9 +45,13 @@
                     <tr>
                         <td class="titulo">TERCERO</td>
                         <td class="td-in-well">{{ arMovimiento.terceroRel.nombreCorto | default('') }}</td></td>
-                        <td class="titulo" >AUTORIZADO:</td>
-                        <td class="td-in-well">{% if arMovimiento.estadoAutorizado == 1 %} SI {% else %} NO {% endif %}</td>
+                        <td class="titulo" ></td>
+                        <td class="td-in-well"></td>
                     </tr>
+                    <tr>
+                        <td class="titulo" >COMENTARIO: </td>
+                        <td class="td-in-well" colspan="5">{{ arMovimiento.comentarios }}</td>                        
+                    </tr>                     
                 </table>
             </div>
         </div>

@@ -7,7 +7,8 @@
     <table class="table table-striped table-bordered table-condensed">
         <tr>
             <th>CODIGO</th>
-            <th>NOMBRE</th>            
+            <th>NOMBRE</th>
+            <th>MARCA</th>            
             <th>PRECIO</th>            
             <th></th>
         </tr>
@@ -15,6 +16,7 @@
             <tr>
                 <td>{{ arItem.codigoItemPk  }}<input type="hidden" name="LblCodigoConcepto[]" value="{{ arItem.codigoItemPk }}"></td>
                 <td>{{ arItem.nombre }}</td>
+                <td>{{ arItem.marcaRel.nombre |default('') }}</td>
                 <td style="text-align: right">{{ arItem.vrPrecioPredeterminado | number_format(0, '.', ',') }}</td>                                                
                 <td align="center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arItem.codigoItemPk }}" /></td>
             </tr>

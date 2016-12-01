@@ -9,8 +9,8 @@ class InvMovimientoType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder                  
-            ->add('fecha', 'date', array('format' => 'yyyyMMdd'))            
+        $builder     
+            ->add('comentarios', 'textarea', array('required' => false))                                
             ->add('guardar', 'submit')            
             ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
     }

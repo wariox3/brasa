@@ -84,9 +84,35 @@ class InvMovimientoRepository extends EntityRepository {
         return $respuesta;
     }    
     
+    public function imprimir($codigoMovimiento) {
+        $em = $this->getEntityManager();
+        $respuesta = "";
+        if($respuesta == "") {
+            $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimiento();
+            $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->find($codigoMovimiento);
+            if($arMovimiento->getNumero() <= 0) {
+                if($arMovimiento->getDocumentoRel()->getAsignarConsecutivoImpresion()) {
+                    $arDocumento = new \Brasa\InventarioBundle\Entity\InvDocumento();
+                    $arDocumento = $em->getRepository('BrasaInventarioBundle:InvDocumento')->find($arMovimiento->getCodigoDocumentoFk());                
+                    $consecutivo = $arDocumento->getConsecutivo();
+                    $arDocumento->setConsecutivo($consecutivo + 1);
+                    $em->persist($arDocumento);
+                    $arMovimiento->setNumero($consecutivo);                                
+                }                
+            }                                                   
+            $arMovimiento->setEstadoImpreso(1);
+            $em->persist($arMovimiento);
+        }
+        return $respuesta;
+    }    
+    
     public function validarIngreso($codigoMovimiento) {
         $em = $this->getEntityManager();
         $respuesta = "";
+        $validarNumeroRegistros = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->numeroRegistros($codigoMovimiento);
+        if($validarNumeroRegistros <= 0) {
+            $respuesta = "El movimiento no tiene registros";            
+        }
         $validarCantidad = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->validarCantidad($codigoMovimiento);
         if($validarCantidad > 0) {
             $respuesta = "Existen detalles con cantidad en cero";

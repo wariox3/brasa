@@ -12,11 +12,11 @@ use Doctrine\ORM\EntityRepository;
  */
 class InvMovimientoDetalleRepository extends EntityRepository
 {
-    public function numeroRegistros($codigo) {        
+    public function numeroRegistros($codigoMovimiento) {        
         $em = $this->getEntityManager();
         $intNumeroRegistros = 0;
         $dql   = "SELECT COUNT(md.codigoDetalleMovimientoPk) as numeroRegistros FROM BrasaInventarioBundle:InvMovimientoDetalle md "
-                . "WHERE md.codigoMovimientoFk = " . $codigo;
+                . "WHERE md.codigoMovimientoFk = " . $codigoMovimiento;
         $query = $em->createQuery($dql);
         $arrMovimientoDetalles = $query->getSingleResult(); 
         if($arrMovimientoDetalles) {
