@@ -94,13 +94,7 @@ class CtbMovimientoDetalle
      * @ORM\ManyToOne(targetEntity="CtbCuenta", inversedBy="CtbMovimientoDetalle")
      * @ORM\JoinColumn(name="codigo_cuenta_fk", referencedColumnName="codigo_cuenta_pk")
      */
-    protected $cuentaRel;            
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTercero", inversedBy="CtbMovimientoDetalle")
-     * @ORM\JoinColumn(name="codigo_tercero_fk", referencedColumnName="codigo_tercero_pk")
-     */
-    protected $terceroRel;    
+    protected $cuentaRel;               
 
     /**
      * @ORM\ManyToOne(targetEntity="CtbImpuesto", inversedBy="CtbMovimientoDetalle")
@@ -508,30 +502,6 @@ class CtbMovimientoDetalle
     public function getCuentaRel()
     {
         return $this->cuentaRel;
-    }
-
-    /**
-     * Set terceroRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenTercero $terceroRel
-     *
-     * @return CtbMovimientoDetalle
-     */
-    public function setTerceroRel(\Brasa\GeneralBundle\Entity\GenTercero $terceroRel = null)
-    {
-        $this->terceroRel = $terceroRel;
-
-        return $this;
-    }
-
-    /**
-     * Get terceroRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenTercero
-     */
-    public function getTerceroRel()
-    {
-        return $this->terceroRel;
     }
 
     /**

@@ -61,26 +61,13 @@ class TesCuentaPagar
     /**
      * @ORM\Column(name="creditos", type="float")
      */    
-    private $creditos = 0;        
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTercero", inversedBy="TesCuentaPagar")
-     * @ORM\JoinColumn(name="codigo_tercero_fk", referencedColumnName="codigo_tercero_pk")
-     */
-    protected $terceroRel;     
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="Brasa\InventarioBundle\Entity\InvMovimiento", inversedBy="TesCuentaPagar")
-     * @ORM\JoinColumn(name="codigo_movimiento_fk", referencedColumnName="codigo_movimiento_pk")
-     */
-    protected $movimientoRel;     
-
-    
+    private $creditos = 0;              
+   
 
     /**
      * Get codigoCuentaPagarPk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoCuentaPagarPk()
     {
@@ -91,6 +78,7 @@ class TesCuentaPagar
      * Set fecha
      *
      * @param \DateTime $fecha
+     *
      * @return TesCuentaPagar
      */
     public function setFecha($fecha)
@@ -103,7 +91,7 @@ class TesCuentaPagar
     /**
      * Get fecha
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getFecha()
     {
@@ -114,6 +102,7 @@ class TesCuentaPagar
      * Set codigoMovimientoFk
      *
      * @param integer $codigoMovimientoFk
+     *
      * @return TesCuentaPagar
      */
     public function setCodigoMovimientoFk($codigoMovimientoFk)
@@ -126,7 +115,7 @@ class TesCuentaPagar
     /**
      * Get codigoMovimientoFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoMovimientoFk()
     {
@@ -137,6 +126,7 @@ class TesCuentaPagar
      * Set soporte
      *
      * @param string $soporte
+     *
      * @return TesCuentaPagar
      */
     public function setSoporte($soporte)
@@ -149,7 +139,7 @@ class TesCuentaPagar
     /**
      * Get soporte
      *
-     * @return string 
+     * @return string
      */
     public function getSoporte()
     {
@@ -160,6 +150,7 @@ class TesCuentaPagar
      * Set codigoTerceroFk
      *
      * @param integer $codigoTerceroFk
+     *
      * @return TesCuentaPagar
      */
     public function setCodigoTerceroFk($codigoTerceroFk)
@@ -172,7 +163,7 @@ class TesCuentaPagar
     /**
      * Get codigoTerceroFk
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodigoTerceroFk()
     {
@@ -183,6 +174,7 @@ class TesCuentaPagar
      * Set condicion
      *
      * @param integer $condicion
+     *
      * @return TesCuentaPagar
      */
     public function setCondicion($condicion)
@@ -195,7 +187,7 @@ class TesCuentaPagar
     /**
      * Get condicion
      *
-     * @return integer 
+     * @return integer
      */
     public function getCondicion()
     {
@@ -206,6 +198,7 @@ class TesCuentaPagar
      * Set valorOriginal
      *
      * @param float $valorOriginal
+     *
      * @return TesCuentaPagar
      */
     public function setValorOriginal($valorOriginal)
@@ -218,7 +211,7 @@ class TesCuentaPagar
     /**
      * Get valorOriginal
      *
-     * @return float 
+     * @return float
      */
     public function getValorOriginal()
     {
@@ -229,6 +222,7 @@ class TesCuentaPagar
      * Set saldo
      *
      * @param float $saldo
+     *
      * @return TesCuentaPagar
      */
     public function setSaldo($saldo)
@@ -241,7 +235,7 @@ class TesCuentaPagar
     /**
      * Get saldo
      *
-     * @return float 
+     * @return float
      */
     public function getSaldo()
     {
@@ -252,6 +246,7 @@ class TesCuentaPagar
      * Set debitos
      *
      * @param float $debitos
+     *
      * @return TesCuentaPagar
      */
     public function setDebitos($debitos)
@@ -264,7 +259,7 @@ class TesCuentaPagar
     /**
      * Get debitos
      *
-     * @return float 
+     * @return float
      */
     public function getDebitos()
     {
@@ -275,6 +270,7 @@ class TesCuentaPagar
      * Set creditos
      *
      * @param float $creditos
+     *
      * @return TesCuentaPagar
      */
     public function setCreditos($creditos)
@@ -287,56 +283,10 @@ class TesCuentaPagar
     /**
      * Get creditos
      *
-     * @return float 
+     * @return float
      */
     public function getCreditos()
     {
         return $this->creditos;
-    }
-
-    /**
-     * Set terceroRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenTercero $terceroRel
-     * @return TesCuentaPagar
-     */
-    public function setTerceroRel(\Brasa\GeneralBundle\Entity\GenTercero $terceroRel = null)
-    {
-        $this->terceroRel = $terceroRel;
-
-        return $this;
-    }
-
-    /**
-     * Get terceroRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenTercero 
-     */
-    public function getTerceroRel()
-    {
-        return $this->terceroRel;
-    }
-
-    /**
-     * Set movimientoRel
-     *
-     * @param \Brasa\InventarioBundle\Entity\InvMovimiento $movimientoRel
-     * @return TesCuentaPagar
-     */
-    public function setMovimientoRel(\Brasa\InventarioBundle\Entity\InvMovimiento $movimientoRel = null)
-    {
-        $this->movimientoRel = $movimientoRel;
-
-        return $this;
-    }
-
-    /**
-     * Get movimientoRel
-     *
-     * @return \Brasa\InventarioBundle\Entity\InvMovimiento 
-     */
-    public function getMovimientoRel()
-    {
-        return $this->movimientoRel;
     }
 }
