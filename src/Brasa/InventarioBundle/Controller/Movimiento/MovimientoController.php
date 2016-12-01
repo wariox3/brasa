@@ -150,9 +150,12 @@ class MovimientoController extends Controller
             }
             if($form->get('BtnDesAutorizar')->isClicked()) {
                 if($arMovimiento->getEstadoAutorizado() == 1) {
-                    $arMovimiento->setEstadoAutorizado(0);
-                    $em->persist($arMovimiento);
-                    $em->flush();
+                    $respuesta = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->desautorizar($codigoMovimiento);
+                    if($respuesta != "") {
+                        $objMensaje->Mensaje("error", $respuesta, $this);
+                    } else {
+                        $em->flush();
+                    }
                     return $this->redirect($this->generateUrl('brs_inv_movimiento_movimiento_detalle', array('codigoMovimiento' => $codigoMovimiento)));
                 }
             }
@@ -166,7 +169,7 @@ class MovimientoController extends Controller
                 $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->eliminarSeleccionados($arrSeleccionados);                
                 return $this->redirect($this->generateUrl('brs_inv_movimiento_movimiento_detalle', array('codigoMovimiento' => $codigoMovimiento)));
             }
-            if($form->get('BtnImprimir')->isClicked()) {
+            if($form->get('BtnImprimir')->isClicked()) {                                
                 if($arMovimiento->getEstadoAutorizado() == 1) {
                     $objMovimiento = new \Brasa\InventarioBundle\Formatos\FormatoMovimiento();
                     $objMovimiento->Generar($this, $codigoMovimiento);

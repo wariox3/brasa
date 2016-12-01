@@ -65,6 +65,25 @@ class InvMovimientoRepository extends EntityRepository {
         return $respuesta;
     }
     
+    public function desautorizar($codigoMovimiento) {
+        $em = $this->getEntityManager();
+        $respuesta = "";
+        if($respuesta == "") {
+            $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimiento();
+            $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->find($codigoMovimiento);
+            $dql   = "SELECT md.codigoBodegaFk, md.codigoItemFk, md.loteFk, md.fechaVencimiento, md.codigoBodegaFk, md.operacionInventario, md.cantidad FROM BrasaInventarioBundle:InvMovimientoDetalle md "
+                    . "WHERE md.codigoMovimientoFk = " . $codigoMovimiento;
+            $query = $em->createQuery($dql);
+            $arrMovimientoDetalles = $query->getResult();
+            foreach ($arrMovimientoDetalles as $arrMovimientoDetalle) {
+                $em->getRepository('BrasaInventarioBundle:InvLote')->afectar(-1, $arrMovimientoDetalle['operacionInventario'], $arrMovimientoDetalle['codigoItemFk'], $arrMovimientoDetalle['loteFk'], $arrMovimientoDetalle['fechaVencimiento'], $arrMovimientoDetalle['codigoBodegaFk'], $arrMovimientoDetalle['cantidad']);
+            }
+            $arMovimiento->setEstadoAutorizado(0);
+            $em->persist($arMovimiento);
+        }
+        return $respuesta;
+    }    
+    
     public function validarIngreso($codigoMovimiento) {
         $em = $this->getEntityManager();
         $respuesta = "";

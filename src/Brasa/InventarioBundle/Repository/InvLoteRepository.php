@@ -37,7 +37,7 @@ class InvLoteRepository extends EntityRepository {
            $arLote->setFechaVencimiento($fechaVecimiento);
            $arLote->setCodigoBodegaFk($codigoBodega);
         } 
-        $cantidad = $operacion * $cantidad; 
+        $cantidad = ($operacion * $cantidad) * $tipo; 
         $cantidad += $arLote->getCantidadExistencia();
         $arLote->setCantidadExistencia($cantidad);
         $em->persist($arLote);

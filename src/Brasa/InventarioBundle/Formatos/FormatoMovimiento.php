@@ -36,7 +36,7 @@ class FormatoMovimiento extends \FPDF_FPDF {
         $this->SetXY(53, 10);
         $this->Image('imagenes/logos/logo.jpg', 12, 13, 35, 17);
         //INFORMACIÓN EMPRESA
-        $this->Cell(150, 7, utf8_decode("INFORMACIÓN DEL MOVIMIENTO"), 0, 0, 'C', 1);
+        $this->Cell(150, 7, utf8_decode($arMovimiento->getDocumentoRel()->getNombre()), 0, 0, 'C', 1);
         $this->SetXY(53, 18);
         $this->SetFont('Arial','B',9);
         $this->Cell(20, 4, "EMPRESA:", 0, 0, 'L', 1);
@@ -50,14 +50,6 @@ class FormatoMovimiento extends \FPDF_FPDF {
         $this->SetXY(53, 30);
         $this->Cell(20, 4, utf8_decode("TELÉFONO:"), 0, 0, 'L', 1);
         $this->Cell(100, 4, $arConfiguracion->getTelefonoEmpresa(), 0, 0, 'L', 0);
-        //FORMATO ISO
-        $this->SetXY(168, 18);
-        $this->SetFillColor(255, 255, 255);
-        $this->Cell(35, 6, "CODIGO: ".$arContenidoFormatoA->getCodigoFormatoIso(), 1, 0, 'L', 1);
-        $this->SetXY(168, 24);
-        $this->Cell(35, 6, utf8_decode("VERSIÓN: ".$arContenidoFormatoA->getVersion()), 1, 0, 'L', 1);
-        $this->SetXY(168, 30);
-        $this->Cell(35, 6, utf8_decode("FECHA: ".$arContenidoFormatoA->getFechaVersion()->format('Y-m-d')), 1, 0, 'L', 1);
         //fila 1
         $this->SetXY(10, 40);
         $this->SetFont('Arial','B',8);
@@ -75,14 +67,9 @@ class FormatoMovimiento extends \FPDF_FPDF {
         $this->SetFont('Arial','',7);
         $this->Cell(65, 6, utf8_decode($arMovimiento->getNumero()) , 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
-        $this->Cell(30, 6, "DOCUMENTO:" , 1, 0, 'L', 1);
+        $this->Cell(30, 6, "" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',7);
-        if ($arMovimiento->getCodigoDocumentoFk() == null){
-            $strDocumento = "";
-        }else{
-            $strDocumento = $arMovimiento->getDocumentoRel()->getNombre();
-        }
-        $this->Cell(65, 6, utf8_decode($strDocumento) , 1, 0, 'L', 1);
+        $this->Cell(65, 6, utf8_decode("") , 1, 0, 'L', 1);
         //fila3
         $this->SetXY(10, 50);
         $this->SetFont('Arial','B',8);
@@ -90,13 +77,9 @@ class FormatoMovimiento extends \FPDF_FPDF {
         $this->SetFont('Arial','',8);
         $this->Cell(65, 6, utf8_decode($arMovimiento->getTerceroRel()->getNombreCorto()) , 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
-        $this->Cell(30, 6, "AUTORIZADO:" , 1, 0, 'L', 1);
+        $this->Cell(30, 6, "" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
-        $estadoAutorizado = "NO";
-        if ($arMovimiento->getEstadoAutorizado() == 1){
-            $estadoAutorizado = "SI";
-        }
-        $this->Cell(65, 6, $estadoAutorizado, 1, 0, 'L', 1);
+        $this->Cell(65, 6, "", 1, 0, 'L', 1);
         
         
         $this->EncabezadoDetalles();

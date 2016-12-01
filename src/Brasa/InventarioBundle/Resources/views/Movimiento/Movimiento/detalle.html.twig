@@ -83,6 +83,7 @@
                                     <td style="text-align: right"><input class="input-grid" type="text" name="TxtCosto[{{ arMovimientoDetalle.codigoDetalleMovimientoPk }}]" value="{{ arMovimientoDetalle.vrCosto  }}" size="10" style="text-align: right; width:60px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                                                
                                 {% else %}
                                     <td>{{ arMovimientoDetalle.loteFk  }}</td>
+                                    <td>{{ arMovimientoDetalle.fechaVencimiento | date('Y-m-d')  }}</td>                                 
                                     <td>{{ arMovimientoDetalle.codigoBodegaFk  }}</td>                                 
                                     <td style="text-align: right">{{ arMovimientoDetalle.cantidad | number_format(0, '.', ',') }}</td> 
                                     <td style="text-align: right">{{ arMovimientoDetalle.vrCosto | number_format(0, '.', ',') }}</td>                                                                                                    

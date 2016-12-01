@@ -307,7 +307,7 @@ class IncapacidadController extends Controller
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);         
         } 
         $objPHPExcel->setActiveSheetIndex(0)
-                    ->setCellValue('A1', 'CÓDIGO')
+                    ->setCellValue('A1', 'ID')
                     ->setCellValue('B1', 'NÚMERO')
                     ->setCellValue('C1', 'EPS')
                     ->setCellValue('D1', 'TIPO')
@@ -348,7 +348,7 @@ class IncapacidadController extends Controller
                     ->setCellValue('I' . $i, $arIncapacidad->getFechaHasta()->format('Y-m-d'))
                     ->setCellValue('J' . $i, $arIncapacidad->getCantidad())
                     ->setCellValue('K' . $i, $objFuncinoes->devuelveBoolean($arIncapacidad->getEstadoLegalizado()))
-                    ->setCellValue('L' . $i, $arIncapacidad->getCodigoIncapacidadDiagnosticoFk());
+                    ->setCellValue('L' . $i, $arIncapacidad->getIncapacidadDiagnosticoRel()->getCodigo());
             if($arIncapacidad->getCodigoIncapacidadDiagnosticoFk()) {
                 $objPHPExcel->setActiveSheetIndex(0)->setCellValue('M' . $i, $arIncapacidad->getIncapacidadDiagnosticoRel()->getNombre());
             }
