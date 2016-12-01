@@ -47,15 +47,15 @@
                 <th>ITEM</th>
                 <th>LOTE</th>
                 <th>EXISTENCIA</th>
-                <th>CANTIDAD REMISIONADA</th>
-                <th>CANTIDAD DISPONIBLE</th>
-                <th>FECHA VEN</th>                                
+                <th>REMISION</th>
+                <th>DISPONIBLE</th>
+                <th>VENCE</th>                                
             </tr>
             {% for arLotes in arLotes %}
                 <tr>                    
                     <td>{{ arLotes.itemRel.nombre | default('')  }}</td>                       
                     <td>{{ arLotes.LoteFk  }}</td>
-                    <td align="Right">{{ arLotes.existencia  }}</td>
+                    <td align="Right">{{ arLotes.cantidadExistencia  }}</td>
                     <td align="Right">{{ arLotes.cantidadRemisionada  }}</td>
                     <td align="Right">{{ arLotes.cantidadDisponible  }}</td>
                     <td>{{ arLotes.fechaVencimiento | date('Y/m/d') }}</td>                                       

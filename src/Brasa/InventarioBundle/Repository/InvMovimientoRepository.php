@@ -48,17 +48,19 @@ class InvMovimientoRepository extends EntityRepository {
     
     public function autorizar($codigoMovimiento) {
         $em = $this->getEntityManager();
-        $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimiento();
-        $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->find($codigoMovimiento);
         $respuesta = $this->validarIngreso($codigoMovimiento);
         if($respuesta == "") {
-            $dql   = "SELECT md.codigoBodegaFk, md.codigoItemFk, md.loteFk, md.codigoBodegaFk, md.operacionInventario, md.cantidad FROM BrasaInventarioBundle:InvMovimientoDetalle md "
+            $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimiento();
+            $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->find($codigoMovimiento);
+            $dql   = "SELECT md.codigoBodegaFk, md.codigoItemFk, md.loteFk, md.fechaVencimiento, md.codigoBodegaFk, md.operacionInventario, md.cantidad FROM BrasaInventarioBundle:InvMovimientoDetalle md "
                     . "WHERE md.codigoMovimientoFk = " . $codigoMovimiento;
             $query = $em->createQuery($dql);
             $arrMovimientoDetalles = $query->getResult();
             foreach ($arrMovimientoDetalles as $arrMovimientoDetalle) {
-                $em->getRepository('BrasaInventarioBundle:InvLote')->afectar(1, $arrMovimientoDetalle['operacionInventario'], $arrMovimientoDetalle['codigoItemFk'], $arrMovimientoDetalle['loteFk'], $arrMovimientoDetalle['codigoBodegaFk'], $arrMovimientoDetalle['cantidad']);
+                $em->getRepository('BrasaInventarioBundle:InvLote')->afectar(1, $arrMovimientoDetalle['operacionInventario'], $arrMovimientoDetalle['codigoItemFk'], $arrMovimientoDetalle['loteFk'], $arrMovimientoDetalle['fechaVencimiento'], $arrMovimientoDetalle['codigoBodegaFk'], $arrMovimientoDetalle['cantidad']);
             }
+            $arMovimiento->setEstadoAutorizado(1);
+            $em->persist($arMovimiento);
         }
         return $respuesta;
     }

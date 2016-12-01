@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityRepository;
 class InvLoteRepository extends EntityRepository {
 
     public function consultaDisponibleDql($strCodigoItem = '') {
-        $dql   = "SELECT l FROM BrasaInventarioBundle:InvLote l WHERE l.cantidadDisponible > 0";        
+        $dql   = "SELECT l FROM BrasaInventarioBundle:InvLote l WHERE l.cantidadExistencia > 0";        
         if($strCodigoItem != "" ) {
             $dql .= " AND l.codigoItemFk = " . $strCodigoItem;
         }
@@ -21,7 +21,7 @@ class InvLoteRepository extends EntityRepository {
         return $dql;
     }
     
-    public function afectar($tipo, $operacion, $codigoItem, $codigoLote, $codigoBodega, $cantidad) {
+    public function afectar($tipo, $operacion, $codigoItem, $codigoLote, $fechaVecimiento, $codigoBodega, $cantidad) {
         $em = $this->getEntityManager();
         $arLote = new \Brasa\InventarioBundle\Entity\InvLote();
         $arLote = $em->getRepository('BrasaInventarioBundle:InvLote')->find(array('codigoItemFk' => $codigoItem,'loteFk' => $codigoLote,'codigoBodegaFk' => $codigoBodega));
@@ -34,6 +34,7 @@ class InvLoteRepository extends EntityRepository {
            $arLote->setCodigoBodegaFk($codigoBodega);
            $arLote->setBodegaRel($arBodega);
            $arLote->setLoteFk($codigoLote);
+           $arLote->setFechaVencimiento($fechaVecimiento);
            $arLote->setCodigoBodegaFk($codigoBodega);
         } 
         $cantidad = $operacion * $cantidad; 

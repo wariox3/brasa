@@ -38,18 +38,6 @@ class GenClasificacionTributaria
      */    
     private $retencionFuente = 0;     
     
-    /**
-     * @ORM\OneToMany(targetEntity="GenTercero", mappedBy="clasificacionTributariaRel")
-     */
-    protected $tercerosClasificacionTributariaRel;
-
-    public function __construct()
-    {
-        $this->tercerosClasificacionTributariaRel = new ArrayCollection();
-    }
-
-
-
 
     /**
      * Get codigoClasificacionTributariaPk
@@ -155,39 +143,5 @@ class GenClasificacionTributaria
     public function getRetencionFuente()
     {
         return $this->retencionFuente;
-    }
-
-    /**
-     * Add tercerosClasificacionTributariaRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenTercero $tercerosClasificacionTributariaRel
-     *
-     * @return GenClasificacionTributaria
-     */
-    public function addTercerosClasificacionTributariaRel(\Brasa\GeneralBundle\Entity\GenTercero $tercerosClasificacionTributariaRel)
-    {
-        $this->tercerosClasificacionTributariaRel[] = $tercerosClasificacionTributariaRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove tercerosClasificacionTributariaRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenTercero $tercerosClasificacionTributariaRel
-     */
-    public function removeTercerosClasificacionTributariaRel(\Brasa\GeneralBundle\Entity\GenTercero $tercerosClasificacionTributariaRel)
-    {
-        $this->tercerosClasificacionTributariaRel->removeElement($tercerosClasificacionTributariaRel);
-    }
-
-    /**
-     * Get tercerosClasificacionTributariaRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTercerosClasificacionTributariaRel()
-    {
-        return $this->tercerosClasificacionTributariaRel;
     }
 }

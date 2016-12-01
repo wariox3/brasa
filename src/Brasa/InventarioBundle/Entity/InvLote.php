@@ -49,7 +49,7 @@ class InvLote
     private $cantidadDisponible = 0;        
     
     /**
-     * @ORM\Column(name="fecha_vencimiento", type="date")
+     * @ORM\Column(name="fecha_vencimiento", type="date", nullable=true)
      */            
     private $fechaVencimiento;    
 
@@ -65,6 +65,7 @@ class InvLote
      */
     protected $bodegaRel;    
     
+
 
     /**
      * Set codigoItemFk

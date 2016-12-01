@@ -55,19 +55,8 @@ class GenTerceroDireccion
     /**
      * @ORM\Column(name="email", type="string", length=100)
      */
-    private $email;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="GenTercero", inversedBy="tercerosDireccionesRel")
-     * @ORM\JoinColumn(name="codigo_tercero_fk", referencedColumnName="codigo_tercero_pk")
-     */
-    protected $terceroRel;     
-
-    /**
-     * @ORM\ManyToOne(targetEntity="GenCiudad", inversedBy="tercerosDireccionesRel")
-     * @ORM\JoinColumn(name="codigo_ciudad_fk", referencedColumnName="codigo_ciudad_pk")
-     */
-    protected $ciudadRel;        
+    private $email;       
+   
 
     /**
      * Get codigoDireccionPk
@@ -269,53 +258,5 @@ class GenTerceroDireccion
     public function getEmail()
     {
         return $this->email;
-    }
-
-    /**
-     * Set terceroRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenTercero $terceroRel
-     *
-     * @return GenTerceroDireccion
-     */
-    public function setTerceroRel(\Brasa\GeneralBundle\Entity\GenTercero $terceroRel = null)
-    {
-        $this->terceroRel = $terceroRel;
-
-        return $this;
-    }
-
-    /**
-     * Get terceroRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenTercero
-     */
-    public function getTerceroRel()
-    {
-        return $this->terceroRel;
-    }
-
-    /**
-     * Set ciudadRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel
-     *
-     * @return GenTerceroDireccion
-     */
-    public function setCiudadRel(\Brasa\GeneralBundle\Entity\GenCiudad $ciudadRel = null)
-    {
-        $this->ciudadRel = $ciudadRel;
-
-        return $this;
-    }
-
-    /**
-     * Get ciudadRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenCiudad
-     */
-    public function getCiudadRel()
-    {
-        return $this->ciudadRel;
     }
 }

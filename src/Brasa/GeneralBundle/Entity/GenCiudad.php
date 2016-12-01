@@ -54,12 +54,7 @@ class GenCiudad
      * @ORM\ManyToOne(targetEntity="Brasa\TransporteBundle\Entity\TteRuta", inversedBy="ciudadesRel")
      * @ORM\JoinColumn(name="codigo_ruta_predeterminada_fk", referencedColumnName="codigo_ruta_pk")
      */
-    protected $rutaRel;    
-    
-    /**
-     * @ORM\OneToMany(targetEntity="GenTerceroDireccion", mappedBy="ciudadRel")
-     */
-    protected $tercerosDireccionesRel;
+    protected $rutaRel;        
     
     /**
      * @ORM\OneToMany(targetEntity="Brasa\TransporteBundle\Entity\TteGuia", mappedBy="ciudadOrigenRel")
@@ -232,15 +227,11 @@ class GenCiudad
      */
     protected $rhuAcademiasCiudadRel;
 
-    
-    
-    
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->tercerosDireccionesRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->guiasCiudadOrigenRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->guiasCiudadDestinoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->lpdCiudadDestinoRel = new \Doctrine\Common\Collections\ArrayCollection();
@@ -453,40 +444,6 @@ class GenCiudad
     public function getRutaRel()
     {
         return $this->rutaRel;
-    }
-
-    /**
-     * Add tercerosDireccionesRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenTerceroDireccion $tercerosDireccionesRel
-     *
-     * @return GenCiudad
-     */
-    public function addTercerosDireccionesRel(\Brasa\GeneralBundle\Entity\GenTerceroDireccion $tercerosDireccionesRel)
-    {
-        $this->tercerosDireccionesRel[] = $tercerosDireccionesRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove tercerosDireccionesRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenTerceroDireccion $tercerosDireccionesRel
-     */
-    public function removeTercerosDireccionesRel(\Brasa\GeneralBundle\Entity\GenTerceroDireccion $tercerosDireccionesRel)
-    {
-        $this->tercerosDireccionesRel->removeElement($tercerosDireccionesRel);
-    }
-
-    /**
-     * Get tercerosDireccionesRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTercerosDireccionesRel()
-    {
-        return $this->tercerosDireccionesRel;
     }
 
     /**

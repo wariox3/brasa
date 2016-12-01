@@ -22,17 +22,7 @@ class GenFormaPago
      * @ORM\Column(name="nombre", type="string", length=50)
      * @Assert\NotNull()(message="Debe escribir un nombre de la forma de pago")
      */
-    private $nombre;
-
-    /**
-     * @ORM\OneToMany(targetEntity="GenTercero", mappedBy="formaPagoClienteRel")
-     */
-    protected $tercerosFormaPagoClienteRel;    
-    
-    /**
-     * @ORM\OneToMany(targetEntity="GenTercero", mappedBy="formaPagoProveedorRel")     
-     */
-    protected $tercerosFormaPagoProveedorRel;       
+    private $nombre;      
     
     /**
      * @ORM\OneToMany(targetEntity="Brasa\TurnoBundle\Entity\TurCliente", mappedBy="formaPagoRel")
@@ -54,14 +44,11 @@ class GenFormaPago
      */
     protected $afiClientesFormaPagoRel;    
     
-
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->tercerosFormaPagoClienteRel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->tercerosFormaPagoProveedorRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->turClientesFormaPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->carClientesFormaPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rhuClientesFormaPagoRel = new \Doctrine\Common\Collections\ArrayCollection();
@@ -100,74 +87,6 @@ class GenFormaPago
     public function getNombre()
     {
         return $this->nombre;
-    }
-
-    /**
-     * Add tercerosFormaPagoClienteRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenTercero $tercerosFormaPagoClienteRel
-     *
-     * @return GenFormaPago
-     */
-    public function addTercerosFormaPagoClienteRel(\Brasa\GeneralBundle\Entity\GenTercero $tercerosFormaPagoClienteRel)
-    {
-        $this->tercerosFormaPagoClienteRel[] = $tercerosFormaPagoClienteRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove tercerosFormaPagoClienteRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenTercero $tercerosFormaPagoClienteRel
-     */
-    public function removeTercerosFormaPagoClienteRel(\Brasa\GeneralBundle\Entity\GenTercero $tercerosFormaPagoClienteRel)
-    {
-        $this->tercerosFormaPagoClienteRel->removeElement($tercerosFormaPagoClienteRel);
-    }
-
-    /**
-     * Get tercerosFormaPagoClienteRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTercerosFormaPagoClienteRel()
-    {
-        return $this->tercerosFormaPagoClienteRel;
-    }
-
-    /**
-     * Add tercerosFormaPagoProveedorRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenTercero $tercerosFormaPagoProveedorRel
-     *
-     * @return GenFormaPago
-     */
-    public function addTercerosFormaPagoProveedorRel(\Brasa\GeneralBundle\Entity\GenTercero $tercerosFormaPagoProveedorRel)
-    {
-        $this->tercerosFormaPagoProveedorRel[] = $tercerosFormaPagoProveedorRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove tercerosFormaPagoProveedorRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenTercero $tercerosFormaPagoProveedorRel
-     */
-    public function removeTercerosFormaPagoProveedorRel(\Brasa\GeneralBundle\Entity\GenTercero $tercerosFormaPagoProveedorRel)
-    {
-        $this->tercerosFormaPagoProveedorRel->removeElement($tercerosFormaPagoProveedorRel);
-    }
-
-    /**
-     * Get tercerosFormaPagoProveedorRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTercerosFormaPagoProveedorRel()
-    {
-        return $this->tercerosFormaPagoProveedorRel;
     }
 
     /**

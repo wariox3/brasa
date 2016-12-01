@@ -45,12 +45,7 @@ class GenAsesor
     /**
      * @ORM\Column(name="email", type="string", length=80, nullable=true)
      */
-    private $email;
-    
-    /**
-     * @ORM\OneToMany(targetEntity="GenTercero", mappedBy="asesorRel")
-     */
-    protected $tercerosRel;
+    private $email;    
 
     /**
      * @ORM\OneToMany(targetEntity="Brasa\CarteraBundle\Entity\CarCliente", mappedBy="asesorRel")
@@ -83,13 +78,11 @@ class GenAsesor
     protected $carAnticiposAsesorRel;
     
 
-    
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->tercerosRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->carClientesAsesorRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->carCuentasCobrarAsesorRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->carRecibosAsesorRel = new \Doctrine\Common\Collections\ArrayCollection();
@@ -250,40 +243,6 @@ class GenAsesor
     public function getEmail()
     {
         return $this->email;
-    }
-
-    /**
-     * Add tercerosRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenTercero $tercerosRel
-     *
-     * @return GenAsesor
-     */
-    public function addTercerosRel(\Brasa\GeneralBundle\Entity\GenTercero $tercerosRel)
-    {
-        $this->tercerosRel[] = $tercerosRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove tercerosRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenTercero $tercerosRel
-     */
-    public function removeTercerosRel(\Brasa\GeneralBundle\Entity\GenTercero $tercerosRel)
-    {
-        $this->tercerosRel->removeElement($tercerosRel);
-    }
-
-    /**
-     * Get tercerosRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTercerosRel()
-    {
-        return $this->tercerosRel;
     }
 
     /**

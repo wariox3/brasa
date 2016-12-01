@@ -208,7 +208,8 @@ class MovimientoController extends Controller
                         $arMovimientoDetalle = new \Brasa\InventarioBundle\Entity\InvMovimientoDetalle();
                         $arMovimientoDetalle->setMovimientoRel($arMovimiento);
                         $arMovimientoDetalle->setItemRel($arItem);                        
-                        $arMovimientoDetalle->setOperacionInventario($arMovimiento->getOperacionInventario());
+                        $arMovimientoDetalle->setFechaVencimiento(new \DateTime('now'));
+                        $arMovimientoDetalle->setOperacionInventario($arMovimiento->getOperacionInventario());                        
                         $em->persist($arMovimientoDetalle);
                     }
                     $em->persist($arMovimientoDetalle);
@@ -358,10 +359,13 @@ class MovimientoController extends Controller
                 $arMovimientoDetalle = new \Brasa\InventarioBundle\Entity\InvMovimientoDetalle();                
                 $arMovimientoDetalle = $em->getRepository('BrasaInventarioBundle:InvMovimientoDetalle')->find($codigo);
                 $lote = $arrControles['TxtLote'][$codigo];
+                $vence = $arrControles['TxtVence'][$codigo];
+                $vence = date_create($vence);
                 $bodega = $arrControles['TxtBodega'][$codigo];
                 $cantidad = $arrControles['TxtCantidad'][$codigo];
-                $costo = $arrControles['TxtCosto'][$codigo];
-                $arMovimientoDetalle->setLoteFk($lote);
+                $costo = $arrControles['TxtCosto'][$codigo];                
+                $arMovimientoDetalle->setLoteFk($lote);                
+                $arMovimientoDetalle->setFechaVencimiento($vence);
                 $arMovimientoDetalle->setCodigoBodegaFk($bodega);
                 $arMovimientoDetalle->setCantidad($cantidad);
                 $arMovimientoDetalle->setVrCosto($costo);

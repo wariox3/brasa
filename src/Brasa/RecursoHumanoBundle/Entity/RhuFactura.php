@@ -106,13 +106,7 @@ class RhuFactura
      * @ORM\ManyToOne(targetEntity="RhuCentroCosto", inversedBy="facturasCentroCostoRel")
      * @ORM\JoinColumn(name="codigo_centro_costo_fk", referencedColumnName="codigo_centro_costo_pk")
      */
-    protected $centroCostoRel;    
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTercero", inversedBy="rhuFacturasTerceroRel")
-     * @ORM\JoinColumn(name="codigo_tercero_fk", referencedColumnName="codigo_tercero_pk")
-     */
-    protected $terceroRel;    
+    protected $centroCostoRel;      
     
     /**
      * @ORM\OneToMany(targetEntity="RhuFacturaDetalle", mappedBy="facturaRel")
@@ -135,6 +129,8 @@ class RhuFactura
     public function __construct()
     {
         $this->facturasDetallesFacturaRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->examenesFacturaRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->seleccionesFacturaRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -436,6 +432,54 @@ class RhuFactura
     }
 
     /**
+     * Set vrSeleccion
+     *
+     * @param float $vrSeleccion
+     *
+     * @return RhuFactura
+     */
+    public function setVrSeleccion($vrSeleccion)
+    {
+        $this->VrSeleccion = $vrSeleccion;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSeleccion
+     *
+     * @return float
+     */
+    public function getVrSeleccion()
+    {
+        return $this->VrSeleccion;
+    }
+
+    /**
+     * Set vrExamen
+     *
+     * @param float $vrExamen
+     *
+     * @return RhuFactura
+     */
+    public function setVrExamen($vrExamen)
+    {
+        $this->VrExamen = $vrExamen;
+
+        return $this;
+    }
+
+    /**
+     * Get vrExamen
+     *
+     * @return float
+     */
+    public function getVrExamen()
+    {
+        return $this->VrExamen;
+    }
+
+    /**
      * Set comentarios
      *
      * @param string $comentarios
@@ -529,30 +573,6 @@ class RhuFactura
     public function getCentroCostoRel()
     {
         return $this->centroCostoRel;
-    }
-
-    /**
-     * Set terceroRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenTercero $terceroRel
-     *
-     * @return RhuFactura
-     */
-    public function setTerceroRel(\Brasa\GeneralBundle\Entity\GenTercero $terceroRel = null)
-    {
-        $this->terceroRel = $terceroRel;
-
-        return $this;
-    }
-
-    /**
-     * Get terceroRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenTercero
-     */
-    public function getTerceroRel()
-    {
-        return $this->terceroRel;
     }
 
     /**
@@ -655,53 +675,5 @@ class RhuFactura
     public function getSeleccionesFacturaRel()
     {
         return $this->seleccionesFacturaRel;
-    }
-
-    /**
-     * Set vrSeleccion
-     *
-     * @param float $vrSeleccion
-     *
-     * @return RhuFactura
-     */
-    public function setVrSeleccion($vrSeleccion)
-    {
-        $this->VrSeleccion = $vrSeleccion;
-
-        return $this;
-    }
-
-    /**
-     * Get vrSeleccion
-     *
-     * @return float
-     */
-    public function getVrSeleccion()
-    {
-        return $this->VrSeleccion;
-    }
-
-    /**
-     * Set vrExamen
-     *
-     * @param float $vrExamen
-     *
-     * @return RhuFactura
-     */
-    public function setVrExamen($vrExamen)
-    {
-        $this->VrExamen = $vrExamen;
-
-        return $this;
-    }
-
-    /**
-     * Get vrExamen
-     *
-     * @return float
-     */
-    public function getVrExamen()
-    {
-        return $this->VrExamen;
     }
 }
