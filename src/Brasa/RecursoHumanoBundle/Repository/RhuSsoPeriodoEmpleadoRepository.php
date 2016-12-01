@@ -158,9 +158,15 @@ class RhuSsoPeriodoEmpleadoRepository extends EntityRepository {
             }
             
             $ibc = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->ibc($arPeriodoDetalle->getSsoPeriodoRel()->getFechaDesde()->format('Y-m-d'), $arPeriodoDetalle->getSsoPeriodoRel()->getFechaHasta()->format('Y-m-d'), $arContrato->getCodigoContratoPk());                        
+            $ibc = round($ibc);
             $ibcMinimo = ($salarioMinimo / 30) * $intDiasLaborados;            
             if($ibc < $ibcMinimo) {
                 $ibc = $ibcMinimo;
+            }
+            
+            $ibcSalario = round(($floSalario / 30) * $intDiasLaborados);
+            if($ibcSalario != $ibc) {
+                $arPeriodoEmpleadoActualizar->setVariacionTransitoriaSalario('X');
             }
             //Se quita porque ya en la generacion se calcula el 70%
             /*if($arContrato->getSalarioIntegral() == 1) {

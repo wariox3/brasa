@@ -224,8 +224,14 @@ class SeguridadSocialPeriodosController extends Controller
                 fputs($ar, '          ');
                 fputs($ar, '          '); // Nro 9 del formato
                 fputs($ar, $tipoSucursal); // Nro 10 del formato
-                fputs($ar, $this->RellenarNr($arPeriodoDetalle->getSsoSucursalRel()->getCodigoInterface(), " ", 10, "D")); //Nro 11
-                fputs($ar, $this->RellenarNr($arPeriodoDetalle->getSsoSucursalRel()->getNombre(), " ", 40, "D")); //Nro 12
+                if($tipoSucursal == "U") {
+                    fputs($ar, $this->RellenarNr("", " ", 10, "D")); //Nro 11
+                    fputs($ar, $this->RellenarNr("", " ", 40, "D")); //Nro 12                    
+                } else {
+                    fputs($ar, $this->RellenarNr($arPeriodoDetalle->getSsoSucursalRel()->getCodigoInterface(), " ", 10, "D")); //Nro 11
+                    fputs($ar, $this->RellenarNr($arPeriodoDetalle->getSsoSucursalRel()->getNombre(), " ", 40, "D")); //Nro 12                    
+                }
+
                 //Arp del aportante
                 //fputs($ar, '14-18 '); 
                 fputs($ar, $this->RellenarNr($condigoInterfaceRiesgos, " ", 6, "D")); //Nro 13
@@ -234,13 +240,16 @@ class SeguridadSocialPeriodosController extends Controller
                 fputs($ar, $arPeriodoDetalle->getSsoPeriodoRel()->getAnioPago().'-'. $this->RellenarNr($arPeriodoDetalle->getSsoPeriodoRel()->getMesPago(), "0", 2, "I")); //Nro 15
                 //Numero radicacion de la planilla
                 fputs($ar, '0000000000'); //Nro 16
+                
                 //Fecha de pago
-                fputs($ar, $arPeriodoDetalle->getSsoPeriodoRel()->getFechaPago()->format('Y-m-d')); //Nro 17
+                //fputs($ar, $arPeriodoDetalle->getSsoPeriodoRel()->getFechaPago()->format('Y-m-d')); //Nro 17
+                fputs($ar, $this->RellenarNr("", " ", 10, "D"));
+                
                 //Numero total de empleados
                 fputs($ar, $this->RellenarNr($arPeriodoDetalle->getNumeroEmpleados(), "0", 5, "I")); 
-                //Valor total de la nomina
-                //fputs($ar, $this->RellenarNr($arPeriodoDetalle->getTotalCotizacion(), "0", 12, "I")); //duda nro 19
-                fputs($ar, '000000000000'); //Es el anterior
+                //Valor total de la nomina parafiscales (ibc caja)
+                fputs($ar, $this->RellenarNr($arPeriodoDetalle->getTotalIngresoBaseCotizacionCaja(), "0", 12, "I"));
+                //fputs($ar, '000000000000'); //Es el anterior
                 fputs($ar, '1');
                 fputs($ar, '88');
                 fputs($ar, "\n");

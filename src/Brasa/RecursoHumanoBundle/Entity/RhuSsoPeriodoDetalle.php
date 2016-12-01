@@ -63,6 +63,11 @@ class RhuSsoPeriodoDetalle
     private $totalCotizacion = 0;
     
     /**
+     * @ORM\Column(name="total_ingreso_base_cotizacion_caja", type="float" , nullable=true)
+     */
+    private $totalIngresoBaseCotizacionCaja = 0;    
+    
+    /**
      * @ORM\Column(name="estado_pago_banco", type="boolean")
      */
     private $estadoPagoBanco = 0;    
@@ -94,6 +99,7 @@ class RhuSsoPeriodoDetalle
      */
     protected $pagosBancosDetallesSsoPeriodoDetalleRel;     
     
+
     /**
      * Constructor
      */
@@ -328,6 +334,30 @@ class RhuSsoPeriodoDetalle
     public function getTotalCotizacion()
     {
         return $this->totalCotizacion;
+    }
+
+    /**
+     * Set totalIngresoBaseCotizacionCaja
+     *
+     * @param float $totalIngresoBaseCotizacionCaja
+     *
+     * @return RhuSsoPeriodoDetalle
+     */
+    public function setTotalIngresoBaseCotizacionCaja($totalIngresoBaseCotizacionCaja)
+    {
+        $this->totalIngresoBaseCotizacionCaja = $totalIngresoBaseCotizacionCaja;
+
+        return $this;
+    }
+
+    /**
+     * Get totalIngresoBaseCotizacionCaja
+     *
+     * @return float
+     */
+    public function getTotalIngresoBaseCotizacionCaja()
+    {
+        return $this->totalIngresoBaseCotizacionCaja;
     }
 
     /**

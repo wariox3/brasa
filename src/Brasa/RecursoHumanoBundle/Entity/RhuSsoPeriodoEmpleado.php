@@ -83,6 +83,11 @@ class RhuSsoPeriodoEmpleado
     private $salarioIntegral = ' ';    
     
     /**
+     * @ORM\Column(name="variacion_transitoria_salario", type="string", length=1)
+     */
+    private $variacionTransitoriaSalario = ' ';    
+    
+    /**
      * @ORM\Column(name="dias_licencia", type="integer")
      */    
     private $diasLicencia = 0;    
@@ -845,5 +850,29 @@ class RhuSsoPeriodoEmpleado
     public function getVrVacaciones()
     {
         return $this->vrVacaciones;
+    }
+
+    /**
+     * Set variacionTransitoriaSalario
+     *
+     * @param string $variacionTransitoriaSalario
+     *
+     * @return RhuSsoPeriodoEmpleado
+     */
+    public function setVariacionTransitoriaSalario($variacionTransitoriaSalario)
+    {
+        $this->variacionTransitoriaSalario = $variacionTransitoriaSalario;
+
+        return $this;
+    }
+
+    /**
+     * Get variacionTransitoriaSalario
+     *
+     * @return string
+     */
+    public function getVariacionTransitoriaSalario()
+    {
+        return $this->variacionTransitoriaSalario;
     }
 }

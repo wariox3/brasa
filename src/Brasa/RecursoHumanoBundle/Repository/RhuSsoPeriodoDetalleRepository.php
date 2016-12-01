@@ -39,6 +39,7 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 $em->persist($arPeriodoDetalle);
             }
             $totalCotizacionGeneral = 0;
+            $floIbcCajaTotal = 0;
             $i = 1;
             $arPeriodoEmpleados = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoPeriodoEmpleado();
             $arPeriodoEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoPeriodoEmpleado')->findBy(array('codigoPeriodoFk' => $arPeriodoDetalle->getCodigoPeriodoFk(), 'codigoPeriodoDetalleFk' => $codigoPeriodoDetalle));                
@@ -96,10 +97,11 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 $floIbcIncapacidades = 0;
                 $ibcVacaciones = 0;
                 $ibcIncapacidad = 0;                
-                if($arPeriodoEmpleado->getVrSuplementario() > 0) {
+                if($arPeriodoEmpleado->getVrSuplementario() > 0 || $arPeriodoEmpleado->getVariacionTransitoriaSalario() == 'X') {
                     $arAporte->setVariacionTransitoriaSalario('X');
                     $arAporte->setSuplementario($arPeriodoEmpleado->getVrSuplementario());
-                }                
+                }                   
+                
                 if($arPeriodoEmpleado->getDiasIncapacidadGeneral() > 0 || $arPeriodoEmpleado->getDiasIncapacidadLaboral() > 0 || $arPeriodoEmpleado->getDiasLicenciaMaternidad() > 0) {
                     $ibcIncapacidad = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->ibcIncapacidad($arPeriodo->getFechaDesde()->format('Y-m-d'), $arPeriodo->getFechaHasta()->format('Y-m-d'), $arContrato->getCodigoContratoPk());                                                            
                 }
@@ -205,6 +207,7 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 $arAporte->setIbcSalud($floIbcSalud);
                 $arAporte->setIbcRiesgosProfesionales($floIbcRiesgos);
                 $arAporte->setIbcCaja($floIbcCaja);                 
+                $floIbcCajaTotal += $floIbcCaja;
                 
                 $floTarifaSalud = 4;
                 $floTarifaRiesgos = $arPeriodoEmpleado->getTarifaRiesgos();
@@ -220,7 +223,11 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                     $floTarifaIcbf = 3;
                     $floTarifaSena = 2;                
                 }
-
+                
+                if($intDiasCotizarRiesgos <= 0) {
+                    $floTarifaRiesgos = 0;
+                }
+                
                 $arAporte->setTarifaPension($floTarifaPension);
                 $arAporte->setTarifaSalud($floTarifaSalud);
                 $arAporte->setTarifaRiesgos($floTarifaRiesgos);
@@ -374,7 +381,7 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                     $floIbcPension = $this->redondearIbc($intDiasCotizarPension, $floIbcBrutoPension);
                     $floIbcSalud = $this->redondearIbc($intDiasCotizarSalud, $floIbcBrutoSalud);
                     $floIbcRiesgos = $this->redondearIbc($intDiasCotizarRiesgos, $floIbcBrutoRiesgos);
-                    $floIbcCaja = $this->redondearIbc($intDiasCotizarCaja, $floIbcBrutoCaja);
+                    $floIbcCaja = $this->redondearIbc($intDiasCotizarCaja, $floIbcBrutoCaja);                    
                     
                     $arAporte->setIbcPension($floIbcPension);
                     $arAporte->setIbcSalud($floIbcSalud);
@@ -405,11 +412,12 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                         if($vacaciones > 0) {
                             $ibcCajaVacaciones = $vacaciones;
                             $floTarifaCaja = 4;
-                            $floIbcCaja = $this->redondearIbc($intDiasCotizarCaja, $ibcCajaVacaciones);
+                            $floIbcCaja = $this->redondearIbc($intDiasCotizarCaja, $ibcCajaVacaciones);                            
                             $arAporte->setIbcCaja($floIbcCaja);
-                            $arAporte->setTarifaCaja($floTarifaCaja); 
+                            $arAporte->setTarifaCaja($floTarifaCaja);                             
                         }
                     }
+                    $floIbcCajaTotal += $floIbcCaja;
                     $floCotizacionSalud = $this->redondearAporte($floSalario + $floSuplementario, $floIbcSalud, $floTarifaSalud, $intDiasCotizarSalud);
                     $floCotizacionRiesgos = $this->redondearAporte($floSalario + $floSuplementario, $floIbcRiesgos, $floTarifaRiesgos, $intDiasCotizarRiesgos);
                     $floCotizacionCaja = $this->redondearAporte($ibcCajaVacaciones, $ibcCajaVacaciones, $floTarifaCaja, 0);
@@ -433,7 +441,9 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 }
             }
         }
+        
         $arPeriodoDetalle->setTotalCotizacion($totalCotizacionGeneral);
+        $arPeriodoDetalle->setTotalIngresoBaseCotizacionCaja($floIbcCajaTotal);
         $arPeriodoDetalle->setEstadoGenerado(1);
         $arPeriodoDetalle->setNumeroRegistros($i - 1);
         $arPeriodoDetalle->setNumeroEmpleados($intNumeroEmpleados);                
