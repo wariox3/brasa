@@ -4,18 +4,21 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Brasa\TurnoBundle\Form\Type\TurTurnoType;
 use Brasa\TurnoBundle\Form\Type\TurTurnoDetalleType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
 class TurnoController extends Controller
 {
     var $strListaDql = "";
     
     /**
+     * 
      * @Route("/tur/base/turno/", name="brs_tur_base_turno")
      */     
-    public function listaAction() {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
+    public function listaAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();        
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 81, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
@@ -50,8 +53,7 @@ class TurnoController extends Controller
     /**
      * @Route("/tur/base/turno/nuevo/{codigoTurno}", name="brs_tur_base_turno_nuevo")
      */    
-    public function nuevoAction($codigoTurno = '') {
-        $request = $this->getRequest();
+    public function nuevoAction(Request $request, $codigoTurno = '') {        
         $em = $this->getDoctrine()->getManager();
         $arTurno = new \Brasa\TurnoBundle\Entity\TurTurno();
         if($codigoTurno != '' && $codigoTurno != '0') {
@@ -88,12 +90,11 @@ class TurnoController extends Controller
     }
     
     private function formularioFiltro() {
-        $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $em = $this->getDoctrine()->getManager();        
         $form = $this->createFormBuilder()                        
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar',))            
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel',))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
     }    
