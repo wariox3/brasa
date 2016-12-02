@@ -66,6 +66,11 @@ class RhuCredito
      * @ORM\Column(name="vr_cuota", type="float")
      */
     private $vrCuota = 0;
+
+    /**
+     * @ORM\Column(name="vr_cuota_prima", type="float")
+     */
+    private $vrCuotaPrima = 0;
     
     /**
      * @ORM\Column(name="vr_cuota_temporal", type="float")
@@ -136,6 +141,11 @@ class RhuCredito
      * @ORM\Column(name="validar_cuotas", type="boolean")
      */    
     private $validarCuotas = false;    
+    
+    /**     
+     * @ORM\Column(name="aplicar_cuota_prima", type="boolean")
+     */    
+    private $aplicarCuotaPrima = false;    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="creditosEmpleadoRel")
@@ -1032,5 +1042,53 @@ class RhuCredito
     public function getVacacionesAdicionalesCreditoRel()
     {
         return $this->vacacionesAdicionalesCreditoRel;
+    }
+
+    /**
+     * Set vrCuotaPrima
+     *
+     * @param float $vrCuotaPrima
+     *
+     * @return RhuCredito
+     */
+    public function setVrCuotaPrima($vrCuotaPrima)
+    {
+        $this->vrCuotaPrima = $vrCuotaPrima;
+
+        return $this;
+    }
+
+    /**
+     * Get vrCuotaPrima
+     *
+     * @return float
+     */
+    public function getVrCuotaPrima()
+    {
+        return $this->vrCuotaPrima;
+    }
+
+    /**
+     * Set aplicarCuotaPrima
+     *
+     * @param boolean $aplicarCuotaPrima
+     *
+     * @return RhuCredito
+     */
+    public function setAplicarCuotaPrima($aplicarCuotaPrima)
+    {
+        $this->aplicarCuotaPrima = $aplicarCuotaPrima;
+
+        return $this;
+    }
+
+    /**
+     * Get aplicarCuotaPrima
+     *
+     * @return boolean
+     */
+    public function getAplicarCuotaPrima()
+    {
+        return $this->aplicarCuotaPrima;
     }
 }

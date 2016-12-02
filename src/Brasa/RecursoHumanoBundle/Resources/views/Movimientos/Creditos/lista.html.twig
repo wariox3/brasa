@@ -91,7 +91,7 @@
                 <td style="text-align: right" {% if arCreditos.estadoPagado == 1 %} class="success"> SI {% else %} <td {{ arCreditos.estadoPagado }} class="danger">NO {% endif %}</td>
                 <td style="text-align: right" {% if arCreditos.estadoSuspendido == 0 %} class="success"> NO {% else %} <td class="danger">SI {% endif %}</td>
                 {% if arCreditos.estadoPagado == 0 %}
-                    <td style="text-align: center"><a href="{{ path('brs_rhu_creditos_nuevo', { 'codigoCredito': arCreditos.codigoCreditoPk,  'codigoEmpleado': arCreditos.codigoEmpleadoFk}) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                                   
+                    <td style="text-align: center"><a href="{{ path('brs_rhu_creditos_nuevo', { 'codigoCredito': arCreditos.codigoCreditoPk }) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                                   
                 {% else %}    
                     <td></td>
                 {% endif %}                    

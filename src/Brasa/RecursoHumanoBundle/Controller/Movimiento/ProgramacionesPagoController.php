@@ -725,7 +725,7 @@ class ProgramacionesPagoController extends Controller
             $arrBotonMarcar['disabled'] = true;
         }        
         if($arProgramacionPago->getCodigoPagoTipoFk() == 2) {
-            $arrBotonActualizar['disabled'] = true;
+            //$arrBotonActualizar['disabled'] = true;
             $arrBotonActualizarHoras['disabled'] = true;
             $arrBotonActualizarHorasSoportePago['disabled'] = true;            
             $arrBotonEliminarPagoAdicional['disabled'] = true;            

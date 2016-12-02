@@ -104,6 +104,23 @@
             </div>
         </div>
     </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">Información general (Primas)</div>
+        <div class="panel-body">          
+            <div class="form-group form-group-sm">
+                <label for="form_vrCuota" class="col-sm-3 control-label">Valor cuota prima:</label>
+                <div class="col-sm-9">
+                    {{ form_widget(form.vrCuotaPrima, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>                
+            <div class="form-group form-group-sm">
+                <label class="col-sm-3 control-label">Apicar cuota prima:</label>
+                <div class="col-sm-9">
+                            {{ form_widget(form.aplicarCuotaPrima) }}
+                </div>
+            </div> 
+        </div>
+    </div>                
     <div class="modal-footer">
         <a class="btn btn-default btn-sm" href="{{ path('brs_rhu_creditos_lista') }}">Cancelar</a>        
         {{ form_widget(form.guardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
