@@ -270,7 +270,7 @@ class PeriodoController extends Controller
             'form' => $form->createView()));
     }
 
-    /**
+    /** 
      * @Route("/afi/movimiento/periodo/interesmora/{codigoPeriodo}", name="brs_afi_movimiento_periodo_interesmora")
      */
     /*public function interesmoraAction(Request $request, $codigoPeriodo = '') {
