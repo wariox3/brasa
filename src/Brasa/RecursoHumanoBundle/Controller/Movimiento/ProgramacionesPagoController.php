@@ -247,6 +247,7 @@ class ProgramacionesPagoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $objMensaje = $this->get('mensajes_brasa');
         $paginator  = $this->get('knp_paginator');
+        $permisoParametros = $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 114); 
         $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
         $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigoProgramacionPago);
         $form = $this->formularioDetallePrima($arProgramacionPago);
@@ -308,6 +309,7 @@ class ProgramacionesPagoController extends Controller
                     'arCentroCosto' => $arCentroCosto,                                        
                     'arProgramacionPagoDetalles' => $arProgramacionPagoDetalles,
                     'arProgramacionPago' => $arProgramacionPago,
+                    'permisoParametros' => $permisoParametros,
                     'form' => $form->createView()
                     ));
     }
@@ -404,7 +406,7 @@ class ProgramacionesPagoController extends Controller
         $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
-        $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
+        $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();        
         $arProgramacionPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->find($codigoProgramacionPagoDetalle);        
         $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
         $arPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->findOneBy(array('codigoProgramacionPagoDetalleFk' => $codigoProgramacionPagoDetalle));                
@@ -591,8 +593,13 @@ class ProgramacionesPagoController extends Controller
         }        
  
         $arrDiaSemana = $objFunciones->diasMes($arProgramacionPagoDetalle->getFechaDesde(), $em->getRepository('BrasaGeneralBundle:GenFestivo')->festivos($arProgramacionPagoDetalle->getFechaDesde()->format('Y-m-').'01', $arProgramacionPagoDetalle->getFechaDesde()->format('Y-m-').'31'));        
-        $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->programacionPagoGeneralDql($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoDetalle->getFechaDesde()->format('Y/m/d'), $arProgramacionPagoDetalle->getFechaHasta()->format('Y/m/d')));
-        $arPagosAdicionales = $paginator->paginate($query, $request->query->get('page', 1), 20);        
+        if($arProgramacionPagoDetalle->getProgramacionPagoRel()->getCodigoPagoTipoFk() == 1) {
+            $query = $em->createQuery($em->getRepository('BrasaRecursoHumanoBundle:RhuPagoAdicional')->programacionPagoGeneralDql($arProgramacionPagoDetalle->getCodigoEmpleadoFk(), $arProgramacionPagoDetalle->getFechaDesde()->format('Y/m/d'), $arProgramacionPagoDetalle->getFechaHasta()->format('Y/m/d')));
+            $arPagosAdicionales = $paginator->paginate($query, $request->query->get('page', 1), 20);                    
+        } else {
+            $arPagosAdicionales = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoAdicional();
+        }
+
         $dql = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->listaDql("", $codigoProgramacionPagoDetalle);                
         $arPagoDetalles = $paginator->paginate($em->createQuery($dql), $request->query->get('page', 1), 50);        
         return $this->render('BrasaRecursoHumanoBundle:Movimientos/ProgramacionesPago:verResumenTurno.html.twig', array(                        
@@ -606,6 +613,37 @@ class ProgramacionesPagoController extends Controller
             'arSoportePagoProgramacion' => $arSoportePagoProgramacion,
             'form' => $form->createView()));
     }
+    
+    /**
+     * @Route("/rhu/movimiento/programacion/pago/detalle/parametros/prima/{codigoProgramacionPagoDetalle}", name="brs_rhu_movimiento_programacion_pago_detalle_parametros_prima")
+     */    
+    public function parametrosPrimaAction($codigoProgramacionPagoDetalle) {
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
+        $arProgramacionPagoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPagoDetalle')->find($codigoProgramacionPagoDetalle);        
+        $form = $this->createFormBuilder()
+            ->setAction($this->generateUrl('brs_rhu_movimiento_programacion_pago_detalle_parametros_prima', array('codigoProgramacionPagoDetalle' => $codigoProgramacionPagoDetalle)))            
+            ->add('porcentajeIbp', 'number', array('data' => $arProgramacionPagoDetalle->getPorcentajeIbp() ,'required' => false))      
+            ->add('vrSalarioPrimaPropuesto', 'number', array('data' => $arProgramacionPagoDetalle->getVrSalarioPrimaPropuesto() ,'required' => false))                                      
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isValid()) {            
+            $porcentajeIbp = $form->get('porcentajeIbp')->getData();            
+            $vrSalarioPrimaPropuesto = $form->get('vrSalarioPrimaPropuesto')->getData();            
+            $arProgramacionPagoDetalle->setPorcentajeIbp($porcentajeIbp);
+            $arProgramacionPagoDetalle->setVrSalarioPrimaPropuesto($vrSalarioPrimaPropuesto);
+            $em->persist($arProgramacionPagoDetalle);
+            $em->flush();
+            return $this->redirect($this->generateUrl('brs_rhu_programaciones_pago_detalle_prima', array('codigoProgramacionPago' => $arProgramacionPagoDetalle->getCodigoProgramacionPagoFk())));
+        }
+        return $this->render('BrasaRecursoHumanoBundle:Movimientos/ProgramacionesPago:parametrosPrima.html.twig', array(
+            'arProgramacionPagoDetalle' => $arProgramacionPagoDetalle,
+            'form' => $form->createView()           
+        ));
+    }     
     
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
@@ -705,7 +743,7 @@ class ProgramacionesPagoController extends Controller
                     ->getForm();  
         return $form;
     }        
-
+    
     private function formularioVerReusmenTurno($arProgramacionPago) {                
         $arrBotonActualizar = array('label' => 'Actualizar', 'disabled' => false);
         $arrBotonActualizarHoras = array('label' => 'Actualizar', 'disabled' => false);
@@ -743,7 +781,7 @@ class ProgramacionesPagoController extends Controller
             ->add('BtnMarcar', 'submit', $arrBotonMarcar)
             ->getForm();
         return $form;
-    }
+    }    
     
     private function listar() {
         $em = $this->getDoctrine()->getManager();

@@ -260,6 +260,16 @@ class RhuProgramacionPagoDetalle
     private $vrAjusteDevengado = 0;      
     
     /**
+     * @ORM\Column(name="porcentaje_ibp", type="float")
+     */
+    private $porcentajeIbp = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_salario_prima_propuesto", type="float")
+     */
+    private $vrSalarioPrimaPropuesto = 0;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuProgramacionPago", inversedBy="programacionesPagosDetallesProgramacionPagoRel")
      * @ORM\JoinColumn(name="codigo_programacion_pago_fk", referencedColumnName="codigo_programacion_pago_pk")
      */
@@ -551,6 +561,30 @@ class RhuProgramacionPagoDetalle
     public function getVrSalario()
     {
         return $this->vrSalario;
+    }
+
+    /**
+     * Set vrSalarioPrima
+     *
+     * @param float $vrSalarioPrima
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setVrSalarioPrima($vrSalarioPrima)
+    {
+        $this->vrSalarioPrima = $vrSalarioPrima;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalarioPrima
+     *
+     * @return float
+     */
+    public function getVrSalarioPrima()
+    {
+        return $this->vrSalarioPrima;
     }
 
     /**
@@ -1418,6 +1452,78 @@ class RhuProgramacionPagoDetalle
     }
 
     /**
+     * Set vrAjusteDevengado
+     *
+     * @param float $vrAjusteDevengado
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setVrAjusteDevengado($vrAjusteDevengado)
+    {
+        $this->vrAjusteDevengado = $vrAjusteDevengado;
+
+        return $this;
+    }
+
+    /**
+     * Get vrAjusteDevengado
+     *
+     * @return float
+     */
+    public function getVrAjusteDevengado()
+    {
+        return $this->vrAjusteDevengado;
+    }
+
+    /**
+     * Set porcentajeIbp
+     *
+     * @param float $porcentajeIbp
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setPorcentajeIbp($porcentajeIbp)
+    {
+        $this->porcentajeIbp = $porcentajeIbp;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentajeIbp
+     *
+     * @return float
+     */
+    public function getPorcentajeIbp()
+    {
+        return $this->porcentajeIbp;
+    }
+
+    /**
+     * Set vrSalarioPrimaPropuesto
+     *
+     * @param float $vrSalarioPrimaPropuesto
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setVrSalarioPrimaPropuesto($vrSalarioPrimaPropuesto)
+    {
+        $this->vrSalarioPrimaPropuesto = $vrSalarioPrimaPropuesto;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalarioPrimaPropuesto
+     *
+     * @return float
+     */
+    public function getVrSalarioPrimaPropuesto()
+    {
+        return $this->vrSalarioPrimaPropuesto;
+    }
+
+    /**
      * Set programacionPagoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago $programacionPagoRel
@@ -1589,53 +1695,5 @@ class RhuProgramacionPagoDetalle
     public function getPagosProgramacionPagoDetalleRel()
     {
         return $this->pagosProgramacionPagoDetalleRel;
-    }
-
-    /**
-     * Set vrAjusteDevengado
-     *
-     * @param float $vrAjusteDevengado
-     *
-     * @return RhuProgramacionPagoDetalle
-     */
-    public function setVrAjusteDevengado($vrAjusteDevengado)
-    {
-        $this->vrAjusteDevengado = $vrAjusteDevengado;
-
-        return $this;
-    }
-
-    /**
-     * Get vrAjusteDevengado
-     *
-     * @return float
-     */
-    public function getVrAjusteDevengado()
-    {
-        return $this->vrAjusteDevengado;
-    }
-
-    /**
-     * Set vrSalarioPrima
-     *
-     * @param float $vrSalarioPrima
-     *
-     * @return RhuProgramacionPagoDetalle
-     */
-    public function setVrSalarioPrima($vrSalarioPrima)
-    {
-        $this->vrSalarioPrima = $vrSalarioPrima;
-
-        return $this;
-    }
-
-    /**
-     * Get vrSalarioPrima
-     *
-     * @return float
-     */
-    public function getVrSalarioPrima()
-    {
-        return $this->vrSalarioPrima;
     }
 }
