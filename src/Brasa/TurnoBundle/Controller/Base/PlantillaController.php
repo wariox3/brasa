@@ -7,7 +7,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurPlantillaType;
-
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 class PlantillaController extends Controller {
 
     var $strDqlLista = "";
@@ -17,9 +18,8 @@ class PlantillaController extends Controller {
     /**
      * @Route("/tur/base/plantilla/lista", name="brs_tur_base_plantilla_lista")
      */     
-    public function listaAction() {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
+    public function listaAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();        
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 82, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
@@ -52,8 +52,7 @@ class PlantillaController extends Controller {
     /**
      * @Route("/tur/base/plantilla/nuevo/{codigoPlantilla}", name="brs_tur_base_plantilla_nuevo")
      */     
-    public function nuevoAction($codigoPlantilla = 0) {
-        $request = $this->getRequest();
+    public function nuevoAction(Request $request, $codigoPlantilla = 0) {        
         $em = $this->getDoctrine()->getManager();
         $arPlantilla = new \Brasa\TurnoBundle\Entity\TurPlantilla();
         if ($codigoPlantilla != 0) {
@@ -82,9 +81,8 @@ class PlantillaController extends Controller {
     /**
      * @Route("/tur/base/plantilla/detalle/{codigoPlantilla}", name="brs_tur_base_plantilla_detalle")
      */     
-    public function detalleAction($codigoPlantilla) {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
+    public function detalleAction(Request $request, $codigoPlantilla) {
+        $em = $this->getDoctrine()->getManager();        
         $objMensaje = $this->get('mensajes_brasa');
         $arPlantilla = new \Brasa\TurnoBundle\Entity\TurPlantilla();
         $arPlantilla = $em->getRepository('BrasaTurnoBundle:TurPlantilla')->find($codigoPlantilla);
@@ -152,9 +150,8 @@ class PlantillaController extends Controller {
     /**
      * @Route("/tur/base/plantilla/detalle/editar/{codigoPlantillaDetalle}", name="brs_tur_base_plantilla_detalle_editar")
      */     
-    public function detalleEditarAction($codigoPlantillaDetalle) {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
+    public function detalleEditarAction(Request $request, $codigoPlantillaDetalle) {
+        $em = $this->getDoctrine()->getManager();        
         $arPlantillaDetalleAct = new \Brasa\TurnoBundle\Entity\TurPlantillaDetalle();
         $arPlantillaDetalleAct = $em->getRepository('BrasaTurnoBundle:TurPlantillaDetalle')->find($codigoPlantillaDetalle);        
         $arPlantillaDetalle = new \Brasa\TurnoBundle\Entity\TurPlantillaDetalle();
@@ -201,11 +198,11 @@ class PlantillaController extends Controller {
 
     private function formularioFiltro() {
         $form = $this->createFormBuilder()
-                ->add('TxtNombre', 'text', array('label' => 'Nombre', 'data' => $this->strNombre))
-                ->add('TxtCodigo', 'text', array('label' => 'Codigo', 'data' => $this->strCodigo))
-                ->add('BtnEliminar', 'submit', array('label' => 'Eliminar',))
-                ->add('BtnExcel', 'submit', array('label' => 'Excel',))
-                ->add('BtnFiltrar', 'submit', array('label' => 'Filtrar'))
+                ->add('TxtNombre', TextType::class, array('label' => 'Nombre', 'data' => $this->strNombre))
+                ->add('TxtCodigo', TextType::class, array('label' => 'Codigo', 'data' => $this->strCodigo))
+                ->add('BtnEliminar', SubmitType::class, array('label' => 'Eliminar',))
+                ->add('BtnExcel', SubmitType::class, array('label' => 'Excel',))
+                ->add('BtnFiltrar', SubmitType::class, array('label' => 'Filtrar'))
                 ->getForm();
         return $form;
     }
@@ -228,12 +225,12 @@ class PlantillaController extends Controller {
         }
 
         $form = $this->createFormBuilder()
-                ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)
-                ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)
-                ->add('BtnImprimir', 'submit', $arrBotonImprimir)
-                ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
-                ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
-                ->add('BtnDetalleNuevo', 'submit', $arrBotonDetalleNuevo)
+                ->add('BtnDesAutorizar', SubmitType::class, $arrBotonDesAutorizar)
+                ->add('BtnAutorizar', SubmitType::class, $arrBotonAutorizar)
+                ->add('BtnImprimir', SubmitType::class, $arrBotonImprimir)
+                ->add('BtnDetalleActualizar', SubmitType::class, $arrBotonDetalleActualizar)
+                ->add('BtnDetalleEliminar', SubmitType::class, $arrBotonDetalleEliminar)
+                ->add('BtnDetalleNuevo', SubmitType::class, $arrBotonDetalleNuevo)
                 ->getForm();
         return $form;
     }
