@@ -7,6 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class ArchivosController extends Controller
 {
@@ -14,9 +16,8 @@ class ArchivosController extends Controller
     /**
      * @Route("/ad/archivos/lista/{codigoDocumento}/{numero}", name="brs_ad_archivos_lista")
      */     
-    public function listaAction($codigoDocumento, $numero) {
+    public function listaAction(Request $request, $codigoDocumento, $numero) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();  
         $paginator  = $this->get('knp_paginator');
         $query = $em->createQuery($em->getRepository('BrasaAdministracionDocumentalBundle:AdArchivo')->listaDQL($codigoDocumento, $numero));        
         $arArchivos = $paginator->paginate($query, $request->query->get('page', 1), 50);                               
@@ -30,15 +31,14 @@ class ArchivosController extends Controller
     /**
      * @Route("/ad/archivos/cargar/{codigoDocumento}/{numero}", name="brs_ad_archivos_cargar")
      */    
-    public function cargarAction($codigoDocumento, $numero) {
+    public function cargarAction(Request $request, $codigoDocumento, $numero) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $objMensaje = $this->get('mensajes_brasa'); 
         $form = $this->createFormBuilder()
             ->add('attachment', 'file')
             ->add('descripcion', 'text', array('required' => false))
             ->add('comentarios', 'textarea', array('required' => false)) 
-            ->add('BtnCargar', 'submit', array('label'  => 'Cargar'))
+            ->add('BtnCargar', SubmitType::class, array('label'  => 'Cargar'))
             ->getForm();
         $form->handleRequest($request);
         if($form->isValid()) {
@@ -115,9 +115,8 @@ class ArchivosController extends Controller
     /**
      * @Route("/ad/archivos/enviar/{codigoDocumento}/{numero}/{codigoArchivo}", name="brs_ad_archivos_enviar")
      */    
-    public function enviarAction($codigoDocumento, $numero,$codigoArchivo) {
+    public function enviarAction(Request $request, $codigoDocumento, $numero,$codigoArchivo) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();  
         $arArchivo = new \Brasa\AdministracionDocumentalBundle\Entity\AdArchivo();
         $arArchivo = $em->getRepository('BrasaAdministracionDocumentalBundle:AdArchivo')->find($codigoArchivo);
@@ -127,7 +126,7 @@ class ArchivosController extends Controller
             ->add('asunto', 'text', array('required' => true))
             ->add('email', 'text', array('required' => true))
             ->add('mensaje', 'textarea', array('required' => true)) 
-            ->add('BtnEnviar', 'submit', array('label'  => 'Enviar'))
+            ->add('BtnEnviar', SubmitType::class , array('label'  => 'Enviar'))
             ->getForm();
         $form->handleRequest($request);
         if($form->isValid()) {
@@ -167,9 +166,8 @@ class ArchivosController extends Controller
     /**
      * @Route("/ad/archivos/prueba/{codigoDocumento}/{numero}", name="brs_ad_archivos_prueba")
      */    
-    public function pruebaAction($codigoDocumento, $numero) {
+    public function pruebaAction(Request $request, $codigoDocumento, $numero) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();                                       
         $message = \Swift_Message::newInstance()
             ->setSubject('Prueba email SogaApp')

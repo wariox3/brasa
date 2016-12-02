@@ -5,6 +5,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\AfiliacionBundle\Form\Type\AfiClienteType;
+
 class ClienteController extends Controller
 {
     var $strDqlLista = "";

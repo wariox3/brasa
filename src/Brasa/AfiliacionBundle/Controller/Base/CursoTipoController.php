@@ -5,6 +5,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\AfiliacionBundle\Form\Type\AfiCursoTipoType;
+
 class CursoTipoController extends Controller
 {
     var $strDqlLista = "";
