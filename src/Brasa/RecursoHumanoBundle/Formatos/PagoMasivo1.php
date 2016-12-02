@@ -214,7 +214,7 @@ class PagoMasivo1 extends \FPDF_FPDF {
             $pdf->Cell(24, 5, "SALARIO" , 1, 0, 'L', 1);
             $pdf->SetFont('Arial','',7);
             $pdf->SetFillColor(255, 255, 255);
-            $pdf->Cell(21, 5, number_format($arPago->getEmpleadoRel()->getVrSalario(), 0, '.', ',') , 1, 0, 'R', 1);                    
+            $pdf->Cell(21, 5, number_format($arPago->getVrSalarioEmpleado(), 0, '.', ',') , 1, 0, 'R', 1);                    
             $pdf->Ln(12);
             $totalExtras = 0;
             $totalCompensado = 0;

@@ -30,7 +30,7 @@
                     <td class="titulo">NÚMERO:</td>
                     <td class="td-in-well">{{ arPago.numero }}</td>
                     <td class="titulo">SALARIO:</td>
-                    <td class="td-in-well-numerico" align="right">$ {{ arPago.empleadoRel.VrSalario | number_format(0, '.', ',') }}</td>
+                    <td class="td-in-well-numerico" align="right">$ {{ arPago.VrSalarioEmpleado | number_format(0, '.', ',') }}</td>
                     <td class="titulo">SALARIO PERIODO:</td>
                     <td class="td-in-well-numerico" align="right">$ {{ arPago.VrSalario | number_format(0, '.', ',') }}</td>
                 </tr>
