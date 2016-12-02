@@ -881,7 +881,7 @@ class PeriodoController extends Controller
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnGenerarCobro', 'submit', array('label'  => 'Generar cobro masivo',))
             ->add('BtnGenerarPago', 'submit', array('label'  => 'Generar pago masivo',))
-            ->add('BtnGenerarInteresMora', 'submit', array('label'  => 'Generar Int x mora masivo',))    
+            ->add('BtnGenerarInteresMora', 'submit', array('label'  => 'Generar financieros',))    
             ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
@@ -897,7 +897,7 @@ class PeriodoController extends Controller
             ->add('BtnDetalleCobroEliminar', 'submit', array('label'  => 'Eliminar',))
             ->add('BtnDetallePagoExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnDetalleTrasladarNuevo', 'submit', array('label'  => 'Traslado nuevo',))
-            ->add('BtnDetalleInteresMora', 'submit', array('label'  => 'Interes mora',))    
+            ->add('BtnDetalleInteresMora', 'submit', array('label'  => 'financieros',))    
               
                 
             ->getForm();

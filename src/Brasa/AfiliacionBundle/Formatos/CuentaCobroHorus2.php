@@ -80,7 +80,7 @@ class CuentaCobroHorus2 extends \FPDF_FPDF {
         $this->ln(1);
         
         $this->SetY(50);
-        $List1 = array('Fecha emision:', 'Fecha vencimiento:', 'Forma pago:', 'Plazo:', 'Soporte:', 'Interes mora pila:');
+        $List1 = array('Fecha emision:', 'Fecha vencimiento:', 'Forma pago:', 'Plazo:', 'Soporte:', 'Financiero pila:');
         $this->SetFont('Arial', 'B', 8);
         foreach ($List1 as $col) {
             $this->SetX(225);

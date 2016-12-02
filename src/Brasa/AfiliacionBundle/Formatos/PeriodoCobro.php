@@ -97,7 +97,7 @@ class PeriodoCobro extends \FPDF_FPDF {
         $this->Cell(30, 5, utf8_decode($arPeriodo->getClienteRel()->getPlazoPago()), 1, 0, 'L', 1);
         $this->SetFont('Arial','B',8);
         $this->SetFillColor(200, 200, 200);
-        $this->Cell(30, 5, "INTERES MORA:" , 1, 0, 'L', 1);
+        $this->Cell(30, 5, "FINANCIERO:" , 1, 0, 'L', 1);
         $this->SetFont('Arial','',8);
         $this->SetFillColor(272, 272, 272); 
         $this->Cell(100, 5, number_format($arPeriodo->getInteresMora(), 0, '.', ',') , 1, 0, 'R', 1);

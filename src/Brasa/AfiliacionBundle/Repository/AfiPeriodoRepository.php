@@ -534,30 +534,35 @@ class AfiPeriodoRepository extends EntityRepository {
         
         $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
         $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);//SALARIO MINIMO
-        $arPeriodo->getFechaDesde();
-        
-        //$validar = $arPeriodo->getFechaDesde();
+        $arPeriodo->getFechaDesde();                
         
         $fecha = $arPeriodo->getFechaDesde()->format('Y-m-d');
         $nuevafecha = strtotime ( '+1 month' , strtotime ( $fecha ) ) ;
         $nuevafecha = date ( 'Y-m-d' , $nuevafecha );
-        $nuevafecha = strtotime ( '+15 day' , strtotime ( $nuevafecha ) ) ;
+        //$fecha1 lleva 15 dias de mora
+        //$nuevafecha = strtotime ( '+15 day' , strtotime ( $nuevafecha ) ) ;
+        $nuevafecha = strtotime ( '+1 day' , strtotime ( $nuevafecha ) ) ; // se cambio por un dia de mora en adelante, estaba a partir de 15 dias en adelante
+        //$fecha1 lleva 1 dia de mora
         $fecha1 = date ( 'Y-m-d' , $nuevafecha );
-        
-        $fecha2 = strtotime ( '+4 day' , strtotime ( $fecha1 ) ) ;
+        //$fecha2, mas de 20 dias de mora
+        //$fecha2 = strtotime ( '+4 day' , strtotime ( $fecha1 ) ) ;
+        $fecha2 = strtotime ( '+19 day' , strtotime ( $fecha1 ) ) ;
         $fecha2 = date ( 'Y-m-d' , $fecha2 );
-        
+        //$fecha1 lleva 1 dia de mora
         $fecha16 = new \DateTime($fecha1);
+        //$fecha2, mas de 20 dias de mora
         $fecha20 = new \DateTime($fecha2);
+        //fecha actual
+        $hoy = new \DateTime(date('Y-m-d'));    
         
-        $hoy = new \DateTime(date('Y-m-d'));
-        //$hoy = new \DateTime('2016-09-21');
         $porcentajeInteres = 0;
         $control = false;
+        //si a fecha de hoy lleva mora de menos de 15 dias
         if ($hoy >= $fecha16 && $hoy <= $fecha20){
             $porcentajeInteres = 0.5;
             $control = true;
         }
+        //si a fecha de hoy lleva mora mas de 15 dias de mora
         if ($hoy > $fecha20){
             $porcentajeInteres = 1;
             $control = true;
