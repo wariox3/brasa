@@ -119,7 +119,7 @@
                         <button class="btn btn-default btn-xs" type="submit" name="OpExcelDetalle" value="{{ arProgramacionPago.codigoProgramacionPagoPk }}">Excel</button> 
                     {% endif %}
                 </td> 
-                {% if arProgramacionPago.empleadosGenerados == 0 %}
+                {% if arProgramacionPago.estadoGenerado == 0 %}
                     <td style="text-align: center"><a href="javascript:abrirVentana3('{{ path('brs_rhu_programaciones_pago_nuevo', {'codigoProgramacionPago': arProgramacionPago.codigoProgramacionPagoPk}) }}', 'NuevaProgramacionPago', 600, 900)" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                
                 {% else %}                
                     <td></td>
