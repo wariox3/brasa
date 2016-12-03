@@ -270,6 +270,11 @@ class RhuContrato
     private $turnoFijoOrdinario = false;     
     
     /**
+     * @ORM\Column(name="secuencia", type="integer", nullable=true)
+     */    
+    private $secuencia;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="contratosEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
@@ -2815,5 +2820,29 @@ class RhuContrato
     public function getDisciplinariosContratoRel()
     {
         return $this->disciplinariosContratoRel;
+    }
+
+    /**
+     * Set secuencia
+     *
+     * @param integer $secuencia
+     *
+     * @return RhuContrato
+     */
+    public function setSecuencia($secuencia)
+    {
+        $this->secuencia = $secuencia;
+
+        return $this;
+    }
+
+    /**
+     * Get secuencia
+     *
+     * @return integer
+     */
+    public function getSecuencia()
+    {
+        return $this->secuencia;
     }
 }

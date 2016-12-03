@@ -98,6 +98,7 @@
                 <th><p data-toggle="tooltip" data-placement="top" title="Recargo festivo diurno">RFD</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Recargo festivo nocturno">RFN</p></th>
                 <th><p data-toggle="tooltip" data-placement="top" title="Turno fijo">{{ knp_pagination_sortable(arSoportesPagos, 'TF', 'sp.turnoFijo') }}</p></th>                                
+                <th><p data-toggle="tooltip" data-placement="top" title="Secuencia de programacion alterna">{{ knp_pagination_sortable(arSoportesPagos, 'S', 'sp.secuencia') }}</p></th>                                                
                 <th></th>
                 <th></th>
                 <th><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodosTabla(this, 'ChkSeleccionar[]');"/></th>
@@ -131,6 +132,7 @@
                 <td style="text-align: right">{{ arSoportesPagos.horasRecargoFestivoDiurno | number_format(2, '.', ',') }}</td>                                                
                 <td style="text-align: right">{{ arSoportesPagos.horasRecargoFestivoNocturno | number_format(2, '.', ',') }}</td>                                                
                 <td style="text-align: right">{{ arSoportesPagos.turnoFijo }}</td>                                                
+                <td style="text-align: right">{{ arSoportesPagos.secuencia }}</td>                                                
                 <td>{% if arSoportePagoPeriodo.estadoAprobadoPagoNomina == 0%}<a href="javascript:abrirVentana3('{{ path('brs_tur_proceso_generar_soporte_pago_editar', {'codigoSoportePago': arSoportesPagos.codigoSoportePagoPk }) }}', 'Editar', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Ver"></a>{% endif %}</td>
                 <td><a href="javascript:abrirVentana3('{{ path('brs_tur_proceso_generar_soporte_pago_detalle_ver', {'codigoSoportePago': arSoportesPagos.codigoSoportePagoPk }) }}', 'VerDetalleSoportePago', 600, 1200)"><img src="{{ asset('imagenes/bootstrap/glyphicons_090_table.png') }}" width=20 height=20 title="Ver"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arSoportesPagos.codigoSoportePagoPk }}" /></td>

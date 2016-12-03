@@ -1233,136 +1233,138 @@ class TurSoportePagoRepository extends EntityRepository {
         $em->getConnection()->executeQuery($strSql);      
         $strSql = "DELETE FROM tur_soporte_pago_detalle WHERE codigo_soporte_pago_periodo_fk = " . $codigoSoportePagoPeriodo;
         $em->getConnection()->executeQuery($strSql);        
-        $arSecuencia = new \Brasa\TurnoBundle\Entity\TurSecuencia();
-        $arSecuencia = $em->getRepository('BrasaTurnoBundle:TurSecuencia')->find($arSoportePagoPeriodo->getCentroCostoRel()->getSecuencia());                
-        $arSecuenciaDetalle = new \Brasa\TurnoBundle\Entity\TurSecuenciaDetalle();
-        $arSecuenciaDetalle = $em->getRepository('BrasaTurnoBundle:TurSecuenciaDetalle')->findBy(array('codigoSecuenciaFk' => $arSoportePagoPeriodo->getCentroCostoRel()->getSecuencia()));        
         $indiceSecuencia = 0;
         $arSoportesPago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
         $arSoportesPago = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo));                                
-        foreach ($arSoportesPago as $arSoportePago) {   
-            if($indiceSecuencia >= $arSecuencia->getFilas()) {
-                $indiceSecuencia = 0;
-            }
-            $arProgramacionDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
-            $arProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->periodoDias($arSoportePago->getAnio(), $arSoportePago->getMes(), $arSoportePago->getCodigoRecursoFk());        
-            $arProgramacionAlterna = new \Brasa\TurnoBundle\Entity\TurProgramacionAlterna();
-            $arProgramacionAlterna->setSoportePagoPeriodoRel($arSoportePago->getSoportePagoPeriodoRel());
-            $arProgramacionAlterna->setSoportePagoRel($arSoportePago);
-            $arProgramacionAlterna->setAnio($arSoportePago->getAnio());
-            $arProgramacionAlterna->setMes($arSoportePago->getMes());            
-            $arProgramacionAlterna->setRecursoRel($arSoportePago->getRecursoRel());              
-            for($i = 1; $i <= 31; $i++) {
-                $strTurnoDefinitivo = NULL;
-                foreach ($arProgramacionDetalles as $arProgramacionDetalle) {
-                    $strTurno = $arProgramacionDetalle['dia'.$i];
-                    if($strTurno != '') {
-                        $arTurno = new \Brasa\TurnoBundle\Entity\TurTurno();                        
-                        $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($strTurno); 
-                        if($arTurno) {
-                            if($arTurno->getNovedad()) {
-                                $strTurnoDefinitivo = $strTurno;
+        foreach ($arSoportesPago as $arSoportePago) {
+            if($arSoportePago->getSecuencia()) {
+                $arSecuencia = new \Brasa\TurnoBundle\Entity\TurSecuencia();
+                $arSecuencia = $em->getRepository('BrasaTurnoBundle:TurSecuencia')->find($arSoportePago->getSecuencia());                
+                $arSecuenciaDetalle = new \Brasa\TurnoBundle\Entity\TurSecuenciaDetalle();
+                $arSecuenciaDetalle = $em->getRepository('BrasaTurnoBundle:TurSecuenciaDetalle')->findBy(array('codigoSecuenciaFk' => $arSoportePago->getSecuencia()));                        
+                if($indiceSecuencia >= $arSecuencia->getFilas()) {
+                    $indiceSecuencia = 0;
+                }
+                $arProgramacionDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
+                $arProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->periodoDias($arSoportePago->getAnio(), $arSoportePago->getMes(), $arSoportePago->getCodigoRecursoFk());        
+                $arProgramacionAlterna = new \Brasa\TurnoBundle\Entity\TurProgramacionAlterna();
+                $arProgramacionAlterna->setSoportePagoPeriodoRel($arSoportePago->getSoportePagoPeriodoRel());
+                $arProgramacionAlterna->setSoportePagoRel($arSoportePago);
+                $arProgramacionAlterna->setAnio($arSoportePago->getAnio());
+                $arProgramacionAlterna->setMes($arSoportePago->getMes());            
+                $arProgramacionAlterna->setRecursoRel($arSoportePago->getRecursoRel());              
+                for($i = 1; $i <= 31; $i++) {
+                    $strTurnoDefinitivo = NULL;
+                    foreach ($arProgramacionDetalles as $arProgramacionDetalle) {
+                        $strTurno = $arProgramacionDetalle['dia'.$i];
+                        if($strTurno != '') {
+                            $arTurno = new \Brasa\TurnoBundle\Entity\TurTurno();                        
+                            $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($strTurno); 
+                            if($arTurno) {
+                                if($arTurno->getNovedad()) {
+                                    $strTurnoDefinitivo = $strTurno;
+                                }
                             }
                         }
                     }
+                    $strTurnoDefinitivo = $this->turnoDefinitivo($arSecuenciaDetalle[0], $i, $strTurnoDefinitivo);
+                    if($i == 1) {
+                        $arProgramacionAlterna->setDia1($strTurnoDefinitivo);                    
+                    }
+                    if($i == 2) {
+                        $arProgramacionAlterna->setDia2($strTurnoDefinitivo);                    
+                    }
+                    if($i == 3) {
+                        $arProgramacionAlterna->setDia3($strTurnoDefinitivo);                    
+                    }
+                    if($i == 4) {
+                        $arProgramacionAlterna->setDia4($strTurnoDefinitivo);                    
+                    }
+                    if($i == 5) {
+                        $arProgramacionAlterna->setDia5($strTurnoDefinitivo);                    
+                    }
+                    if($i == 6) {
+                        $arProgramacionAlterna->setDia6($strTurnoDefinitivo);                    
+                    }
+                    if($i == 7) {
+                        $arProgramacionAlterna->setDia7($strTurnoDefinitivo);                    
+                    }
+                    if($i == 8) {
+                        $arProgramacionAlterna->setDia8($strTurnoDefinitivo);                    
+                    }
+                    if($i == 9) {
+                        $arProgramacionAlterna->setDia9($strTurnoDefinitivo);                    
+                    }
+                    if($i == 10) {
+                        $arProgramacionAlterna->setDia10($strTurnoDefinitivo);                    
+                    }
+                    if($i == 11) {
+                        $arProgramacionAlterna->setDia11($strTurnoDefinitivo);                    
+                    }
+                    if($i == 12) {
+                        $arProgramacionAlterna->setDia12($strTurnoDefinitivo);                    
+                    }
+                    if($i == 13) {
+                        $arProgramacionAlterna->setDia13($strTurnoDefinitivo);                    
+                    }
+                    if($i == 14) {
+                        $arProgramacionAlterna->setDia14($strTurnoDefinitivo);                    
+                    }
+                    if($i == 15) {
+                        $arProgramacionAlterna->setDia15($strTurnoDefinitivo);                    
+                    }
+                    if($i == 16) {
+                        $arProgramacionAlterna->setDia16($strTurnoDefinitivo);                    
+                    }
+                    if($i == 17) {
+                        $arProgramacionAlterna->setDia17($strTurnoDefinitivo);                    
+                    }
+                    if($i == 18) {
+                        $arProgramacionAlterna->setDia18($strTurnoDefinitivo);                    
+                    }
+                    if($i == 19) {
+                        $arProgramacionAlterna->setDia19($strTurnoDefinitivo);                    
+                    }
+                    if($i == 20) {
+                        $arProgramacionAlterna->setDia20($strTurnoDefinitivo);                    
+                    }
+                    if($i == 21) {
+                        $arProgramacionAlterna->setDia21($strTurnoDefinitivo);                    
+                    }
+                    if($i == 22) {
+                        $arProgramacionAlterna->setDia22($strTurnoDefinitivo);                    
+                    }
+                    if($i == 23) {
+                        $arProgramacionAlterna->setDia23($strTurnoDefinitivo);                    
+                    }
+                    if($i == 24) {
+                        $arProgramacionAlterna->setDia24($strTurnoDefinitivo);                    
+                    }
+                    if($i == 25) {
+                        $arProgramacionAlterna->setDia25($strTurnoDefinitivo);                    
+                    }
+                    if($i == 26) {
+                        $arProgramacionAlterna->setDia26($strTurnoDefinitivo);                    
+                    }
+                    if($i == 27) {
+                        $arProgramacionAlterna->setDia27($strTurnoDefinitivo);                    
+                    }
+                    if($i == 28) {
+                        $arProgramacionAlterna->setDia28($strTurnoDefinitivo);                    
+                    }
+                    if($i == 29) {
+                        $arProgramacionAlterna->setDia29($strTurnoDefinitivo);                    
+                    }
+                    if($i == 30) {
+                        $arProgramacionAlterna->setDia30($strTurnoDefinitivo);                    
+                    }
+                    if($i == 31) {
+                        $arProgramacionAlterna->setDia31($strTurnoDefinitivo);                    
+                    }                   
                 }
-                $strTurnoDefinitivo = $this->turnoDefinitivo($arSecuenciaDetalle[$indiceSecuencia], $i, $strTurnoDefinitivo);
-                if($i == 1) {
-                    $arProgramacionAlterna->setDia1($strTurnoDefinitivo);                    
-                }
-                if($i == 2) {
-                    $arProgramacionAlterna->setDia2($strTurnoDefinitivo);                    
-                }
-                if($i == 3) {
-                    $arProgramacionAlterna->setDia3($strTurnoDefinitivo);                    
-                }
-                if($i == 4) {
-                    $arProgramacionAlterna->setDia4($strTurnoDefinitivo);                    
-                }
-                if($i == 5) {
-                    $arProgramacionAlterna->setDia5($strTurnoDefinitivo);                    
-                }
-                if($i == 6) {
-                    $arProgramacionAlterna->setDia6($strTurnoDefinitivo);                    
-                }
-                if($i == 7) {
-                    $arProgramacionAlterna->setDia7($strTurnoDefinitivo);                    
-                }
-                if($i == 8) {
-                    $arProgramacionAlterna->setDia8($strTurnoDefinitivo);                    
-                }
-                if($i == 9) {
-                    $arProgramacionAlterna->setDia9($strTurnoDefinitivo);                    
-                }
-                if($i == 10) {
-                    $arProgramacionAlterna->setDia10($strTurnoDefinitivo);                    
-                }
-                if($i == 11) {
-                    $arProgramacionAlterna->setDia11($strTurnoDefinitivo);                    
-                }
-                if($i == 12) {
-                    $arProgramacionAlterna->setDia12($strTurnoDefinitivo);                    
-                }
-                if($i == 13) {
-                    $arProgramacionAlterna->setDia13($strTurnoDefinitivo);                    
-                }
-                if($i == 14) {
-                    $arProgramacionAlterna->setDia14($strTurnoDefinitivo);                    
-                }
-                if($i == 15) {
-                    $arProgramacionAlterna->setDia15($strTurnoDefinitivo);                    
-                }
-                if($i == 16) {
-                    $arProgramacionAlterna->setDia16($strTurnoDefinitivo);                    
-                }
-                if($i == 17) {
-                    $arProgramacionAlterna->setDia17($strTurnoDefinitivo);                    
-                }
-                if($i == 18) {
-                    $arProgramacionAlterna->setDia18($strTurnoDefinitivo);                    
-                }
-                if($i == 19) {
-                    $arProgramacionAlterna->setDia19($strTurnoDefinitivo);                    
-                }
-                if($i == 20) {
-                    $arProgramacionAlterna->setDia20($strTurnoDefinitivo);                    
-                }
-                if($i == 21) {
-                    $arProgramacionAlterna->setDia21($strTurnoDefinitivo);                    
-                }
-                if($i == 22) {
-                    $arProgramacionAlterna->setDia22($strTurnoDefinitivo);                    
-                }
-                if($i == 23) {
-                    $arProgramacionAlterna->setDia23($strTurnoDefinitivo);                    
-                }
-                if($i == 24) {
-                    $arProgramacionAlterna->setDia24($strTurnoDefinitivo);                    
-                }
-                if($i == 25) {
-                    $arProgramacionAlterna->setDia25($strTurnoDefinitivo);                    
-                }
-                if($i == 26) {
-                    $arProgramacionAlterna->setDia26($strTurnoDefinitivo);                    
-                }
-                if($i == 27) {
-                    $arProgramacionAlterna->setDia27($strTurnoDefinitivo);                    
-                }
-                if($i == 28) {
-                    $arProgramacionAlterna->setDia28($strTurnoDefinitivo);                    
-                }
-                if($i == 29) {
-                    $arProgramacionAlterna->setDia29($strTurnoDefinitivo);                    
-                }
-                if($i == 30) {
-                    $arProgramacionAlterna->setDia30($strTurnoDefinitivo);                    
-                }
-                if($i == 31) {
-                    $arProgramacionAlterna->setDia31($strTurnoDefinitivo);                    
-                }                   
+                $em->persist($arProgramacionAlterna);            
+                $indiceSecuencia++;                
             }
-            $em->persist($arProgramacionAlterna);            
-            $indiceSecuencia++;
         }               
         $em->flush();
         
@@ -1371,7 +1373,9 @@ class TurSoportePagoRepository extends EntityRepository {
         $arSoportesPago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
         $arSoportesPago = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->findBy(array('codigoSoportePagoPeriodoFk' => $codigoSoportePagoPeriodo));
         foreach ($arSoportesPago as $arSoportePago) {
-            $em->getRepository('BrasaTurnoBundle:TurSoportePago')->generarAlterna($arSoportePago, $arFestivos);                    
+            if($arSoportePago->getSecuencia()) {
+                $em->getRepository('BrasaTurnoBundle:TurSoportePago')->generarAlterna($arSoportePago, $arFestivos);                                    
+            }            
         }                                                
         $em->flush();                
 

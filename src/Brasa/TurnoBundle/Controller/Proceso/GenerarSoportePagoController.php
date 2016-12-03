@@ -90,6 +90,7 @@ class GenerarSoportePagoController extends Controller
                                     $arSoportePago->setAnio($arSoportePagoPeriodo->getAnio());
                                     $arSoportePago->setMes($arSoportePagoPeriodo->getMes());
                                     $arSoportePago->setDescansoOrdinario($arCentroCosto->getDescansoOrdinario());
+                                    $arSoportePago->setSecuencia($arContrato->getSecuencia());
                                     if($numeroContratos > 1) {
                                         if($arContrato->getFechaDesde() > $arSoportePagoPeriodo->getFechaDesde()) {
                                             $arSoportePago->setFechaDesde($arContrato->getFechaDesde());

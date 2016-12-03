@@ -117,7 +117,8 @@ class RhuContratoType extends AbstractType
                     ->orderBy('c.nombre', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))   
-            ->add('turnoFijoOrdinario', 'checkbox', array('required'  => false))                                 
+            ->add('turnoFijoOrdinario', 'checkbox', array('required'  => false))   
+            ->add('secuencia', 'number', array('required' => true))                             
             ->add('guardar', 'submit');        
     }
  

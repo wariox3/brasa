@@ -298,6 +298,11 @@ class TurSoportePago
     private $mes = 0;     
     
     /**
+     * @ORM\Column(name="secuencia", type="integer", nullable=true)
+     */    
+    private $secuencia;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="TurSoportePagoPeriodo", inversedBy="soportesPagosSoportePagoPeriodoRel")
      * @ORM\JoinColumn(name="codigo_soporte_pago_periodo_fk", referencedColumnName="codigo_soporte_pago_periodo_pk")
      */
@@ -1796,5 +1801,29 @@ class TurSoportePago
     public function getVrAjusteCompensacion()
     {
         return $this->vrAjusteCompensacion;
+    }
+
+    /**
+     * Set secuencia
+     *
+     * @param integer $secuencia
+     *
+     * @return TurSoportePago
+     */
+    public function setSecuencia($secuencia)
+    {
+        $this->secuencia = $secuencia;
+
+        return $this;
+    }
+
+    /**
+     * Get secuencia
+     *
+     * @return integer
+     */
+    public function getSecuencia()
+    {
+        return $this->secuencia;
     }
 }
