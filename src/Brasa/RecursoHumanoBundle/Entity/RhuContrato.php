@@ -254,6 +254,11 @@ class RhuContrato
      */    
     private $codigoCiudadLaboraFk;
     
+    /**
+     * @ORM\Column(name="codigo_contrato_grupo_fk", type="integer", nullable=true)
+     */    
+    private $codigoContratoGrupoFk;     
+    
     /**     
      * @ORM\Column(name="limitarHoraExtra", type="boolean")
      */    
@@ -272,7 +277,7 @@ class RhuContrato
     /**
      * @ORM\Column(name="secuencia", type="integer", nullable=true)
      */    
-    private $secuencia;    
+    private $secuencia;            
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="contratosEmpleadoRel")
@@ -298,6 +303,12 @@ class RhuContrato
      */
     protected $contratoTipoRel;     
 
+    /**
+     * @ORM\ManyToOne(targetEntity="RhuContratoGrupo", inversedBy="contratosContratoGrupoRel")
+     * @ORM\JoinColumn(name="codigo_contrato_grupo_fk", referencedColumnName="codigo_contrato_grupo_pk")
+     */
+    protected $contratoGrupoRel;    
+    
     /**
      * @ORM\ManyToOne(targetEntity="RhuContratoClase", inversedBy="contratosContratoClaseRel")
      * @ORM\JoinColumn(name="codigo_contrato_clase_fk", referencedColumnName="codigo_contrato_clase_pk")
@@ -2844,5 +2855,53 @@ class RhuContrato
     public function getSecuencia()
     {
         return $this->secuencia;
+    }
+
+    /**
+     * Set codigoContratoGrupoFk
+     *
+     * @param integer $codigoContratoGrupoFk
+     *
+     * @return RhuContrato
+     */
+    public function setCodigoContratoGrupoFk($codigoContratoGrupoFk)
+    {
+        $this->codigoContratoGrupoFk = $codigoContratoGrupoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoContratoGrupoFk
+     *
+     * @return integer
+     */
+    public function getCodigoContratoGrupoFk()
+    {
+        return $this->codigoContratoGrupoFk;
+    }
+
+    /**
+     * Set contratoGrupoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuContratoGrupo $contratoGrupoRel
+     *
+     * @return RhuContrato
+     */
+    public function setContratoGrupoRel(\Brasa\RecursoHumanoBundle\Entity\RhuContratoGrupo $contratoGrupoRel = null)
+    {
+        $this->contratoGrupoRel = $contratoGrupoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get contratoGrupoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuContratoGrupo
+     */
+    public function getContratoGrupoRel()
+    {
+        return $this->contratoGrupoRel;
     }
 }

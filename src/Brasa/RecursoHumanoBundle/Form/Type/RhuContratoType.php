@@ -13,6 +13,10 @@ class RhuContratoType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuContratoTipo',
                         'property' => 'nombre',
             ))                 
+            ->add('contratoGrupoRel', 'entity', array(
+                'class' => 'BrasaRecursoHumanoBundle:RhuContratoGrupo',
+                        'property' => 'nombre',
+            ))                 
             ->add('clasificacionRiesgoRel', 'entity', array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuClasificacionRiesgo',
                 'property' => 'nombre',
@@ -118,7 +122,7 @@ class RhuContratoType extends AbstractType
                 'property' => 'nombre',
                 'required' => true))   
             ->add('turnoFijoOrdinario', 'checkbox', array('required'  => false))   
-            ->add('secuencia', 'number', array('required' => true))                             
+            ->add('secuencia', 'number', array('required' => false))                             
             ->add('guardar', 'submit');        
     }
  
