@@ -4,6 +4,12 @@ namespace Brasa\AfiliacionBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\dateType;
 
 class AfiContratoType extends AbstractType
 {
@@ -61,23 +67,23 @@ class AfiContratoType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuClasificacionRiesgo',
                 'property' => 'nombre',
             ))                  
-            ->add('numero', 'text', array('required' => false))
+            ->add('numero', textType::class, array('required' => false))
             ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd'))                            
             ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd'))
-            ->add('indefinido', 'checkbox', array('required'  => false))
-            ->add('vrSalario', 'number', array('required' => true))  
-            ->add('generaPension', 'checkbox', array('required'  => false))
-            ->add('generaSalud', 'checkbox', array('required'  => false))
-            ->add('generaRiesgos', 'checkbox', array('required'  => false))
-            ->add('generaCaja', 'checkbox', array('required'  => false))                            
-            ->add('generaSena', 'checkbox', array('required'  => false))
-            ->add('generaIcbf', 'checkbox', array('required'  => false))
-            ->add('porcentajePension', 'number', array('required' => true))
-            ->add('porcentajeSalud', 'number', array('required' => true))
-            ->add('porcentajeCaja', 'number', array('required' => true))
-            ->add('comentarios', 'textarea', array('required' => false))
+            ->add('indefinido', CheckboxType::class, array('required'  => false))
+            ->add('vrSalario', NumberType::class, array('required' => true))  
+            ->add('generaPension', CheckboxType::class, array('required'  => false))
+            ->add('generaSalud', CheckboxType::class, array('required'  => false))
+            ->add('generaRiesgos', CheckboxType::class, array('required'  => false))
+            ->add('generaCaja', CheckboxType::class, array('required'  => false))                            
+            ->add('generaSena', CheckboxType::class, array('required'  => false))
+            ->add('generaIcbf', CheckboxType::class, array('required'  => false))
+            ->add('porcentajePension', NumberType::class, array('required' => true))
+            ->add('porcentajeSalud', NumberType::class, array('required' => true))
+            ->add('porcentajeCaja', NumberType::class, array('required' => true))
+            ->add('comentarios', TextareaType::class, array('required' => false))
             
-            ->add('guardar', 'submit');
+            ->add('guardar', SubmitType::class);
     }
 
     public function getName()
