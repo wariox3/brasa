@@ -4,6 +4,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 class CostoRecursoController extends Controller
 {
     var $strListaDql = "";    
@@ -11,9 +12,8 @@ class CostoRecursoController extends Controller
     /**
      * @Route("/tur/consulta/costo/recurso", name="brs_tur_consulta_costo_recurso")
      */    
-    public function listaAction() {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
+    public function listaAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();        
         if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 48)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }
@@ -44,9 +44,8 @@ class CostoRecursoController extends Controller
     /**
      * @Route("/tur/consulta/costo/recurso/ver/detalle/{codigoCostoRecurso}", name="brs_tur_consulta_costo_recurso_ver_detalle")
      */    
-    public function verDetalleAction($codigoCostoRecurso) {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
+    public function verDetalleAction(Request $request, $codigoCostoRecurso) {
+        $em = $this->getDoctrine()->getManager();        
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioVerDetalle();
         $form->handleRequest($request);

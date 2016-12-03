@@ -17,9 +17,8 @@ class SecuenciaController extends Controller {
     /**
      * @Route("/tur/base/secuencia/lista", name="brs_tur_base_secuencia_lista")
      */     
-    public function listaAction() {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
+    public function listaAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();        
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 82, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
@@ -54,9 +53,8 @@ class SecuenciaController extends Controller {
     /**
      * @Route("/tur/base/secuencia/detalle/editar/{codigoSecuenciaDetalle}", name="brs_tur_base_secuencia_detalle_editar")
      */     
-    public function detalleEditarAction($codigoSecuenciaDetalle) {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
+    public function detalleEditarAction(Request $request, $codigoSecuenciaDetalle) {
+        $em = $this->getDoctrine()->getManager();        
         $arSecuenciaDetalleAct = new \Brasa\TurnoBundle\Entity\TurSecuenciaDetalle();
         $arSecuenciaDetalleAct = $em->getRepository('BrasaTurnoBundle:TurSecuenciaDetalle')->find($codigoSecuenciaDetalle);        
         $arSecuenciaDetalle = new \Brasa\TurnoBundle\Entity\TurSecuenciaDetalle();

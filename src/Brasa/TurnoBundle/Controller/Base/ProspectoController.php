@@ -14,9 +14,8 @@ class ProspectoController extends Controller
     /**
      * @Route("/tur/base/prospecto/lista", name="brs_tur_base_prospecto_lista")
      */     
-    public function listaAction() {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();        
+    public function listaAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();                
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 85, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
@@ -49,8 +48,7 @@ class ProspectoController extends Controller
     /**
      * @Route("/tur/base/prospecto/nuevo/{codigoProspecto}", name="brs_tur_base_prospecto_nuevo")
      */     
-    public function nuevoAction($codigoProspecto = '') {
-        $request = $this->getRequest();
+    public function nuevoAction(Request $request, $codigoProspecto = '') {        
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arProspecto = new \Brasa\TurnoBundle\Entity\TurProspecto();

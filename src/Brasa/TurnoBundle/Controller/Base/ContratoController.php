@@ -15,9 +15,8 @@ class ContratoController extends Controller
     /**
      * @Route("/tur/base/contrato/", name="brs_tur_base_contrato")
      */     
-    public function listaAction() {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
+    public function listaAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();        
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 75, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
@@ -50,8 +49,7 @@ class ContratoController extends Controller
     /**
      * @Route("/tur/base/contrato/nuevo/{codigoContrato}", name="brs_tur_base_contrato_nuevo")
      */    
-    public function nuevoAction($codigoContrato = '') {
-        $request = $this->getRequest();
+    public function nuevoAction(Request $request, $codigoContrato = '') {        
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arContrato = new \Brasa\TurnoBundle\Entity\TurContrato();
@@ -86,9 +84,8 @@ class ContratoController extends Controller
     /**
      * @Route("/tur/base/contrato/detalle/{codigoContrato}", name="brs_tur_base_contrato_detalle")
      */     
-    public function detalleAction($codigoContrato) {
-        $em = $this->getDoctrine()->getManager(); 
-        $request = $this->getRequest();
+    public function detalleAction(Request $request, $codigoContrato) {
+        $em = $this->getDoctrine()->getManager();         
         $objMensaje = $this->get('mensajes_brasa');
         $arContrato = new \Brasa\TurnoBundle\Entity\TurContrato();
         $arContrato = $em->getRepository('BrasaTurnoBundle:TurContrato')->find($codigoContrato);

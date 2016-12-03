@@ -13,9 +13,8 @@ class RecursoController extends Controller
     /**
      * @Route("/tur/base/recurso/lista", name="brs_tur_base_recurso_lista")
      */     
-    public function listaAction() {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
+    public function listaAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();        
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 77, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
@@ -59,8 +58,7 @@ class RecursoController extends Controller
     /**
      * @Route("/tur/base/recurso/nuevo/{codigoRecurso}/{codigoEmpleado}", name="brs_tur_base_recurso_nuevo")
      */ 
-    public function nuevoAction($codigoRecurso = '', $codigoEmpleado = '') {
-        $request = $this->getRequest();
+    public function nuevoAction(Request $request, $codigoRecurso = '', $codigoEmpleado = '') {        
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
@@ -139,9 +137,8 @@ class RecursoController extends Controller
     /**
      * @Route("/tur/base/recurso/detalle/{codigoRecurso}", name="brs_tur_base_recurso_detalle")
      */     
-    public function detalleAction($codigoRecurso) {
-        $em = $this->getDoctrine()->getManager(); 
-        $request = $this->getRequest();
+    public function detalleAction(Request $request, $codigoRecurso) {
+        $em = $this->getDoctrine()->getManager();         
         $objMensaje = $this->get('mensajes_brasa');
         $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
         $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($codigoRecurso);
@@ -163,9 +160,8 @@ class RecursoController extends Controller
     /**
      * @Route("/tur/base/recurso/nuevo/enlazar/", name="brs_tur_base_recurso_nuevo_enlazar")
      */     
-    public function enlazarAction() {
-        $session = $this->getRequest()->getSession();
-        $request = $this->getRequest();
+    public function enlazarAction(Request $request) {
+        $session = $this->getRequest()->getSession();        
         $paginator  = $this->get('knp_paginator');
         $em = $this->getDoctrine()->getManager();
         $form = $this->formularioEnlazar();
@@ -186,8 +182,7 @@ class RecursoController extends Controller
     /**
      * @Route("/tur/base/recurso/retiro/{codigoRecurso}", name="brs_tur_base_recurso_retiro")
      */    
-    public function retiroAction($codigoRecurso) {
-        $request = $this->getRequest();
+    public function retiroAction(Request $request, $codigoRecurso) {        
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();

@@ -5,6 +5,8 @@ namespace Brasa\TurnoBundle\Controller\Buscar;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class NovedadController extends Controller
 {
@@ -16,9 +18,8 @@ class NovedadController extends Controller
     /**
      * @Route("/tur/burcar/novedad/{campoCodigo}/{campoNombre}", name="brs_tur_buscar_novedad")
      */    
-    public function buscarAction($campoCodigo, $campoNombre) {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
+    public function buscarAction(Request $request, $campoCodigo, $campoNombre) {
+        $em = $this->getDoctrine()->getManager();        
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioLista();
         $form->handleRequest($request);
@@ -56,8 +57,7 @@ class NovedadController extends Controller
     }           
 
     private function filtrarLista($form) {
-        $session = $this->getRequest()->getSession();
-        $request = $this->getRequest();
+        $session = $this->getRequest()->getSession();        
         $controles = $request->request->get('form');
         $this->strNombre = $form->get('TxtNombre')->getData();
     }    

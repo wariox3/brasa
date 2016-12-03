@@ -2,9 +2,10 @@
 namespace Brasa\TurnoBundle\Controller\Consulta;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+
 class ServiciosDetallesRecursosController extends Controller
 {
     var $strListaDql = "";
@@ -13,9 +14,8 @@ class ServiciosDetallesRecursosController extends Controller
     /**
      * @Route("/tur/consulta/servicios/detalles/recursos", name="brs_tur_consulta_servicios_detalles_recursos")
      */     
-    public function listaAction() {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
+    public function listaAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();        
         if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 44)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }

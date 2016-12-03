@@ -21,9 +21,8 @@ class ClienteController extends Controller
     /**
      * @Route("/tur/base/cliente/", name="brs_tur_base_cliente")
      */     
-    public function listaAction() {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
+    public function listaAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();        
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 74, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
@@ -60,8 +59,7 @@ class ClienteController extends Controller
     /**
      * @Route("/tur/base/cliente/nuevo/{codigoCliente}", name="brs_tur_base_cliente_nuevo")
      */    
-    public function nuevoAction($codigoCliente = '') {
-        $request = $this->getRequest();
+    public function nuevoAction(Request $request, $codigoCliente = '') {        
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
@@ -97,9 +95,8 @@ class ClienteController extends Controller
     /**
      * @Route("/tur/base/cliente/detalle/{codigoCliente}", name="brs_tur_base_cliente_detalle")
      */     
-    public function detalleAction($codigoCliente) {
-        $em = $this->getDoctrine()->getManager(); 
-        $request = $this->getRequest();
+    public function detalleAction(Request $request, $codigoCliente) {
+        $em = $this->getDoctrine()->getManager();         
         $objMensaje = $this->get('mensajes_brasa');
         $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
         $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->find($codigoCliente);
@@ -144,8 +141,7 @@ class ClienteController extends Controller
     /**
      * @Route("/tur/base/cliente/puesto/nuevo/{codigoCliente}/{codigoPuesto}", name="brs_tur_base_cliente_puesto_nuevo")
      */    
-    public function puestoNuevoAction($codigoCliente, $codigoPuesto) {
-        $request = $this->getRequest();
+    public function puestoNuevoAction(Request $request, $codigoCliente, $codigoPuesto) {        
         $em = $this->getDoctrine()->getManager();        
         $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
         $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->find($codigoCliente);
@@ -175,8 +171,7 @@ class ClienteController extends Controller
     /**
      * @Route("/tur/base/cliente/proyecto/nuevo/{codigoCliente}/{codigoProyecto}", name="brs_tur_base_cliente_proyecto_nuevo")
      */    
-    public function proyectoNuevoAction($codigoCliente, $codigoProyecto) {
-        $request = $this->getRequest();
+    public function proyectoNuevoAction(Request $request, $codigoCliente, $codigoProyecto) {        
         $em = $this->getDoctrine()->getManager();        
         $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
         $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->find($codigoCliente);
@@ -206,8 +201,7 @@ class ClienteController extends Controller
     /**
      * @Route("/tur/base/cliente/grupo/facturacion/nuevo/{codigoCliente}/{codigoGrupoFacturacion}", name="brs_tur_base_cliente_grupo_facturacion_nuevo")
      */    
-    public function grupoFacturacionNuevoAction($codigoCliente, $codigoGrupoFacturacion) {
-        $request = $this->getRequest();
+    public function grupoFacturacionNuevoAction(Request $request, $codigoCliente, $codigoGrupoFacturacion) {      
         $em = $this->getDoctrine()->getManager();        
         $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
         $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->find($codigoCliente);
@@ -237,8 +231,7 @@ class ClienteController extends Controller
     /**
      * @Route("/tur/base/cliente/direccion/nuevo/{codigoCliente}/{codigoDireccion}", name="brs_tur_base_cliente_direccion_nuevo")
      */    
-    public function direccionNuevoAction($codigoCliente, $codigoDireccion) {
-        $request = $this->getRequest();
+    public function direccionNuevoAction(Request $request, $codigoCliente, $codigoDireccion) {        
         $em = $this->getDoctrine()->getManager();        
         $arCliente = new \Brasa\TurnoBundle\Entity\TurCliente();
         $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->find($codigoCliente);

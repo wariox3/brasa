@@ -5,6 +5,8 @@ namespace Brasa\TurnoBundle\Controller\Buscar;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class RecursoController extends Controller
 {
@@ -16,9 +18,8 @@ class RecursoController extends Controller
     /**
      * @Route("/tur/burcar/recurso/{campoCodigo}/{campoNombre}", name="brs_tur_buscar_recurso")
      */    
-    public function buscarAction($campoCodigo, $campoNombre) {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
+    public function buscarAction(Request $request, $campoCodigo, $campoNombre) {
+        $em = $this->getDoctrine()->getManager();        
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioLista();
         $form->handleRequest($request);
@@ -41,9 +42,8 @@ class RecursoController extends Controller
     /**
      * @Route("/tur/burcar/recurso/{campoCodigo}", name="brs_tur_buscar_recurso2")
      */  
-    public function buscar2Action($campoCodigo) {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
+    public function buscar2Action(Request $request, $campoCodigo) {
+        $em = $this->getDoctrine()->getManager();        
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioLista();
         $form->handleRequest($request);
@@ -87,8 +87,7 @@ class RecursoController extends Controller
     }           
 
     private function filtrarLista($form) {
-        $session = $this->getRequest()->getSession();
-        $request = $this->getRequest();
+        $session = $this->getRequest()->getSession();        
         $controles = $request->request->get('form');
         $this->strNombre = $form->get('TxtNombre')->getData();
         $this->strCodigo = $form->get('TxtCodigo')->getData();

@@ -14,9 +14,8 @@ class ConceptoServicioController extends Controller
     /**
      * @Route("/tur/base/concepto/servicio/lista", name="brs_tur_base_concepto_servicio_lista")
      */    
-    public function listaAction() {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
+    public function listaAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();        
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 86, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
@@ -49,8 +48,7 @@ class ConceptoServicioController extends Controller
     /**
      * @Route("/tur/base/concepto/servicio/nuevo/{codigoConceptoServicio}", name="brs_tur_base_concepto_servicio_nuevo")
      */    
-    public function nuevoAction($codigoConceptoServicio) {
-        $request = $this->getRequest();
+    public function nuevoAction(Request $request, $codigoConceptoServicio) {        
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arConceptoServicio = new \Brasa\TurnoBundle\Entity\TurConceptoServicio();

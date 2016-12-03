@@ -85,8 +85,7 @@ class TurnoController extends Controller
     }
 
     private function filtrar ($form) {
-        $session = $this->getRequest()->getSession();
-        $request = $this->getRequest(); 
+        $session = $this->getRequest()->getSession();         
     }
     
     private function formularioFiltro() {

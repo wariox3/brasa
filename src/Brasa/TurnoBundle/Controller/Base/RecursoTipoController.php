@@ -14,9 +14,8 @@ class RecursoTipoController extends Controller
     /**
      * @Route("/tur/base/recurso/tipo", name="brs_tur_base_recurso_tipo")
      */     
-    public function listaAction() {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
+    public function listaAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();        
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 80, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
@@ -49,8 +48,7 @@ class RecursoTipoController extends Controller
     /**
      * @Route("/tur/base/recurso/tipo/nuevo/{codigoRecursoTipo}", name="brs_tur_base_recurso_tipo_nuevo")
      */    
-    public function nuevoAction($codigoRecursoTipo = '') {
-        $request = $this->getRequest();
+    public function nuevoAction(Request $request, $codigoRecursoTipo = '') {        
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arRecursoTipo = new \Brasa\TurnoBundle\Entity\TurRecursoTipo();

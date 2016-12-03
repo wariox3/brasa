@@ -15,9 +15,8 @@ class PuestoController extends Controller
     /**
      * @Route("/tur/base/puesto/", name="brs_tur_base_puesto")
      */     
-    public function listaAction() {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
+    public function listaAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();        
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 76, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
@@ -50,8 +49,7 @@ class PuestoController extends Controller
     /**
      * @Route("/tur/base/puesto/nuevo/{codigoPuesto}", name="brs_tur_base_puesto_nuevo")
      */    
-    public function nuevoAction($codigoPuesto = '') {
-        $request = $this->getRequest();
+    public function nuevoAction(Request $request, $codigoPuesto = '') {        
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arPuesto = new \Brasa\TurnoBundle\Entity\TurPuesto();
@@ -74,9 +72,8 @@ class PuestoController extends Controller
     /**
      * @Route("/tur/base/puesto/detalle/{codigoPuesto}", name="brs_tur_base_puesto_detalle")
      */     
-    public function detalleAction($codigoPuesto) {
-        $em = $this->getDoctrine()->getManager(); 
-        $request = $this->getRequest();
+    public function detalleAction(Request $request, $codigoPuesto) {
+        $em = $this->getDoctrine()->getManager();         
         $objMensaje = $this->get('mensajes_brasa');
         $arPuesto = new \Brasa\TurnoBundle\Entity\TurPuesto();
         $arPuesto = $em->getRepository('BrasaTurnoBundle:TurPuesto')->find($codigoPuesto);
@@ -103,8 +100,7 @@ class PuestoController extends Controller
     /**
      * @Route("/tur/base/puesto/dotacion/nuevo/{codigoPuesto}", name="brs_tur_base_puesto_dotacion_nuevo")
      */    
-    public function dotacionNuevoAction($codigoPuesto) {
-        $request = $this->getRequest();
+    public function dotacionNuevoAction(Request $request, $codigoPuesto) {        
         $paginator  = $this->get('knp_paginator');
         $em = $this->getDoctrine()->getManager();        
         $arPuesto = new \Brasa\TurnoBundle\Entity\TurPuesto();

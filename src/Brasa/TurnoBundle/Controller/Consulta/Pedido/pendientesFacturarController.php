@@ -4,6 +4,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 class pendientesFacturarController extends Controller
 {
     var $strListaDql = "";
@@ -11,9 +12,8 @@ class pendientesFacturarController extends Controller
     /**
      * @Route("/tur/consulta/pedidos/pendiente/facturar", name="brs_tur_consulta_pedidos_pendientes_facturar")
      */    
-    public function listaAction() {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
+    public function listaAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();        
         if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 46)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }

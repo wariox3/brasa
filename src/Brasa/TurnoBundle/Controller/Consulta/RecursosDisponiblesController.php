@@ -5,6 +5,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+
 class RecursosDisponiblesController extends Controller
 {
     var $strListaDql = "";
@@ -13,9 +15,8 @@ class RecursosDisponiblesController extends Controller
     /**
      * @Route("/tur/consulta/recursos/disponibles", name="brs_tur_consulta_recursos_disponibles")
      */     
-    public function listaAction() {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
+    public function listaAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();        
         if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 42)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }
@@ -116,7 +117,7 @@ class RecursosDisponiblesController extends Controller
     /**
      * @Route("/tur/consultas/recursos/disponibles/programacion/{anio}/{mes}/{codigoRecurso}", name="brs_tur_consultas_recursos_disponibles_programacion")
      */         
-    public function programacionAction($anio, $mes, $codigoRecurso) {
+    public function programacionAction(Request $request, $anio, $mes, $codigoRecurso) {
         $em = $this->getDoctrine()->getManager();        
         $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
         $arRecurso =  $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($codigoRecurso);                
