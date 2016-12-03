@@ -9,6 +9,9 @@ use Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class ArchivosController extends Controller
 {
@@ -35,9 +38,9 @@ class ArchivosController extends Controller
         $em = $this->getDoctrine()->getManager();
         $objMensaje = $this->get('mensajes_brasa'); 
         $form = $this->createFormBuilder()
-            ->add('attachment', 'file')
-            ->add('descripcion', 'text', array('required' => false))
-            ->add('comentarios', 'textarea', array('required' => false)) 
+            ->add('attachment', fileType::class)
+            ->add('descripcion', textType::class, array('required' => false))
+            ->add('comentarios', TextareaType::class, array('required' => false)) 
             ->add('BtnCargar', SubmitType::class, array('label'  => 'Cargar'))
             ->getForm();
         $form->handleRequest($request);

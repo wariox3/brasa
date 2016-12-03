@@ -4,7 +4,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Brasa\AfiliacionBundle\Form\Type\AfiClienteType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class ClienteController extends Controller
 {
@@ -96,8 +100,8 @@ class ClienteController extends Controller
             'form' => $form->createView()));
     }    
     
-    private function lista() {    
-        $session = $this->getRequest()->getSession();
+    private function lista() {  
+        $session = new Session();        
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiCliente')->listaDQL(
                 $session->get('filtroClienteNombre'),
@@ -108,7 +112,7 @@ class ClienteController extends Controller
     }
 
     private function filtrar ($form) {        
-        $session = $this->getRequest()->getSession();        
+        $session = new Session();         
         $session->set('filtroClienteNombre', $form->get('TxtNombre')->getData());
         $session->set('filtroClienteCodigo', $form->get('TxtCodigo')->getData());
         $session->set('filtroClienteIndentificacion', $form->get('TxtIdentificacion')->getData());
@@ -117,30 +121,29 @@ class ClienteController extends Controller
     }
     
     private function formularioFiltro() {
-        $session = $this->getRequest()->getSession();
+        $session = new Session(); 
         $form = $this->createFormBuilder()            
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroClienteNombre')))
-            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroClienteIndentificacion')))
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo'))    
-            ->add('independiente', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'),'data' => $session->get('filtroIndependiente')))                                            
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('TxtNombre', textType::class, array('label'  => 'Nombre','data' => $session->get('filtroClienteNombre')))
+            ->add('TxtIdentificacion', textType::class, array('label'  => 'Identificacion','data' => $session->get('filtroClienteIndentificacion')))
+            ->add('TxtCodigo', textType::class, array('label'  => 'Codigo'))    
+            ->add('independiente', ChoiceType::class, array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO')))                                            
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar',))            
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel',))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
     }    
     
     private function formularioDetalle() {        
         $form = $this->createFormBuilder()                                    
-            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))                        
+            ->add('BtnImprimir', SubmitType::class, array('label'  => 'Imprimir',))                        
             ->getForm();
         return $form;
     }         
     
     private function generarExcel() {
         ob_clean();
-        $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $em = $this->getDoctrine()->getManager();        
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("EMPRESA")

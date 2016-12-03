@@ -5,6 +5,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\AfiliacionBundle\Form\Type\AfiEntidadEntrenamientoType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+
 class EntidadEntrenamientoController extends Controller
 {
     var $strDqlLista = "";
@@ -159,19 +162,19 @@ class EntidadEntrenamientoController extends Controller
     private function formularioFiltro() {
         $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()            
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroEntidadEntrenamientoNombre')))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('TxtNombre', textType::class, array('label'  => 'Nombre','data' => $session->get('filtroEntidadEntrenamientoNombre')))
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar',))            
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel',))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
     }    
     
     private function formularioDetalle() {        
         $form = $this->createFormBuilder()                                    
-            ->add('BtnActualizarCosto', 'submit', array('label'  => 'Actualizar',))                        
-            ->add('BtnEliminarCosto', 'submit', array('label'  => 'Eliminar',))                        
-            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))                        
+            ->add('BtnActualizarCosto', SubmitType::class, array('label'  => 'Actualizar',))                        
+            ->add('BtnEliminarCosto', SubmitType::class, array('label'  => 'Eliminar',))                        
+            ->add('BtnImprimir', SubmitType::class, array('label'  => 'Imprimir',))                        
             ->getForm();
         return $form;
     }         

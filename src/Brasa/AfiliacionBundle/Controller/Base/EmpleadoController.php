@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Brasa\AfiliacionBundle\Form\Type\AfiEmpleadoType;
 use Brasa\AfiliacionBundle\Form\Type\AfiContratoType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class EmpleadoController extends Controller
 {
@@ -234,13 +236,13 @@ class EmpleadoController extends Controller
             $session->set('filtroCodigoCliente', null);
         }
         $form = $this->createFormBuilder()
-            ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
-            ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroEmpleadoNombre')))
-            ->add('TxtNumeroIdentificacion', 'text', array('label'  => 'Nombre','data' => $session->get('filtroEmpleadoIdentificacion')))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))            
+            ->add('TxtNit', textType::class, array('label'  => 'Nit','data' => $session->get('filtroNit')))
+            ->add('TxtNombreCliente', textType::class, array('label'  => 'NombreCliente','data' => $strNombreCliente))
+            ->add('TxtNombre', textType::class, array('label'  => 'Nombre','data' => $session->get('filtroEmpleadoNombre')))
+            ->add('TxtNumeroIdentificacion', textType::class, array('label'  => 'Nombre','data' => $session->get('filtroEmpleadoIdentificacion')))
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar',))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel',))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))            
             ->getForm();
         return $form;
     }
@@ -248,8 +250,8 @@ class EmpleadoController extends Controller
     private function formularioDetalle() {
         $session = $this->getRequest()->getSession();
         $form = $this->createFormBuilder()
-            ->add('BtnEliminarContrato', 'submit', array('label'  => 'Eliminar contrato',))
-            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
+            ->add('BtnEliminarContrato', SubmitType::class, array('label'  => 'Eliminar contrato',))
+            ->add('BtnImprimir', SubmitType::class, array('label'  => 'Imprimir',))
             ->getForm();
         return $form;
     }
