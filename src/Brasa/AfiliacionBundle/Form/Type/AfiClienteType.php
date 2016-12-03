@@ -4,6 +4,13 @@ namespace Brasa\AfiliacionBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Form\ChoiceList\ArrayChoiceList;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class AfiClienteType extends AbstractType
 {
@@ -32,37 +39,37 @@ class AfiClienteType extends AbstractType
                 'property' => 'nombre',
                 'required' => true))                              
                             
-            ->add('nit', 'text', array('required' => true))
-            ->add('digitoVerificacion', 'text', array('required' => false))  
-            ->add('nombreCorto', 'text', array('required' => true))              
-            ->add('plazoPago', 'number', array('required' => false)) 
-            ->add('direccion', 'text', array('required' => false))  
-            ->add('barrio', 'text', array('required' => false))  
-            ->add('telefono', 'text', array('required' => false))                              
-            ->add('celular', 'text', array('required' => false))                              
-            ->add('fax', 'text', array('required' => false))                              
-            ->add('email', 'text', array('required' => false))                              
-            ->add('contacto', 'text', array('required' => false))                  
-            ->add('celularContacto', 'text', array('required' => false))  
-            ->add('telefonoContacto', 'text', array('required' => false))
-            ->add('afiliacion', 'number', array('required' => false))
-            ->add('administracion', 'number', array('required' => false))
-            ->add('generaPension', 'checkbox', array('required'  => false))
-            ->add('generaSalud', 'checkbox', array('required'  => false))
-            ->add('generaRiesgos', 'checkbox', array('required'  => false))
-            ->add('generaCaja', 'checkbox', array('required'  => false))                            
-            ->add('generaSena', 'checkbox', array('required'  => false))
-            ->add('generaIcbf', 'checkbox', array('required'  => false))
-            ->add('porcentajePension', 'number', array('required' => true))
-            ->add('porcentajeSalud', 'number', array('required' => true))
-            ->add('porcentajeCaja', 'number', array('required' => true))  
-            ->add('redondearCobro', 'checkbox', array('required'  => false))                            
-            ->add('comentarios', 'textarea', array('required' => false))
-            ->add('codigoSucursal', 'text', array('required' => false))
-            ->add('independiente', 'checkbox', array('required'  => false))
-            ->add('tipoIdentificacion', 'choice', array('choices'   => array('NI' => 'NIT', 'CC' => 'CEDULA DE CIUDADANIA')))                
-            ->add('guardar', 'submit')
-            ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
+            ->add('nit', textType::class, array('required' => true))
+            ->add('digitoVerificacion', textType::class, array('required' => false))  
+            ->add('nombreCorto', textType::class, array('required' => true))              
+            ->add('plazoPago', NumberType::class, array('required' => false)) 
+            ->add('direccion', textType::class, array('required' => false))  
+            ->add('barrio', textType::class, array('required' => false))  
+            ->add('telefono', textType::class, array('required' => false))                              
+            ->add('celular', textType::class, array('required' => false))                              
+            ->add('fax', textType::class, array('required' => false))                              
+            ->add('email', textType::class, array('required' => false))                              
+            ->add('contacto', textType::class, array('required' => false))                  
+            ->add('celularContacto', textType::class, array('required' => false))  
+            ->add('telefonoContacto', textType::class, array('required' => false))
+            ->add('afiliacion', NumberType::class, array('required' => false))
+            ->add('administracion', NumberType::class, array('required' => false))
+            ->add('generaPension', CheckboxType::class, array('required'  => false))
+            ->add('generaSalud', CheckboxType::class, array('required'  => false))
+            ->add('generaRiesgos', CheckboxType::class, array('required'  => false))
+            ->add('generaCaja', CheckboxType::class, array('required'  => false))                            
+            ->add('generaSena', CheckboxType::class, array('required'  => false))
+            ->add('generaIcbf', CheckboxType::class, array('required'  => false))
+            ->add('porcentajePension', NumberType::class, array('required' => true))
+            ->add('porcentajeSalud', NumberType::class, array('required' => true))
+            ->add('porcentajeCaja', NumberType::class, array('required' => true))  
+            ->add('redondearCobro', CheckboxType::class, array('required'  => false))                            
+            ->add('comentarios', TextareaType::class, array('required' => false))
+            ->add('codigoSucursal', textType::class, array('required' => false))
+            ->add('independiente', CheckboxType::class, array('required'  => false))
+            ->add('tipoIdentificacion', ChoiceType::class, array('choices'   => array('NI' => 'NIT', 'CC' => 'CEDULA DE CIUDADANIA')))                
+            ->add('guardar', SubmitType::class)
+            ->add('guardarnuevo', SubmitType::class, array('label'  => 'Guardar y Nuevo'));
     }
 
     public function getName()

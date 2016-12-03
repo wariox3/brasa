@@ -4,6 +4,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Brasa\AfiliacionBundle\Form\Type\AfiEmpleadoType;
 use Brasa\AfiliacionBundle\Form\Type\AfiContratoType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
@@ -202,7 +203,7 @@ class EmpleadoController extends Controller
     }
 
     private function lista() {
-        $session = $this->getRequest()->getSession();
+        $session = new Session();
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiEmpleado')->listaDQL(
                 $session->get('filtroEmpleadoNombre'),
@@ -212,7 +213,7 @@ class EmpleadoController extends Controller
     }
 
     private function filtrar ($form) {
-        $session = $this->getRequest()->getSession();
+        $session = new Session();
         $session->set('filtroNit', $form->get('TxtNit')->getData());
         $session->set('filtroEmpleadoNombre', $form->get('TxtNombre')->getData());
         $session->set('filtroEmpleadoIdentificacion', $form->get('TxtNumeroIdentificacion')->getData());
@@ -221,7 +222,7 @@ class EmpleadoController extends Controller
 
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new Session();
         $strNombreCliente = "";
         if($session->get('filtroNit')) {
             $arCliente = $em->getRepository('BrasaAfiliacionBundle:AfiCliente')->findOneBy(array('nit' => $session->get('filtroNit')));
@@ -248,7 +249,7 @@ class EmpleadoController extends Controller
     }
 
     private function formularioDetalle() {
-        $session = $this->getRequest()->getSession();
+        $session = new Session();
         $form = $this->createFormBuilder()
             ->add('BtnEliminarContrato', SubmitType::class, array('label'  => 'Eliminar contrato',))
             ->add('BtnImprimir', SubmitType::class, array('label'  => 'Imprimir',))

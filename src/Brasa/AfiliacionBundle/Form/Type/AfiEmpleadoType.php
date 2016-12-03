@@ -4,6 +4,11 @@ namespace Brasa\AfiliacionBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class AfiEmpleadoType extends AbstractType
 {
@@ -45,21 +50,21 @@ class AfiEmpleadoType extends AbstractType
                     ->orderBy('rh.tipo', 'ASC');},
                 'property' => 'tipo',
                 'required' => true))                             
-            ->add('numeroIdentificacion', 'text', array('required' => true))                            
-            ->add('nombre1', 'text', array('required' => true))
-            ->add('nombre2', 'text', array('required' => false))
-            ->add('apellido1', 'text', array('required' => true))
-            ->add('apellido2', 'text', array('required' => false))
-            ->add('telefono', 'text', array('required' => false))
-            ->add('celular', 'text', array('required' => false))
-            ->add('direccion', 'text', array('required' => false))
-            ->add('barrio', 'text', array('required' => false))
-            ->add('codigoSexoFk', 'choice', array('choices'   => array('M' => 'MASCULINO', 'F' => 'FEMENINO')))
-            ->add('fechaNacimiento','date', array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date' )))                            
-            ->add('correo', 'text', array('required' => false))                            
-            ->add('comentarios', 'textarea', array('required' => false))
-            ->add('guardar', 'submit')
-            ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
+            ->add('numeroIdentificacion', textType::class, array('required' => true))                            
+            ->add('nombre1', textType::class, array('required' => true))
+            ->add('nombre2', textType::class, array('required' => false))
+            ->add('apellido1', textType::class, array('required' => true))
+            ->add('apellido2', textType::class, array('required' => false))
+            ->add('telefono', textType::class, array('required' => false))
+            ->add('celular', textType::class, array('required' => false))
+            ->add('direccion', textType::class, array('required' => false))
+            ->add('barrio', textType::class, array('required' => false))
+            ->add('codigoSexoFk', ChoiceType::class, array('choices'   => array('M' => 'MASCULINO', 'F' => 'FEMENINO')))
+            ->add('fechaNacimiento',DateType::class, array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date' )))                            
+            ->add('correo', textType::class, array('required' => false))                            
+            ->add('comentarios', TextareaType::class, array('required' => false))
+            ->add('guardar', SubmitType::class)
+            ->add('guardarnuevo', SubmitType::class, array('label'  => 'Guardar y Nuevo'));
     }
 
     public function getName()

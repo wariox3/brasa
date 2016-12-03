@@ -4,6 +4,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Brasa\AfiliacionBundle\Form\Type\AfiSucursalType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -73,7 +74,7 @@ class SucursalController extends Controller
     }        
     
     private function lista() {    
-        $session = $this->getRequest()->getSession();
+        $session = new Session();
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiSucursal')->listaDQL(
                 $session->get('filtroSucursalNombre')   
@@ -81,13 +82,13 @@ class SucursalController extends Controller
     }
 
     private function filtrar ($form) {        
-        $session = $this->getRequest()->getSession();        
+        $session = new Session();       
         $session->set('filtroSucursalNombre', $form->get('TxtNombre')->getData());
         $this->lista();
     }
     
     private function formularioFiltro() {
-        $session = $this->getRequest()->getSession();
+        $session = new Session();
         $form = $this->createFormBuilder()            
             ->add('TxtNombre', textType::class, array('label'  => 'Nombre','data' => $session->get('filtroSucursalNombre')))
             ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar',))            
@@ -100,7 +101,7 @@ class SucursalController extends Controller
     private function generarExcel() {
         ob_clean();
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new Session();
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("EMPRESA")

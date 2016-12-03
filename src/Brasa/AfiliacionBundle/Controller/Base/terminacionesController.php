@@ -4,6 +4,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -17,8 +18,7 @@ class terminacionesController extends Controller
      * @Route("/afi/base/empleado/terminaciones", name="brs_afi_base_empleado_terminaciones")
      */
     public function listaAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();        
+        $em = $this->getDoctrine()->getManager();        
         $paginator  = $this->get('knp_paginator');
         
         $form = $this->formularioFiltro();
@@ -47,7 +47,7 @@ class terminacionesController extends Controller
     }
     
     private function lista() {    
-        $session = $this->getRequest()->getSession();
+        $session = new Session();
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->listaTerminacionesDql(
                 $session->get('filtroEmpleadoNombre'),
@@ -61,7 +61,7 @@ class terminacionesController extends Controller
     /**
      * @Route("/afi/base/empleado/terminar/{codigoContrato}", name="brs_afi_base_empleado_terminar")
      */
-    public function terminarAction($codigoContrato) {
+    public function terminarAction(Request $request, $codigoContrato) {
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         
@@ -91,7 +91,7 @@ class terminacionesController extends Controller
     }
 
     private function filtrar ($form) {        
-        $session = $this->getRequest()->getSession();                        
+        $session = new Session();                        
         $session->set('filtroNit', $form->get('TxtNit')->getData()); 
         $session->set('filtroEmpleadoNombre', $form->get('TxtNombre')->getData());
         $session->set('filtroEmpleadoIdentificacion', $form->get('TxtNumeroIdentificacion')->getData());
@@ -109,7 +109,7 @@ class terminacionesController extends Controller
     
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new Session();
         $strNombreCliente = "";
         if($session->get('filtroNit')) {
             $arCliente = $em->getRepository('BrasaAfiliacionBundle:AfiCliente')->findOneBy(array('nit' => $session->get('filtroNit')));
@@ -141,7 +141,7 @@ class terminacionesController extends Controller
         set_time_limit(0);
         ini_set("memory_limit", -1);
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new Session();
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("EMPRESA")
