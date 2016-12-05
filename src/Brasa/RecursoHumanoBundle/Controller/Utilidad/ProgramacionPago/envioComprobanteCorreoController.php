@@ -30,7 +30,7 @@ class envioComprobanteCorreoController extends Controller
         $form->handleRequest($request);
         if($form->isValid()) {
             if($form->get('BtnEnviar')->isClicked()) {
-                $codigo = $form->get('numero')->getData();  
+                $codigo = $form->get('codigoProgramacionPago')->getData();  
                 $arProgramacionPago = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPago();
                 $arProgramacionPago = $em->getRepository('BrasaRecursoHumanoBundle:RhuProgramacionPago')->find($codigo);
                 if($arProgramacionPago) {

@@ -4,6 +4,10 @@ namespace Brasa\AfiliacionBundle\Controller\Buscar;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class ClienteController extends Controller
 {
@@ -14,9 +18,8 @@ class ClienteController extends Controller
     /**
      * @Route("/afi/buscar/cliente/{campoCodigo}/{campoNombre}", name="brs_afi_buscar_cliente")
      */     
-    public function listaAction($campoCodigo, $campoNombre) {
+    public function listaAction(Request $request, $campoCodigo, $campoNombre) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioLista();
         $form->handleRequest($request);
@@ -46,15 +49,15 @@ class ClienteController extends Controller
     
     private function formularioLista() {                
         $form = $this->createFormBuilder()                                                
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $this->strNombre))
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->strCodigo))                            
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('TxtNombre', TextType::class, array('label'  => 'Nombre','data' => $this->strNombre))
+            ->add('TxtCodigo', TextType::class, array('label'  => 'Codigo','data' => $this->strCodigo))                            
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
             ->getForm();        
         return $form;
     }           
 
     private function filtrarLista($form) {
-        $session = $this->getRequest()->getSession();
+        $session = new Session;
         $request = $this->getRequest();
         $controles = $request->request->get('form');
         $this->strNombre = $form->get('TxtNombre')->getData();

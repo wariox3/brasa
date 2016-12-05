@@ -4,6 +4,10 @@ namespace Brasa\AfiliacionBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class AfiFacturaType extends AbstractType
 {
@@ -17,11 +21,11 @@ class AfiFacturaType extends AbstractType
                     ->orderBy('ft.codigoFacturaTipoPk', 'ASC');},
                 'property' => 'nombre',
                 'required' => true))                 
-            ->add('soporte', 'text', array('required' => false))
-            ->add('comentarios', 'textarea', array('required' => false))
-            ->add('afiliacion', 'checkbox', array('required' => false))
-            ->add('guardar', 'submit')
-            ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
+            ->add('soporte', textType::class, array('required' => false))
+            ->add('comentarios', TextareaType::class, array('required' => false))
+            ->add('afiliacion', CheckboxType::class, array('required' => false))
+            ->add('guardar', SubmitType::class)
+            ->add('guardarnuevo', SubmitType::class, array('label'  => 'Guardar y Nuevo'));
     }
 
     public function getName()

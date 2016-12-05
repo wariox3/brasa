@@ -9,7 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\dateType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 class AfiContratoType extends AbstractType
 {
@@ -67,9 +67,9 @@ class AfiContratoType extends AbstractType
                 'class' => 'BrasaRecursoHumanoBundle:RhuClasificacionRiesgo',
                 'property' => 'nombre',
             ))                  
-            ->add('numero', textType::class, array('required' => false))
-            ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd'))                            
-            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd'))
+            ->add('numero', TextType::class, array('required' => false))
+            ->add('fechaDesde', DateType::class, array('format' => 'yyyyMMdd'))                            
+            ->add('fechaHasta', DateType::class, array('format' => 'yyyyMMdd'))
             ->add('indefinido', CheckboxType::class, array('required'  => false))
             ->add('vrSalario', NumberType::class, array('required' => true))  
             ->add('generaPension', CheckboxType::class, array('required'  => false))
