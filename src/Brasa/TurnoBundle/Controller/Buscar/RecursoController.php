@@ -88,8 +88,8 @@ class RecursoController extends Controller
 
     private function filtrarLista($form) {
         $session = new Session();
-        $request = $this->getRequest();
-        $controles = $request->request->get('form');
+        $request = $this->getRequest(); 
+        $controles = $request->request->get('form'); 
         $this->strNombre = $form->get('TxtNombre')->getData();
         $this->strCodigo = $form->get('TxtCodigo')->getData();
         $session->set('filtroTurnoRecursoInactivo', $form->get('inactivos')->getData());
