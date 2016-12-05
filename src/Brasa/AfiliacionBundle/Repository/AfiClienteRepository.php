@@ -5,7 +5,7 @@ namespace Brasa\AfiliacionBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 
 class AfiClienteRepository extends EntityRepository {    
-    public function ListaDql($strNombre = "", $strCodigo = "", $strIdentificacion = "", $strIndependiente = "") {
+    public function listaDql($strNombre = "", $strCodigo = "", $strIdentificacion = "", $strIndependiente = "") {
         $em = $this->getEntityManager();
         $dql   = "SELECT c FROM BrasaAfiliacionBundle:AfiCliente c WHERE c.codigoClientePk <> 0";
         if($strNombre != "" ) {
