@@ -30,6 +30,7 @@ class PagosAdicionalesAgregarController extends Controller
             ->add('TxtValor', 'number', array('required' => true))                             
             ->add('TxtDetalle', 'text', array('required' => false))            
             ->add('aplicarDiaLaborado', 'choice', array('choices' => array('0' => 'NO', '1' => 'SI')))                
+            ->add('aplicarDiaLaboradoSinDescanso', 'choice', array('choices' => array('0' => 'NO', '1' => 'SI')))                                            
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
             ->add('BtnGuardaryNuevo', 'submit', array('label'  => 'Guardar y nuevo',))
             ->getForm();
@@ -109,6 +110,7 @@ class PagosAdicionalesAgregarController extends Controller
                                 $arPagoAdicional->setPrestacional($arPagoConcepto->getPrestacional());
                                 $arPagoAdicional->setTipoAdicional($tipo);                                
                                 $arPagoAdicional->setAplicaDiaLaborado($form->get('aplicarDiaLaborado')->getData());
+                                $arPagoAdicional->setAplicaDiaLaboradoSinDescanso($form->get('aplicarDiaLaboradoSinDescanso')->getData());
                                 $arPagoAdicional->setCodigoUsuario($arUsuario->getUserName());
                                 $arPagoAdicional->setModalidad($modalidad);
                                 if($periodo != 0) {
@@ -161,6 +163,11 @@ class PagosAdicionalesAgregarController extends Controller
         } else {
             $intAplicaDiaLaborado = "NO";
         }
+        if ($arPagoAdicional->getAplicaDiaLaborado() == 1){
+            $intAplicaDiaLaboradoSinDescanso = "SI";
+        } else {
+            $intAplicaDiaLaboradoSinDescanso = "NO";
+        }                
         $codigoEmpleado = $arPagoAdicional->getCodigoEmpleadoFk();
         $codigoCentroCosto = $arPagoAdicional->getEmpleadoRel()->getCodigoCentroCostoFk();        
         $codigoPagoConcepto = $arPagoAdicional->getCodigoPagoConceptoFk();
@@ -172,6 +179,12 @@ class PagosAdicionalesAgregarController extends Controller
         } else {
             $aplicaDiaLaborado = 1;
         }
+        $aplicaDiaLaboradoSinDescanso = $arPagoAdicional->getAplicaDiaLaboradoSinDescanso();
+        if ($aplicaDiaLaboradoSinDescanso == false ){
+            $aplicaDiaLaboradoSinDescanso = 0;
+        } else {
+            $aplicaDiaLaboradoSinDescanso = 1;
+        }        
         $arrayPropiedadesPagoConcepto = array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuPagoConcepto',
                 'query_builder' => function (EntityRepository $er) use ($intTipoAdicional) {
@@ -201,6 +214,7 @@ class PagosAdicionalesAgregarController extends Controller
             ->add('TxtValor', 'number', array('required' => true, 'data' => $arPagoAdicional->getValor()))                             
             ->add('TxtDetalle', 'text', array('required' => false, 'data' => $arPagoAdicional->getDetalle()))
             ->add('aplicarDiaLaborado', 'choice', array('choices' => array($aplicaDiaLaborado => $intAplicaDiaLaborado, '0' => 'NO', '1' => 'SI')))                
+            ->add('aplicarDiaLaboradoSinDescanso', 'choice', array('choices' => array($aplicaDiaLaboradoSinDescanso => $intAplicaDiaLaboradoSinDescanso, '0' => 'NO', '1' => 'SI')))                
             ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
             ->add('BtnGuardaryNuevo', 'submit', array('label'  => 'Guardar y nuevo',))
             ->getForm();
@@ -258,6 +272,7 @@ class PagosAdicionalesAgregarController extends Controller
                         $arPagoAdicional->setTipoAdicional($tipo);
                         $arPagoAdicional->setPermanente(1);
                         $arPagoAdicional->setAplicaDiaLaborado($form->get('aplicarDiaLaborado')->getData());
+                        $arPagoAdicional->setAplicaDiaLaboradoSinDescanso($form->get('aplicarDiaLaboradoSinDescanso')->getData());
                         $arPagoAdicional->setFechaUltimaEdicion(new \DateTime('now'));
                         $arPagoAdicional->setCodigoUsuarioUltimaEdicion($arUsuario->getUserName());
                         $em->persist($arPagoAdicional);                                                        

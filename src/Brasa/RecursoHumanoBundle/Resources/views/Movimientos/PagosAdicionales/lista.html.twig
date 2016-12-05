@@ -74,6 +74,7 @@
                 <th>CANT</th>
                 <th>VALOR</th>
                 <th>ADL</th>
+                <th>ADL_SD</th>
                 <th>ACT</th>
                 <th>USUARIO</th>
                 <th></th>
@@ -93,6 +94,7 @@
                 <td style="text-align: right">{{ arPagosAdicionales.cantidad | number_format(1, '.', ',') }}</td>                            
                 <td style="text-align: right">{{ arPagosAdicionales.valor | number_format(2, '.', ',') }}</td>                                                                        
                 <td>{% if arPagosAdicionales.aplicaDiaLaborado == 1 %} SI {% else %} NO {% endif %}</td>                        
+                <td>{% if arPagosAdicionales.aplicaDiaLaboradoSinDescanso == 1 %} SI {% else %} NO {% endif %}</td>                        
                 <td>{% if arPagosAdicionales.estadoInactivo == 1 %} NO {% else %} SI {% endif %}</td>                        
                 <td>{{ arPagosAdicionales.codigoUsuario }}</td> 
                 <td style="text-align: center"><a href="{{ path('brs_rhu_pagos_adicionales_agregar_valoradicionaleditar', { 'tipo': arPagosAdicionales.tipoAdicional, 'codigoPagoAdicional': arPagosAdicionales.codigoPagoAdicionalPk, 'modalidad': modalidad, 'periodo': periodo }) }}" ><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                                

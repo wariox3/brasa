@@ -73,6 +73,11 @@ class RhuPagoAdicional
      */    
     private $aplicaDiaLaborado = 0;                 
     
+    /**     
+     * @ORM\Column(name="aplica_dia_laborado_sin_descanso", type="boolean")
+     */    
+    private $aplicaDiaLaboradoSinDescanso = 0;     
+    
     /**
      * @ORM\Column(name="detalle", type="string", length=250, nullable=true)
      */    
@@ -641,5 +646,29 @@ class RhuPagoAdicional
     public function getCodigoUsuarioUltimaEdicion()
     {
         return $this->codigoUsuarioUltimaEdicion;
+    }
+
+    /**
+     * Set aplicaDiaLaboradoSinDescanso
+     *
+     * @param boolean $aplicaDiaLaboradoSinDescanso
+     *
+     * @return RhuPagoAdicional
+     */
+    public function setAplicaDiaLaboradoSinDescanso($aplicaDiaLaboradoSinDescanso)
+    {
+        $this->aplicaDiaLaboradoSinDescanso = $aplicaDiaLaboradoSinDescanso;
+
+        return $this;
+    }
+
+    /**
+     * Get aplicaDiaLaboradoSinDescanso
+     *
+     * @return boolean
+     */
+    public function getAplicaDiaLaboradoSinDescanso()
+    {
+        return $this->aplicaDiaLaboradoSinDescanso;
     }
 }
