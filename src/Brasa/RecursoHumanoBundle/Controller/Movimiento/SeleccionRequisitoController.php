@@ -662,7 +662,7 @@ class SeleccionRequisitoController extends Controller
                     ->setCellValue('J' . $i, $aprobado)
                     ->setCellValue('L' . $i, $fechaDescarte)
                     ->setCellValue('M' . $i, $arRequisicionDetalle->getComentarios());
-            if($arRequisicionDetalle->getCodigoMotivoDescarteRequisicionAspitanteFk()) {
+            if($arRequisicionDetalle->getCodigoMotivoDescarteRequisicionAspiranteFk()) {
                         $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K' . $i, $arRequisicionDetalle->getMotivoDescarteRequisicionAspiranteRel()->getNombre());                
                     }
             $i++;

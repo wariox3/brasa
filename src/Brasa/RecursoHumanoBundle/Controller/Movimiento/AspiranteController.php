@@ -375,7 +375,9 @@ class AspiranteController extends Controller
 
     private function generarExcel() {
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
-        ob_clean();
+        ob_clean();        
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -493,9 +495,13 @@ class AspiranteController extends Controller
             if ($arAspirantes->getReintegro() == 1){
                 $reingreso = "SI";
             }
+            $fecha = "";
+            if ($arAspirantes->getFecha() != null){
+                $fecha = $arAspirantes->getFecha()->format('Y-m-d');
+            }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arAspirantes->getCodigoAspirantePk())
-                    ->setCellValue('B' . $i, $arAspirantes->getFecha()->format('Y-m-d'))
+                    ->setCellValue('B' . $i, $fecha)
                     ->setCellValue('C' . $i, $ciudad)
                     ->setCellValue('D' . $i, $arAspirantes->getTipoIdentificacionRel()->getNombre())
                     ->setCellValue('E' . $i, $arAspirantes->getNumeroIdentificacion())
