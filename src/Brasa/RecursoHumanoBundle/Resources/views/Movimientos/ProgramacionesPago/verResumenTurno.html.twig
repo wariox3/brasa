@@ -219,6 +219,7 @@
                 <th>CANT</th>
                 <th>VALOR</th>
                 <th>ADL</th>
+                <th>ADL_SD</th>
                 <th>PER</th>
                 <th>ACT</th>
                 <th>USUARIO</th>                  
@@ -236,6 +237,7 @@
                     <td style="text-align: right">{{ arPagosAdicionales.valor | number_format(0, '.', ',') }}</td>
                 {% endif %}                
                 <td>{% if arPagosAdicionales.aplicaDiaLaborado == 1 %} SI {% else %} NO {% endif %}</td>                    
+                <td>{% if arPagosAdicionales.aplicaDiaLaboradoSinDescanso == 1 %} SI {% else %} NO {% endif %}</td>                                    
                 <td>{% if arPagosAdicionales.permanente == 1 %} SI {% else %} NO {% endif %}</td>
                 <td>{% if arPagosAdicionales.estadoInactivo == 0 %} SI {% else %} NO {% endif %}</td>
                 <td>{{ arPagosAdicionales.codigoUsuario }}</td>                                                          
