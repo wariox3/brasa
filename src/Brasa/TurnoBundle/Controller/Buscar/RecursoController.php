@@ -87,7 +87,9 @@ class RecursoController extends Controller
     }           
 
     private function filtrarLista($form) {
-        $session = $this->getRequest()->getSession();        
+        //$session = $this->getRequest()->getSession();
+        $session = new Session();
+        $request = $this->getRequest();
         $controles = $request->request->get('form');
         $this->strNombre = $form->get('TxtNombre')->getData();
         $this->strCodigo = $form->get('TxtCodigo')->getData();
