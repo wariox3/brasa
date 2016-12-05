@@ -37,7 +37,7 @@ class RecursoController extends Controller
             'campoNombre' => $campoNombre,
             'form' => $form->createView()
             ));
-    }
+    } 
 
     /**
      * @Route("/tur/burcar/recurso/{campoCodigo}", name="brs_tur_buscar_recurso2")
