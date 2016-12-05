@@ -48,6 +48,8 @@ class TurSoportePagoPeriodoRepository extends EntityRepository {
         foreach ($arSoportePagos as $arSoportePago) {            
             $arSoportePagoAct = new \Brasa\TurnoBundle\Entity\TurSoportePago();                        
             $arSoportePagoAct = $em->getRepository('BrasaTurnoBundle:TurSoportePago')->find($arSoportePago->getCodigoSoportePagoPk()); 
+            $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+            $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arSoportePago->getCodigoContratoFk());
             $salario = $arSoportePago->getVrSalario();
             $vrDia = $salario / 30;
             $vrHora = $vrDia / 8;
@@ -60,7 +62,10 @@ class TurSoportePagoPeriodoRepository extends EntityRepository {
             $vrExtraOrdinariaNocturna = (($vrHora * $porExtraOrdinariaNocturna)/100) * $arSoportePago->getHorasExtrasOrdinariasNocturnas();                        
             $vrExtraFestivaDiurna = (($vrHora * $porExtraFestivaDiurna)/100) * $arSoportePago->getHorasExtrasFestivasDiurnas();
             $vrExtraFestivaNocturna = (($vrHora * $porExtraFestivaNocturna)/100) * $arSoportePago->getHorasExtrasFestivasNocturnas();            
-            $vrAuxilioTransporte = $diaAuxilioTransporte * $arSoportePago->getDiasTransporte();
+            $vrAuxilioTransporte = 0;
+            if($arContrato->getEmpleadoRel()->getAuxilioTransporte()) {
+                $vrAuxilioTransporte = $diaAuxilioTransporte * $arSoportePago->getDiasTransporte();
+            }            
             $vrPago = $vrDiurna + $vrNocturna + $vrDescanso + $vrFestivaDiurna + $vrFestivaNocturna + $vrExtraOrdinariaDiurna + $vrExtraOrdinariaNocturna + $vrExtraFestivaDiurna + $vrExtraFestivaNocturna;
             $vrDevengado = $vrPago + $vrAuxilioTransporte;
             $vrDevengadoPactadoPeriodo = ($arSoportePago->getVrDevengadoPactado() / 30) * $arSoportePago->getDiasTransporte();
