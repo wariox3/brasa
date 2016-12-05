@@ -218,6 +218,11 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                     $valorDia = $arPagoAdicional->getValor() / $diasPeriodo;
                     $douPagoDetalle = $valorDia * $arProgramacionPagoDetalle->getDias();
                 }
+                if($arPagoAdicional->getAplicaDiaLaboradoSinDescanso() == 1) {                                                
+                    $diasPeriodo = $arCentroCosto->getPeriodoPagoRel()->getDias();
+                    $valorDia = $arPagoAdicional->getValor() / $diasPeriodo;                                        
+                    $douPagoDetalle = $valorDia * $arProgramacionPagoDetalle->getDias() - ($arProgramacionPagoDetalle->getHorasDescanso() / 8);
+                }                
                 $douPagoDetalle = round($douPagoDetalle);
                 if($arPagoAdicional->getPagoConceptoRel()->getOperacion() == 1) {
                     $devengado += $douPagoDetalle;
