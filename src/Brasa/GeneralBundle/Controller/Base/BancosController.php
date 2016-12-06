@@ -25,8 +25,7 @@ class BancosController extends Controller
             ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
             ->getForm(); 
-        $form->handleRequest($request);
-        $arTerceros = new \Brasa\GeneralBundle\Entity\GenTercero();
+        $form->handleRequest($request);        
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
