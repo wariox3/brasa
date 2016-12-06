@@ -1271,7 +1271,7 @@ class TurSoportePagoRepository extends EntityRepository {
                         }
                     }
                     if($arSoportePago->getSecuencia() == 3) {
-                        $strTurnoDefinitivo = $this->turnoDefinitivo($arSecuenciaDetalle[0], $i, $strTurnoDefinitivo);
+                        $strTurnoDefinitivo = $this->turnoDefinitivo($arSecuenciaDetalle[$indiceSecuencia], $i, $strTurnoDefinitivo);
                     } else {
                         $strTurnoDefinitivo = $this->turnoDefinitivo($arSecuenciaDetalle[0], $i, $strTurnoDefinitivo);
                     }
