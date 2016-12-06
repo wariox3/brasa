@@ -1242,9 +1242,12 @@ class TurSoportePagoRepository extends EntityRepository {
                 $arSecuencia = $em->getRepository('BrasaTurnoBundle:TurSecuencia')->find($arSoportePago->getSecuencia());                
                 $arSecuenciaDetalle = new \Brasa\TurnoBundle\Entity\TurSecuenciaDetalle();
                 $arSecuenciaDetalle = $em->getRepository('BrasaTurnoBundle:TurSecuenciaDetalle')->findBy(array('codigoSecuenciaFk' => $arSoportePago->getSecuencia()));                        
-                if($indiceSecuencia >= $arSecuencia->getFilas()) {
-                    $indiceSecuencia = 0;
+                if($arSoportePago->getSecuencia() == 3) {                    
+                    if($indiceSecuencia >= 3) {
+                        $indiceSecuencia = 0;
+                    }                     
                 }
+
                 $arProgramacionDetalles = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
                 $arProgramacionDetalles = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->periodoDias($arSoportePago->getAnio(), $arSoportePago->getMes(), $arSoportePago->getCodigoRecursoFk());        
                 $arProgramacionAlterna = new \Brasa\TurnoBundle\Entity\TurProgramacionAlterna();
@@ -1267,7 +1270,12 @@ class TurSoportePagoRepository extends EntityRepository {
                             }
                         }
                     }
-                    $strTurnoDefinitivo = $this->turnoDefinitivo($arSecuenciaDetalle[0], $i, $strTurnoDefinitivo);
+                    if($arSoportePago->getSecuencia() == 3) {
+                        $strTurnoDefinitivo = $this->turnoDefinitivo($arSecuenciaDetalle[0], $i, $strTurnoDefinitivo);
+                    } else {
+                        $strTurnoDefinitivo = $this->turnoDefinitivo($arSecuenciaDetalle[0], $i, $strTurnoDefinitivo);
+                    }
+                    
                     if($i == 1) {
                         $arProgramacionAlterna->setDia1($strTurnoDefinitivo);                    
                     }
@@ -1360,10 +1368,12 @@ class TurSoportePagoRepository extends EntityRepository {
                     }
                     if($i == 31) {
                         $arProgramacionAlterna->setDia31($strTurnoDefinitivo);                    
-                    }                   
+                    } 
+                    if($arSoportePago->getSecuencia() == 3) {
+                        $indiceSecuencia++;
+                    }
                 }
-                $em->persist($arProgramacionAlterna);            
-                $indiceSecuencia++;                
+                $em->persist($arProgramacionAlterna);                                            
             }
         }               
         $em->flush();
