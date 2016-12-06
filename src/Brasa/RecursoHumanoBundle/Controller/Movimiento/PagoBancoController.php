@@ -209,6 +209,13 @@ class PagoBancoController extends Controller
                     $objMensaje->Mensaje('error', 'El pago al banco debe estar autorizado ', $this);
                 }
             }
+            if($form->get('BtnArchivoColpatriaCsv')->isClicked()) {
+                if($arPagoBanco->getEstadoAutorizado() == 1) {
+                    $this->generarArchivoColpatriaCsv($arPagoBanco);
+                } else {
+                    $objMensaje->Mensaje('error', 'El pago al banco debe estar autorizado ', $this);
+                }
+            }
             if ($form->get('BtnDetalleExcel')->isClicked()) {                
                 $this->generarDetalleExcel($codigoPagoBanco);
             }
@@ -688,7 +695,8 @@ class PagoBancoController extends Controller
         $arrBotonArchivoAvvillasInterno = array('label' => 'Av Villas Interno', 'disabled' => false);
         $arrBotonArchivoAvvillasOtros = array('label' => 'Av Villas Otros', 'disabled' => false);
         $arrBotonArchivoDavivienda = array('label' => 'Davivienda', 'disabled' => false);
-        $arrBotonArchivoBogota = array('label' => 'Bogota', 'disabled' => false);        
+        $arrBotonArchivoBogota = array('label' => 'Bogota', 'disabled' => false);
+        $arrBotonArchivoColpatriaCsv = array('label' => 'Colpatria csv', 'disabled' => false);        
         if($ar->getEstadoAutorizado() == 1) {            
             $arrBotonAutorizar['disabled'] = true;
             $arrBotonEliminarDetalle['disabled'] = true;
@@ -709,6 +717,7 @@ class PagoBancoController extends Controller
                     ->add('BtnArchivoAvvillasOtros', 'submit', $arrBotonArchivoAvvillasOtros)
                     ->add('BtnArchivoDavivienda', 'submit', $arrBotonArchivoDavivienda)
                     ->add('BtnArchivoBogota', 'submit', $arrBotonArchivoBogota)
+                    ->add('BtnArchivoColpatriaCsv', 'submit', $arrBotonArchivoColpatriaCsv)
                     ->add('BtnEliminarDetalle', 'submit', $arrBotonEliminarDetalle)
                     ->add('BtnDetalleExcel', 'submit', array('label' => 'Excel'))
                     ->getForm();  
@@ -1169,6 +1178,57 @@ class PagoBancoController extends Controller
         exit;
         
         
+    }
+    
+    private function generarArchivoColpatriaCsv($arPagoBanco) {
+        $em = $this->getDoctrine()->getManager();
+        //$arPagoBanco = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco();
+        $arConfiguracionGeneral = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
+        $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+        $strNombreArchivo = "pagoAvvillasInterno" . date('YmdHis') . ".csv";
+        $strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;                                    
+        //$strArchivo = "c:/xampp/" . $strNombreArchivo;                                    
+        ob_clean();
+        $ar = fopen($strArchivo,"a") or die("Problemas en la creacion del archivo plano");
+        $strValorTotal = 0;
+        $arPagosBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
+        $arPagosBancoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->findBy(array ('codigoPagoBancoFk' => $arPagoBanco->getCodigoPagoBancoPk()));                        
+                
+        // Encabezado
+                
+        $nombreArchivo = "NominaVillas";        
+        $array = array("Cuenta Destino", ";","Nit Beneficiario",";", "Nombre Beneficiario",";", "Cod. Transaccion",";","Tipo de cargo",";","Valor Neto Pago",";","No. Factura",";","No. Control de pago",";","Valor Retencion en la Fuente",";","Valor IVA",";","Fecha Pago",";","Numero Nota Debito",";","Valor Nota Debito",";","Cod. Banco",";","Tipo Cuenta",";","Tipo Documento",";","Inf. Adicional");
+        //Fin encabezado        
+        
+        foreach($array as $fields){
+            fputs($ar,$fields);
+        }   
+        fputs($ar, "\n");
+        //Inicio cuerpo
+        $strSecuencia = 1;
+        foreach ($arPagosBancoDetalle AS $arPagoBancoDetalle) {
+            if($arPagoBancoDetalle->getVrPago() > 0) {                
+                $array = array($arPagoBancoDetalle->getCuenta(), ";",$arPagoBancoDetalle->getEmpleadoRel()->getNumeroIdentificacion(),";", $arPagoBancoDetalle->getEmpleadoRel()->getNombreCorto(),";","902",";","0",";",$arPagoBancoDetalle->getVrPago(),";","",";","",";","",";","",";",$arPagoBanco->getFechaTrasmision()->format('dmY'),";","",";","",";","560019",";","2",";","C",";",$arPagoBanco->getDescripcion());
+                foreach($array as $fields){
+                    fputs($ar,$fields);
+                }  
+                fputs($ar, "\n");
+                $strSecuencia ++;                
+            }
+        }
+        //fputs($ar, "03" . $this->RellenarNr(($strSecuencia-1), "0", 9) . $strValorTotal . "\n");
+        fclose($ar);
+        $em->flush();
+        //Fin cuerpo                        
+        header('Content-Description: File Transfer');
+        header('Content-Type: text/csv; charset=ISO-8859-15');
+        header('Content-Disposition: attachment; filename='.basename($strArchivo));
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($strArchivo));
+        readfile($strArchivo);
+        exit; 
     }
     
     //Rellenar numeros
