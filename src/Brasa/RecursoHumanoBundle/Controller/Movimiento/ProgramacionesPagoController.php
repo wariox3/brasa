@@ -907,10 +907,10 @@ class ProgramacionesPagoController extends Controller
                 ->setCategory("Test result file");
             $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
             $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-            for($col = 'A'; $col !== 'L'; $col++) {
+            for($col = 'A'; $col !== 'M'; $col++) {
                 $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                  
             }     
-            for($col = 'F'; $col !== 'L'; $col++) {
+            for($col = 'F'; $col !== 'M'; $col++) {
                 $objPHPExcel->getActiveSheet()->getStyle($col)->getAlignment()->setHorizontal('right'); 
                 $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
                 $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
@@ -925,8 +925,9 @@ class ProgramacionesPagoController extends Controller
                         ->setCellValue('G1', 'HASTA')
                         ->setCellValue('H1', 'SALARIO')
                         ->setCellValue('I1', 'DEVENGADO')
-                        ->setCellValue('J1', 'DEDUCCIONES')
-                        ->setCellValue('K1', 'NETO');
+                        ->setCellValue('J1', 'DEV_PAC')
+                        ->setCellValue('K1', 'DEDUCCIONES')
+                        ->setCellValue('L1', 'NETO');
             $i = 2;
 
             $arPagos = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();
@@ -941,8 +942,9 @@ class ProgramacionesPagoController extends Controller
                         ->setCellValue('G' . $i, $arPago->getFechaHasta()->format('Y/m/d'))
                         ->setCellValue('H' . $i, $arPago->getVrSalarioEmpleado())
                         ->setCellValue('I' . $i, $arPago->getVrDevengado())
-                        ->setCellValue('J' . $i, $arPago->getVrDeducciones())
-                        ->setCellValue('K' . $i, $arPago->getVrNeto());
+                        ->setCellValue('J' . $i, $arPago->getContratoRel()->getVrDevengadoPactado())
+                        ->setCellValue('K' . $i, $arPago->getVrDeducciones())
+                        ->setCellValue('L' . $i, $arPago->getVrNeto());
                 if($arPago->getEmpleadoRel()->getCodigoBancoFk()) {
                     $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D' . $i, $arPago->getEmpleadoRel()->getBancoRel()->getNombre());
                 }
