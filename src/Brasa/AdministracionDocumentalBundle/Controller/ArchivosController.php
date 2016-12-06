@@ -126,9 +126,9 @@ class ArchivosController extends Controller
         $strRuta = $arArchivo->getDirectorioRel()->getRutaPrincipal() . $arArchivo->getDirectorioRel()->getNumero()  ."/" . $arArchivo->getCodigoArchivoPk() . "_" . $arArchivo->getNombre();
         
         $form = $this->createFormBuilder()
-            ->add('asunto', 'text', array('required' => true))
-            ->add('email', 'text', array('required' => true))
-            ->add('mensaje', 'textarea', array('required' => true)) 
+            ->add('asunto', textType::class, array('required' => true))
+            ->add('email', textType::class, array('required' => true))
+            ->add('mensaje', TextareaType::class, array('required' => true)) 
             ->add('BtnEnviar', SubmitType::class , array('label'  => 'Enviar'))
             ->getForm();
         $form->handleRequest($request);

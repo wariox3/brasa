@@ -4,6 +4,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -18,8 +19,7 @@ class AfiliacionPagoPendienteController extends Controller
      * @Route("/afi/consulta/contrato/afiliacionpagopendiente", name="brs_afi_consulta_contrato_afiliacionpagopendiente")
      */    
     public function listaAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();        
+        $em = $this->getDoctrine()->getManager();     
         $paginator  = $this->get('knp_paginator');
         if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 102)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
@@ -48,7 +48,7 @@ class AfiliacionPagoPendienteController extends Controller
     }
     
     private function lista() {    
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->listaConsultaPagoPendienteDql(
                 $session->get('filtroEmpleadoNombre'),
@@ -60,7 +60,7 @@ class AfiliacionPagoPendienteController extends Controller
     }       
 
     private function filtrar ($form) {        
-        $session = $this->getRequest()->getSession();                        
+        $session = new session;                        
         $session->set('filtroNit', $form->get('TxtNit')->getData()); 
         $session->set('filtroEmpleadoNombre', $form->get('TxtNombre')->getData());
         $session->set('filtroEmpleadoIdentificacion', $form->get('TxtNumeroIdentificacion')->getData());
@@ -79,7 +79,7 @@ class AfiliacionPagoPendienteController extends Controller
     
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $strNombreCliente = "";
         if($session->get('filtroNit')) {
             $arCliente = $em->getRepository('BrasaAfiliacionBundle:AfiCliente')->findOneBy(array('nit' => $session->get('filtroNit')));
