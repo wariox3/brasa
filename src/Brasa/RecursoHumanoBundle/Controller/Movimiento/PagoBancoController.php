@@ -1185,7 +1185,7 @@ class PagoBancoController extends Controller
         //$arPagoBanco = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBanco();
         $arConfiguracionGeneral = new \Brasa\GeneralBundle\Entity\GenConfiguracion();
         $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
-        $strNombreArchivo = "pagoAvvillasInterno" . date('YmdHis') . ".csv";
+        $strNombreArchivo = "pagoColpatriaCsv" . date('YmdHis') . ".csv";
         $strArchivo = $arConfiguracionGeneral->getRutaTemporal() . $strNombreArchivo;                                    
         //$strArchivo = "c:/xampp/" . $strNombreArchivo;                                    
         ob_clean();
@@ -1194,9 +1194,7 @@ class PagoBancoController extends Controller
         $arPagosBancoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoBancoDetalle();
         $arPagosBancoDetalle = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoBancoDetalle')->findBy(array ('codigoPagoBancoFk' => $arPagoBanco->getCodigoPagoBancoPk()));                        
                 
-        // Encabezado
-                
-        $nombreArchivo = "NominaVillas";        
+        // Encabezado                        
         $array = array("Cuenta Destino", ";","Nit Beneficiario",";", "Nombre Beneficiario",";", "Cod. Transaccion",";","Tipo de cargo",";","Valor Neto Pago",";","No. Factura",";","No. Control de pago",";","Valor Retencion en la Fuente",";","Valor IVA",";","Fecha Pago",";","Numero Nota Debito",";","Valor Nota Debito",";","Cod. Banco",";","Tipo Cuenta",";","Tipo Documento",";","Inf. Adicional");
         //Fin encabezado        
         
