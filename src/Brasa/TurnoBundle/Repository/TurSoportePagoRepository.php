@@ -1243,7 +1243,7 @@ class TurSoportePagoRepository extends EntityRepository {
                 $arSecuenciaDetalle = new \Brasa\TurnoBundle\Entity\TurSecuenciaDetalle();
                 $arSecuenciaDetalle = $em->getRepository('BrasaTurnoBundle:TurSecuenciaDetalle')->findBy(array('codigoSecuenciaFk' => $arSoportePago->getSecuencia()));                        
                 if($arSoportePago->getSecuencia() == 3) {                    
-                    if($indiceSecuencia >= 3) {
+                    if($indiceSecuencia >= 2) {
                         $indiceSecuencia = 0;
                     }                     
                 }
