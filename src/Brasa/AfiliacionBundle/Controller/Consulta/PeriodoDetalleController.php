@@ -4,6 +4,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Brasa\AfiliacionBundle\Form\Type\AfiPeriodoType;
 class PeriodoDetalleController extends Controller
 {
@@ -13,7 +19,6 @@ class PeriodoDetalleController extends Controller
      */    
     public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 107)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         } 
@@ -42,7 +47,7 @@ class PeriodoDetalleController extends Controller
     }
     
     private function lista() {    
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetalle')->listaConsultaDql(
                 $session->get('filtroCursoNumero'),
@@ -54,8 +59,8 @@ class PeriodoDetalleController extends Controller
                 ); 
     }       
 
-    private function filtrar ($form) {        
-        $session = $this->getRequest()->getSession(); 
+    private function filtrar ( $form) {        
+        $session = new session;
         $request = $this->getRequest();
         $controles = $request->request->get('form');
         $arrControles = $request->request->All();
@@ -77,16 +82,16 @@ class PeriodoDetalleController extends Controller
     
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $arrayPropiedades = array(
                 'class' => 'BrasaGeneralBundle:GenAsesor',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('cc')
                     ->orderBy('cc.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => false,
                 'empty_data' => "",
-                'empty_value' => "TODOS",
+                'placeholder' => "TODOS",
                 'data' => ""
             );
         if($session->get('filtroAsesor')) {
@@ -106,15 +111,15 @@ class PeriodoDetalleController extends Controller
             $session->set('filtroCodigoCliente', null);
         }        
         $form = $this->createFormBuilder() 
-            ->add('asesorRel', 'entity', $arrayPropiedades)    
-            ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
-            ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))
-            ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCursoNumero')))
-            ->add('estadoFacturado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'FACTURADO', '0' => 'SIN FACTURAR'), 'data' => $session->get('filtroPeriodoEstadoFacturado')))                
-            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
-            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('asesorRel', EntityType::class, $arrayPropiedades)    
+            ->add('TxtNit', textType::class, array('label'  => 'Nit','data' => $session->get('filtroNit')))
+            ->add('TxtNombreCliente', textType::class, array('label'  => 'NombreCliente','data' => $strNombreCliente))
+            ->add('TxtNumero', textType::class, array('label'  => 'Codigo','data' => $session->get('filtroCursoNumero')))
+            ->add('estadoFacturado', ChoiceType::class, array('choices'   => array('2' => 'TODOS', '1' => 'FACTURADO', '0' => 'SIN FACTURAR'), 'data' => $session->get('filtroPeriodoEstadoFacturado')))                
+            ->add('fechaDesde', DateType::class ,array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('fechaHasta', DateType::class,array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel',))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
     }            

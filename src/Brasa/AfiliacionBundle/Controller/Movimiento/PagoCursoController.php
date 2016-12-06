@@ -4,6 +4,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Brasa\AfiliacionBundle\Form\Type\AfiPagoCursoType;
 class PagoCursoController extends Controller
 {
@@ -201,7 +204,7 @@ class PagoCursoController extends Controller
     }    
     
     private function lista() {    
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiPagoCurso')->listaDQL(
                 $session->get('filtroPagoCursoNombre')   
@@ -209,18 +212,18 @@ class PagoCursoController extends Controller
     }      
 
     private function filtrar ($form) {        
-        $session = $this->getRequest()->getSession();        
+        $session = new session;      
         $session->set('filtroPagoCursoNombre', $form->get('TxtNombre')->getData());
         $this->lista();
     }
     
     private function formularioFiltro() {
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $form = $this->createFormBuilder()            
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroPagoCursoNombre')))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('TxtNombre', textType::class, array('label'  => 'Nombre','data' => $session->get('filtroPagoCursoNombre')))
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar',))            
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel',))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
     }    
@@ -246,11 +249,11 @@ class PagoCursoController extends Controller
         }
  
         $form = $this->createFormBuilder()
-                    ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
-                    ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)                                     
-                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)
-                    ->add('BtnAnular', 'submit', $arrBotonAnular)                                    
-                    ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)                    
+                    ->add('BtnDesAutorizar', SubmitType::class, $arrBotonDesAutorizar)            
+                    ->add('BtnAutorizar', SubmitType::class, $arrBotonAutorizar)                                     
+                    ->add('BtnImprimir', SubmitType::class, $arrBotonImprimir)
+                    ->add('BtnAnular', SubmitType::class, $arrBotonAnular)                                    
+                    ->add('BtnDetalleEliminar', SubmitType::class, $arrBotonDetalleEliminar)                    
                     
                     ->getForm();
         return $form;
@@ -258,7 +261,7 @@ class PagoCursoController extends Controller
 
     private function formularioDetalleNuevo() {        
         $form = $this->createFormBuilder()                 
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))                        
+            ->add('BtnGuardar', SubmitType::class, array('label'  => 'Guardar',))                        
             ->getForm();
         return $form;
     }             

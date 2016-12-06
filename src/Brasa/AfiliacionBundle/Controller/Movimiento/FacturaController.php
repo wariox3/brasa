@@ -4,6 +4,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Brasa\AfiliacionBundle\Form\Type\AfiFacturaType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
@@ -376,7 +381,7 @@ class FacturaController extends Controller
     }
 
     private function lista() {
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $em = $this->getDoctrine()->getManager();
         
         $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->listaDQL(
@@ -390,7 +395,7 @@ class FacturaController extends Controller
     }
 
     private function filtrar ($form) {
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $session->set('filtroEstadoAnulado', $form->get('estadoAnulado')->getData());
         $session->set('filtroEstadoAutorizado', $form->get('estadoAutorizado')->getData());
         $session->set('filtroEstadoAfiliado', $form->get('estadoAfiliado')->getData());
@@ -409,7 +414,7 @@ class FacturaController extends Controller
     
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $strNombreCliente = "";
         if($session->get('filtroNit')) {
             $arCliente = $em->getRepository('BrasaAfiliacionBundle:AfiCliente')->findOneBy(array('nit' => $session->get('filtroNit')));
@@ -436,16 +441,16 @@ class FacturaController extends Controller
         $dateFechaDesde = date_create($strFechaDesde);
         $dateFechaHasta = date_create($strFechaHasta);
         $form = $this->createFormBuilder()
-            ->add('TxtNit', 'text')
-            ->add('TxtNombreCliente', 'text')       
-            ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroEstadoAutorizado')))
-            ->add('estadoAnulado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroEstadoAnulado')))
-            ->add('estadoAfiliado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroEstadoAfiliado')))
-            ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde))                            
-            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta)) 
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('TxtNit', textType::class)
+            ->add('TxtNombreCliente', textType::class)       
+            ->add('estadoAutorizado', ChoiceType::class, array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroEstadoAutorizado')))
+            ->add('estadoAnulado', ChoiceType::class, array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroEstadoAnulado')))
+            ->add('estadoAfiliado', ChoiceType::class, array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'), 'data' => $session->get('filtroEstadoAfiliado')))
+            ->add('fechaDesde', DateType::class, array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde))                            
+            ->add('fechaHasta', DateType::class, array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta)) 
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar',))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel',))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
     }
@@ -477,21 +482,21 @@ class FacturaController extends Controller
         }
 
         $form = $this->createFormBuilder()
-                    ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)
-                    ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)
-                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)
-                    ->add('BtnAnular', 'submit', $arrBotonAnular)
-                    ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
-                    ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
-                    ->add('BtnDetalleCursoEliminar', 'submit', $arrBotonDetalleEliminar)
-                    ->add('BtnDetalleAfiliacionEliminar', 'submit', $arrBotonDetalleAfiliacionEliminar)
+                    ->add('BtnDesAutorizar', SubmitType::class, $arrBotonDesAutorizar)
+                    ->add('BtnAutorizar', SubmitType::class, $arrBotonAutorizar)
+                    ->add('BtnImprimir', SubmitType::class, $arrBotonImprimir)
+                    ->add('BtnAnular', SubmitType::class, $arrBotonAnular)
+                    ->add('BtnDetalleActualizar', SubmitType::class, $arrBotonDetalleActualizar)
+                    ->add('BtnDetalleEliminar', SubmitType::class, $arrBotonDetalleEliminar)
+                    ->add('BtnDetalleCursoEliminar', SubmitType::class, $arrBotonDetalleEliminar)
+                    ->add('BtnDetalleAfiliacionEliminar', SubmitType::class, $arrBotonDetalleAfiliacionEliminar)
                     ->getForm();
         return $form;
     }
 
     private function formularioDetalleNuevo() {
         $form = $this->createFormBuilder()
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->add('BtnGuardar', SubmitType::class, array('label'  => 'Guardar',))
             ->getForm();
         return $form;
     }

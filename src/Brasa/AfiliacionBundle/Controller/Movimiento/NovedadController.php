@@ -4,6 +4,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Brasa\AfiliacionBundle\Form\Type\AfiNovedadType;
 class NovedadController extends Controller
 {
@@ -96,7 +99,7 @@ class NovedadController extends Controller
     }        
     
     private function lista() {    
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiNovedad')->listaDQL(
                   
@@ -104,18 +107,18 @@ class NovedadController extends Controller
     }   
     
     private function filtrar ($form) {        
-        $session = $this->getRequest()->getSession();        
+        $session = new session;    
         $session->set('filtroNovedadNombre', $form->get('TxtNombre')->getData());
         $this->lista();
     }
     
     private function formularioFiltro() {
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $form = $this->createFormBuilder()            
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNovedadNombre')))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('TxtNombre', textType::class, array('label'  => 'Nombre','data' => $session->get('filtroNovedadNombre')))
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar',))            
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel',))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
     }        
@@ -123,7 +126,7 @@ class NovedadController extends Controller
     private function generarExcel() {
         ob_clean();
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("EMPRESA")

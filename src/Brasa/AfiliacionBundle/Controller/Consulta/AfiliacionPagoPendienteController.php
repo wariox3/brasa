@@ -109,7 +109,7 @@ class AfiliacionPagoPendienteController extends Controller
     private function generarExcel() {
         ob_clean();
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("EMPRESA")

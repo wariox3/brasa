@@ -4,6 +4,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 //use Brasa\AfiliacionBundle\Form\Type\AfiIngresoType;
 
@@ -14,8 +19,7 @@ class generalController extends Controller
      * @Route("/afi/consulta/contrato/general", name="brs_afi_consulta_contrato_general")
      */    
     public function listaAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();        
+        $em = $this->getDoctrine()->getManager();      
         $paginator  = $this->get('knp_paginator');
         if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 109)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
@@ -46,7 +50,7 @@ class generalController extends Controller
     }
     
     private function lista() {    
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->listaConsultaGeneralDql(
                 $session->get('filtroEmpleadoNombre'),
@@ -59,7 +63,7 @@ class generalController extends Controller
     }       
 
     private function filtrar ($form) {        
-        $session = $this->getRequest()->getSession();                        
+        $session = new session;                      
         $session->set('filtroNit', $form->get('TxtNit')->getData()); 
         $session->set('filtroEmpleadoNombre', $form->get('TxtNombre')->getData());
         $session->set('filtroEmpleadoIdentificacion', $form->get('TxtNumeroIdentificacion')->getData());
@@ -78,7 +82,7 @@ class generalController extends Controller
     
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $strNombreCliente = "";
         if($session->get('filtroNit')) {
             $arCliente = $em->getRepository('BrasaAfiliacionBundle:AfiCliente')->findOneBy(array('nit' => $session->get('filtroNit')));
@@ -93,15 +97,15 @@ class generalController extends Controller
             $session->set('filtroCodigoCliente', null);
         } 
         $form = $this->createFormBuilder()            
-            ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
-            ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))                                
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroEmpleadoNombre')))
-            ->add('TxtNumeroIdentificacion', 'text', array('label'  => 'Nombre','data' => $session->get('filtroEmpleadoIdentificacion')))
-            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
-            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
-            ->add('estadoActivo', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ACTIVO', '0' => 'RETIRADO'), 'data' => $session->get('filtroActivo')))                
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('TxtNit', textType::class, array('label'  => 'Nit','data' => $session->get('filtroNit')))
+            ->add('TxtNombreCliente', textType::class, array('label'  => 'NombreCliente','data' => $strNombreCliente))                                
+            ->add('TxtNombre', textType::class, array('label'  => 'Nombre','data' => $session->get('filtroEmpleadoNombre')))
+            ->add('TxtNumeroIdentificacion', textType::class, array('label'  => 'Nombre','data' => $session->get('filtroEmpleadoIdentificacion')))
+            ->add('fechaDesde', DateType::class, array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('fechaHasta', DateType::class, array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('estadoActivo', ChoiceType::class, array('choices'   => array('2' => 'TODOS', '1' => 'ACTIVO', '0' => 'RETIRADO'), 'data' => $session->get('filtroActivo')))                
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel',))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
             ->getForm();
         return $form;        
     }            

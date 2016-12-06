@@ -4,6 +4,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Brasa\AfiliacionBundle\Form\Type\AfiPeriodoType;
 class PagoAfiliacionesController extends Controller
 {
@@ -12,8 +17,7 @@ class PagoAfiliacionesController extends Controller
      * @Route("/afi/consulta/pago/afiliaciones", name="brs_afi_consulta_pago_afiliaciones")
      */    
     public function listaAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();        
+        $em = $this->getDoctrine()->getManager();     
         $paginator  = $this->get('knp_paginator');
         if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 103)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
@@ -43,7 +47,7 @@ class PagoAfiliacionesController extends Controller
     }
     
     private function lista() {    
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaCarteraBundle:CarAnticipoDetalle')->listaConsultaPagoAfiliacionesDql(
                 $session->get('filtroCodigo'),
@@ -59,8 +63,8 @@ class PagoAfiliacionesController extends Controller
                 ); 
     }       
 
-    private function filtrar ($form) {        
-        $session = $this->getRequest()->getSession(); 
+    private function filtrar (Request $request, $form) {        
+        $session = new session;
         $request = $this->getRequest();
         $controles = $request->request->get('form');
         $arrControles = $request->request->All();
@@ -85,16 +89,16 @@ class PagoAfiliacionesController extends Controller
     
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $arrayPropiedades = array(
                 'class' => 'BrasaGeneralBundle:GenAsesor',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('cc')
                     ->orderBy('cc.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => false,
                 'empty_data' => "",
-                'empty_value' => "TODOS",
+                'placeholder' => "TODOS",
                 'data' => ""
             );
         if($session->get('filtroAsesor')) {
@@ -105,10 +109,10 @@ class PagoAfiliacionesController extends Controller
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('cc')
                     ->orderBy('cc.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => false,
                 'empty_data' => "",
-                'empty_value' => "TODOS",
+                'placeholder' => "TODOS",
                 'data' => ""
             );
         if($session->get('filtroCuenta')) {
@@ -128,18 +132,18 @@ class PagoAfiliacionesController extends Controller
             $session->set('filtroCodigoCliente', null);
         }        
         $form = $this->createFormBuilder() 
-            ->add('asesorRel', 'entity', $arrayPropiedades)
-            ->add('cuentaRel', 'entity', $arrayPropiedadesCuenta)
-            ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
-            ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))                                
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroEmpleadoNombre')))
-            ->add('TxtNumeroIdentificacion', 'text', array('label'  => 'Nombre','data' => $session->get('filtroEmpleadoIdentificacion')))
-            ->add('TxtNumero', 'text', array('label'  => 'Numero','data' => $session->get('filtroNumero')))
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCodigo')))            
-            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
-            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('asesorRel', EntityType::class, $arrayPropiedades)
+            ->add('cuentaRel', EntityType::class, $arrayPropiedadesCuenta)
+            ->add('TxtNit', textType::class, array('label'  => 'Nit','data' => $session->get('filtroNit')))
+            ->add('TxtNombreCliente', textType::class, array('label'  => 'NombreCliente','data' => $strNombreCliente))                                
+            ->add('TxtNombre', textType::class, array('label'  => 'Nombre','data' => $session->get('filtroEmpleadoNombre')))
+            ->add('TxtNumeroIdentificacion', textType::class, array('label'  => 'Nombre','data' => $session->get('filtroEmpleadoIdentificacion')))
+            ->add('TxtNumero', textType::class, array('label'  => 'Numero','data' => $session->get('filtroNumero')))
+            ->add('TxtCodigo', textType::class, array('label'  => 'Codigo','data' => $session->get('filtroCodigo')))            
+            ->add('fechaDesde', DateType::class, array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('fechaHasta', DateType::class,array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel',))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
     }            
@@ -149,7 +153,7 @@ class PagoAfiliacionesController extends Controller
         set_time_limit(0);
         ini_set("memory_limit", -1);
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("EMPRESA")
