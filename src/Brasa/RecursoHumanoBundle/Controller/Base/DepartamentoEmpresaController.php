@@ -3,6 +3,9 @@
 namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuDepartamentoEmpresaType;
@@ -18,17 +21,16 @@ class DepartamentoEmpresaController extends Controller
     /**
      * @Route("/rhu/base/departamento/empresa/listar", name="brs_rhu_base_departamento_empresa_listar")
      */
-    public function listarAction() {
+    public function listarAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest(); // captura o recupera datos del formulario
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 58, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
         $paginator  = $this->get('knp_paginator');
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel'))
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar'))
             ->getForm(); 
         $form->handleRequest($request);
         $arDepartamentosEmpresa = new \Brasa\RecursoHumanoBundle\Entity\RhuDepartamentoEmpresa();
@@ -96,7 +98,7 @@ class DepartamentoEmpresaController extends Controller
         }
         $arDepartamentosEmpresa = new \Brasa\RecursoHumanoBundle\Entity\RhuDepartamentoEmpresa();
         $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuDepartamentoEmpresa')->findAll();
-        $arDepartamentosEmpresa = $paginator->paginate($query, $this->get('request')->query->get('page', 1),50);
+        $arDepartamentosEmpresa = $paginator->paginate($query, $this->get('Request')->query->get('page', 1),50);
 
         return $this->render('BrasaRecursoHumanoBundle:Base/DepartamentosEmpresa:listar.html.twig', array(
                     'arDepartamentosEmpresa' => $arDepartamentosEmpresa,
@@ -108,9 +110,8 @@ class DepartamentoEmpresaController extends Controller
     /**
      * @Route("/rhu/base/departamento/empresa/nuevo/{codigoDepartamentoEmpresa}", name="brs_rhu_base_departamento_empresa_nuevo")
      */
-    public function nuevoAction($codigoDepartamentoEmpresa) {
+    public function nuevoAction(Request $request, $codigoDepartamentoEmpresa) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $arDepartamentoEmpresa = new \Brasa\RecursoHumanoBundle\Entity\RhuDepartamentoEmpresa();
         if ($codigoDepartamentoEmpresa != 0)
         {

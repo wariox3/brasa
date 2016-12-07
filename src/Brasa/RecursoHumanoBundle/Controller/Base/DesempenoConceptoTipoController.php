@@ -3,6 +3,8 @@
 namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuDesempenoConceptoTipoType;
@@ -18,17 +20,16 @@ class DesempenoConceptoTipoController extends Controller
     /**
      * @Route("/rhu/base/desempeno/concepto/tipo/listar", name="brs_rhu_base_desempeno_concepto_tipo_listar")
      */
-    public function listarAction() {
+    public function listarAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest(); // captura o recupera datos del formulario
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 47, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
         $paginator  = $this->get('knp_paginator');
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel'))
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar'))
             ->getForm(); 
         $form->handleRequest($request);
         $arDesempenoConceptoTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempenoConceptoTipo();
@@ -53,7 +54,7 @@ class DesempenoConceptoTipoController extends Controller
         }
         $arDesempenoConceptoTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempenoConceptoTipo();
         $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuDesempenoConceptoTipo')->findAll();
-        $arDesempenoConceptoTipos = $paginator->paginate($query, $this->get('request')->query->get('page', 1),20);
+        $arDesempenoConceptoTipos = $paginator->paginate($query, $this->get('Request')->query->get('page', 1),20);
 
         return $this->render('BrasaRecursoHumanoBundle:Base/DesempenoConceptoTipo:listar.html.twig', array(
                     'arDesempenoConceptoTipos' => $arDesempenoConceptoTipos,
@@ -65,9 +66,8 @@ class DesempenoConceptoTipoController extends Controller
     /**
      * @Route("/rhu/base/desempeno/concepto/tipo/nuevo/{codigoDesempenoConceptoTipo}", name="brs_rhu_base_desempeno_concepto_tipo_nuevo")
      */
-    public function nuevoAction($codigoDesempenoConceptoTipo) {
+    public function nuevoAction(Request $request, $codigoDesempenoConceptoTipo) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $arDesempenoConceptoTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuDesempenoConceptoTipo();
         if ($codigoDesempenoConceptoTipo != 0)
         {

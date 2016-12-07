@@ -2,7 +2,11 @@
 
 namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuDotacionCargoType;
@@ -20,9 +24,8 @@ class DotacionCargoController extends Controller
     /**
      * @Route("/rhu/base/dotacion/cargo/lista", name="brs_rhu_base_dotacion_cargo_lista")
      */
-    public function listaAction() {
+    public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest(); // captura o recupera datos del formulario
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 71, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }         
@@ -65,9 +68,8 @@ class DotacionCargoController extends Controller
     /**
      * @Route("/rhu/base/dotacion/cargo/nuevo/{codigoDotacionCargo}", name="brs_rhu_base_dotacion_cargo_nuevo")
      */
-    public function nuevoAction($codigoDotacionCargo) {
+    public function nuevoAction(Request $request, $codigoDotacionCargo) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $arDotacionCargo = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionCargo();
         if ($codigoDotacionCargo != 0) {
             $arDotacionCargo = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionCargo')->find($codigoDotacionCargo);
@@ -88,17 +90,16 @@ class DotacionCargoController extends Controller
     /**
      * @Route("/rhu/base/dotacion/cargo/nuevomultiple/{codigoDotacionCargo}", name="brs_rhu_base_dotacion_cargo_nuevomultiple")
      */
-    public function nuevoMultipleAction($codigoDotacionCargo) {
+    public function nuevoMultipleAction(Request $request, $codigoDotacionCargo) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $arDotacionesElementos = new \Brasa\RecursoHumanoBundle\Entity\RhuDotacionElemento();
         $arDotacionesElementos = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionElemento')->findAll();
         $form = $this->createFormBuilder()
-            ->add('cargoRel', 'entity', array(
+            ->add('cargoRel', EntityType::class, array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCargo',
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
             ))    
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->add('BtnGuardar', SubmitType::class, array('label'  => 'Guardar',))
             ->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -132,39 +133,39 @@ class DotacionCargoController extends Controller
     
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $arrayPropiedades = array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCargo',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('c')
                     ->orderBy('c.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => false,
                 'empty_data' => "",
-                'empty_value' => "TODOS",
+                'placeholder' => "TODOS",
                 'data' => ""
             );
         if($session->get('filtroCodigoCargo')) {
             $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCargo", $session->get('filtroCodigoCargo'));
         }
         $form = $this->createFormBuilder()
-            ->add('cargoRel', 'entity', $arrayPropiedades)    
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))                
+            ->add('cargoRel', EntityType::class, $arrayPropiedades)    
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel'))
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar'))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))                
             ->getForm();        
         return $form;
     }     
     
     private function listar() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacionCargo')->listaDql(
         $session->get('filtroCodigoCargo'));         
     }    
     
     private function filtrar ($form) {
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $request = $this->getRequest();
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCargo', $controles['cargoRel']);

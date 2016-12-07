@@ -1,7 +1,11 @@
 <?php
 
 namespace Brasa\RecursoHumanoBundle\Controller\Base;
+
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuCreditoTipoType;
@@ -17,18 +21,17 @@ class CreditoTipoController extends Controller
     /**
      * @Route("/rhu/base/creditotipo/listar", name="brs_rhu_base_creditotipo_listar")
      */
-    public function listarAction() {
+    public function listarAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest(); // captura o recupera datos del formulario
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 37, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
         $paginator  = $this->get('knp_paginator');
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
-            ->add('BtnPdf', 'submit', array('label'  => 'PDF'))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
+            ->add('BtnPdf', SubmitType::class, array('label'  => 'PDF'))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel'))
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar'))
             ->getForm(); 
         $form->handleRequest($request);
         
@@ -110,7 +113,7 @@ class CreditoTipoController extends Controller
         }
         $arCreditoTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoTipo();
         $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuCreditoTipo')->findAll();
-        $arCreditoTipos = $paginator->paginate($query, $this->get('request')->query->get('page', 1),20);
+        $arCreditoTipos = $paginator->paginate($query, $this->get('Request')->query->get('page', 1),20);
 
         return $this->render('BrasaRecursoHumanoBundle:Base/CreditoTipo:listar.html.twig', array(
                     'arCreditoTipos' => $arCreditoTipos,
@@ -122,9 +125,8 @@ class CreditoTipoController extends Controller
     /**
      * @Route("/rhu/base/creditotipo/nuevo/{codigoCreditoTipoPk}", name="brs_rhu_base_creditotipo_nuevo")
      */
-    public function nuevoAction($codigoCreditoTipoPk) {
+    public function nuevoAction(Request $request, $codigoCreditoTipoPk) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arCreditoTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoTipo();
         if ($codigoCreditoTipoPk != 0)
@@ -154,12 +156,11 @@ class CreditoTipoController extends Controller
     /**
      * @Route("/rhu/base/creditotipo/detalle/{codigoCreditoTipoPk}", name="brs_rhu_base_creditotipo_detalle")
      */
-    public function detalleAction($codigoCreditoTipoPk) {
+    public function detalleAction(Request $request, $codigoCreditoTipoPk) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $form = $this->createFormBuilder()    
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel',))
             ->getForm();
         $form->handleRequest($request);
         $arCreditosTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuCreditoTipo();
@@ -258,7 +259,7 @@ class CreditoTipoController extends Controller
                 exit;
             }
         }
-        $arCreditosTiposEmpleados = $paginator->paginate($arCreditosTiposEmpleados, $this->get('request')->query->get('page', 1),30);
+        $arCreditosTiposEmpleados = $paginator->paginate($arCreditosTiposEmpleados, $this->get('Request')->query->get('page', 1),30);
         return $this->render('BrasaRecursoHumanoBundle:Base/CreditoTipo:detalle.html.twig', array(
                     'arCreditosTiposEmpleados' => $arCreditosTiposEmpleados,
                     'arCreditosTipo' => $arCreditosTipo,

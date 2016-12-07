@@ -33,7 +33,7 @@ class ContratosController extends Controller
         }
         $paginator  = $this->get('knp_paginator');
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        $session = $this->getRequest()->getSession();        
+        $session = new session;     
         $form = $this->formularioLista();
         $form->handleRequest($request);
         $this->listar();
@@ -823,7 +823,7 @@ class ContratosController extends Controller
 
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $arrayPropiedades = array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
                 'query_builder' => function (EntityRepository $er) {

@@ -3,6 +3,9 @@
 namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuContratoTipoType;
@@ -19,16 +22,15 @@ class ContratosTipoController extends Controller
     /**
      * @Route("/rhu/base/contrato/tipo/lista", name="brs_rhu_base_contrato_tipo_lista")
      */ 
-    public function listaAction() {
+    public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest(); // captura o recupera datos del formulario
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 43, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
         $paginator  = $this->get('knp_paginator');
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder()
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar'))
             ->getForm(); 
         $form->handleRequest($request);
         $this->listar();
@@ -60,9 +62,8 @@ class ContratosTipoController extends Controller
     /**
      * @Route("/rhu/base/contrato/tipo/nuevo/{codigoContratoTipo}", name="brs_rhu_base_contrato_tipo_nuevo")
      */ 
-    public function nuevoAction($codigoContratoTipo) {
+    public function nuevoAction(Request $request, $codigoContratoTipo) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $arContratoTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuContratoTipo();
         if ($codigoContratoTipo != 0) {
             $arContratoTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuContratoTipo')->find($codigoContratoTipo);

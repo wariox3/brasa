@@ -3,6 +3,8 @@
 namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuDisciplinarioTipoType;
@@ -19,16 +21,15 @@ class DisciplinarioTipoController extends Controller
     /**
      * @Route("/rhu/base/disciplinario/tipo/lista", name="brs_rhu_base_disciplinario_tipo_lista")
      */
-    public function listaAction() {
+    public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest(); // captura o recupera datos del formulario
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 44, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
         $paginator  = $this->get('knp_paginator');
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder()
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar'))
             ->getForm(); 
         $form->handleRequest($request);
         $this->listar();
@@ -60,9 +61,8 @@ class DisciplinarioTipoController extends Controller
     /**
      * @Route("/rhu/base/disciplinario/tipo/nuevo/{codigoDisciplinarioTipo}", name="brs_rhu_base_disciplinario_tipo_nuevo")
      */
-    public function nuevoAction($codigoDisciplinarioTipo) {
+    public function nuevoAction(Request $request, $codigoDisciplinarioTipo) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $arDisciplinarioTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuDisciplinarioTipo();
         if ($codigoDisciplinarioTipo != 0) {
             $arDisciplinarioTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuDisciplinarioTipo')->find($codigoDisciplinarioTipo);
