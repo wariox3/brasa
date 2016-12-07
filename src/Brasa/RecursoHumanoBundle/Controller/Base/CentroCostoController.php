@@ -16,20 +16,19 @@ class CentroCostoController extends Controller
     /**
      * @Route("/rhu/base/centroscostos/lista", name="brs_rhu_base_centros_costos_lista")
      */ 
-    public function listaAction() {
+    public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 31, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }
         $paginator  = $this->get('knp_paginator');
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $form = $this->createFormBuilder()
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombreCentroCosto')))
-            ->add('BtnBuscar', 'submit', array('label'  => 'Buscar'))
-            ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnInactivar', 'submit', array('label'  => 'Activa / Inactiva',))
+            ->add('TxtNombre', TextType::class, array('label'  => 'Nombre','data' => $session->get('filtroNombreCentroCosto')))
+            ->add('BtnBuscar', SubmitType::class, array('label'  => 'Buscar'))
+            ->add('BtnPdf', SubmitType::class, array('label'  => 'PDF',))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel',))
+            ->add('BtnInactivar', SubmitType::class, array('label'  => 'Activa / Inactiva',))
             ->getForm();
         $form->handleRequest($request);
         $arCentrosCostos = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();        
@@ -76,7 +75,7 @@ class CentroCostoController extends Controller
                     $session->get('filtroNombreCentroCosto')
                     ));                          
         }        
-        $arCentrosCostos = $paginator->paginate($em->createQuery($session->get('dqlCentroCosto')), $this->get('request')->query->get('page', 1), 20);
+        $arCentrosCostos = $paginator->paginate($em->createQuery($session->get('dqlCentroCosto')), $this->get('Request')->query->get('page', 1), 20);
         return $this->render('BrasaRecursoHumanoBundle:Base/CentroCosto:lista.html.twig', array(
             'arCentrosCostos' => $arCentrosCostos,
             'form' => $form->createView()));
@@ -85,8 +84,7 @@ class CentroCostoController extends Controller
     /**
      * @Route("/rhu/base/centroscostos/nuevo/{codigoCentroCosto}", name="brs_rhu_base_centros_costos_nuevo")
      */ 
-    public function nuevoAction($codigoCentroCosto) {
-        $request = $this->getRequest();
+    public function nuevoAction(Request $request, $codigoCentroCosto) {
         $em = $this->getDoctrine()->getManager();  
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
@@ -147,16 +145,15 @@ class CentroCostoController extends Controller
     /**
      * @Route("/rhu/base/centroscostos/detalle/{codigoCentroCosto}", name="brs_rhu_base_centros_costos_detalle")
      */ 
-    public function detalleAction($codigoCentroCosto) {
+    public function detalleAction(Request $request, $codigoCentroCosto) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $form = $this->createFormBuilder()               
             ->getForm();
         $form->handleRequest($request);
         $arSedes = new \Brasa\RecursoHumanoBundle\Entity\RhuSede();
         $arSedes = $em->getRepository('BrasaRecursoHumanoBundle:RhuSede')->findBy(array('codigoCentroCostoFk' => $codigoCentroCosto));
-        $arSedes = $paginator->paginate($arSedes, $this->get('request')->query->get('page', 1),5);
+        $arSedes = $paginator->paginate($arSedes, $this->get('Request')->query->get('page', 1),5);
         $arCentrosCostos = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
         $arCentrosCostos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($codigoCentroCosto);
         return $this->render('BrasaRecursoHumanoBundle:Base/CentroCosto:detalle.html.twig', array(

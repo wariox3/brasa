@@ -1,10 +1,14 @@
 <?php
 
 namespace Brasa\RecursoHumanoBundle\Controller\Base;
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuClienteType;
-use Symfony\Component\HttpFoundation\Request;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 class ClienteController extends Controller
@@ -20,11 +24,11 @@ class ClienteController extends Controller
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }
         $paginator  = $this->get('knp_paginator');
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $form = $this->createFormBuilder()
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombreCliente')))
-            ->add('BtnBuscar', 'submit', array('label'  => 'Buscar'))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+            ->add('TxtNombre', TextType::class, array('label'  => 'Nombre','data' => $session->get('filtroNombreCliente')))
+            ->add('BtnBuscar', SubmitType::class, array('label'  => 'Buscar'))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel',))
             ->getForm();
         $form->handleRequest($request);
         $this->lista();        
@@ -44,14 +48,14 @@ class ClienteController extends Controller
                     $session->get('filtroNombreCliente')
                     ));                          
         }             
-        $arClientes = $paginator->paginate($em->createQuery($session->get('dqlCliente')), $this->get('request')->query->get('page', 1), 50);
+        $arClientes = $paginator->paginate($em->createQuery($session->get('dqlCliente')), $this->get('Request')->query->get('page', 1), 50);
         return $this->render('BrasaRecursoHumanoBundle:Base/Cliente:lista.html.twig', array(
             'arClientes' => $arClientes,
             'form' => $form->createView()));
     }
     
     private function lista() {    
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuCliente')->listaDQL(
                 $session->get('filtroClienteNombre')   
@@ -95,9 +99,8 @@ class ClienteController extends Controller
     /**
      * @Route("/rhu/base/cliente/detalle/{codigoCliente}", name="brs_rhu_base_cliente_detalle")
      */
-    public function detalleAction($codigoCliente) {
+    public function detalleAction(Request $request, $codigoCliente) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $form = $this->createFormBuilder()               
             ->getForm();

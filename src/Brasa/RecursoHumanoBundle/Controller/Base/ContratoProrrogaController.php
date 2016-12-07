@@ -2,6 +2,11 @@
 
 namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
@@ -11,9 +16,8 @@ class ContratoProrrogaController extends Controller
     /**
      * @Route("/rhu/contrato/prorroga/nuevo/{codigoContrato}/{codigoContratoProrroga}", name="brs_rhu_contrato_prorroga_nuevo")
      */
-    public function nuevoAction($codigoContrato, $codigoContratoProrroga = 0) {
+    public function nuevoAction(Request $request, $codigoContrato, $codigoContratoProrroga = 0) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arContratoProrroga = new \Brasa\RecursoHumanoBundle\Entity\RhuContratoProrroga();
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
@@ -30,10 +34,10 @@ class ContratoProrrogaController extends Controller
             $detalle = $arContratoProrroga->getDetalle();
         }    
         $form = $this->createFormBuilder()
-            ->add('fechaInicioNueva','date',array('data' => $fechaDesdeProrroga, 'widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date')))
-            ->add('fechaFinalNueva','date',array('data' => $fechaHastaProrroga, 'widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date')))
-            ->add('detalle', 'text', array('data' => $detalle,'required' => true))
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
+            ->add('fechaInicioNueva', DateType::class, array('data' => $fechaDesdeProrroga, 'widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date')))
+            ->add('fechaFinalNueva', DateType::class, array('data' => $fechaHastaProrroga, 'widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date')))
+            ->add('detalle', TextType::class, array('data' => $detalle,'required' => true))
+            ->add('BtnGuardar', SubmitType::class, array('label'  => 'Guardar'))
             ->getForm();
         $form->handleRequest($request);
         if ($form->isValid())

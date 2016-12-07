@@ -2,10 +2,21 @@
 
 namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuContratoType;
 use Doctrine\ORM\EntityRepository;
+
 class ContratosController extends Controller
 {
     var $fechaDesdeInicia;
@@ -15,9 +26,8 @@ class ContratosController extends Controller
     /**
      * @Route("/rhu/base/contratos/lista/", name="brs_rhu_base_contratos_lista")
      */
-    public function listaAction() {
+    public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 33, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }
@@ -86,10 +96,9 @@ class ContratosController extends Controller
     /**
      * @Route("/rhu/base/contratos/detalle/{codigoContrato}", name="brs_rhu_base_contratos_detalles")
      */
-    public function detalleAction($codigoContrato) {
+    public function detalleAction(Request $request, $codigoContrato) {
         $em = $this->getDoctrine()->getManager();
         $paginator  = $this->get('knp_paginator');
-        $request = $this->getRequest();
         $mensaje = 0;
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
@@ -103,8 +112,8 @@ class ContratosController extends Controller
             $disabled = TRUE;
         }
         $form = $this->createFormBuilder()
-            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir Contrato'))
-            ->add('BtnImprimirCartaPresentacion', 'submit', array('label'  => 'Carta presentación'))            
+            ->add('BtnImprimir', SubmitType::class, array('label'  => 'Imprimir Contrato'))
+            ->add('BtnImprimirCartaPresentacion', SubmitType::class, array('label'  => 'Carta presentación'))            
             ->getForm();
         $form->handleRequest($request);
         if($form->isValid()) {
@@ -136,16 +145,16 @@ class ContratosController extends Controller
         }
         $arCambiosSalario = new \Brasa\RecursoHumanoBundle\Entity\RhuCambioSalario();
         $arCambiosSalario = $em->getRepository('BrasaRecursoHumanoBundle:RhuCambioSalario')->findBy(array('codigoContratoFk' => $codigoContrato));
-        $arCambiosSalario = $paginator->paginate($arCambiosSalario, $this->get('request')->query->get('page', 1),5);
+        $arCambiosSalario = $paginator->paginate($arCambiosSalario, $this->get('Request')->query->get('page', 1),5);
         $arVacaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuVacacion();
         $arVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->findBy(array('codigoContratoFk' => $codigoContrato));
-        $arVacaciones = $paginator->paginate($arVacaciones, $this->get('request')->query->get('page', 1),5);
+        $arVacaciones = $paginator->paginate($arVacaciones, $this->get('Request')->query->get('page', 1),5);
         $arContratoSedes = new \Brasa\RecursoHumanoBundle\Entity\RhuContratoSede();
         $arContratoSedes = $em->getRepository('BrasaRecursoHumanoBundle:RhuContratoSede')->findBy(array('codigoContratoFk' => $codigoContrato));
-        $arContratoSedes = $paginator->paginate($arContratoSedes, $this->get('request')->query->get('page', 1),5);
+        $arContratoSedes = $paginator->paginate($arContratoSedes, $this->get('Request')->query->get('page', 1),5);
         
         $arContratoProrrogas = $em->getRepository('BrasaRecursoHumanoBundle:RhuContratoProrroga')->findBy(array('codigoContratoFk' => $codigoContrato), array('codigoContratoProrrogaPk' => 'DESC'));
-        $arContratoProrrogas = $paginator->paginate($arContratoProrrogas, $this->get('request')->query->get('page', 1),10);
+        $arContratoProrrogas = $paginator->paginate($arContratoProrrogas, $this->get('Request')->query->get('page', 1),10);
         return $this->render('BrasaRecursoHumanoBundle:Base/Contrato:detalle.html.twig', array(
                     'arContrato' => $arContrato,
                     'arCambiosSalario' => $arCambiosSalario,
@@ -161,8 +170,7 @@ class ContratosController extends Controller
     /**
      * @Route("/rhu/contratos/nuevo/{codigoContrato}/{codigoEmpleado}", name="brs_rhu_contratos_nuevo")
      */
-    public function nuevoAction($codigoContrato, $codigoEmpleado) {
-        $request = $this->getRequest(); 
+    public function nuevoAction(Request $request, $codigoContrato, $codigoEmpleado) {
         $em = $this->getDoctrine()->getManager();        
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
@@ -387,21 +395,20 @@ class ContratosController extends Controller
     /**
      * @Route("/rhu/contratos/terminar/{codigoContrato}", name="brs_rhu_contratos_terminar")
      */
-    public function terminarAction($codigoContrato) {
-        $request = $this->getRequest();
+    public function terminarAction(Request $request, $codigoContrato) {
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
         $formContrato = $this->createFormBuilder()
             ->setAction($this->generateUrl('brs_rhu_contratos_terminar', array('codigoContrato' => $codigoContrato)))
-            ->add('fechaTerminacion', 'date', array('label'  => 'Terminacion', 'data' => new \DateTime('now')))
-            ->add('terminacionContratoRel', 'entity', array(
+            ->add('fechaTerminacion', DateType::class, array('label'  => 'Terminacion', 'data' => new \DateTime('now')))
+            ->add('terminacionContratoRel', EntityType::class, array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuMotivoTerminacionContrato',
-                        'property' => 'motivo',
+                        'choice_label' => 'motivo',
             ))      
-            ->add('comentarioTerminacion', 'textarea', array('required' => false))
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
+            ->add('comentarioTerminacion', TextareaType::class, array('required' => false))
+            ->add('BtnGuardar', SubmitType::class, array('label'  => 'Guardar'))
             ->getForm();
         $formContrato->handleRequest($request);
         $arDotacionPendiente = $em->getRepository('BrasaRecursoHumanoBundle:RhuDotacion')->dotacionDevolucion($arContrato->getCodigoEmpleadoFk());
@@ -548,8 +555,7 @@ class ContratosController extends Controller
     /**
      * @Route("/rhu/contratos/cambiotipocontrato/{codigoContrato}", name="brs_rhu_contratos_cambiotipocontrato")
      */
-    public function cambioContratoAction($codigoContrato) {
-        $request = $this->getRequest();
+    public function cambioContratoAction(Request $request, $codigoContrato) {
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
@@ -558,14 +564,14 @@ class ContratosController extends Controller
         $formContrato = $this->createFormBuilder()
             ->setAction($this->generateUrl('brs_rhu_contratos_cambiotipocontrato', array('codigoContrato' => $codigoContrato)))
             //->add('fechaTerminacion', 'date', array('label'  => 'Terminacion', 'data' => new \DateTime('now')))
-            ->add('contratoTipoNuevoRel', 'entity', array(
+            ->add('contratoTipoNuevoRel', EntityType::class, array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuContratoTipo',
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => true        
             ))
-            ->add('VrSalarioNuevo', 'number', array('data' =>$arContrato->getVrSalario() ,'required' => true))                      
-            ->add('detalle', 'text', array('required' => true))          
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
+            ->add('VrSalarioNuevo', NumberType::class, array('data' =>$arContrato->getVrSalario() ,'required' => true))                      
+            ->add('detalle', TextType::class, array('required' => true))          
+            ->add('BtnGuardar', SubmitType::class, array('label'  => 'Guardar'))
             ->getForm();
         $formContrato->handleRequest($request);
            
@@ -599,8 +605,7 @@ class ContratosController extends Controller
     /**
      * @Route("/rhu/contratos/actualizar/terminado/{codigoContrato}", name="brs_rhu_contratos_actualizar_terminado")
      */
-    public function actualizarContratoTerminadoAction($codigoContrato) {
-        $request = $this->getRequest();
+    public function actualizarContratoTerminadoAction(Request $request, $codigoContrato) {
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         //$permiso = "";
@@ -609,55 +614,55 @@ class ContratosController extends Controller
         $permiso = $em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(),5);
         $formActualizar = $this->createFormBuilder()
             //->setAction($this->generateUrl('brs_rhu_contratos_actualizar_terminado', array('codigoContrato' => $codigoContrato)))
-            ->add('clasificacionRiesgoRel', 'entity', array(
+            ->add('clasificacionRiesgoRel', EntityType::class, array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuClasificacionRiesgo',
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'data' => $arContrato->getClasificacionRiesgoRel(),
             ))
-            ->add('pensionRel', 'entity', array(
+            ->add('pensionRel', EntityType::class, array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEntidadPension',
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'data' => $arContrato->getEntidadPensionRel(),
             ))
-            ->add('saludRel', 'entity', array(
+            ->add('saludRel', EntityType::class, array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEntidadSalud',
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'data' => $arContrato->getEntidadSaludRel(),
             ))
-            ->add('cajaRel', 'entity', array(
+            ->add('cajaRel', EntityType::class, array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEntidadCaja',
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'data' => $arContrato->getCargoRel(),
             ))    
-            ->add('terminacionContratoRel', 'entity', array(
+            ->add('terminacionContratoRel', EntityType::class, array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuMotivoTerminacionContrato',
-                'property' => 'motivo',
+                'choice_label' => 'motivo',
                 'data' => $arContrato->getTerminacionContratoRel(),
             ))   
-            ->add('contratoTipoRel', 'entity', array(
+            ->add('contratoTipoRel', EntityType::class, array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuContratoTipo',
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'data' => $arContrato->getContratoTipoRel(),
             ))                
-            ->add('salarioTipoRel', 'entity', array(
+            ->add('salarioTipoRel', EntityType::class, array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuSalarioTipo',
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'data' => $arContrato->getSalarioTipoRel(),
             ))  
-            ->add('ssoTipoCotizanteRel', 'entity', array(
+            ->add('ssoTipoCotizanteRel', EntityType::class, array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuSsoTipoCotizante',
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'data' => $arContrato->getSsoTipoCotizanteRel(),
             ))
-            ->add('ssoSubtipoCotizanteRel', 'entity', array(
+            ->add('ssoSubtipoCotizanteRel', EntityType::class, array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuSsoSubtipoCotizante',
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'data' => $arContrato->getSsoSubtipoCotizanteRel(),
             ))                
-            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'data' => $arContrato->getFechaHasta()  ,'attr' => array('class' => 'date',)))                                    
-            ->add('vrDevengadoPactado', 'number', array('data' => $arContrato->getVrDevengadoPactado()))                
-            ->add('turnoFijoOrdinario', 'checkbox', array('required'  => false, 'data' => $arContrato->getTurnoFijoOrdinario()))                 
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
+            ->add('fechaHasta', DateType::class, array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'data' => $arContrato->getFechaHasta()  ,'attr' => array('class' => 'date',)))                                    
+            ->add('vrDevengadoPactado', NumberType::class, array('data' => $arContrato->getVrDevengadoPactado()))                
+            ->add('turnoFijoOrdinario', CheckboxType::class, array('required'  => false, 'data' => $arContrato->getTurnoFijoOrdinario()))                 
+            ->add('BtnGuardar', SubmitType::class, array('label'  => 'Guardar'))
             ->getForm();
         $formActualizar->handleRequest($request);
         if ($permiso == false){
@@ -695,21 +700,20 @@ class ContratosController extends Controller
     /**
      * @Route("/rhu/contratos/informacion/inicial/{codigoContrato}", name="brs_rhu_contratos_informacion_inicial")
      */
-    public function informacionInicialAction($codigoContrato) {
-        $request = $this->getRequest();
+    public function informacionInicialAction(Request $request, $codigoContrato) {
         $em = $this->getDoctrine()->getManager();
         
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
         $formIbpAdicional = $this->createFormBuilder()
             ->setAction($this->generateUrl('brs_rhu_contratos_informacion_inicial', array('codigoContrato' => $codigoContrato)))
-            ->add('ibpCesantiasInicial', 'number', array('data' =>$arContrato->getIbpCesantiasInicial() ,'required' => false))      
-            ->add('ibpPrimasInicial', 'number', array('data' =>$arContrato->getIbpPrimasInicial() ,'required' => false))                      
-            ->add('promedioRecargoNocturnoInicial', 'number', array('data' =>$arContrato->getPromedioRecargoNocturnoInicial() ,'required' => false))                                      
-            ->add('fechaUltimoPagoCesantias','date',array('data' =>$arContrato->getFechaUltimoPagoCesantias(), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                                 
-            ->add('fechaUltimoPagoPrimas','date',array('data' =>$arContrato->getFechaUltimoPagoPrimas(), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                                 
-            ->add('fechaUltimoPagoVacaciones','date',array('data' =>$arContrato->getFechaUltimoPagoVacaciones(), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
+            ->add('ibpCesantiasInicial', NumberType::class, array('data' =>$arContrato->getIbpCesantiasInicial() ,'required' => false))      
+            ->add('ibpPrimasInicial', NumberType::class, array('data' =>$arContrato->getIbpPrimasInicial() ,'required' => false))                      
+            ->add('promedioRecargoNocturnoInicial', NumberType::class, array('data' =>$arContrato->getPromedioRecargoNocturnoInicial() ,'required' => false))                                      
+            ->add('fechaUltimoPagoCesantias', DateType::class, array('data' =>$arContrato->getFechaUltimoPagoCesantias(), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                                 
+            ->add('fechaUltimoPagoPrimas', DateType::class, array('data' =>$arContrato->getFechaUltimoPagoPrimas(), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                                 
+            ->add('fechaUltimoPagoVacaciones', DateType::class, array('data' =>$arContrato->getFechaUltimoPagoVacaciones(), 'widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('BtnGuardar', SubmitType::class, array('label'  => 'Guardar'))
             ->getForm();
         $formIbpAdicional->handleRequest($request);    
         if ($formIbpAdicional->isValid()) {
@@ -740,24 +744,23 @@ class ContratosController extends Controller
     /**
      * @Route("/rhu/contratos/sedes/nuevo/{codigoContrato}", name="brs_rhu_contratos_sedes_nuevo")
      */
-    public function detalleSedeNuevoAction($codigoContrato) {
-        $request = $this->getRequest();
+    public function detalleSedeNuevoAction(Request $request, $codigoContrato) {
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($codigoContrato);
         $codigoCentroCosto = $arContrato->getCodigoCentroCostoFk();
         $form = $this->createFormBuilder()
-            ->add('sedeRel', 'entity', array(
+            ->add('sedeRel', EntityType::class, array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuSede',
                 'query_builder' => function (EntityRepository $er) use($codigoCentroCosto) {
                     return $er->createQueryBuilder('s')
                     ->where('s.codigoCentroCostoFk = :centroCosto')
                     ->setParameter('centroCosto', $codigoCentroCosto)
                     ->orderBy('s.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => true))
-            ->add('guardar', 'submit', array('label'  => 'Guardar',))
+            ->add('guardar', SubmitType::class, array('label'  => 'Guardar',))
             ->getForm();
         $form->handleRequest($request);
 
@@ -775,7 +778,7 @@ class ContratosController extends Controller
     }
 
     private function listar() {
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $em = $this->getDoctrine()->getManager();
         $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->listaDQL(
                 $session->get('filtroIdentificacion'),
@@ -789,12 +792,11 @@ class ContratosController extends Controller
     /**
      * @Route("/rhu/base/contratos/documentos/{codigoContrato}", name="brs_rhu_base_contratos_documentos")
      */
-    public function documentosAction($codigoContrato) {
+    public function documentosAction(Request $request, $codigoContrato) {
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        $request = $this->getRequest(); // captura o recupera datos del formulario
         $form = $this->createFormBuilder() //
-            ->add('BtnEntregaDocumentos', 'submit', array('label'  => 'Imprimir'))
+            ->add('BtnEntregaDocumentos', SubmitType::class, array('label'  => 'Imprimir'))
             ->getForm(); 
         $form->handleRequest($request);
         if($form->isValid()) {
@@ -827,10 +829,10 @@ class ContratosController extends Controller
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('cc')
                     ->orderBy('cc.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => false,
                 'empty_data' => "",
-                'empty_value' => "TODOS",
+                'placeholder' => "TODOS",
                 'data' => ""
             );
         if($session->get('filtroCodigoCentroCosto')) {
@@ -846,21 +848,21 @@ class ContratosController extends Controller
             }          
         }
         $form = $this->createFormBuilder()
-            ->add('centroCostoRel', 'entity', $arrayPropiedades)
-            ->add('txtNumeroIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
-            ->add('txtNombreCorto', 'text', array('label'  => 'Nombre','data' => $strNombreEmpleado))
-            ->add('fechaDesdeInicia', 'date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
-            ->add('fechaHastaInicia', 'date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
-            ->add('estadoActivo', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ACTIVOS', '0' => 'INACTIVOS')))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+            ->add('centroCostoRel', EntityType::class, $arrayPropiedades)
+            ->add('txtNumeroIdentificacion', TextType::class, array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
+            ->add('txtNombreCorto', TextType::class, array('label'  => 'Nombre','data' => $strNombreEmpleado))
+            ->add('fechaDesdeInicia', DateType::class,array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('fechaHastaInicia', DateType::class,array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('estadoActivo', ChoiceType::class, array('choices'   => array('2' => 'TODOS', '1' => 'ACTIVOS', '0' => 'INACTIVOS')))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar',))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel',))
             ->getForm();
         return $form;
     }
 
     private function filtrar ($form) {
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $request = $this->getRequest();
         $controles = $request->request->get('form');
         $arrControles = $request->request->All();
@@ -877,7 +879,7 @@ class ContratosController extends Controller
         set_time_limit(0);
         ini_set("memory_limit", -1);
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("EMPRESA")

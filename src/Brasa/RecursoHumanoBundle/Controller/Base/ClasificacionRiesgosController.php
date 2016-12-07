@@ -3,6 +3,9 @@
 namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuClasificacionRiesgosType;
@@ -17,18 +20,17 @@ class ClasificacionRiesgosController extends Controller
     /**
      * @Route("/rhu/base/clasificacion/listar", name="brs_rhu_base_clasificacion_listar")
      */
-    public function listarAction() {
+    public function listarAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest(); // captura o recupera datos del formulario
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 67, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
         $paginator  = $this->get('knp_paginator');
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
-            ->add('BtnPdf', 'submit', array('label'  => 'PDF'))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
+            ->add('BtnPdf', SubmitType::class, array('label'  => 'PDF'))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel'))
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar'))
             ->getForm(); 
         $form->handleRequest($request);
         $arCargos = new \Brasa\RecursoHumanoBundle\Entity\RhuClasificacionRiesgo();
@@ -103,7 +105,7 @@ class ClasificacionRiesgosController extends Controller
         }
         $arClasificaciones = new \Brasa\RecursoHumanoBundle\Entity\RhuClasificacionRiesgo();
         $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuClasificacionRiesgo')->findAll();
-        $arClasificaciones = $paginator->paginate($query, $this->get('request')->query->get('page', 1),20);
+        $arClasificaciones = $paginator->paginate($query, $this->get('Request')->query->get('page', 1),20);
 
         return $this->render('BrasaRecursoHumanoBundle:Base/Clasificacion:listar.html.twig', array(
                     'arClasificaciones' => $arClasificaciones,
@@ -115,9 +117,8 @@ class ClasificacionRiesgosController extends Controller
     /**
      * @Route("/rhu/base/clasificacion/nuevo/{codigoClasificacionPk}", name="brs_rhu_base_clasificacion_nuevo")
      */
-    public function nuevoAction($codigoClasificacionPk) {
+    public function nuevoAction(Request $request, $codigoClasificacionPk) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $arClasificacion = new \Brasa\RecursoHumanoBundle\Entity\RhuClasificacionRiesgo();
         if ($codigoClasificacionPk != 0)
         {
