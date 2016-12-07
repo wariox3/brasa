@@ -2,6 +2,13 @@
 
 namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuEmpleadoType;
@@ -16,14 +23,13 @@ class EmpleadoController extends Controller
     /**
      * @Route("/rhu/base/empleados/lista", name="brs_rhu_base_empleados_lista")
      */
-    public function listaAction() {
+    public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 32, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }
         $paginator  = $this->get('knp_paginator');
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $form = $this->formularioLista();
         $form->handleRequest($request);
         $this->listar();
@@ -77,15 +83,14 @@ class EmpleadoController extends Controller
     /**
      * @Route("/rhu/base/empleados/detalles/{codigoEmpleado}", name="brs_rhu_base_empleados_detalles")
      */
-    public function detalleAction($codigoEmpleado) {
+    public function detalleAction(Request $request, $codigoEmpleado) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $paginator  = $this->get('knp_paginator');
         $form = $this->createFormBuilder()            
-            ->add('BtnEliminarEmpleadoEstudio', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnEliminarEmpleadoFamilia', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnImprimir', 'submit', array('label'  => 'Imprimir',))
+            ->add('BtnEliminarEmpleadoEstudio', SubmitType::class, array('label'  => 'Eliminar',))
+            ->add('BtnEliminarEmpleadoFamilia', SubmitType::class, array('label'  => 'Eliminar',))
+            ->add('BtnImprimir', SubmitType::class, array('label'  => 'Imprimir',))
             ->getForm();
         $form->handleRequest($request);
         //inicio - permiso para ver el salario del empleado        
@@ -154,17 +159,17 @@ class EmpleadoController extends Controller
             $strRutaImagen = $arConfiguracion->getRutaImagenes()."empleados/" . $arEmpleado->getRutaFoto();
         }
         //$verRuta = $arConfiguracion->getRutaImagenes()."empleados/" . $arEmpleado->getRutaFoto();
-        $arIncapacidades = $paginator->paginate($arIncapacidades, $this->get('request')->query->get('page', 1),5);
-        $arVacaciones = $paginator->paginate($arVacaciones, $this->get('request')->query->get('page', 1),5);
-        $arLicencias = $paginator->paginate($arLicencias, $this->get('request')->query->get('page', 1),5);
-        $arContratos = $paginator->paginate($arContratos, $this->get('request')->query->get('page', 1),5);
-        $arCreditos = $paginator->paginate($arCreditos, $this->get('request')->query->get('page', 1),5);
-        $arDisciplinarios = $paginator->paginate($arDisciplinarios, $this->get('request')->query->get('page', 1),5);
-        $arEmpleadoEstudios = $paginator->paginate($arEmpleadoEstudios, $this->get('request')->query->get('page', 1),6);
-        $arExamenes = $paginator->paginate($arExamenes, $this->get('request')->query->get('page', 1),6);
-        $arEmpleadoFamilia = $paginator->paginate($arEmpleadoFamilia, $this->get('request')->query->get('page', 1),8);
-        $arDotacion = $paginator->paginate($arDotacion, $this->get('request')->query->get('page', 1),8);
-        $arAdicionalesPago = $paginator->paginate($arAdicionalesPago, $this->get('request')->query->get('page', 1),8);
+        $arIncapacidades = $paginator->paginate($arIncapacidades, $this->get('Request')->query->get('page', 1),5);
+        $arVacaciones = $paginator->paginate($arVacaciones, $this->get('Request')->query->get('page', 1),5);
+        $arLicencias = $paginator->paginate($arLicencias, $this->get('Request')->query->get('page', 1),5);
+        $arContratos = $paginator->paginate($arContratos, $this->get('Request')->query->get('page', 1),5);
+        $arCreditos = $paginator->paginate($arCreditos, $this->get('Request')->query->get('page', 1),5);
+        $arDisciplinarios = $paginator->paginate($arDisciplinarios, $this->get('Request')->query->get('page', 1),5);
+        $arEmpleadoEstudios = $paginator->paginate($arEmpleadoEstudios, $this->get('Request')->query->get('page', 1),6);
+        $arExamenes = $paginator->paginate($arExamenes, $this->get('Request')->query->get('page', 1),6);
+        $arEmpleadoFamilia = $paginator->paginate($arEmpleadoFamilia, $this->get('Request')->query->get('page', 1),8);
+        $arDotacion = $paginator->paginate($arDotacion, $this->get('Request')->query->get('page', 1),8);
+        $arAdicionalesPago = $paginator->paginate($arAdicionalesPago, $this->get('Request')->query->get('page', 1),8);
         return $this->render('BrasaRecursoHumanoBundle:Base/Empleado:detalle.html.twig', array(
                     'arEmpleado' => $arEmpleado,
                     'arIncapacidades' => $arIncapacidades,
@@ -188,8 +193,7 @@ class EmpleadoController extends Controller
     /**
      * @Route("/rhu/base/empleados/nuevo/{codigoEmpleado}/{codigoSeleccion}", name="brs_rhu_base_empleados_nuevo")
      */
-    public function nuevoAction($codigoEmpleado, $codigoSeleccion = 0) {
-        $request = $this->getRequest();
+    public function nuevoAction(Request $request, $codigoEmpleado, $codigoSeleccion = 0) {
         $em = $this->getDoctrine()->getManager();
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion;
@@ -279,8 +283,7 @@ class EmpleadoController extends Controller
     /**
      * @Route("/rhu/base/empleados/nuevo/enlazar/", name="brs_rhu_base_empleados_nuevo_enlazar")
      */
-    public function enlazarAction() {
-        $request = $this->getRequest();
+    public function enlazarAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         $form = $this->formularioEnlazar();
         $form->handleRequest($request);
@@ -300,8 +303,7 @@ class EmpleadoController extends Controller
     /**
      * @Route("/rhu/base/empleados/cargar/foto/{codigoEmpleado}", name="brs_rhu_base_empleados_cargar_foto")
      */
-    public function cargarFotoAction($codigoEmpleado) {
-        $request = $this->getRequest();
+    public function cargarFotoAction(Request $request, $codigoEmpleado) {
         $em = $this->getDoctrine()->getManager();
         $form = $this->formularioCargarFoto();
         $form->handleRequest($request);
@@ -335,59 +337,59 @@ class EmpleadoController extends Controller
 
     private function formularioEnlazar() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $form = $this->createFormBuilder()
-            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacionSeleccion')))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('TxtIdentificacion', TextType::class, array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacionSeleccion')))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
     }
 
     private function formularioCargarFoto() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $form = $this->createFormBuilder()
-            ->add('attachment', 'file')
-            ->add('BtnCargar', 'submit', array('label'  => 'Cargar'))
+            ->add('attachment', FileType::class)
+            ->add('BtnCargar', SubmitType::class, array('label'  => 'Cargar'))
             ->getForm();
         return $form;
     }
 
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $arrayPropiedades = array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCentroCosto',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('cc')
                     ->orderBy('cc.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => false,
                 'empty_data' => "",
-                'empty_value' => "TODOS",
+                'placeholder' => "TODOS",
                 'data' => ""
             );
         if($session->get('filtroCodigoCentroCosto')) {
             $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
         }
         $form = $this->createFormBuilder()
-            ->add('centroCostoRel', 'entity', $arrayPropiedades)
-            ->add('estadoActivo', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ACTIVOS', '0' => 'INACTIVOS')))
-            ->add('estadoContratado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO')))    
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombre')))
-            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
-            ->add('TxtCodigo', 'text', array('data' => $session->get('filtroCodigoEmpleado')))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
-            ->add('BtnInterfaz', 'submit', array('label'  => 'Interfaz',))
-            ->add('BtnPdf', 'submit', array('label'  => 'PDF',))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnInactivar', 'submit', array('label'  => 'Activar / Inactivar',))
+            ->add('centroCostoRel', EntityType::class, $arrayPropiedades)
+            ->add('estadoActivo', ChoiceType::class, array('choices'   => array('2' => 'TODOS', '1' => 'ACTIVOS', '0' => 'INACTIVOS')))
+            ->add('estadoContratado', ChoiceType::class, array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO')))    
+            ->add('TxtNombre', TextType::class, array('label'  => 'Nombre','data' => $session->get('filtroNombre')))
+            ->add('TxtIdentificacion', TextType::class, array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
+            ->add('TxtCodigo', TextType::class, array('data' => $session->get('filtroCodigoEmpleado')))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
+            ->add('BtnInterfaz', SubmitType::class, array('label'  => 'Interfaz',))
+            ->add('BtnPdf', SubmitType::class, array('label'  => 'PDF',))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel',))
+            ->add('BtnInactivar', SubmitType::class, array('label'  => 'Activar / Inactivar',))
             ->getForm();
         return $form;
     }
 
     private function filtrarLista($form) {
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $request = $this->getRequest();
         $controles = $request->request->get('form');
         $session->set('filtroCodigoCentroCosto', $controles['centroCostoRel']);
@@ -400,7 +402,7 @@ class EmpleadoController extends Controller
 
     private function listar() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $this->strSqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->listaDQL(
                 $session->get('filtroEmpleadoNombre'),
                 $session->get('filtroCodigoCentroCosto'),
