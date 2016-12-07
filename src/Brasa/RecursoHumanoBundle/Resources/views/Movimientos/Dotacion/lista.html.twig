@@ -51,7 +51,7 @@
             {% for arDotaciones in arDotaciones %}
             <tr>
                 <td><input type="hidden" name="LblCodigo[]" value="{{ arDotaciones.codigoDotacionPk }}">{{ arDotaciones.codigoDotacionPk }} </td>
-                <td>{{ arDotaciones.fecha |date("Y/m/d")  }}</td>
+                <td>{{ arDotaciones.fechaEntrega |date("Y/m/d")  }}</td>
                 <td>{{ arDotaciones.dotacionTipoRel.nombre | default('')  }}</td>
                 <td>{{ arDotaciones.centroCostoRel.nombre | default('')  }}</td>
                 <td>{{ arDotaciones.empleadoRel.numeroIdentificacion  }}</td>
