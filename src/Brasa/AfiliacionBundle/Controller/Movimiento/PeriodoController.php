@@ -4,6 +4,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Brasa\AfiliacionBundle\Form\Type\AfiPeriodoType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
@@ -303,7 +309,6 @@ class PeriodoController extends Controller
      * @Route("/afi/movimiento/periodo/actualizarfechapago/{codigoPeriodo}", name="brs_afi_movimiento_periodo_actualizarfechapago")
      */
     public function actualizarFechasPagoAction(Request $request, $codigoPeriodo = '') {
-        $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
@@ -316,14 +321,14 @@ class PeriodoController extends Controller
         }
         $form = $this->createFormBuilder()
             ->setAction($this->generateUrl('brs_afi_movimiento_periodo_actualizarfechapago', array('codigoPeriodo' => $codigoPeriodo)))
-            ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd', 'data' => $arPeriodo->getFechaDesde()))    
-            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => $arPeriodo->getFechaHasta()))    
-            ->add('fechaPago', 'date', array('format' => 'yyyyMMdd', 'data' => $fechaPago))    
-            ->add('anio', 'number', array('required' => true, 'data' => $arPeriodo->getAnio()))
-            ->add('mes', 'number', array('required' => true, 'data' => $arPeriodo->getMes()))
-            ->add('anioPago', 'number', array('required' => true, 'data' => $arPeriodo->getAnioPago()))
-            ->add('mesPago', 'number', array('required' => true, 'data' => $arPeriodo->getMesPago()))
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
+            ->add('fechaDesde', DateType::class, array('format' => 'yyyyMMdd', 'data' => $arPeriodo->getFechaDesde()))    
+            ->add('fechaHasta', DateType::class, array('format' => 'yyyyMMdd', 'data' => $arPeriodo->getFechaHasta()))    
+            ->add('fechaPago', DateType::class, array('format' => 'yyyyMMdd', 'data' => $fechaPago))    
+            ->add('anio', NumberType::class, array('required' => true, 'data' => $arPeriodo->getAnio()))
+            ->add('mes', NumberType::class, array('required' => true, 'data' => $arPeriodo->getMes()))
+            ->add('anioPago', NumberType::class, array('required' => true, 'data' => $arPeriodo->getAnioPago()))
+            ->add('mesPago', NumberType::class, array('required' => true, 'data' => $arPeriodo->getMesPago()))
+            ->add('BtnGuardar', SubmitType::class, array('label'  => 'Guardar'))
             ->getForm();
         $form->handleRequest($request);
 
@@ -349,7 +354,6 @@ class PeriodoController extends Controller
      * @Route("/afi/movimiento/periodo/archivoplano/{codigoPeriodo}", name="brs_afi_movimiento_periodo_archivoplano")
      */
     public function archivoPlanoAction(Request $request, $codigoPeriodo = '') {
-        $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
@@ -815,7 +819,7 @@ class PeriodoController extends Controller
     }
 
     private function lista() {
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->listaDQL(
                 $session->get('filtroCodigoCliente'),
@@ -840,7 +844,7 @@ class PeriodoController extends Controller
     }
 
     private function filtrar ($form) {
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $session->set('filtroNit', $form->get('TxtNit')->getData());
         $session->set('filtroPeriodoEstadoCerrado', $form->get('estadoCerrado')->getData());
         $fechaDesde = $form->get('fechaDesde')->getData();
@@ -857,7 +861,7 @@ class PeriodoController extends Controller
 
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $strNombreCliente = "";
         if($session->get('filtroNit')) {
             $arCliente = $em->getRepository('BrasaAfiliacionBundle:AfiCliente')->findOneBy(array('nit' => $session->get('filtroNit')));
@@ -872,32 +876,32 @@ class PeriodoController extends Controller
             $session->set('filtroCodigoCliente', null);
         }
         $form = $this->createFormBuilder()
-            ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
-            ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))
-            ->add('estadoCerrado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'CERRADO', '0' => 'SIN CERRAR'), 'data' => $session->get('filtroPeriodoEstadoCerrado')))
-            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
-            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnGenerarCobro', 'submit', array('label'  => 'Generar cobro masivo',))
-            ->add('BtnGenerarPago', 'submit', array('label'  => 'Generar pago masivo',))
-            ->add('BtnGenerarInteresMora', 'submit', array('label'  => 'Generar financieros',))    
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('TxtNit', TextType::class, array('label'  => 'Nit','data' => $session->get('filtroNit')))
+            ->add('TxtNombreCliente', TextType::class, array('label'  => 'NombreCliente','data' => $strNombreCliente))
+            ->add('estadoCerrado', ChoiceType::class, array('choices'   => array('2' => 'TODOS', '1' => 'CERRADO', '0' => 'SIN CERRAR'), 'data' => $session->get('filtroPeriodoEstadoCerrado')))
+            ->add('fechaDesde', DateType::class, array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('fechaHasta', DateType::class, array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar',))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel',))
+            ->add('BtnGenerarCobro', SubmitType::class, array('label'  => 'Generar cobro masivo',))
+            ->add('BtnGenerarPago', SubmitType::class, array('label'  => 'Generar pago masivo',))
+            ->add('BtnGenerarInteresMora', SubmitType::class, array('label'  => 'Generar financieros',))    
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
     }
 
     private function formularioDetalle() {
-        $session = $this->getRequest()->getSession();
+        $session = new session;
                     
         $form = $this->createFormBuilder()
-            ->add('BtnDetalleCobroExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnDetalleCobroImprimir', 'submit', array('label'  => 'Imprimir',))
-            ->add('BtnDetallePagoEliminar', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnDetalleCobroEliminar', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnDetallePagoExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnDetalleTrasladarNuevo', 'submit', array('label'  => 'Traslado nuevo',))
-            ->add('BtnDetalleInteresMora', 'submit', array('label'  => 'financieros',))    
+            ->add('BtnDetalleCobroExcel', SubmitType::class, array('label'  => 'Excel',))
+            ->add('BtnDetalleCobroImprimir', SubmitType::class, array('label'  => 'Imprimir',))
+            ->add('BtnDetallePagoEliminar', SubmitType::class, array('label'  => 'Eliminar',))
+            ->add('BtnDetalleCobroEliminar', SubmitType::class, array('label'  => 'Eliminar',))
+            ->add('BtnDetallePagoExcel', SubmitType::class, array('label'  => 'Excel',))
+            ->add('BtnDetalleTrasladarNuevo', SubmitType::class, array('label'  => 'Traslado nuevo',))
+            ->add('BtnDetalleInteresMora', SubmitType::class, array('label'  => 'financieros',))    
               
                 
             ->getForm();
@@ -909,7 +913,7 @@ class PeriodoController extends Controller
         set_time_limit(0);
         ini_set("memory_limit", -1);
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("EMPRESA")
@@ -969,7 +973,7 @@ class PeriodoController extends Controller
         set_time_limit(0);
         ini_set("memory_limit", -1);
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("EMPRESA")
@@ -1057,7 +1061,7 @@ class PeriodoController extends Controller
         set_time_limit(0);
         ini_set("memory_limit", -1);
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("EMPRESA")

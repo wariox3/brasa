@@ -1,6 +1,7 @@
 <?php
 namespace Brasa\AfiliacionBundle\Form\Type;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\ORM\EntityRepository;
@@ -12,12 +13,12 @@ class AfiNovedadType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder    
-            ->add('novedadTipoRel', 'entity', array(
+            ->add('novedadTipoRel', EntityType::class, array(
                 'class' => 'BrasaAfiliacionBundle:AfiNovedadTipo',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('nt')
                     ->orderBy('nt.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => true))                                             
             ->add('fechaDesde', DateType::class, array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                            
             ->add('fechaHasta', DateType::class, array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                                       

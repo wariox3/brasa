@@ -3,6 +3,7 @@
 namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuCajaType;
@@ -17,18 +18,17 @@ class CajaController extends Controller
     /**
      * @Route("/rhu/base/caja/listar", name="brs_rhu_base_caja_listar")
      */
-    public function listarAction() {
+    public function listarAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest(); // captura o recupera datos del formulario
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 64, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
         $paginator  = $this->get('knp_paginator');
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
-            ->add('BtnPdf', 'submit', array('label'  => 'PDF'))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
+            ->add('BtnPdf', SubmitType::class, array('label'  => 'PDF'))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel'))
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar'))
             ->getForm(); 
         $form->handleRequest($request);
         
@@ -108,7 +108,7 @@ class CajaController extends Controller
         }
         $arEntidadesCaja = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja();
         $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadCaja')->findAll();
-        $arEntidadesCaja = $paginator->paginate($query, $this->get('request')->query->get('page', 1),30);
+        $arEntidadesCaja = $paginator->paginate($query, $this->get('Request')->query->get('page', 1),30);
 
         return $this->render('BrasaRecursoHumanoBundle:Base/CajaCompensacion:listar.html.twig', array(
                     'arEntidadesCaja' => $arEntidadesCaja,
@@ -120,9 +120,8 @@ class CajaController extends Controller
     /**
      * @Route("/rhu/base/caja/nuevo/{codigoEntidadCajaPk}", name="brs_rhu_base_caja_nuevo")
      */
-    public function nuevoAction($codigoEntidadCajaPk) {
+    public function nuevoAction(Request $request, $codigoEntidadCajaPk) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $arCaja = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja();
         if ($codigoEntidadCajaPk != 0)
         {

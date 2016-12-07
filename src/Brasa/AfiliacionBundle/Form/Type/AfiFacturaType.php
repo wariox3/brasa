@@ -1,6 +1,7 @@
 <?php
 namespace Brasa\AfiliacionBundle\Form\Type;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\ORM\EntityRepository;
@@ -14,12 +15,12 @@ class AfiFacturaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder    
-            ->add('facturaTipoRel', 'entity', array(
+            ->add('facturaTipoRel', EntityType::class, array(
                 'class' => 'BrasaAfiliacionBundle:AfiFacturaTipo',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('ft')
                     ->orderBy('ft.codigoFacturaTipoPk', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => true))                 
             ->add('soporte', textType::class, array('required' => false))
             ->add('comentarios', TextareaType::class, array('required' => false))

@@ -4,6 +4,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 //use Brasa\AfiliacionBundle\Form\Type\AfiPeriodoType;
 class ActualizarClienteCarteraController extends Controller
 {
@@ -61,7 +65,7 @@ class ActualizarClienteCarteraController extends Controller
     }
 
     private function lista() {
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiCliente')->listaDQL(
                 $session->get('filtroClienteNombre'),
@@ -72,7 +76,7 @@ class ActualizarClienteCarteraController extends Controller
     }
 
     private function filtrar ($form) {
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $session->set('filtroClienteNombre', $form->get('TxtNombre')->getData());
         $session->set('filtroClienteIdentificacion', $form->get('TxtIdentificacion')->getData());
         $session->set('filtroIndependiente', $form->get('independiente')->getData());
@@ -80,13 +84,13 @@ class ActualizarClienteCarteraController extends Controller
     }
 
     private function formularioFiltro() {
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $form = $this->createFormBuilder()
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroClienteNombre')))
-            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroClienteIdentificacion')))
-            ->add('independiente', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'),'data' => $session->get('filtroIndependiente')))
-            ->add('BtnActualizar', 'submit', array('label'  => 'Actualizar',))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('TxtNombre', TextType::class, array('label'  => 'Nombre','data' => $session->get('filtroClienteNombre')))
+            ->add('TxtIdentificacion', TextType::class, array('label'  => 'Identificacion','data' => $session->get('filtroClienteIdentificacion')))
+            ->add('independiente', ChoiceType::class, array('choices'   => array('2' => 'TODOS', '1' => 'SI', '0' => 'NO'),'data' => $session->get('filtroIndependiente')))
+            ->add('BtnActualizar', SubmitType::class, array('label'  => 'Actualizar',))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
     }

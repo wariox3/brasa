@@ -1,6 +1,7 @@
 <?php
 namespace Brasa\AfiliacionBundle\Form\Type;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\ORM\EntityRepository;
@@ -16,56 +17,56 @@ class AfiContratoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder    
-            ->add('clienteRel', 'entity', array(
+            ->add('clienteRel', EntityType::class, array(
                 'class' => 'BrasaAfiliacionBundle:AfiCliente',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('c')
                     ->orderBy('c.nombreCorto', 'ASC');},
-                'property' => 'nombreCorto',
+                'choice_label' => 'nombreCorto',
                 'required' => true))                                                         
-            ->add('sucursalRel', 'entity', array(
+            ->add('sucursalRel', EntityType::class, array(
                 'class' => 'BrasaAfiliacionBundle:AfiSucursal',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('s')
                     ->orderBy('s.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => true))                            
-            ->add('cargoRel', 'entity', array(
+            ->add('cargoRel', EntityType::class, array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCargo',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('ec')
                     ->orderBy('ec.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => true)) 
-            ->add('entidadSaludRel', 'entity', array(
+            ->add('entidadSaludRel', EntityType::class, array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEntidadSalud',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('es')
                     ->orderBy('es.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => true))
-            ->add('entidadPensionRel', 'entity', array(
+            ->add('entidadPensionRel', EntityType::class, array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEntidadPension',
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
             ))
-            ->add('entidadCajaRel', 'entity', array(
+            ->add('entidadCajaRel', EntityType::class, array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEntidadCaja',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('ec')
                     ->orderBy('ec.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => true))  
-            ->add('ssoTipoCotizanteRel', 'entity', array(
+            ->add('ssoTipoCotizanteRel', EntityType::class, array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuSsoTipoCotizante',
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
             ))                            
-            ->add('ssoSubtipoCotizanteRel', 'entity', array(
+            ->add('ssoSubtipoCotizanteRel', EntityType::class, array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuSsoSubtipoCotizante',
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
             ))
-            ->add('clasificacionRiesgoRel', 'entity', array(
+            ->add('clasificacionRiesgoRel', EntityType::class, array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuClasificacionRiesgo',
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
             ))                  
             ->add('numero', TextType::class, array('required' => false))
             ->add('fechaDesde', DateType::class, array('format' => 'yyyyMMdd'))                            

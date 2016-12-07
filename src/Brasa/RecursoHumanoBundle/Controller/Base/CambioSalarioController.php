@@ -2,6 +2,12 @@
 
 namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
@@ -11,9 +17,8 @@ class CambioSalarioController extends Controller
     /**
      * @Route("/rhu/cambiosalario/nuevo/{codigoContrato}/{codigoCambioSalario}", name="brs_rhu_cambio_salario_nuevo")
      */
-    public function nuevoAction($codigoContrato, $codigoCambioSalario = 0) {
+    public function nuevoAction(Request $request, $codigoContrato, $codigoCambioSalario = 0) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arCambioSalario = new \Brasa\RecursoHumanoBundle\Entity\RhuCambioSalario();
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
@@ -26,10 +31,10 @@ class CambioSalarioController extends Controller
             $dateAplicacion = new \DateTime('now');
         }    
         $form = $this->createFormBuilder()
-            ->add('salarioNuevo', 'number', array('required' => true, 'data' => $arCambioSalario->getVrSalarioNuevo()))
-            ->add('fechaAplicacion', 'date', array('data' => new \DateTime('now')))
-            ->add('detalle', 'text', array('required' => true, 'data' => $arCambioSalario->getDetalle()))
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
+            ->add('salarioNuevo', NumberType::class, array('required' => true, 'data' => $arCambioSalario->getVrSalarioNuevo()))
+            ->add('fechaAplicacion', DateType::class, array('data' => new \DateTime('now')))
+            ->add('detalle', TextType::class, array('required' => true, 'data' => $arCambioSalario->getDetalle()))
+            ->add('BtnGuardar', SubmitType::class, array('label'  => 'Guardar'))
             ->getForm();
         $form->handleRequest($request);
         if ($form->isValid())

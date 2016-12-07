@@ -3,6 +3,7 @@
 namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuCapacitacionTipoType;
@@ -17,17 +18,16 @@ class CapacitacionTipoController extends Controller
     /**
      * @Route("/rhu/capacitacion/tipo/lista", name="brs_rhu_base_capacitacion_tipo_lista")
      */
-    public function listaAction() {
+    public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest(); // captura o recupera datos del formulario
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 42, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
         $paginator  = $this->get('knp_paginator');
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel'))
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar'))
             ->getForm(); 
         $form->handleRequest($request);
         $arCapacitacionTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionTipo();
@@ -65,9 +65,8 @@ class CapacitacionTipoController extends Controller
     /**
      * @Route("/rhu/capacitacion/tipo/nuevo/{codigoTipoCapacitacion}", name="brs_rhu_base_capacitacion_tipo_nuevo")
      */
-    public function nuevoAction($codigoTipoCapacitacion) {
+    public function nuevoAction(Request $request, $codigoTipoCapacitacion) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $arCapacitacionTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionTipo();
         if ($codigoTipoCapacitacion != 0)
         {

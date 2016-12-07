@@ -3,6 +3,9 @@
 namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuCartaTipoType;
@@ -19,16 +22,15 @@ class CartaTipoController extends Controller
     /**
      * @Route("/rhu/base/carta/tipo/lista", name="brs_rhu_base_carta_tipo_lista")
      */
-    public function listaAction() {
+    public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest(); // captura o recupera datos del formulario
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 45, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
         $paginator  = $this->get('knp_paginator');
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder()
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar'))
             ->getForm(); 
         $form->handleRequest($request);
         $this->listar();
@@ -60,9 +62,8 @@ class CartaTipoController extends Controller
     /**
      * @Route("/rhu/base/carta/tipo/nuevo/{codigoCartaTipo}", name="brs_rhu_base_carta_tipo_nuevo")
      */
-    public function nuevoAction($codigoCartaTipo) {
+    public function nuevoAction(Request $request, $codigoCartaTipo) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $arCartaTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuCartaTipo();
         if ($codigoCartaTipo != 0) {
             $arCartaTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuCartaTipo')->find($codigoCartaTipo);

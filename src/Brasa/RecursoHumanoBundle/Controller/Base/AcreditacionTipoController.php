@@ -3,6 +3,7 @@
 namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuAcreditacionTipoType;
@@ -20,17 +21,16 @@ class AcreditacionTipoController extends Controller
     /**
      * @Route("/rhu/base/acreditacion/tipo/lista", name="brs_rhu_base_acreditacion_tipo_lista")
      */ 
-    public function listarAction() {
+    public function listarAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest(); // captura o recupera datos del formulario
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 53, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
         $paginator  = $this->get('knp_paginator');
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel'))
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar'))
             ->getForm(); 
         $form->handleRequest($request);
         
@@ -110,7 +110,7 @@ class AcreditacionTipoController extends Controller
         }
         $arAcreditacionTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacionTipo();
         $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuAcreditacionTipo')->findAll();
-        $arAcreditacionTipo = $paginator->paginate($query, $this->get('request')->query->get('page', 1),40);
+        $arAcreditacionTipo = $paginator->paginate($query, $this->get('Request')->query->get('page', 1),40);
 
         return $this->render('BrasaRecursoHumanoBundle:Base/AcreditacionTipo:listar.html.twig', array(
                     'arAcreditacionTipo' => $arAcreditacionTipo,
@@ -122,9 +122,8 @@ class AcreditacionTipoController extends Controller
     /**
      * @Route("/rhu/base/acreditacion/tipo/nuevo/{codigoAcreditacionTipoPk}", name="brs_rhu_base_acreditacion_tipo_nuevo")
      */ 
-    public function nuevoAction($codigoAcreditacionTipoPk) {
+    public function nuevoAction(Request $request, $codigoAcreditacionTipoPk) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $arAcreditacionTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuAcreditacionTipo();
         if ($codigoAcreditacionTipoPk != 0)
         {

@@ -225,8 +225,7 @@
                         <th style="text-align: right">VR. SEGURO</th>
                         <th style="text-align: right">CUOTAS</th>
                         <th style="text-align: right">C. ACTUAL</th>
-                        <th style="text-align: center">PAGADO</th>
-                        <th style="text-align: center">APROBADO</th>
+                        <th style="text-align: center">PAGADO</th>                        
                         <th style="text-align: center">SUSPENDIDO</th>
                     </tr>
                     {% for arCreditos in arCreditos %}
@@ -239,8 +238,7 @@
                             <td style="text-align: right">{{ arCreditos.Seguro | number_format(2, '.', ',') }}</td>
                             <td style="text-align: right">{{ arCreditos.numeroCuotas | number_format(0, '.', ',') }}</td>
                             <td style="text-align: right">{{ arCreditos.numeroCuotaActual | number_format(0, '.', ',') }}</td>
-                            <td {% if arCreditos.estadopagado == 1 %}class="success">SI{% else %}<td class="danger"> NO {% endif %}</td>
-                            <td {% if arCreditos.Aprobado == 1 %}class="success">SI{% else %}<td class="danger"> NO {% endif %}</td>
+                            <td {% if arCreditos.estadopagado == 1 %}class="success">SI{% else %}<td class="danger"> NO {% endif %}</td>                            
                             <td {% if arCreditos.estadoSuspendido == 1 %}class="success">SI{% else %}<td class="danger"> NO {% endif %}</td>
                         </tr>
                     {% endfor %}

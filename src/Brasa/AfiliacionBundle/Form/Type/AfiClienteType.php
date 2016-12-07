@@ -1,6 +1,7 @@
 <?php
 namespace Brasa\AfiliacionBundle\Form\Type;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\ORM\EntityRepository;
@@ -17,26 +18,26 @@ class AfiClienteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder                    
-            ->add('ciudadRel', 'entity', array(
+            ->add('ciudadRel', EntityType::class, array(
                 'class' => 'BrasaGeneralBundle:GenCiudad',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('c')
                     ->orderBy('c.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => true))                
-            ->add('asesorRel', 'entity', array(
+            ->add('asesorRel', EntityType::class, array(
                 'class' => 'BrasaGeneralBundle:GenAsesor',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('a')
                     ->orderBy('a.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => true))                            
-            ->add('formaPagoRel', 'entity', array(
+            ->add('formaPagoRel', EntityType::class, array(
                 'class' => 'BrasaGeneralBundle:GenFormaPago',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('fp')
                     ->orderBy('fp.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => true))                              
                             
             ->add('nit', textType::class, array('required' => true))

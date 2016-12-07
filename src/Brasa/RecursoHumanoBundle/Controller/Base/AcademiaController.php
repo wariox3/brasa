@@ -2,7 +2,9 @@
 
 namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Request; 
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuAcademiaType;
@@ -20,17 +22,16 @@ class AcademiaController extends Controller
     /**
      * @Route("/rhu/base/academia/listar", name="brs_rhu_base_academia_listar")
      */
-    public function listarAction() {
+    public function listarAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest(); // captura o recupera datos del formulario
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 52, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
         $paginator  = $this->get('knp_paginator');
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel'))
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar'))
             ->getForm(); 
         $form->handleRequest($request);
         
@@ -116,7 +117,7 @@ class AcademiaController extends Controller
         }
         $arAcademias = new \Brasa\RecursoHumanoBundle\Entity\RhuAcademia();
         $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuAcademia')->findAll();
-        $arAcademias = $paginator->paginate($query, $this->get('request')->query->get('page', 1),40);
+        $arAcademias = $paginator->paginate($query, $this->get('Request')->query->get('page', 1),40);
 
         return $this->render('BrasaRecursoHumanoBundle:Base/Academia:listar.html.twig', array(
                     'arAcademias' => $arAcademias,
@@ -128,9 +129,8 @@ class AcademiaController extends Controller
     /**
      * @Route("/rhu/base/academia/nuevo/{codigoAcademiaPk}", name="brs_rhu_base_academia_nuevo")
      */
-    public function nuevoAction($codigoAcademiaPk) {
+    public function nuevoAction(Request $request, $codigoAcademiaPk) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $arAcademia = new \Brasa\RecursoHumanoBundle\Entity\RhuAcademia();
         if ($codigoAcademiaPk != 0)
         {

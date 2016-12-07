@@ -28,8 +28,8 @@ class AfiPagoCursoType extends AbstractType
                     ->orderBy('ee.codigoProveedorPk', 'ASC');},
                 'choice_label' => 'nombreCorto',
                 'required' => true))                
-            ->add('soporte', textType::class, array('required' => false))
-            ->add('comentarios', textType::class, array('required' => false))                            
+            ->add('soporte', TextType::class, array('required' => false))
+            ->add('comentarios', TextType::class, array('required' => false))                            
             ->add('guardar', SubmitType::class)
             ->add('guardarnuevo', SubmitType::class, array('label'  => 'Guardar y Nuevo'));
     }

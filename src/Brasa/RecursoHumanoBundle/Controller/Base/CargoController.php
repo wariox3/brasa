@@ -3,6 +3,9 @@
 namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuCargoType;
@@ -19,9 +22,8 @@ class CargoController extends Controller
     /**
      * @Route("/rhu/base/cargo/", name="brs_rhu_base_cargo")
      */     
-    public function listarAction() {
+    public function listarAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest(); // captura o recupera datos del formulario
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 54, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
@@ -76,9 +78,8 @@ class CargoController extends Controller
     /**
      * @Route("/rhu/base/cargo/nuevo/{codigoCargoPk}", name="brs_rhu_base_cargo_nuevo")
      */    
-    public function nuevoAction($codigoCargoPk) {
+    public function nuevoAction(Request $request, $codigoCargoPk) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $arCargo = new \Brasa\RecursoHumanoBundle\Entity\RhuCargo();
         if ($codigoCargoPk != 0)
         {
@@ -108,13 +109,13 @@ class CargoController extends Controller
     
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();        
+        $session = new session;     
         $form = $this->createFormBuilder()                                    
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => "", 'required' => false))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
+            ->add('TxtNombre', TextType::class, array('label'  => 'Nombre','data' => "", 'required' => false))
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar',))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel',))
             //->add('BtnPdf', 'submit', array('label'  => 'Pdf',))    
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))                                            
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))                                            
             ->getForm();        
         return $form;
     }           

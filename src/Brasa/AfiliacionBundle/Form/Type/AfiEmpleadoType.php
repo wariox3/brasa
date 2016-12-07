@@ -1,6 +1,7 @@
 <?php
 namespace Brasa\AfiliacionBundle\Form\Type;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\ORM\EntityRepository;
@@ -15,40 +16,40 @@ class AfiEmpleadoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder    
-            ->add('clienteRel', 'entity', array(
+            ->add('clienteRel', EntityType::class, array(
                 'class' => 'BrasaAfiliacionBundle:AfiCliente',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('c')
                     ->orderBy('c.nombreCorto', 'ASC');},
-                'property' => 'nombreCorto',
+                'choice_label' => 'nombreCorto',
                 'required' => true))                 
-            ->add('tipoIdentificacionRel', 'entity', array(
+            ->add('tipoIdentificacionRel', EntityType::class, array(
                 'class' => 'BrasaGeneralBundle:GenTipoIdentificacion',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('ti')
                     ->orderBy('ti.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => true))                                             
-            ->add('estadoCivilRel', 'entity', array(
+            ->add('estadoCivilRel', EntityType::class, array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEstadoCivil',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('ec')
                     ->orderBy('ec.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => true)) 
-            ->add('ciudadRel', 'entity', array(
+            ->add('ciudadRel', EntityType::class, array(
                 'class' => 'BrasaGeneralBundle:GenCiudad',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('c')
                     ->orderBy('c.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => true))                             
-            ->add('rhRel', 'entity', array(
+            ->add('rhRel', EntityType::class, array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuRh',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('rh')
                     ->orderBy('rh.tipo', 'ASC');},
-                'property' => 'tipo',
+                'choice_label' => 'tipo',
                 'required' => true))                             
             ->add('numeroIdentificacion', textType::class, array('required' => true))                            
             ->add('nombre1', textType::class, array('required' => true))
