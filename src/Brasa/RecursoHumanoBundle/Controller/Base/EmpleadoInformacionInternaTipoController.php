@@ -3,6 +3,7 @@
 namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuEmpleadoInformacionInternaTipoType;
@@ -18,7 +19,7 @@ class EmpleadoInformacionInternaTipoController extends Controller
     /**
      * @Route("/rhu/base/empleado/informacion/interna/tipo/lista", name="brs_rhu_base_empleado_informacion_interna_tipo_lista")
      */
-    public function listaAction() {
+    public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 46, 1)) {
@@ -27,8 +28,8 @@ class EmpleadoInformacionInternaTipoController extends Controller
         $paginator  = $this->get('knp_paginator');
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel'))
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar'))
             ->getForm(); 
         $form->handleRequest($request);
         $arEmpleadoInformacionInternaTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoInformacionInternaTipo();
@@ -53,7 +54,7 @@ class EmpleadoInformacionInternaTipoController extends Controller
         }
         $arEmpleadoInformacionInternaTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoInformacionInternaTipo();
         $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoInformacionInternaTipo')->findAll();
-        $arEmpleadoInformacionInternaTipos = $paginator->paginate($query, $this->get('request')->query->get('page', 1),20);
+        $arEmpleadoInformacionInternaTipos = $paginator->paginate($query, $this->get('Request')->query->get('page', 1),20);
 
         return $this->render('BrasaRecursoHumanoBundle:Base/EmpleadoInformacionInternaTipo:listar.html.twig', array(
                     'arEmpleadoInformacionInternaTipos' => $arEmpleadoInformacionInternaTipos,
@@ -65,9 +66,8 @@ class EmpleadoInformacionInternaTipoController extends Controller
     /**
      * @Route("/rhu/base/empleado/informacion/interna/tipo/nuevo/{codigoInformacionInternaTipo}", name="brs_rhu_base_empleado_informacion_interna_tipo_nuevo")
      */
-    public function nuevoAction($codigoInformacionInternaTipo) {
+    public function nuevoAction(Request $request, $codigoInformacionInternaTipo) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $arEmpleadoInformacionInternaTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoInformacionInternaTipo();
         if ($codigoInformacionInternaTipo != 0)
         {

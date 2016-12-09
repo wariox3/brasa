@@ -2,10 +2,11 @@
 
 namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
-use Symfony\Component\HttpFoundation\Request;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 
@@ -20,18 +21,17 @@ class EntidadExamenController extends Controller
     /**
      * @Route("/rhu/base/entidadexamen/listar", name="brs_rhu_base_entidadexamen_listar")
      */
-    public function listarAction() {
+    public function listarAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest(); // captura o recupera datos del formulario
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 96, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }
         $paginator  = $this->get('knp_paginator');
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
-            ->add('BtnPdf', 'submit', array('label'  => 'PDF'))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
+            ->add('BtnPdf', SubmitType::class, array('label'  => 'PDF'))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel'))
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar'))
             ->getForm(); 
         $form->handleRequest($request);
         
@@ -114,7 +114,7 @@ class EntidadExamenController extends Controller
         }
         $arEntidadesExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadExamen();
         $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadExamen')->findAll();
-        $arEntidadesExamen = $paginator->paginate($query, $this->get('request')->query->get('page', 1),20);
+        $arEntidadesExamen = $paginator->paginate($query, $this->get('Request')->query->get('page', 1),20);
 
         return $this->render('BrasaRecursoHumanoBundle:Base/EntidadExamen:listar.html.twig', array(
                     'arEntidadesExamen' => $arEntidadesExamen,
@@ -126,9 +126,8 @@ class EntidadExamenController extends Controller
     /**
      * @Route("/rhu/base/entidadexamen/nuevo/{codigoEntidadExamenPk}", name="brs_rhu_base_entidadexamen_nuevo")
      */
-    public function nuevoAction($codigoEntidadExamenPk) {
+    public function nuevoAction(Request $request, $codigoEntidadExamenPk) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $arEntidadExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadExamen();
         if ($codigoEntidadExamenPk != 0)
         {
@@ -207,15 +206,14 @@ class EntidadExamenController extends Controller
     /**
      * @Route("/rhu/base/entidadexamen/detalle/nuevo/{codigoEntidadExamenPk}", name="brs_rhu_base_entidadexamen_detalle_nuevo")
      */
-    public function detalleNuevoAction($codigoEntidadExamenPk) {
-        $request = $this->getRequest();
+    public function detalleNuevoAction(Request $request, $codigoEntidadExamenPk) {
         $em = $this->getDoctrine()->getManager();        
         $arEntidadExamen = new \Brasa\RecursoHumanoBundle\Entity\RhuEntidadExamen();
         $arEntidadExamen = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadExamen')->find($codigoEntidadExamenPk);
         $arExamenTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenTipo();
         $arExamenTipos = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenTipo')->findAll();
         $form = $this->createFormBuilder()
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->add('BtnGuardar', SubmitType::class, array('label'  => 'Guardar',))
             ->getForm();
         $form->handleRequest($request); 
         if ($form->isValid()) {

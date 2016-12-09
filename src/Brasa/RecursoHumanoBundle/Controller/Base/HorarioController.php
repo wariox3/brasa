@@ -3,6 +3,7 @@
 namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuHorarioType;
@@ -17,17 +18,16 @@ class HorarioController extends Controller
     /**
      * @Route("/rhu/base/horario/listar", name="brs_rhu_base_horario_listar")
      */
-    public function listarAction() {
+    public function listarAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest(); // captura o recupera datos del formulario
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 59, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
         $paginator  = $this->get('knp_paginator');
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel'))
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar'))
             ->getForm(); 
         $form->handleRequest($request);
         
@@ -122,7 +122,7 @@ class HorarioController extends Controller
         }
         $arHorarios = new \Brasa\RecursoHumanoBundle\Entity\RhuHorario();
         $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuHorario')->findAll();
-        $arHorarios = $paginator->paginate($query, $this->get('request')->query->get('page', 1),20);
+        $arHorarios = $paginator->paginate($query, $this->get('Request')->query->get('page', 1),20);
 
         return $this->render('BrasaRecursoHumanoBundle:Base/Horario:listar.html.twig', array(
                     'arHorarios' => $arHorarios,
@@ -134,9 +134,8 @@ class HorarioController extends Controller
     /**
      * @Route("/rhu/base/horario/nuevo/{codigoHorarioPk}", name="brs_rhu_base_horario_nuevo")
      */
-    public function nuevoAction($codigoHorarioPk) {
+    public function nuevoAction(Request $request, $codigoHorarioPk) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $arHorario = new \Brasa\RecursoHumanoBundle\Entity\RhuHorario();
         if ($codigoHorarioPk != 0)
         {

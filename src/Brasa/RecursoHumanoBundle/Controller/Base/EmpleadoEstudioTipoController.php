@@ -3,6 +3,7 @@
 namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuEmpleadoEstudioTipoType;
@@ -18,17 +19,16 @@ class EmpleadoEstudioTipoController extends Controller
     /**
      * @Route("/rhu/empleado/estudio/tipo/lista", name="brs_rhu_base_empleado_estudio_tipo_lista")
      */
-    public function listaAction() {
+    public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest(); // captura o recupera datos del formulario
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 38, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
         $paginator  = $this->get('knp_paginator');
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel'))
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar'))
             ->getForm(); 
         $form->handleRequest($request);
         $arTipoEstudios = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudioTipo();
@@ -53,7 +53,7 @@ class EmpleadoEstudioTipoController extends Controller
         }
         $arTipoEstudios = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudioTipo();
         $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleadoEstudioTipo')->findAll();
-        $arTipoEstudios = $paginator->paginate($query, $this->get('request')->query->get('page', 1),20);
+        $arTipoEstudios = $paginator->paginate($query, $this->get('Request')->query->get('page', 1),20);
 
         return $this->render('BrasaRecursoHumanoBundle:Base/EmpleadoEstudioTipo:listar.html.twig', array(
                     'arTipoEstudios' => $arTipoEstudios,
@@ -65,9 +65,8 @@ class EmpleadoEstudioTipoController extends Controller
     /**
      * @Route("/rhu/empleado/estudio/tipo/nuevo/{codigoTipoEstudio}", name="brs_rhu_base_empleado_estudio_tipo_nuevo")
      */
-    public function nuevoAction($codigoTipoEstudio) {
+    public function nuevoAction(Request $request, $codigoTipoEstudio) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $arTipoEstudios = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleadoEstudioTipo();
         if ($codigoTipoEstudio != 0)
         {

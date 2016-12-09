@@ -18,8 +18,7 @@ class EmpleadoEstudioController extends Controller
     /**
      * @Route("/rhu/base/empleadoEstudio/nuevo/{codigoEmpleado}/{codigoEmpleadoEstudio}", name="brs_rhu_base_empleado_estudio_nuevo")
      */
-    public function nuevoAction($codigoEmpleado, $codigoEmpleadoEstudio = 0) {
-        $request = $this->getRequest();
+    public function nuevoAction(Request $request, $codigoEmpleado, $codigoEmpleadoEstudio = 0) {
         $em = $this->getDoctrine()->getManager();
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);

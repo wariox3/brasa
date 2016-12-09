@@ -2,6 +2,7 @@
 
 namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
@@ -13,8 +14,7 @@ class EmpleadoFamiliaController extends Controller
     /**
      * @Route("/rhu/base/empleadoFamilia/nuevo/{codigoEmpleado}/{codigoEmpleadoFamilia}", name="brs_rhu_base_empleado_familia_nuevo")
      */
-    public function nuevoAction($codigoEmpleado, $codigoEmpleadoFamilia = 0) {
-        $request = $this->getRequest();
+    public function nuevoAction(Request $request, $codigoEmpleado, $codigoEmpleadoFamilia = 0) {
         $em = $this->getDoctrine()->getManager();
         $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
         $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);

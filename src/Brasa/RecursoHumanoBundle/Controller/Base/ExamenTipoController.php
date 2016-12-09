@@ -3,6 +3,7 @@
 namespace Brasa\RecursoHumanoBundle\Controller\Base;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Brasa\RecursoHumanoBundle\Form\Type\RhuExamenTipoType;
@@ -18,18 +19,17 @@ class ExamenTipoController extends Controller
     /**
      * @Route("/rhu/base/examentipo/listar", name="brs_rhu_base_examentipo_listar")
      */
-    public function listarAction() {
+    public function listarAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest(); // captura o recupera datos del formulario
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 39, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
         $paginator  = $this->get('knp_paginator');
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder() //
-            ->add('BtnPdf', 'submit', array('label'  => 'PDF'))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))
+            ->add('BtnPdf', SubmitType::class, array('label'  => 'PDF'))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel'))
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar'))
             ->getForm(); 
         $form->handleRequest($request);
         
@@ -59,7 +59,7 @@ class ExamenTipoController extends Controller
         }
         $arExamenTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenTipo();
         $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuExamenTipo')->findAll();
-        $arExamenTipos = $paginator->paginate($query, $this->get('request')->query->get('page', 1),20);
+        $arExamenTipos = $paginator->paginate($query, $this->get('Request')->query->get('page', 1),20);
 
         return $this->render('BrasaRecursoHumanoBundle:Base/ExamenTipo:listar.html.twig', array(
                     'arExamenTipos' => $arExamenTipos,
@@ -71,9 +71,8 @@ class ExamenTipoController extends Controller
     /**
      * @Route("/rhu/base/examentipo/nuevo/{codigoExamenTipoPk}", name="brs_rhu_base_examentipo_nuevo")
      */
-    public function nuevoAction($codigoExamenTipoPk) {
+    public function nuevoAction(Request $request, $codigoExamenTipoPk) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $arExamenTipo = new \Brasa\RecursoHumanoBundle\Entity\RhuExamenTipo();
         if ($codigoExamenTipoPk != 0)
         {
