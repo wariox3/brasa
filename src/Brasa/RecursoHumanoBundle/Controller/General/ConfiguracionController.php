@@ -300,6 +300,7 @@ class ConfiguracionController extends Controller
         $form = $this->createFormBuilder()            
             ->add('BtnGuardar', 'submit', array('label' => 'Guardar'))            
             ->add('BtnNuevo', 'submit', array('label' => 'Nuevo'))            
+            ->add('BtnEliminar', 'submit', array('label' => 'Eliminar'))            
             ->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -337,6 +338,18 @@ class ConfiguracionController extends Controller
                 $arParametroPrestacion = new \Brasa\RecursoHumanoBundle\Entity\RhuParametroPrestacion();
                 $em->persist($arParametroPrestacion);
                 $em->flush();
+            }
+            if($form->get('BtnEliminar')->isClicked()) {             
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                if(count($arrSeleccionados) > 0) {
+                    foreach ($arrSeleccionados AS $codigo) {
+                        $arParametroPrestacion = new \Brasa\RecursoHumanoBundle\Entity\RhuParametroPrestacion();
+                        $arParametroPrestacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuParametroPrestacion')->find($codigo);
+                        $em->remove($arParametroPrestacion);
+                    }
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('brs_rhu_configuracion_nomina_parametros_prestaciones'));    
+                }
             }
         }
         $arParametrosPrestacion = new \Brasa\RecursoHumanoBundle\Entity\RhuParametroPrestacion();

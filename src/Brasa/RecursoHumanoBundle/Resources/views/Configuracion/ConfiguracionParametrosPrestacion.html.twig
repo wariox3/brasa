@@ -22,6 +22,7 @@
                     <th>HASTA</th>  
                     <th>PORCENTAJE</th> 
                     <th>ORIGEN</th>
+                    <th></th>
                 </tr>
                 {% for arParametrosPrestacion in arParametrosPrestacion %}
                 <tr >
@@ -32,12 +33,14 @@
                     <td style="text-align: center"><input class="input-grid" type="text" name="TxtHasta{{ arParametrosPrestacion.codigoParametroPrestacionPk }}" value="{{ arParametrosPrestacion.diaHasta }}" size="5" style="text-align: right; width:40px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
                     <td style="text-align: center"><input class="input-grid" type="text" name="TxtPorcentaje{{ arParametrosPrestacion.codigoParametroPrestacionPk }}" value="{{ arParametrosPrestacion.porcentaje }}" size="5" style="text-align: right; width:40px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>
                     <td style="text-align: center"><input class="input-grid" type="text" name="TxtOrigen{{ arParametrosPrestacion.codigoParametroPrestacionPk }}" value="{{ arParametrosPrestacion.origen }}" size="5" style="width:40px" onclick="this.select()"/></td>
+                    <td style="text-align: center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arParametrosPrestacion.codigoParametroPrestacionPk }}" /></td>                    
                 </tr>
                 {% endfor %}
             </table>                  
             <div class="btn-toolbar" style="float: right">                
                 <div class="btn-group">                
                     {{ form_widget(form.BtnNuevo, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
+                    {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                     {{ form_widget(form.BtnGuardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
                 </div>           
             </div>                                             
