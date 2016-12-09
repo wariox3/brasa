@@ -71,11 +71,31 @@ class RhuProyeccion
      * @ORM\Column(name="vr_primas", type="float")
      */
     private $vrPrimas = 0;     
+
+    /**
+     * @ORM\Column(name="vr_primas_real", type="float")
+     */
+    private $vrPrimasReal = 0; 
     
     /**
      * @ORM\Column(name="vr_salario_promedio_primas", type="float")
      */
     private $vrSalarioPromedioPrimas = 0;     
+    
+    /**
+     * @ORM\Column(name="vr_salario_promedio_primas_real", type="float")
+     */
+    private $vrSalarioPromedioPrimasReal = 0;     
+    
+    /**
+     * @ORM\Column(name="porcentaje_primas", type="float")
+     */
+    private $porcentajePrimas = 0;     
+
+    /**
+     * @ORM\Column(name="diferencia_primas", type="float")
+     */
+    private $vrDiferenciaPrimas = 0;
     
     /**
      * @ORM\Column(name="dias_cesantias", type="integer")
@@ -91,16 +111,46 @@ class RhuProyeccion
      * @ORM\Column(name="vr_cesantias", type="float")
      */
     private $vrCesantias = 0;         
+
+    /**
+     * @ORM\Column(name="vr_cesantias_real", type="float")
+     */
+    private $vrCesantiasReal = 0;
     
     /**
      * @ORM\Column(name="vr_intereses_cesantias", type="float")
      */
     private $vrInteresesCesantias = 0;         
+
+    /**
+     * @ORM\Column(name="vr_intereses_cesantias_real", type="float")
+     */
+    private $vrInteresesCesantiasReal = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_diferencia_intereses_cesantias", type="float")
+     */
+    private $vrDiferenciaInteresesCesantias = 0;    
     
     /**
      * @ORM\Column(name="vr_salario_promedio_cesantias", type="float")
      */
     private $vrSalarioPromedioCesantias = 0;    
+    
+    /**
+     * @ORM\Column(name="vr_salario_promedio_cesantias_real", type="float")
+     */
+    private $vrSalarioPromedioCesantiasReal = 0;    
+    
+    /**
+     * @ORM\Column(name="porcentaje_cesantias", type="float")
+     */
+    private $porcentajeCesantias = 0;    
+
+    /**
+     * @ORM\Column(name="diferencia_cesantias", type="float")
+     */
+    private $vrDiferenciaCesantias = 0;
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="proyeccionesEmpleadoRel")
@@ -113,6 +163,7 @@ class RhuProyeccion
      * @ORM\JoinColumn(name="codigo_contrato_fk", referencedColumnName="codigo_contrato_pk")
      */
     protected $contratoRel;     
+
 
 
     /**
@@ -243,6 +294,30 @@ class RhuProyeccion
     public function getDias()
     {
         return $this->dias;
+    }
+
+    /**
+     * Set diasAusentismo
+     *
+     * @param integer $diasAusentismo
+     *
+     * @return RhuProyeccion
+     */
+    public function setDiasAusentismo($diasAusentismo)
+    {
+        $this->diasAusentismo = $diasAusentismo;
+
+        return $this;
+    }
+
+    /**
+     * Get diasAusentismo
+     *
+     * @return integer
+     */
+    public function getDiasAusentismo()
+    {
+        return $this->diasAusentismo;
     }
 
     /**
@@ -390,6 +465,78 @@ class RhuProyeccion
     }
 
     /**
+     * Set vrSalarioPromedioPrimasReal
+     *
+     * @param float $vrSalarioPromedioPrimasReal
+     *
+     * @return RhuProyeccion
+     */
+    public function setVrSalarioPromedioPrimasReal($vrSalarioPromedioPrimasReal)
+    {
+        $this->vrSalarioPromedioPrimasReal = $vrSalarioPromedioPrimasReal;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalarioPromedioPrimasReal
+     *
+     * @return float
+     */
+    public function getVrSalarioPromedioPrimasReal()
+    {
+        return $this->vrSalarioPromedioPrimasReal;
+    }
+
+    /**
+     * Set porcentajePrimas
+     *
+     * @param float $porcentajePrimas
+     *
+     * @return RhuProyeccion
+     */
+    public function setPorcentajePrimas($porcentajePrimas)
+    {
+        $this->porcentajePrimas = $porcentajePrimas;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentajePrimas
+     *
+     * @return float
+     */
+    public function getPorcentajePrimas()
+    {
+        return $this->porcentajePrimas;
+    }
+
+    /**
+     * Set vrDiferenciaPrimas
+     *
+     * @param float $vrDiferenciaPrimas
+     *
+     * @return RhuProyeccion
+     */
+    public function setVrDiferenciaPrimas($vrDiferenciaPrimas)
+    {
+        $this->vrDiferenciaPrimas = $vrDiferenciaPrimas;
+
+        return $this;
+    }
+
+    /**
+     * Get vrDiferenciaPrimas
+     *
+     * @return float
+     */
+    public function getVrDiferenciaPrimas()
+    {
+        return $this->vrDiferenciaPrimas;
+    }
+
+    /**
      * Set diasCesantias
      *
      * @param integer $diasCesantias
@@ -486,6 +633,102 @@ class RhuProyeccion
     }
 
     /**
+     * Set vrSalarioPromedioCesantias
+     *
+     * @param float $vrSalarioPromedioCesantias
+     *
+     * @return RhuProyeccion
+     */
+    public function setVrSalarioPromedioCesantias($vrSalarioPromedioCesantias)
+    {
+        $this->vrSalarioPromedioCesantias = $vrSalarioPromedioCesantias;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalarioPromedioCesantias
+     *
+     * @return float
+     */
+    public function getVrSalarioPromedioCesantias()
+    {
+        return $this->vrSalarioPromedioCesantias;
+    }
+
+    /**
+     * Set vrSalarioPromedioCesantiasReal
+     *
+     * @param float $vrSalarioPromedioCesantiasReal
+     *
+     * @return RhuProyeccion
+     */
+    public function setVrSalarioPromedioCesantiasReal($vrSalarioPromedioCesantiasReal)
+    {
+        $this->vrSalarioPromedioCesantiasReal = $vrSalarioPromedioCesantiasReal;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSalarioPromedioCesantiasReal
+     *
+     * @return float
+     */
+    public function getVrSalarioPromedioCesantiasReal()
+    {
+        return $this->vrSalarioPromedioCesantiasReal;
+    }
+
+    /**
+     * Set porcentajeCesantias
+     *
+     * @param float $porcentajeCesantias
+     *
+     * @return RhuProyeccion
+     */
+    public function setPorcentajeCesantias($porcentajeCesantias)
+    {
+        $this->porcentajeCesantias = $porcentajeCesantias;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentajeCesantias
+     *
+     * @return float
+     */
+    public function getPorcentajeCesantias()
+    {
+        return $this->porcentajeCesantias;
+    }
+
+    /**
+     * Set vrDiferenciaCesantias
+     *
+     * @param float $vrDiferenciaCesantias
+     *
+     * @return RhuProyeccion
+     */
+    public function setVrDiferenciaCesantias($vrDiferenciaCesantias)
+    {
+        $this->vrDiferenciaCesantias = $vrDiferenciaCesantias;
+
+        return $this;
+    }
+
+    /**
+     * Get vrDiferenciaCesantias
+     *
+     * @return float
+     */
+    public function getVrDiferenciaCesantias()
+    {
+        return $this->vrDiferenciaCesantias;
+    }
+
+    /**
      * Set empleadoRel
      *
      * @param \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado $empleadoRel
@@ -534,50 +777,98 @@ class RhuProyeccion
     }
 
     /**
-     * Set vrSalarioPromedioCesantias
+     * Set vrPrimasReal
      *
-     * @param float $vrSalarioPromedioCesantias
+     * @param float $vrPrimasReal
      *
      * @return RhuProyeccion
      */
-    public function setVrSalarioPromedioCesantias($vrSalarioPromedioCesantias)
+    public function setVrPrimasReal($vrPrimasReal)
     {
-        $this->vrSalarioPromedioCesantias = $vrSalarioPromedioCesantias;
+        $this->vrPrimasReal = $vrPrimasReal;
 
         return $this;
     }
 
     /**
-     * Get vrSalarioPromedioCesantias
+     * Get vrPrimasReal
      *
      * @return float
      */
-    public function getVrSalarioPromedioCesantias()
+    public function getVrPrimasReal()
     {
-        return $this->vrSalarioPromedioCesantias;
+        return $this->vrPrimasReal;
     }
 
     /**
-     * Set diasAusentismo
+     * Set vrCesantiasReal
      *
-     * @param integer $diasAusentismo
+     * @param float $vrCesantiasReal
      *
      * @return RhuProyeccion
      */
-    public function setDiasAusentismo($diasAusentismo)
+    public function setVrCesantiasReal($vrCesantiasReal)
     {
-        $this->diasAusentismo = $diasAusentismo;
+        $this->vrCesantiasReal = $vrCesantiasReal;
 
         return $this;
     }
 
     /**
-     * Get diasAusentismo
+     * Get vrCesantiasReal
      *
-     * @return integer
+     * @return float
      */
-    public function getDiasAusentismo()
+    public function getVrCesantiasReal()
     {
-        return $this->diasAusentismo;
+        return $this->vrCesantiasReal;
+    }
+
+    /**
+     * Set vrInteresesCesantiasReal
+     *
+     * @param float $vrInteresesCesantiasReal
+     *
+     * @return RhuProyeccion
+     */
+    public function setVrInteresesCesantiasReal($vrInteresesCesantiasReal)
+    {
+        $this->vrInteresesCesantiasReal = $vrInteresesCesantiasReal;
+
+        return $this;
+    }
+
+    /**
+     * Get vrInteresesCesantiasReal
+     *
+     * @return float
+     */
+    public function getVrInteresesCesantiasReal()
+    {
+        return $this->vrInteresesCesantiasReal;
+    }
+
+    /**
+     * Set vrDiferenciaInteresesCesantias
+     *
+     * @param float $vrDiferenciaInteresesCesantias
+     *
+     * @return RhuProyeccion
+     */
+    public function setVrDiferenciaInteresesCesantias($vrDiferenciaInteresesCesantias)
+    {
+        $this->vrDiferenciaInteresesCesantias = $vrDiferenciaInteresesCesantias;
+
+        return $this;
+    }
+
+    /**
+     * Get vrDiferenciaInteresesCesantias
+     *
+     * @return float
+     */
+    public function getVrDiferenciaInteresesCesantias()
+    {
+        return $this->vrDiferenciaInteresesCesantias;
     }
 }

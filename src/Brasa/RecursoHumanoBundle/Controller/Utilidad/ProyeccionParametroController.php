@@ -6,18 +6,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 
-class ProyeccionController extends Controller
+class ProyeccionParametroController extends Controller
 {
     var $strDqlLista = "";
-    
+
     /**
-     * @Route("/rhu/utilidades/proyeccion", name="brs_rhu_utilidades_proyeccion")
+     * @Route("/rhu/utilidades/proyeccion/parametro", name="brs_rhu_utilidades_proyeccion_parametro")
      */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
-        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 80)) {
-            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 116)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));
         }
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioLista();
@@ -29,22 +29,22 @@ class ProyeccionController extends Controller
                 $this->filtrarLista($form);
                 $this->generarExcel();
             }
-            if($form->get('BtnGenerar')->isClicked()) {                                 
+            if($form->get('BtnGenerar')->isClicked()) {
                 $fechaHasta = $form->get('fechaHasta')->getData();
                 if($fechaHasta != null) {
                     set_time_limit(0);
-                    ini_set("memory_limit", -1);                    
+                    ini_set("memory_limit", -1);
                     $strSql = "DELETE FROM rhu_proyeccion WHERE 1";
-                    $em->getConnection()->executeQuery($strSql); 
+                    $em->getConnection()->executeQuery($strSql);
                     $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
                     $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
                     $arParametrosPrestacionPrima = new \Brasa\RecursoHumanoBundle\Entity\RhuParametroPrestacion();
-                    $arParametrosPrestacionPrima = $em->getRepository('BrasaRecursoHumanoBundle:RhuParametroPrestacion')->findBy(array('tipo' => 'PRI'));                                                    
+                    $arParametrosPrestacionPrima = $em->getRepository('BrasaRecursoHumanoBundle:RhuParametroPrestacion')->findBy(array('tipo' => 'PRI'));
                     $arParametrosPrestacionCesantia = new \Brasa\RecursoHumanoBundle\Entity\RhuParametroPrestacion();
-                    $arParametrosPrestacionCesantia = $em->getRepository('BrasaRecursoHumanoBundle:RhuParametroPrestacion')->findBy(array('tipo' => 'CES'));                                                    
-                    $douAuxilioTransporte = $arConfiguracion->getVrAuxilioTransporte();                    
-                    $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();                    
-                    $arContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->findBy(array('estadoActivo' => 1));                    
+                    $arParametrosPrestacionCesantia = $em->getRepository('BrasaRecursoHumanoBundle:RhuParametroPrestacion')->findBy(array('tipo' => 'CES'));
+                    $douAuxilioTransporte = $arConfiguracion->getVrAuxilioTransporte();
+                    $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
+                    $arContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->findBy(array('estadoActivo' => 1));
                     foreach($arContratos as $arContrato) {
                         $douSalario = $arContrato->getVrSalarioPago();
                         $auxilioTransporte = $arConfiguracion->getVrAuxilioTransporte();
@@ -52,40 +52,42 @@ class ProyeccionController extends Controller
                         $arProyeccion = new \Brasa\RecursoHumanoBundle\Entity\RhuProyeccion();
                         $arProyeccion->setContratoRel($arContrato);
                         $arProyeccion->setEmpleadoRel($arContrato->getEmpleadoRel());
-                        $arProyeccion->setVrSalario($arContrato->getVrSalario());                        
+                        $arProyeccion->setVrSalario($arContrato->getVrSalario());
                         $arProyeccion->setFechaHasta($fechaHasta);
-                        
+
                         //Cesantias
                         if($arContrato->getSalarioIntegral() == 0) {
-                            $dateFechaDesde = $arContrato->getFechaUltimoPagoCesantias();   
+                            $dateFechaDesde = $arContrato->getFechaUltimoPagoCesantias();
                             $dateFechaHastaCesantias = $arContrato->getFechaUltimoPago();
-                            $ibpCesantiasInicial = $arContrato->getIbpCesantiasInicial();                            
-                            $ibpCesantias = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->ibp($dateFechaDesde->format('Y-m-d'), $dateFechaHastaCesantias->format('Y-m-d'), $arContrato->getCodigoContratoPk());                
-                            $ibpCesantias += $ibpCesantiasInicial;                  
-                            $intDiasCesantias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($dateFechaDesde, $dateFechaHasta);                                                                 
-                            $intDiasCesantiasSalarioPromedio = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($dateFechaDesde, $dateFechaHastaCesantias);                                                                 
-                            $intDiasAusentismo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->diasAusentismo($dateFechaDesde->format('Y-m-d'), $dateFechaHastaCesantias->format('Y-m-d'), $arContrato->getCodigoContratoPk());                                                    
+                            $ibpCesantiasInicial = $arContrato->getIbpCesantiasInicial();
+                            $ibpCesantias = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->ibp($dateFechaDesde->format('Y-m-d'), $dateFechaHastaCesantias->format('Y-m-d'), $arContrato->getCodigoContratoPk());
+                            $ibpCesantias += $ibpCesantiasInicial;
+                            $intDiasCesantias = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($dateFechaDesde, $dateFechaHasta);
+                            $intDiasCesantiasSalarioPromedio = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($dateFechaDesde, $dateFechaHastaCesantias);
+                            $intDiasAusentismo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->diasAusentismo($dateFechaDesde->format('Y-m-d'), $dateFechaHastaCesantias->format('Y-m-d'), $arContrato->getCodigoContratoPk());
                             $salarioPromedioCesantias = 0;
                             if($arContrato->getCodigoSalarioTipoFk() == 2) {
                                 if($intDiasCesantiasSalarioPromedio > 0) {
-                                    $salarioPromedioCesantias = ($ibpCesantias / $intDiasCesantiasSalarioPromedio) * 30;                                                                    
+                                    $salarioPromedioCesantias = ($ibpCesantias / $intDiasCesantiasSalarioPromedio) * 30;
                                 } else {
                                     if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
                                         $salarioPromedioCesantias = $douSalario + $auxilioTransporte;
                                     } else {
                                         $salarioPromedioCesantias = $douSalario;
-                                    }                                  
-                                }                            
-                            } else {                                        
+                                    }
+                                }
+                            } else {
                                 if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
                                     $salarioPromedioCesantias = $douSalario + $auxilioTransporte;
                                 } else {
                                     $salarioPromedioCesantias = $douSalario;
-                                }                                            
-                            }        
-                            if($arConfiguracion->getPrestacionesAplicaPorcentajeSalario()) {                            
-                                if($arContrato->getCodigoSalarioTipoFk() == 2) {            
-                                    $intDiasLaborados = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($arContrato->getFechaDesde(), $dateFechaHasta);                                                                    
+                                }
+                            }
+                            $salarioPromedioCesantiasReal = $salarioPromedioCesantias;
+                            $porcentaje = 100;
+                            if($arConfiguracion->getPrestacionesAplicaPorcentajeSalario()) {
+                                if($arContrato->getCodigoSalarioTipoFk() == 2) {
+                                    $intDiasLaborados = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($arContrato->getFechaDesde(), $dateFechaHasta);
                                     foreach ($arParametrosPrestacionCesantia as $arParametroPrestacion) {
                                         if($intDiasLaborados >= $arParametroPrestacion->getDiaDesde() && $intDiasLaborados <= $arParametroPrestacion->getDiaHasta()) {
                                             if($arParametroPrestacion->getOrigen() == 'SAL') {
@@ -93,67 +95,80 @@ class ProyeccionController extends Controller
                                                     $salarioPromedioCesantias = $douSalario + $auxilioTransporte;
                                                 } else {
                                                     $salarioPromedioCesantias = $douSalario;
-                                                } 
+                                                }
                                             } else {
                                                 $porcentaje = $arParametroPrestacion->getPorcentaje();
-                                                $salarioPromedioCesantias = ($salarioPromedioCesantias * $porcentaje)/100;                                
-                                            }                                            
+                                                $salarioPromedioCesantias = ($salarioPromedioCesantias * $porcentaje)/100;
+                                            }
                                         }
-                                    }                              
-                                }                                                        
-                            }                        
+                                    }
+                                }
+                            }
                             $intDiasCesantias -= $intDiasAusentismo;
-                            $douCesantias = ($salarioPromedioCesantias * $intDiasCesantias) / 360;          
+
+                            $douCesantias = ($salarioPromedioCesantias * $intDiasCesantias) / 360;
+                            $douCesantiasReal = ($salarioPromedioCesantiasReal * $intDiasCesantias) / 360;
+                            $diferencia = $douCesantiasReal - $douCesantias;
                             $floPorcentajeIntereses = (($intDiasCesantias * 12) / 360)/100;
-                            $douInteresesCesantias = $douCesantias * $floPorcentajeIntereses;                                                                                                                        
+                            $douInteresesCesantias = $douCesantias * $floPorcentajeIntereses;
+                            $douInteresesCesantiasReal = $douCesantiasReal * $floPorcentajeIntereses;
+                            $diferenciaIntereses = $douInteresesCesantiasReal - $douInteresesCesantias;
                             $arProyeccion->setDiasCesantias($intDiasCesantias);
                             $arProyeccion->setVrCesantias($douCesantias);
+                            $arProyeccion->setVrCesantiasReal($douCesantiasReal);
                             $arProyeccion->setVrSalarioPromedioCesantias($salarioPromedioCesantias);
+                            $arProyeccion->setVrSalarioPromedioCesantiasReal($salarioPromedioCesantiasReal);
+                            $arProyeccion->setPorcentajeCesantias($porcentaje);
+                            $arProyeccion->setVrDiferenciaCesantias($diferencia);
                             $arProyeccion->setVrInteresesCesantias($douInteresesCesantias);
+                            $arProyeccion->setVrInteresesCesantiasReal($douInteresesCesantiasReal);
+                            $arProyeccion->setVrDiferenciaInteresesCesantias($diferenciaIntereses);
                             $arProyeccion->setFechaDesdeCesantias($dateFechaDesde);
-                            $arProyeccion->setDiasAusentismo($intDiasAusentismo);                            
+                            $arProyeccion->setDiasAusentismo($intDiasAusentismo);
                         } else {
                             $arProyeccion->setFechaDesdeCesantias($dateFechaHasta);
                         }
-                        
-                        //Primas  
+
+                        //Primas
                         if($arContrato->getSalarioIntegral() == 0) {
-                            $dateFechaDesde = $arContrato->getFechaUltimoPagoPrimas();                        
+                            $dateFechaDesde = $arContrato->getFechaUltimoPagoPrimas();
                             $dateFechaHastaPrimas = $arContrato->getFechaUltimoPago();
-                            $intDiasPrima = 0;                                        
-                            $intDiasPrima = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($dateFechaDesde, $dateFechaHasta);    
-                            $intDiasPrimaSalarioPromedio = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($dateFechaDesde, $dateFechaHastaPrimas);                            
+                            $intDiasPrima = 0;
+                            $intDiasPrima = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($dateFechaDesde, $dateFechaHasta);
+                            $intDiasPrimaSalarioPromedio = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($dateFechaDesde, $dateFechaHastaPrimas);
                             $intDiasPrimaLiquidar = $intDiasPrima;
                             if($dateFechaDesde->format('m-d') == '06-30' || $dateFechaDesde->format('m-d') == '12-30') {
                                 $intDiasPrimaLiquidar -= 1;
                                 $intDiasPrimaSalarioPromedio -= 1;
                             }
-                            $ibpPrimasInicial = $arContrato->getIbpPrimasInicial();                    
+                            $ibpPrimasInicial = $arContrato->getIbpPrimasInicial();
                             $ibpPrimasInicial = round($ibpPrimasInicial);
-                            $ibpPrimas = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->ibp($dateFechaDesde->format('Y-m-d'), $dateFechaHastaPrimas->format('Y-m-d'), $arContrato->getCodigoContratoPk());                
-                            $ibpPrimas += $ibpPrimasInicial;                                            
+                            $ibpPrimas = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->ibp($dateFechaDesde->format('Y-m-d'), $dateFechaHastaPrimas->format('Y-m-d'), $arContrato->getCodigoContratoPk());
+                            $ibpPrimas += $ibpPrimasInicial;
                             $ibpPrimas = round($ibpPrimas);
                             $salarioPromedioPrimas = 0;
                             if($arContrato->getCodigoSalarioTipoFk() == 2) {
                                 if($intDiasPrimaSalarioPromedio > 0) {
-                                    $salarioPromedioPrimas = ($ibpPrimas / $intDiasPrimaSalarioPromedio) * 30;   
+                                    $salarioPromedioPrimas = ($ibpPrimas / $intDiasPrimaSalarioPromedio) * 30;
                                 } else {
                                     if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
                                         $salarioPromedioPrimas = $douSalario + $auxilioTransporte;
                                     } else {
                                         $salarioPromedioPrimas = $douSalario;
-                                    }                                
-                                }                                                         
+                                    }
+                                }
                             } else {
                                 if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
                                     $salarioPromedioPrimas = $douSalario + $auxilioTransporte;
                                 } else {
                                     $salarioPromedioPrimas = $douSalario;
-                                }                                                
-                            }                     
-                            if($arConfiguracion->getPrestacionesAplicaPorcentajeSalario()) {                            
-                                if($arContrato->getCodigoSalarioTipoFk() == 2) {  
-                                    $intDiasLaborados = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($arContrato->getFechaDesde(), $dateFechaHasta);                                                                    
+                                }
+                            }
+                            $salarioPromedioPrimasReal = $salarioPromedioPrimas;
+                            $porcentaje = 100;
+                            if($arConfiguracion->getPrestacionesAplicaPorcentajeSalario()) {
+                                if($arContrato->getCodigoSalarioTipoFk() == 2) {
+                                    $intDiasLaborados = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($arContrato->getFechaDesde(), $dateFechaHasta);
                                     foreach ($arParametrosPrestacionPrima as $arParametroPrestacion) {
                                         if($intDiasLaborados >= $arParametroPrestacion->getDiaDesde() && $intDiasLaborados <= $arParametroPrestacion->getDiaHasta()) {
                                             if($arParametroPrestacion->getOrigen() == 'SAL') {
@@ -161,39 +176,42 @@ class ProyeccionController extends Controller
                                                     $salarioPromedioPrimas = $douSalario + $auxilioTransporte;
                                                 } else {
                                                     $salarioPromedioPrimas = $douSalario;
-                                                } 
+                                                }
                                             } else {
                                                 $porcentaje = $arParametroPrestacion->getPorcentaje();
-                                                $salarioPromedioPrimas = ($salarioPromedioPrimas * $porcentaje)/100;                                
-                                            }                                            
+                                                $salarioPromedioPrimas = ($salarioPromedioPrimas * $porcentaje)/100;
+                                                $arProyeccion->setPorcentajePrimas($porcentaje);
+                                            }
                                         }
-                                    }                                               
-                                }                                                        
-                            }                        
+                                    }
+                                }
+                            }
                             $salarioPromedioPrimas = round($salarioPromedioPrimas);
-                            $douPrima = ($salarioPromedioPrimas * $intDiasPrimaLiquidar) / 360;                
-                            $douPrima = round($douPrima);         
+                            $salarioPromedioPrimasReal = round($salarioPromedioPrimasReal);
+                            $douPrima = ($salarioPromedioPrimas * $intDiasPrimaLiquidar) / 360;
+                            $douPrima = round($douPrima);
+                            $douPrimaReal = ($salarioPromedioPrimasReal * $intDiasPrimaLiquidar) / 360;
+                            $douPrimaReal = round($douPrimaReal);
+                            $diferenciaPrimas = round($douPrimaReal - $douPrima);
+                            $arProyeccion->setVrSalarioPromedioPrimasReal($salarioPromedioPrimasReal);
+                            $arProyeccion->setPorcentajePrimas($porcentaje);
                             $arProyeccion->setVrSalarioPromedioPrimas($salarioPromedioPrimas);
+                            $arProyeccion->setVrDiferenciaPrimas($diferenciaPrimas);
                             $arProyeccion->setVrPrimas($douPrima);
+                            $arProyeccion->setVrPrimasReal($douPrimaReal);
                             $arProyeccion->setDiasPrima($intDiasPrimaLiquidar);
-                            $arProyeccion->setFechaDesdePrima($dateFechaDesde);                             
+                            $arProyeccion->setFechaDesdePrima($dateFechaDesde);
                         } else {
-                            $arProyeccion->setFechaDesdePrima($dateFechaHasta);                                               
+                            $arProyeccion->setFechaDesdePrima($dateFechaHasta);
                         }
-                        
+
                         $em->persist($arProyeccion);
-                    }         
-                    $em->flush();                    
+                    }
+                    $em->flush();
                 }
-                return $this->redirect($this->generateUrl('brs_rhu_utilidades_proyeccion'));           
-            }            
-            
-            /*if($form->get('BtnPDF')->isClicked()) {
-                $this->filtrarLista($form);
-                $this->listarCostosGeneral();
-                $objReporteCostos = new \Brasa\RecursoHumanoBundle\Reportes\ReporteCostos();
-                $objReporteCostos->Generar($this, $this->strDqlLista);
-            }*/            
+                return $this->redirect($this->generateUrl('brs_rhu_utilidades_proyeccion_parametro'));
+            }
+
             if($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrarLista($form);
                 $this->listar();
@@ -201,22 +219,22 @@ class ProyeccionController extends Controller
 
         }
         $arProyecciones = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 40);
-        return $this->render('BrasaRecursoHumanoBundle:Utilidades/Proyeccion:lista.html.twig', array(
+        return $this->render('BrasaRecursoHumanoBundle:Utilidades/ProyeccionParametro:lista.html.twig', array(
             'arProyecciones' => $arProyecciones,
             'form' => $form->createView()
             ));
-    }        
-    
+    }
+
     private function listar() {
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();
-        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuProyeccion')->listaDql(                                        
+        $this->strDqlLista = $em->getRepository('BrasaRecursoHumanoBundle:RhuProyeccion')->listaDql(
                     "",
                     "",
                     "",
                     ""
                     );
-    }    
+    }
 
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
@@ -226,9 +244,9 @@ class ProyeccionController extends Controller
         $strFechaHasta = $dateFecha->format('Y/m/').$intUltimoDia;
         if($session->get('filtroHasta') != "") {
             $strFechaHasta = $session->get('filtroHasta');
-        }            
+        }
         $dateFechaHasta = date_create($strFechaHasta);
-        $form = $this->createFormBuilder()            
+        $form = $this->createFormBuilder()
             ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacion')))
             ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta))
             ->add('BtnGenerar', 'submit', array('label'  => 'Generar'))
@@ -236,21 +254,21 @@ class ProyeccionController extends Controller
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->getForm();
         return $form;
-    }        
+    }
 
     private function filtrarLista($form) {
         $session = $this->getRequest()->getSession();
         $request = $this->getRequest();
-        $controles = $request->request->get('form');        
-        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());        
-        $dateFechaHasta = $form->get('fechaHasta')->getData();        
+        $controles = $request->request->get('form');
+        $session->set('filtroIdentificacion', $form->get('TxtIdentificacion')->getData());
+        $dateFechaHasta = $form->get('fechaHasta')->getData();
         $session->set('filtroHasta', $dateFechaHasta->format('Y/m/d'));
     }
 
     private function generarExcel() {
         ob_clean();
         set_time_limit(0);
-        ini_set("memory_limit", -1);        
+        ini_set("memory_limit", -1);
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         $objPHPExcel = new \PHPExcel();
@@ -262,59 +280,77 @@ class ProyeccionController extends Controller
             ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
-        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10); 
+        $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10);
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        for($col = 'A'; $col !== 'R'; $col++) {
-                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                           
-        }   
-        for($col = 'G'; $col !== 'J'; $col++) {            
+        for($col = 'A'; $col !== 'AA'; $col++) {
+                    $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+        }
+        for($col = 'G'; $col !== 'M'; $col++) {
             $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
-        } 
-        for($col = 'L'; $col !== 'O'; $col++) {            
+        }
+        for($col = 'O'; $col !== 'X'; $col++) {
             $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
-        }         
+        }
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'DOCUMENTO')
                     ->setCellValue('B1', 'EMPLEADO')
                     ->setCellValue('C1', 'CONTRATO')
                     ->setCellValue('D1', 'GRUPO PAGO')
                     ->setCellValue('E1', 'SALARIO')
-                    ->setCellValue('F1', 'HASTA')                    
-                    ->setCellValue('G1', 'VACACIONES')
-                    ->setCellValue('H1', 'S_PROMEDIO')    
-                    ->setCellValue('I1', 'PRIMAS')
-                    ->setCellValue('J1', 'DIAS')
-                    ->setCellValue('K1', 'U.PAGO')
-                    ->setCellValue('L1', 'S_PROMEDIO')    
-                    ->setCellValue('M1', 'CESANTIAS')
-                    ->setCellValue('N1', 'INTERESES')
-                    ->setCellValue('O1', 'DIAS')
-                    ->setCellValue('P1', 'U.PAGO')
-                    ->setCellValue('Q1', 'D_AUS');
-        
+                    ->setCellValue('F1', 'HASTA')
+                    ->setCellValue('G1', 'SAL_REAL')
+                    ->setCellValue('H1', 'POR')
+                    ->setCellValue('I1', 'SAL_PROMEDIO')
+                    ->setCellValue('J1', 'PRI_REAL')
+                    ->setCellValue('K1', 'PRIMAS')
+                    ->setCellValue('L1', 'DIF')
+                    ->setCellValue('M1', 'DIAS')
+                    ->setCellValue('N1', 'U.PAGO')
+                    ->setCellValue('O1', 'SAL_REAL')
+                    ->setCellValue('P1', 'POR')                
+                    ->setCellValue('Q1', 'SAL_PROMEDIO')
+                    ->setCellValue('R1', 'CES_REAL')    
+                    ->setCellValue('S1', 'CESANTIAS')
+                    ->setCellValue('T1', 'DIF')
+                    ->setCellValue('U1', 'INT_REAL')
+                    ->setCellValue('V1', 'INTERESES')
+                    ->setCellValue('W1', 'DIF')
+                    ->setCellValue('X1', 'DIAS')
+                    ->setCellValue('Y1', 'U.PAGO')
+                    ->setCellValue('Z1', 'D_AUS');
+
         $i = 2;
         $query = $em->createQuery($this->strDqlLista);
         $arProyecciones = new \Brasa\RecursoHumanoBundle\Entity\RhuProyeccion();
         $arProyecciones = $query->getResult();
         foreach ($arProyecciones as $arProyeccion) {
-            $objPHPExcel->setActiveSheetIndex(0)                    
+            $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arProyeccion->getEmpleadoRel()->getNumeroIdentificacion())
                     ->setCellValue('B' . $i, $arProyeccion->getEmpleadoRel()->getNombreCorto())
                     ->setCellValue('C' . $i, $arProyeccion->getCodigoContratoFk())
-                    ->setCellValue('D' . $i, $arProyeccion->getContratoRel()->getCentroCostoRel()->getNombre())                                        
+                    ->setCellValue('D' . $i, $arProyeccion->getContratoRel()->getCentroCostoRel()->getNombre())
                     ->setCellValue('E' . $i, $arProyeccion->getVrSalario())
-                    ->setCellValue('F' . $i, $arProyeccion->getFechaHasta()->Format('Y-m-d'))                    
-                    ->setCellValue('G' . $i, $arProyeccion->getVrVacaciones())
-                    ->setCellValue('H' . $i, $arProyeccion->getVrSalarioPromedioPrimas())                    
-                    ->setCellValue('I' . $i, $arProyeccion->getVrPrimas())
-                    ->setCellValue('J' . $i, $arProyeccion->getDiasPrima())
-                    ->setCellValue('K' . $i, $arProyeccion->getFechaDesdePrima()->Format('Y-m-d'))                                        
-                    ->setCellValue('L' . $i, $arProyeccion->getVrSalarioPromedioCesantias())                    
-                    ->setCellValue('M' . $i, $arProyeccion->getVrCesantias())
-                    ->setCellValue('N' . $i, $arProyeccion->getVrInteresesCesantias())
-                    ->setCellValue('O' . $i, $arProyeccion->getDiasCesantias())
-                    ->setCellValue('P' . $i, $arProyeccion->getFechaDesdeCesantias()->Format('Y-m-d'))
-                    ->setCellValue('Q' . $i, $arProyeccion->getDiasAusentismo());
+                    ->setCellValue('F' . $i, $arProyeccion->getFechaHasta()->Format('Y-m-d'))
+                    ->setCellValue('G' . $i, $arProyeccion->getVrSalarioPromedioPrimasReal())
+                    ->setCellValue('H' . $i, $arProyeccion->getPorcentajePrimas())
+                    ->setCellValue('I' . $i, $arProyeccion->getVrSalarioPromedioPrimas())
+                    ->setCellValue('J' . $i, $arProyeccion->getVrPrimasReal())
+                    ->setCellValue('K' . $i, $arProyeccion->getVrPrimas())
+                    ->setCellValue('L' . $i, $arProyeccion->getVrDiferenciaPrimas())
+                    ->setCellValue('M' . $i, $arProyeccion->getDiasPrima())
+                    ->setCellValue('N' . $i, $arProyeccion->getFechaDesdePrima()->Format('Y-m-d'))
+                    ->setCellValue('O' . $i, $arProyeccion->getVrSalarioPromedioCesantiasReal())
+                    ->setCellValue('P' . $i, $arProyeccion->getPorcentajeCesantias())
+                    ->setCellValue('Q' . $i, $arProyeccion->getVrSalarioPromedioCesantias())
+                    ->setCellValue('R' . $i, $arProyeccion->getVrCesantiasReal())
+                    ->setCellValue('S' . $i, $arProyeccion->getVrCesantias())
+                    ->setCellValue('T' . $i, $arProyeccion->getVrDiferenciaCesantias())
+                    ->setCellValue('U' . $i, $arProyeccion->getVrInteresesCesantiasReal())
+                    ->setCellValue('V' . $i, $arProyeccion->getVrInteresesCesantias())
+                    ->setCellValue('W' . $i, $arProyeccion->getVrDiferenciaInteresesCesantias())
+                    ->setCellValue('X' . $i, $arProyeccion->getDiasCesantias())
+                    ->setCellValue('Y' . $i, $arProyeccion->getFechaDesdeCesantias()->Format('Y-m-d'))
+                    ->setCellValue('Z' . $i, $arProyeccion->getDiasAusentismo());
             $i++;
         }
 
@@ -335,6 +371,6 @@ class ProyeccionController extends Controller
         $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('php://output');
         exit;
-    }        
-    
+    }
+
 }
