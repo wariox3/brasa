@@ -333,4 +333,24 @@ class ProyeccionController extends Controller
         exit;
     }
     
+    private function devolverPorcentajeSalarioPrestaciones($fechaDesde, $fechaHasta, $salario, $auxilioTransporte) {
+        $porcentaje = 100;
+        $salarioPromedioPrimas = 0;
+        if($intDiasLaborados <= 30) {
+            if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
+                $salarioPromedioPrimas = $salario + $auxilioTransporte;
+            } else {
+                $salarioPromedioPrimas = $salario;
+            } 
+        } else {
+            if($intDiasLaborados <= 120) {
+                $porcentaje = $arConfiguracion->getPrestacionesPorcentajeSalario1();
+            } else {
+                $porcentaje = $arConfiguracion->getPrestacionesPorcentajeSalario2();
+            }
+        }   
+        $salarioPromedioPrimas = ($salarioPromedioPrimas * $porcentaje)/100;
+        return $porcentaje;
+    }
+    
 }
