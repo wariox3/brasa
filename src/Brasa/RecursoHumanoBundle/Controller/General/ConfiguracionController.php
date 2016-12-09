@@ -299,6 +299,7 @@ class ConfiguracionController extends Controller
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder()            
             ->add('BtnGuardar', 'submit', array('label' => 'Guardar'))            
+            ->add('BtnNuevo', 'submit', array('label' => 'Nuevo'))            
             ->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -311,11 +312,14 @@ class ConfiguracionController extends Controller
                         if($arrControles['TxtTipo'.$codigo] != "" ) {                                
                             $arParametroPrestacion->setTipo($arrControles['TxtTipo'.$codigo]);                                
                         }
+                        if($arrControles['TxtOrden'.$codigo] != "" ) {                                
+                            $arParametroPrestacion->setOrden($arrControles['TxtOrden'.$codigo]);                                
+                        }                        
                         if($arrControles['TxtDesde'.$codigo] != "" ) {                                
                             $arParametroPrestacion->setDiaDesde($arrControles['TxtDesde'.$codigo]);                                
                         }                        
                         if($arrControles['TxtHasta'.$codigo] != "" ) {                                
-                            $arParametroPrestacion->setDiaHasta($arrControles['TxtDesde'.$codigo]);                                
+                            $arParametroPrestacion->setDiaHasta($arrControles['TxtHasta'.$codigo]);                                
                         }            
                         if($arrControles['TxtPorcentaje'.$codigo] != "" ) {                                
                             $arParametroPrestacion->setPorcentaje($arrControles['TxtPorcentaje'.$codigo]);                                
@@ -328,13 +332,19 @@ class ConfiguracionController extends Controller
                 }
                 $em->flush();
             }
+            
+            if($form->get('BtnNuevo')->isClicked()) {             
+                $arParametroPrestacion = new \Brasa\RecursoHumanoBundle\Entity\RhuParametroPrestacion();
+                $em->persist($arParametroPrestacion);
+                $em->flush();
+            }
         }
         $arParametrosPrestacion = new \Brasa\RecursoHumanoBundle\Entity\RhuParametroPrestacion();
-        $arParametrosPrestacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuParametroPrestacion')->findAll();
+        $arParametrosPrestacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuParametroPrestacion')->findBy(array(), array('tipo' => 'ASC', 'orden' => 'ASC'));
         return $this->render('BrasaRecursoHumanoBundle:Configuracion:ConfiguracionParametrosPrestacion.html.twig', array(
             'form' => $form->createView(),
             'arParametrosPrestacion' => $arParametrosPrestacion
         ));
-    }    
+    }        
     
 }

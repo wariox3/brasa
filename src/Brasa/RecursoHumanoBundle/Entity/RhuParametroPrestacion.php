@@ -25,6 +25,11 @@ class RhuParametroPrestacion
     private $tipo;
 
     /**
+     * @ORM\Column(name="orden", type="integer")
+     */
+    private $orden = 0;    
+    
+    /**
      * @ORM\Column(name="dia_desde", type="integer")
      */
     private $diaDesde = 0;    
@@ -172,5 +177,29 @@ class RhuParametroPrestacion
     public function getOrigen()
     {
         return $this->origen;
+    }
+
+    /**
+     * Set orden
+     *
+     * @param integer $orden
+     *
+     * @return RhuParametroPrestacion
+     */
+    public function setOrden($orden)
+    {
+        $this->orden = $orden;
+
+        return $this;
+    }
+
+    /**
+     * Get orden
+     *
+     * @return integer
+     */
+    public function getOrden()
+    {
+        return $this->orden;
     }
 }
