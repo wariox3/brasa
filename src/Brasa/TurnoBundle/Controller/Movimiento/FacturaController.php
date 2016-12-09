@@ -1,9 +1,17 @@
 <?php
 namespace Brasa\TurnoBundle\Controller\Movimiento;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Brasa\TurnoBundle\Form\Type\TurFacturaType;
 use Brasa\TurnoBundle\Form\Type\TurNotaCreditoType;
 use Brasa\TurnoBundle\Form\Type\TurFacturaDetalleType;
@@ -89,8 +97,7 @@ class FacturaController extends Controller
     /**
      * @Route("/tur/movimiento/factura/nuevo/{codigoFactura}", name="brs_tur_movimiento_factura_nuevo")
      */
-    public function nuevoAction($codigoFactura) {
-        $request = $this->getRequest();
+    public function nuevoAction(Request $request, $codigoFactura) {
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $em = $this->getDoctrine()->getManager();
@@ -151,8 +158,7 @@ class FacturaController extends Controller
     /**
      * @Route("/tur/movimiento/nota/credito/nuevo/{codigoFactura}", name="brs_tur_movimiento_nota_credito_nuevo")
      */
-    public function nuevoNotaCreditoAction($codigoFactura) {
-        $request = $this->getRequest();
+    public function nuevoNotaCreditoAction(Request $request, $codigoFactura) {
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $em = $this->getDoctrine()->getManager();
@@ -215,9 +221,8 @@ class FacturaController extends Controller
     /**
      * @Route("/tur/movimiento/factura/detalle/{codigoFactura}", name="brs_tur_movimiento_factura_detalle")
      */
-    public function detalleAction($codigoFactura) {
+    public function detalleAction(Request $request, $codigoFactura) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $objMensaje = $this->get('mensajes_brasa');
         $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
@@ -326,8 +331,7 @@ class FacturaController extends Controller
     /**
      * @Route("/tur/movimiento/factura/detalle/nuevo/{codigoFactura}/{codigoFacturaDetalle}", name="brs_tur_movimiento_factura_detalle_nuevo")
      */    
-    public function detalleNuevoAction($codigoFactura, $codigoFacturaDetalle = 0) {
-        $request = $this->getRequest();
+    public function detalleNuevoAction(Request $request, $codigoFactura, $codigoFacturaDetalle = 0) {
         $em = $this->getDoctrine()->getManager();
         $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
         $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura);
@@ -359,8 +363,7 @@ class FacturaController extends Controller
     /**
      * @Route("/tur/movimiento/factura/detalle/pedido/nuevo/{codigoFactura}", name="brs_tur_movimiento_factura_detalle_pedido_nuevo")
      */
-    public function detallePedidoNuevoAction($codigoFactura) {
-        $request = $this->getRequest();
+    public function detallePedidoNuevoAction(Request $request, $codigoFactura) {
         $paginator  = $this->get('knp_paginator');
         $em = $this->getDoctrine()->getManager();
         $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
@@ -417,15 +420,14 @@ class FacturaController extends Controller
     /**
      * @Route("/tur/movimiento/factura/detalle/factura/nuevo/{codigoFactura}/{tipoCruce}", name="brs_tur_movimiento_factura_detalle_factura_nuevo")
      */
-    public function detalleFacturaNuevoAction($codigoFactura, $tipoCruce) {
-        $request = $this->getRequest();
+    public function detalleFacturaNuevoAction(Request $request, $codigoFactura, $tipoCruce) {
         $paginator  = $this->get('knp_paginator');
         $em = $this->getDoctrine()->getManager();
         $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
         $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura);        
         $form = $this->createFormBuilder()            
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar',))
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar',))
+            ->add('BtnGuardar', SubmitType::class, array('label'  => 'Guardar',))
             ->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -473,8 +475,7 @@ class FacturaController extends Controller
     /**
      * @Route("/tur/movimiento/factura/detalle/editar/{codigoFactura}/{codigoFacturaDetalle}", name="brs_tur_movimiento_factura_detalle_editar")
      */    
-    public function detalleEditarAction($codigoFactura, $codigoFacturaDetalle = 0) {
-        $request = $this->getRequest();
+    public function detalleEditarAction(Request $request, $codigoFactura, $codigoFacturaDetalle = 0) {
         $em = $this->getDoctrine()->getManager();
         $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
         $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura);
@@ -498,14 +499,13 @@ class FacturaController extends Controller
     /**
      * @Route("/tur/movimiento/factura/detalle/concepto/pedido/nuevo/{codigoFactura}", name="brs_tur_movimiento_factura_detalle_concepto_pedido_nuevo")
      */     
-    public function detalleNuevoConceptoPedidoAction($codigoFactura) {
-        $request = $this->getRequest();
+    public function detalleNuevoConceptoPedidoAction(Request $request, $codigoFactura) {
         $paginator  = $this->get('knp_paginator');
         $em = $this->getDoctrine()->getManager();
         $arFactura = new \Brasa\TurnoBundle\Entity\TurFactura();
         $arFactura = $em->getRepository('BrasaTurnoBundle:TurFactura')->find($codigoFactura);
         $form = $this->createFormBuilder()
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->add('BtnGuardar', SubmitType::class, array('label'  => 'Guardar',))
             ->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -547,9 +547,8 @@ class FacturaController extends Controller
     /**
      * @Route("/tur/movimiento/factura/detalle/resumen/{codigoFacturaDetalle}", name="brs_tur_movimiento_factura_detalle_resumen")
      */    
-    public function detalleResumenAction($codigoFacturaDetalle) {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();        
+    public function detalleResumenAction(Request $request, $codigoFacturaDetalle) {
+        $em = $this->getDoctrine()->getManager();     
         $arFacturaDetalle = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();
         $arFacturaDetalle = $em->getRepository('BrasaTurnoBundle:TurFacturaDetalle')->find($codigoFacturaDetalle);
         $arPedido = null;
@@ -564,7 +563,7 @@ class FacturaController extends Controller
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $strFechaDesde = "";
         $strFechaHasta = "";
         $filtrarFecha = $session->get('filtroFacturaFiltrarFecha');
@@ -585,7 +584,7 @@ class FacturaController extends Controller
     
     private function listaDetalleNuevo($codigoCliente) {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $strDql =  $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->pendientesFacturarDql(
                 $codigoCliente, 
                 $this->boolMostrarTodo,
@@ -595,7 +594,7 @@ class FacturaController extends Controller
     }
 
     private function filtrar ($form) { 
-        $session = $this->getRequest()->getSession();   
+        $session = new session;
         $arFacturaTipo = $form->get('facturaTipoRel')->getData();
         if($arFacturaTipo) {
             $session->set('filtroTurnosCodigoFacturaTipo', $arFacturaTipo->getCodigoFacturaTipoPk());
@@ -614,14 +613,14 @@ class FacturaController extends Controller
     }
 
     private function filtrarDetalleNuevo ($form) {
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $this->boolMostrarTodo = $form->get('mostrarTodo')->getData();
         $session->set('filtroPedidoNumero', $form->get('TxtNumero')->getData());
     }    
     
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $strNombreCliente = "";
         if($session->get('filtroNit')) {
             $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $session->get('filtroNit')));
@@ -653,10 +652,10 @@ class FacturaController extends Controller
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('ft')
                     ->orderBy('ft.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => false,
                 'empty_data' => "",
-                'empty_value' => "TODOS",
+                'placeholder' => "TODOS",
                 'data' => ""
             );
         if($session->get('filtroTurnosCodigoFacturaTipo')) {
@@ -664,19 +663,19 @@ class FacturaController extends Controller
         }        
         
         $form = $this->createFormBuilder()
-            ->add('facturaTipoRel', 'entity', $arrayPropiedadesFacturaTipo)
-            ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
-            ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))                
-            ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroFacturaNumero')))
-            ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $session->get('filtroFacturaEstadoAutorizado')))                
-            ->add('estadoAnulado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ANULADO', '0' => 'SIN ANULAR'), 'data' => $session->get('filtroFacturaEstadoAnulado')))                                
-            ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde))                            
-            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta))                
-            ->add('filtrarFecha', 'checkbox', array('required'  => false, 'data' => $session->get('filtroFacturaFiltrarFecha')))                 
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
-            ->add('BtnInterfaz', 'submit', array('label'  => 'Interfaz',))                
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('facturaTipoRel', EntityType::class, $arrayPropiedadesFacturaTipo)
+            ->add('TxtNit', TextType::class, array('label'  => 'Nit','data' => $session->get('filtroNit')))
+            ->add('TxtNombreCliente', TextType::class, array('label'  => 'NombreCliente','data' => $strNombreCliente))                
+            ->add('TxtNumero', TextType::class, array('label'  => 'Codigo','data' => $session->get('filtroFacturaNumero')))
+            ->add('estadoAutorizado', ChoiceType::class, array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $session->get('filtroFacturaEstadoAutorizado')))                
+            ->add('estadoAnulado', ChoiceType::class, array('choices'   => array('2' => 'TODOS', '1' => 'ANULADO', '0' => 'SIN ANULAR'), 'data' => $session->get('filtroFacturaEstadoAnulado')))                                
+            ->add('fechaDesde', DateType::class, array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde))                            
+            ->add('fechaHasta', DateType::class, array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta))                
+            ->add('filtrarFecha', CheckboxType::class, array('required'  => false, 'data' => $session->get('filtroFacturaFiltrarFecha')))                 
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar',))            
+            ->add('BtnInterfaz', SubmitType::class, array('label'  => 'Interfaz',))                
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel',))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
     }
@@ -705,13 +704,13 @@ class FacturaController extends Controller
         }
  
         $form = $this->createFormBuilder()
-                    ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
-                    ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)                                     
-                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)
-                    ->add('BtnVistaPrevia', 'submit', $arrBotonVistaPrevia)
-                    ->add('BtnAnular', 'submit', $arrBotonAnular)                
-                    ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
-                    ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
+                    ->add('BtnDesAutorizar', SubmitType::class, $arrBotonDesAutorizar)            
+                    ->add('BtnAutorizar', SubmitType::class, $arrBotonAutorizar)                                     
+                    ->add('BtnImprimir', SubmitType::class, $arrBotonImprimir)
+                    ->add('BtnVistaPrevia', SubmitType::class, $arrBotonVistaPrevia)
+                    ->add('BtnAnular', SubmitType::class, $arrBotonAnular)                
+                    ->add('BtnDetalleActualizar', SubmitType::class, $arrBotonDetalleActualizar)
+                    ->add('BtnDetalleEliminar', SubmitType::class, $arrBotonDetalleEliminar)
                     ->getForm();
         return $form;
     }
@@ -720,10 +719,10 @@ class FacturaController extends Controller
         $session = $this->getRequest()->getSession();
         $em = $this->getDoctrine()->getManager();        
         $form = $this->createFormBuilder()
-            ->add('mostrarTodo', 'checkbox', array('required'  => false))
-            ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroPedidoNumero'), 'required'  => false))                
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar',))
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->add('mostrarTodo', CheckboxType::class, array('required'  => false))
+            ->add('TxtNumero', TextType::class, array('label'  => 'Codigo','data' => $session->get('filtroPedidoNumero'), 'required'  => false))                
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar',))
+            ->add('BtnGuardar', SubmitType::class, array('label'  => 'Guardar',))
             ->getForm();
         return $form;
     }               

@@ -1,12 +1,19 @@
 <?php
 namespace Brasa\TurnoBundle\Controller\Movimiento;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Brasa\TurnoBundle\Form\Type\TurCotizacionType;
 use Brasa\TurnoBundle\Form\Type\TurCotizacionDetalleType;
 use Brasa\TurnoBundle\Form\Type\TurCotizacionOtroType;
+
 class CotizacionController extends Controller
 {
     var $strListaDql = "";
@@ -17,10 +24,9 @@ class CotizacionController extends Controller
     /**
      * @Route("/tur/movimiento/cotizacion", name="brs_tur_movimiento_cotizacion")
      */
-    public function listaAction() {
+    public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 25, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }
@@ -56,8 +62,7 @@ class CotizacionController extends Controller
     /**
      * @Route("/tur/movimiento/cotizacion/nuevo/{codigoCotizacion}", name="brs_tur_movimiento_cotizacion_nuevo")
      */    
-    public function nuevoAction($codigoCotizacion) {
-        $request = $this->getRequest();
+    public function nuevoAction(Request $request, $codigoCotizacion) {
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();                 
         $arCotizacion = new \Brasa\TurnoBundle\Entity\TurCotizacion();
@@ -101,9 +106,8 @@ class CotizacionController extends Controller
     /**
      * @Route("/tur/movimiento/cotizacion/detalle/{codigoCotizacion}", name="brs_tur_movimiento_cotizacion_detalle")
      */     
-    public function detalleAction($codigoCotizacion) {
+    public function detalleAction(Request $request, $codigoCotizacion) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $objMensaje = $this->get('mensajes_brasa');
         $arCotizacion = new \Brasa\TurnoBundle\Entity\TurCotizacion();
         $arCotizacion = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->find($codigoCotizacion);
@@ -196,8 +200,7 @@ class CotizacionController extends Controller
     /**
      * @Route("/tur/movimiento/cotizacion/detalle/nuevo/{codigoCotizacion}/{codigoCotizacionDetalle}", name="brs_tur_movimiento_cotizacion_detalle_nuevo")
      */     
-    public function detalleNuevoAction($codigoCotizacion, $codigoCotizacionDetalle = 0) {
-        $request = $this->getRequest();
+    public function detalleNuevoAction(Request $request, $codigoCotizacion, $codigoCotizacionDetalle = 0) {
         $em = $this->getDoctrine()->getManager();
         $arCotizacion = new \Brasa\TurnoBundle\Entity\TurCotizacion();
         $arCotizacion = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->find($codigoCotizacion);
@@ -239,8 +242,7 @@ class CotizacionController extends Controller
     /**
      * @Route("/tur/movimiento/cotizacion/detalle/otro/nuevo/{codigoCotizacion}/{codigoCotizacionOtro}", name="brs_tur_movimiento_cotizacion_detalle_otro_nuevo")
      */
-    public function detalleOtroNuevoAction($codigoCotizacion, $codigoCotizacionOtro = 0) {
-        $request = $this->getRequest();
+    public function detalleOtroNuevoAction(Request $request, $codigoCotizacion, $codigoCotizacionOtro = 0) {
         $em = $this->getDoctrine()->getManager();
         $arCotizacion = new \Brasa\TurnoBundle\Entity\TurCotizacion();
         $arCotizacion = $em->getRepository('BrasaTurnoBundle:TurCotizacion')->find($codigoCotizacion);
@@ -268,7 +270,7 @@ class CotizacionController extends Controller
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurCotizacion')->listaDQL(
                 $session->get('filtroCotizacionNumero'), 
                 $session->get('filtroCodigoCliente'),
@@ -276,7 +278,7 @@ class CotizacionController extends Controller
     }
 
     private function filtrar ($form) {       
-        $session = $this->getRequest()->getSession();        
+        $session = new session;   
         $session->set('filtroCotizacionNumero', $form->get('TxtNumero')->getData());
         $session->set('filtroCotizacionEstadoAutorizado', $form->get('estadoAutorizado')->getData());          
         $session->set('filtroNit', $form->get('TxtNit')->getData());   
@@ -284,7 +286,7 @@ class CotizacionController extends Controller
 
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $strNombreCliente = "";
         if($session->get('filtroNit')) {
             $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $session->get('filtroNit')));
@@ -300,13 +302,13 @@ class CotizacionController extends Controller
         }
         
         $form = $this->createFormBuilder()
-            ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCotizacionNumero')))
-            ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
-            ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))
-            ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $session->get('filtroCotizacionEstadoAutorizado')))                
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('TxtNumero', TextType::class, array('label'  => 'Codigo','data' => $session->get('filtroCotizacionNumero')))
+            ->add('TxtNit', TextType::class, array('label'  => 'Nit','data' => $session->get('filtroNit')))
+            ->add('TxtNombreCliente', TextType::class, array('label'  => 'NombreCliente','data' => $strNombreCliente))
+            ->add('estadoAutorizado', ChoiceType::class, array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $session->get('filtroCotizacionEstadoAutorizado')))                
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar',))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel',))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
     }
@@ -336,14 +338,14 @@ class CotizacionController extends Controller
             $arrBotonAprobar['disabled'] = true;            
         } 
         $form = $this->createFormBuilder()
-                    ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
-                    ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)                 
-                    ->add('BtnAprobar', 'submit', $arrBotonAprobar)                 
-                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)
-                    ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
-                    ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
-                    ->add('BtnOtroActualizar', 'submit', $arrBotonOtroActualizar)
-                    ->add('BtnOtroEliminar', 'submit', $arrBotonOtroEliminar)
+                    ->add('BtnDesAutorizar', SubmitType::class, $arrBotonDesAutorizar)            
+                    ->add('BtnAutorizar', SubmitType::class, $arrBotonAutorizar)                 
+                    ->add('BtnAprobar', SubmitType::class, $arrBotonAprobar)                 
+                    ->add('BtnImprimir', SubmitType::class, $arrBotonImprimir)
+                    ->add('BtnDetalleActualizar', SubmitType::class, $arrBotonDetalleActualizar)
+                    ->add('BtnDetalleEliminar', SubmitType::class, $arrBotonDetalleEliminar)
+                    ->add('BtnOtroActualizar', SubmitType::class, $arrBotonOtroActualizar)
+                    ->add('BtnOtroEliminar', SubmitType::class, $arrBotonOtroEliminar)
                     ->getForm();
         return $form;
     }

@@ -1,10 +1,14 @@
 <?php
 namespace Brasa\TurnoBundle\Controller\Consulta;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
 class CostoRecursoController extends Controller
 {
     var $strListaDql = "";    
@@ -63,19 +67,19 @@ class CostoRecursoController extends Controller
     }
     
     private function lista() {
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $em = $this->getDoctrine()->getManager();        
         $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurCostoRecurso')->listaDql($session->get('filtroCodigoRecurso'));                    
     }
 
     private function filtrar ($form) {
-        $session = $this->getRequest()->getSession();        
+        $session = new session;    
         $session->set('filtroCodigoRecurso', $form->get('TxtCodigoRecurso')->getData());
     }    
     
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();      
+        $session = new session;   
         $strNombreRecurso = "";
         if($session->get('filtroCodigoRecurso')) {
             $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($session->get('filtroCodigoRecurso'));
@@ -87,17 +91,17 @@ class CostoRecursoController extends Controller
         }
 
         $form = $this->createFormBuilder()
-            ->add('TxtCodigoRecurso', 'text', array('label'  => 'Nit','data' => $session->get('filtroCodigoRecurso')))
-            ->add('TxtNombreRecurso', 'text', array('label'  => 'NombreCliente','data' => $strNombreRecurso))                                                                    
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('TxtCodigoRecurso', TextType::class, array('label'  => 'Nit','data' => $session->get('filtroCodigoRecurso')))
+            ->add('TxtNombreRecurso', TextType::class, array('label'  => 'NombreCliente','data' => $strNombreRecurso))                                                                    
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel',))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
     }        
 
     private function formularioVerDetalle() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();      
+        $session = new session;  
         $form = $this->createFormBuilder()
             ->getForm();
         return $form;

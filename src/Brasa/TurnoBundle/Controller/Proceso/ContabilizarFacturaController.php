@@ -1,12 +1,22 @@
 <?php
 namespace Brasa\TurnoBundle\Controller\Proceso;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Brasa\TurnoBundle\Form\Type\TurFacturaType;
 use Brasa\TurnoBundle\Form\Type\TurFacturaDetalleType;
 use Brasa\TurnoBundle\Form\Type\TurFacturaDetalleNuevoType;
+
+
 class ContabilizarFacturaController extends Controller
 {
     var $strListaDql = "";    
@@ -47,17 +57,16 @@ class ContabilizarFacturaController extends Controller
     /**
      * @Route("/rhu/proceso/contabilizar/factura/descontabilizar", name="brs_rhu_proceso_contabilizar_factura_descontabilizar")
      */    
-    public function descontabilizarAction() {
+    public function descontabilizarAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
-        $session = $this->getRequest()->getSession(); 
+        $session = new Session;
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->createFormBuilder()
-            ->add('numeroDesde', 'number', array('label'  => 'Numero desde'))
-            ->add('numeroHasta', 'number', array('label'  => 'Numero hasta'))                
-            ->add('fechaDesde','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                
-            ->add('fechaHasta','date',array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                                                            
-            ->add('BtnDescontabilizar', 'submit', array('label'  => 'Descontabilizar',))    
+            ->add('numeroDesde', NumberType::class, array('label'  => 'Numero desde'))
+            ->add('numeroHasta', NumberType::class, array('label'  => 'Numero hasta'))                
+            ->add('fechaDesde', DateType::class, array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                
+            ->add('fechaHasta', DateType::class, array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))                                                            
+            ->add('BtnDescontabilizar', SubmitType::class, array('label'  => 'Descontabilizar',))    
             ->getForm();
         $form->handleRequest($request);        
         if ($form->isValid()) {             
@@ -88,7 +97,7 @@ class ContabilizarFacturaController extends Controller
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new Session;
         $strFechaDesde = "";
         $strFechaHasta = "";
         $filtrarFecha = $session->get('filtroFacturaFiltrarFecha');
@@ -106,7 +115,7 @@ class ContabilizarFacturaController extends Controller
     }       
 
     private function filtrar ($form) {                
-        $session = $this->getRequest()->getSession();        
+        $session = new Session;      
         $session->set('filtroFacturaNumero', $form->get('TxtNumero')->getData());
         $session->set('filtroFacturaEstadoAutorizado', $form->get('estadoAutorizado')->getData());          
         $session->set('filtroFacturaEstadoAnulado', $form->get('estadoAnulado')->getData());          
@@ -120,7 +129,7 @@ class ContabilizarFacturaController extends Controller
     
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new Session;
         $strNombreCliente = "";
         if($session->get('filtroNit')) {
             $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $session->get('filtroNit')));
@@ -147,16 +156,16 @@ class ContabilizarFacturaController extends Controller
         $dateFechaDesde = date_create($strFechaDesde);
         $dateFechaHasta = date_create($strFechaHasta);
         $form = $this->createFormBuilder()
-            ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
-            ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))                
-            ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroFacturaNumero')))
-            ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $session->get('filtroFacturaEstadoAutorizado')))                
-            ->add('estadoAnulado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ANULADO', '0' => 'SIN ANULAR'), 'data' => $session->get('filtroFacturaEstadoAnulado')))                                
-            ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde))                            
-            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta))                
-            ->add('filtrarFecha', 'checkbox', array('required'  => false, 'data' => $session->get('filtroFacturaFiltrarFecha')))                 
-            ->add('BtnContabilizar', 'submit', array('label'  => 'Contabilizar',))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('TxtNit', TextType::class, array('label'  => 'Nit','data' => $session->get('filtroNit')))
+            ->add('TxtNombreCliente', TextType::class, array('label'  => 'NombreCliente','data' => $strNombreCliente))                
+            ->add('TxtNumero', TextType::class, array('label'  => 'Codigo','data' => $session->get('filtroFacturaNumero')))
+            ->add('estadoAutorizado', ChoiceType::class, array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $session->get('filtroFacturaEstadoAutorizado')))                
+            ->add('estadoAnulado', ChoiceType::class, array('choices'   => array('2' => 'TODOS', '1' => 'ANULADO', '0' => 'SIN ANULAR'), 'data' => $session->get('filtroFacturaEstadoAnulado')))                                
+            ->add('fechaDesde', DateType::class, array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde))                            
+            ->add('fechaHasta', DateType::class, array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta))                
+            ->add('filtrarFecha', CheckboxType::class, array('required'  => false, 'data' => $session->get('filtroFacturaFiltrarFecha')))                 
+            ->add('BtnContabilizar', SubmitType::class, array('label'  => 'Contabilizar',))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
     }    

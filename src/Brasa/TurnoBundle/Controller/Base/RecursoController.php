@@ -1,10 +1,18 @@
 <?php
 namespace Brasa\TurnoBundle\Controller\Base;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Brasa\TurnoBundle\Form\Type\TurRecursoType;
+
 class RecursoController extends Controller
 {
     var $strDqlLista = "";
@@ -161,7 +169,7 @@ class RecursoController extends Controller
      * @Route("/tur/base/recurso/nuevo/enlazar/", name="brs_tur_base_recurso_nuevo_enlazar")
      */     
     public function enlazarAction(Request $request) {
-        $session = $this->getRequest()->getSession();        
+        $session = new session;      
         $paginator  = $this->get('knp_paginator');
         $em = $this->getDoctrine()->getManager();
         $form = $this->formularioEnlazar();
@@ -189,8 +197,8 @@ class RecursoController extends Controller
         $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($codigoRecurso);
         $form = $this->createFormBuilder()
             ->setAction($this->generateUrl('brs_tur_base_recurso_retiro', array('codigoRecurso' => $codigoRecurso)))
-            ->add('fechaTerminacion', 'date', array('label'  => 'Terminacion', 'data' => new \DateTime('now')))
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
+            ->add('fechaTerminacion', DateType::class, array('label'  => 'Terminacion', 'data' => new \DateTime('now')))
+            ->add('BtnGuardar', SubmitType::class, array('label'  => 'Guardar'))
             ->getForm();
         $form->handleRequest($request);    
         if ($form->isValid()) {
@@ -211,7 +219,7 @@ class RecursoController extends Controller
     
     private function lista() {        
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $this->strDqlLista = $em->getRepository('BrasaTurnoBundle:TurRecurso')->listaDQL(
                 $session->get('filtroNombreRecurso'),                
                 $session->get('filtroCodigoRecurso'),
@@ -224,7 +232,7 @@ class RecursoController extends Controller
     
     private function listaEnlazar () {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession(); 
+        $session = new session;
         $this->strDqlListaEmpleados = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->ListaRecursoDql(
                         $session->get('filtroEmpleadoNombre'), 
                         $session->get('filtroCodigoCentroCosto'), 
@@ -233,7 +241,7 @@ class RecursoController extends Controller
     }
     
     private function filtrar ($form) {    
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $session->set('filtroCodigoRecurso', $form->get('TxtCodigo')->getData());
         $session->set('filtroNombreRecurso', $form->get('TxtNombre')->getData());
         $session->set('filtroIdentificacionRecurso', $form->get('TxtNumeroIdentificacion')->getData());                
@@ -246,7 +254,7 @@ class RecursoController extends Controller
     }
     
     private function filtrarEnlazar ($form) {    
-        $session = $this->getRequest()->getSession();        
+        $session = new session;     
         $arCentroCosto = $form->get('centroCostoRel')->getData();
         if($arCentroCosto) {            
             $session->set('filtroCodigoCentroCosto', $arCentroCosto->getCodigoCentroCostoPk());
@@ -257,30 +265,30 @@ class RecursoController extends Controller
     
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();     
+        $session = new session;  
         $arrayPropiedadesRecursoGrupo = array(
                 'class' => 'BrasaTurnoBundle:TurRecursoGrupo',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('rg')
                     ->orderBy('rg.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => false,
                 'empty_data' => "",
-                'empty_value' => "TODOS",
+                'placeholder' => "TODOS",
                 'data' => ""
             );
         if($session->get('filtroCodigoRecursoGrupo')) {
             $arrayPropiedadesRecursoGrupo['data'] = $em->getReference("BrasaTurnoBundle:TurRecursoGrupo", $session->get('filtroCodigoRecursoGrupo'));
         }        
         $form = $this->createFormBuilder()            
-            ->add('recursoGrupoRel', 'entity', $arrayPropiedadesRecursoGrupo)
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroNombreRecurso')))
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCodigoRecurso')))                  
-            ->add('TxtNumeroIdentificacion', 'text', array('label'  => 'NumeroIdentificacion','data' => $session->get('filtroIdentificacionRecurso')))                                        
-            ->add('estadoRetirado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'RETIRADO', '0' => 'SIN RETIRAR'), 'data' => $session->get('filtroRecursoEstadoRetirado')))                
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
-            ->add('BtnActivar', 'submit', array('label'  => 'Activar'))
+            ->add('recursoGrupoRel', EntityType::class, $arrayPropiedadesRecursoGrupo)
+            ->add('TxtNombre', TextType::class, array('label'  => 'Nombre','data' => $session->get('filtroNombreRecurso')))
+            ->add('TxtCodigo', TextType::class, array('label'  => 'Codigo','data' => $session->get('filtroCodigoRecurso')))                  
+            ->add('TxtNumeroIdentificacion', TextType::class, array('label'  => 'NumeroIdentificacion','data' => $session->get('filtroIdentificacionRecurso')))                                        
+            ->add('estadoRetirado', ChoiceType::class, array('choices'   => array('2' => 'TODOS', '1' => 'RETIRADO', '0' => 'SIN RETIRAR'), 'data' => $session->get('filtroRecursoEstadoRetirado')))                
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel',))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
+            ->add('BtnActivar', SubmitType::class, array('label'  => 'Activar'))
             ->getForm();
         return $form;
     }
@@ -288,7 +296,7 @@ class RecursoController extends Controller
     private function formularioDetalle($ar) {
         $arrBotonImprimir = array('label' => 'Imprimir', 'disabled' => false);        
         $form = $this->createFormBuilder()    
-                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)                       
+                    ->add('BtnImprimir', SubmitType::class, $arrBotonImprimir)                       
                     ->getForm();  
         return $form;
     }
@@ -301,20 +309,20 @@ class RecursoController extends Controller
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('cc')
                     ->orderBy('cc.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => false,
                 'empty_data' => "",
-                'empty_value' => "TODOS",
+                'placeholder' => "TODOS",
                 'data' => ""
             );        
         if($session->get('filtroCodigoCentroCosto')) {
             $arrayPropiedades['data'] = $em->getReference("BrasaRecursoHumanoBundle:RhuCentroCosto", $session->get('filtroCodigoCentroCosto'));
         }        
         $form = $this->createFormBuilder()
-            ->add('centroCostoRel', 'entity', $arrayPropiedades)   
-            ->add('TxtIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacionSeleccion')))
-            ->add('TxtNombreCorto', 'text', array('label'  => 'Nombre'))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('centroCostoRel', EntityType::class, $arrayPropiedades)   
+            ->add('TxtIdentificacion', TextType::class, array('label'  => 'Identificacion','data' => $session->get('filtroIdentificacionSeleccion')))
+            ->add('TxtNombreCorto', TextType::class, array('label'  => 'Nombre'))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
     }
@@ -323,7 +331,7 @@ class RecursoController extends Controller
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("EMPRESA")

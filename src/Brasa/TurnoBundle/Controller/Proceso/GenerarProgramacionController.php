@@ -1,21 +1,24 @@
 <?php
 namespace Brasa\TurnoBundle\Controller\Proceso;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
 class GenerarProgramacionController extends Controller
 {
     var $strListaDql = "";
     /**
      * @Route("/tur/proceso/generar/programacion/lista", name="brs_tur_proceso_generar_programacion_lista")
      */    
-    public function listaAction() {
+    public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 4)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
-        $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioLista();
         $form->handleRequest($request);
@@ -106,9 +109,9 @@ class GenerarProgramacionController extends Controller
     
     private function formularioLista() {        
         $form = $this->createFormBuilder()                                            
-            ->add('BtnGenerar', 'submit', array('label'  => 'Generar seleccionados'))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
-            ->add('BtnCerrarProgramacion', 'submit', array('label'  => 'Cerrar programacion'))
+            ->add('BtnGenerar', SubmitType::class, array('label'  => 'Generar seleccionados'))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel'))
+            ->add('BtnCerrarProgramacion', SubmitType::class, array('label'  => 'Cerrar programacion'))
             ->getForm();
         return $form;
     }        

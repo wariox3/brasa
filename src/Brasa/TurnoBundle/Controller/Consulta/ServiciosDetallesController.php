@@ -1,11 +1,15 @@
 <?php
 namespace Brasa\TurnoBundle\Controller\Consulta;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class ServiciosDetallesController extends Controller
 {
@@ -53,7 +57,7 @@ class ServiciosDetallesController extends Controller
     }
             
     private function lista() {
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $em = $this->getDoctrine()->getManager();        
         $strFechaHasta = "";                
         $strFechaHasta = $session->get('filtroServicioDetalleFechaHasta');                         
@@ -66,7 +70,7 @@ class ServiciosDetallesController extends Controller
     }
 
     private function filtrar ($form) {   
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $this->codigoServicio = $form->get('TxtCodigo')->getData();
         $session->set('filtroNit', $form->get('TxtNit')->getData());
         $session->set('filtroServicioDetalleEstadoCerrado', $form->get('estadoCerrado')->getData());        
@@ -76,7 +80,7 @@ class ServiciosDetallesController extends Controller
 
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $strNombreCliente = "";
         if($session->get('filtroNit')) {
             $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $session->get('filtroNit')));
@@ -98,14 +102,14 @@ class ServiciosDetallesController extends Controller
         }    
         $dateFechaHasta = date_create($strFechaHasta);        
         $form = $this->createFormBuilder()
-            ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
-            ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))                                
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->codigoServicio))
-            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta)) 
-            ->add('estadoCerrado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'CERRADO', '0' => 'SIN CERRAR'), 'data' => $session->get('filtroServicioDetalleEstadoCerrado')))                                                
-            ->add('BtnExcelResumido', 'submit', array('label'  => 'Excel resumido',))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('TxtNit', TextType::class, array('label'  => 'Nit','data' => $session->get('filtroNit')))
+            ->add('TxtNombreCliente', TextType::class, array('label'  => 'NombreCliente','data' => $strNombreCliente))                                
+            ->add('TxtCodigo', TextType::class, array('label'  => 'Codigo','data' => $this->codigoServicio))
+            ->add('fechaHasta', DateType::class, array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta)) 
+            ->add('estadoCerrado', ChoiceType::class, array('choices'   => array('2' => 'TODOS', '1' => 'CERRADO', '0' => 'SIN CERRAR'), 'data' => $session->get('filtroServicioDetalleEstadoCerrado')))                                                
+            ->add('BtnExcelResumido', SubmitType::class, array('label'  => 'Excel resumido',))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel',))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
     }    

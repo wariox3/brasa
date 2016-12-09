@@ -1,9 +1,14 @@
 <?php
 namespace Brasa\TurnoBundle\Controller\Movimiento;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Brasa\TurnoBundle\Form\Type\TurNovedadType;
 
 class NovedadController extends Controller
@@ -110,9 +115,8 @@ class NovedadController extends Controller
             'form' => $form->createView()));
     }
 
-    public function detalleAction($codigoNovedad) {
+    public function detalleAction(Request $request, $codigoNovedad) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $objMensaje = $this->get('mensajes_brasa');
         $arNovedad = new \Brasa\TurnoBundle\Entity\TurNovedad();
         $arNovedad = $em->getRepository('BrasaTurnoBundle:TurNovedad')->find($codigoNovedad);
@@ -205,8 +209,7 @@ class NovedadController extends Controller
     /**
      * @Route("/tur/movimiento/novedad/cambiar/tipo{codigoNovedad}", name="brs_tur_movimiento_novedad_cambiar_tipo")
      */    
-    public function cambiarTipoAction($codigoNovedad) {
-        $request = $this->getRequest();
+    public function cambiarTipoAction(Request $request, $codigoNovedad) {
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arNovedad = new \Brasa\TurnoBundle\Entity\TurNovedad();
@@ -215,9 +218,9 @@ class NovedadController extends Controller
             ->setAction($this->generateUrl('brs_tur_movimiento_novedad_cambiar_tipo', array('codigoNovedad' => $codigoNovedad)))            
             ->add('novedadTipoRel', 'entity', array(
                 'class' => 'BrasaTurnoBundle:TurNovedadTipo',
-                        'property' => 'nombre',
+                        'choice_label' => 'nombre',
             ))            
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
+            ->add('BtnGuardar', SubmitType::class, array('label'  => 'Guardar'))
             ->getForm();
         $formNovedad->handleRequest($request);                
         if ($formNovedad->isValid()) {                        
@@ -239,7 +242,7 @@ class NovedadController extends Controller
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurNovedad')->listaDQL(
                 $session->get('filtroNovedadNumero'),
                 $session->get('filtroCodigoRecurso'),
@@ -248,7 +251,7 @@ class NovedadController extends Controller
     }
 
     private function filtrar ($form) {       
-        $session = $this->getRequest()->getSession();        
+        $session = new session;     
         $session->set('filtroNovedadNumero', $form->get('TxtNumero')->getData());
         $session->set('filtroCodigoRecurso', $form->get('TxtCodigoRecurso')->getData());        
         $session->set('filtroCodigoNovedad', $form->get('TxtCodigoNovedad')->getData());
@@ -257,7 +260,7 @@ class NovedadController extends Controller
 
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $strNombreRecurso = "";
         if($session->get('filtroCodigoRecurso')) {
             $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($session->get('filtroCodigoRecurso'));
@@ -277,16 +280,16 @@ class NovedadController extends Controller
             }          
         }        
         $form = $this->createFormBuilder()
-            ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroNovedadNumero')))
-            ->add('TxtCodigoRecurso', 'text', array('label'  => 'Nit','data' => $session->get('filtroCodigoRecurso')))
-            ->add('TxtNombreRecurso', 'text', array('label'  => 'NombreCliente','data' => $strNombreRecurso))                                
-            ->add('TxtCodigoNovedad', 'text', array('label'  => 'Codigo','data' => $session->get('filtroCodigoNovedad')))
-            ->add('TxtNombreNovedad', 'text', array('label'  => 'Nombre','data' => $strNombreNovedad))                                                
-            ->add('estadoAplicado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'APLICADAS', '0' => 'SIN APLICAR'), 'data' => $session->get('filtroNovedadEstadoAplicado')))                
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnAplicar', 'submit', array('label'  => 'Aplicar',))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('TxtNumero', TextType::class, array('label'  => 'Codigo','data' => $session->get('filtroNovedadNumero')))
+            ->add('TxtCodigoRecurso', TextType::class, array('label'  => 'Nit','data' => $session->get('filtroCodigoRecurso')))
+            ->add('TxtNombreRecurso', TextType::class, array('label'  => 'NombreCliente','data' => $strNombreRecurso))                                
+            ->add('TxtCodigoNovedad', TextType::class, array('label'  => 'Codigo','data' => $session->get('filtroCodigoNovedad')))
+            ->add('TxtNombreNovedad', TextType::class, array('label'  => 'Nombre','data' => $strNombreNovedad))                                                
+            ->add('estadoAplicado', ChoiceType::class, array('choices'   => array('2' => 'TODOS', '1' => 'APLICADAS', '0' => 'SIN APLICAR'), 'data' => $session->get('filtroNovedadEstadoAplicado')))                
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar',))
+            ->add('BtnAplicar', SubmitType::class, array('label'  => 'Aplicar',))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel',))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
     }
@@ -316,14 +319,14 @@ class NovedadController extends Controller
             $arrBotonAprobar['disabled'] = true;            
         } 
         $form = $this->createFormBuilder()
-                    ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
-                    ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)                 
-                    ->add('BtnAprobar', 'submit', $arrBotonAprobar)                 
-                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)
-                    ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
-                    ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
-                    ->add('BtnOtroActualizar', 'submit', $arrBotonOtroActualizar)
-                    ->add('BtnOtroEliminar', 'submit', $arrBotonOtroEliminar)
+                    ->add('BtnDesAutorizar', SubmitType::class, $arrBotonDesAutorizar)            
+                    ->add('BtnAutorizar', SubmitType::class, $arrBotonAutorizar)                 
+                    ->add('BtnAprobar', SubmitType::class, $arrBotonAprobar)                 
+                    ->add('BtnImprimir', SubmitType::class, $arrBotonImprimir)
+                    ->add('BtnDetalleActualizar', SubmitType::class, $arrBotonDetalleActualizar)
+                    ->add('BtnDetalleEliminar', SubmitType::class, $arrBotonDetalleEliminar)
+                    ->add('BtnOtroActualizar', SubmitType::class, $arrBotonOtroActualizar)
+                    ->add('BtnOtroEliminar', SubmitType::class, $arrBotonOtroEliminar)
                     ->getForm();
         return $form;
     }

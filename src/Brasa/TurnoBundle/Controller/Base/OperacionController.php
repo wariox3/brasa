@@ -1,10 +1,16 @@
 <?php
 namespace Brasa\TurnoBundle\Controller\Base;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurOperacionType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
 class OperacionController extends Controller
 {
     var $strDqlLista = "";
@@ -71,7 +77,7 @@ class OperacionController extends Controller
 
     
     private function lista() {    
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaTurnoBundle:TurOperacion')->listaDQL('',
                 $session->get('filtroOperacionNombre'), $session->get('filtroTurnosCodigoProyecto')   
@@ -79,7 +85,7 @@ class OperacionController extends Controller
     }
 
     private function filtrar ($form) {        
-        $session = $this->getRequest()->getSession();        
+        $session = new session; 
         $session->set('filtroOperacionNombre', $form->get('TxtNombre')->getData());
         $arProyecto = $form->get('proyectoRel')->getData();
         if($arProyecto) {
@@ -92,27 +98,27 @@ class OperacionController extends Controller
     
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $arrayPropiedadesProyecto = array(
                 'class' => 'BrasaTurnoBundle:TurProyecto',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('p')
                     ->orderBy('p.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => false,
                 'empty_data' => "",
-                'empty_value' => "TODOS",
+                'placeholder' => "TODOS",
                 'data' => ""
             );
         if($session->get('filtroTurnosCodigoProyecto')) {
             $arrayPropiedadesProyecto['data'] = $em->getReference("BrasaTurnoBundle:TurProyecto", $session->get('filtroTurnosCodigoProyecto'));
         }         
         $form = $this->createFormBuilder()            
-            ->add('proyectoRel', 'entity', $arrayPropiedadesProyecto)                 
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $session->get('filtroOperacionNombre')))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('proyectoRel', EntityType::class, $arrayPropiedadesProyecto)                 
+            ->add('TxtNombre', TextType::class, array('label'  => 'Nombre','data' => $session->get('filtroOperacionNombre')))
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar',))            
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel',))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
     }    
@@ -120,7 +126,7 @@ class OperacionController extends Controller
     private function generarExcel() {
         ob_clean();
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("EMPRESA")

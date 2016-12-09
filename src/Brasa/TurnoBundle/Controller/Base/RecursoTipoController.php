@@ -1,10 +1,15 @@
 <?php
 namespace Brasa\TurnoBundle\Controller\Base;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Brasa\TurnoBundle\Form\Type\TurRecursoTipoType;
+
 class RecursoTipoController extends Controller
 {
     var $strDqlLista = "";
@@ -89,11 +94,11 @@ class RecursoTipoController extends Controller
     
     private function formularioFiltro() {
         $form = $this->createFormBuilder()            
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $this->strNombre))
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->strCodigo))                                        
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('TxtNombre', TextType::class, array('label'  => 'Nombre','data' => $this->strNombre))
+            ->add('TxtCodigo', TextType::class, array('label'  => 'Codigo','data' => $this->strCodigo))                                        
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar',))            
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel',))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
     }
@@ -103,8 +108,8 @@ class RecursoTipoController extends Controller
         $arrBotonEliminarPuesto = array('label' => 'Eliminar', 'disabled' => false);                
        
         $form = $this->createFormBuilder()    
-                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)            
-                    ->add('BtnEliminarPuesto', 'submit', $arrBotonEliminarPuesto)            
+                    ->add('BtnImprimir', SubmitType::class, $arrBotonImprimir)            
+                    ->add('BtnEliminarPuesto', SubmitType::class, $arrBotonEliminarPuesto)            
                     ->getForm();  
         return $form;
     }
@@ -112,7 +117,7 @@ class RecursoTipoController extends Controller
     private function generarExcel() {
         ob_clean();
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("EMPRESA")

@@ -7,7 +7,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use ZipArchive;
 use Symfony\Component\HttpFoundation\Response;
-
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class ProgramacionMasivaController extends Controller
 {
@@ -15,9 +18,8 @@ class ProgramacionMasivaController extends Controller
     /**
      * @Route("/tur/utilidad/recurso/programacion/masiva/{anio}/{mes}/{codigoRecurso}", name="brs_tur_utilidad_recurso_programacion_masiva")
      */    
-    public function detalleAction($anio, $mes, $codigoRecurso) {
+    public function detalleAction(Request $request, $anio, $mes, $codigoRecurso) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $objMensaje = $this->get('mensajes_brasa');
         $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
         $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->find($codigoRecurso);
@@ -53,7 +55,7 @@ class ProgramacionMasivaController extends Controller
     
     private function formularioDetalleEditar() {
         $form = $this->createFormBuilder(array(), array('csrf_protection' => false))                    
-                    ->add('BtnGuardar', 'submit', array('label' => 'Guardar'))
+                    ->add('BtnGuardar', SubmitType::class, array('label' => 'Guardar'))
                     ->getForm();
         return $form;
     }      

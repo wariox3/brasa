@@ -1,11 +1,14 @@
 <?php
 namespace Brasa\TurnoBundle\Controller\Consulta;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
 class CostoServicioController extends Controller
 {
     var $strListaDql = "";
@@ -64,7 +67,7 @@ class CostoServicioController extends Controller
     }    
     
     private function lista() {
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $em = $this->getDoctrine()->getManager();
         $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurCostoServicio')->listaDql(
                 $session->get('filtroCodigoCliente'), 
@@ -77,7 +80,7 @@ class CostoServicioController extends Controller
     }
 
     private function filtrar ($form) {
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $session->set('filtroNit', $form->get('TxtNit')->getData());
         $session->set('filtroTurMes', $form->get('TxtMes')->getData());
         //$session->set('filtroCodigoRecurso', $form->get('TxtCodigoRecurso')->getData());
@@ -85,7 +88,7 @@ class CostoServicioController extends Controller
 
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $strNombreCliente = "";
         if($session->get('filtroNit')) {
             $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $session->get('filtroNit')));
@@ -110,19 +113,19 @@ class CostoServicioController extends Controller
         }*/
 
         $form = $this->createFormBuilder()
-            ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
-            ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))
+            ->add('TxtNit', TextType::class, array('label'  => 'Nit','data' => $session->get('filtroNit')))
+            ->add('TxtNombreCliente', TextType::class, array('label'  => 'NombreCliente','data' => $strNombreCliente))
             //->add('TxtCodigoRecurso', 'text', array('label'  => 'Nit','data' => $session->get('filtroCodigoRecurso')))
-            ->add('TxtMes', 'text', array('data' => $session->get('filtroTurMes')))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('TxtMes', TextType::class, array('data' => $session->get('filtroTurMes')))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel',))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
     }
 
     private function formularioVerDetalle() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();      
+        $session = new session;    
         $form = $this->createFormBuilder()
             ->getForm();
         return $form;

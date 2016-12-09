@@ -5,6 +5,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class GenerarFacturaController extends Controller
 {
@@ -13,12 +15,11 @@ class GenerarFacturaController extends Controller
     /**
      * @Route("/tur/proceso/generar/factura", name="brs_tur_proceso_generar_factura")
      */      
-    public function listaAction() {
+    public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();  
         if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 6)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
-        $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioLista();
         $form->handleRequest($request);
@@ -56,7 +57,7 @@ class GenerarFacturaController extends Controller
     
     private function formularioLista() {  
         $form = $this->createFormBuilder()
-            ->add('BtnGenerar', 'submit', array('label'  => 'Generar'))            
+            ->add('BtnGenerar', SubmitType::class, array('label'  => 'Generar'))            
             ->getForm();
         return $form;
     }        

@@ -1,10 +1,19 @@
 <?php
 namespace Brasa\TurnoBundle\Controller\Movimiento;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Brasa\TurnoBundle\Form\Type\TurProgramacionType;
+
 class ProgramacionController extends Controller
 {
     var $strListaDql = "";
@@ -12,9 +21,8 @@ class ProgramacionController extends Controller
     /**
      * @Route("/tur/movimiento/programacion", name="brs_tur_movimiento_programacion")
      */
-    public function listaAction() {
+    public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 28, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
@@ -50,8 +58,7 @@ class ProgramacionController extends Controller
     /**
      * @Route("/tur/movimiento/programacion/nuevo/{codigoProgramacion}", name="brs_tur_movimiento_programacion_nuevo")
      */    
-    public function nuevoAction($codigoProgramacion) {
-        $request = $this->getRequest();
+    public function nuevoAction(Request $request, $codigoProgramacion) {
         $em = $this->getDoctrine()->getManager();
         $objMensaje = $this->get('mensajes_brasa');
         $arProgramacion = new \Brasa\TurnoBundle\Entity\TurProgramacion();
@@ -101,10 +108,9 @@ class ProgramacionController extends Controller
     /**
      * @Route("/tur/movimiento/programacion/detalle/{codigoProgramacion}", name="brs_tur_movimiento_programacion_detalle")
      */    
-    public function detalleAction($codigoProgramacion) {
+    public function detalleAction(Request $request, $codigoProgramacion) {
         $em = $this->getDoctrine()->getManager();
         $paginator  = $this->get('knp_paginator');
-        $request = $this->getRequest();
         $objMensaje = $this->get('mensajes_brasa');
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();        
         $arProgramacion = new \Brasa\TurnoBundle\Entity\TurProgramacion();
@@ -194,9 +200,8 @@ class ProgramacionController extends Controller
     /**
      * @Route("/tur/movimiento/programacion/detalle/editar/{codigoPuesto}/{codigoPedidoDetalle}/{codigoProgramacion}/", name="brs_tur_movimiento_programacion_detalle_editar")
      */        
-    public function detalleEditarAction($codigoPuesto, $codigoPedidoDetalle, $codigoProgramacion) {
+    public function detalleEditarAction(Request $request, $codigoPuesto, $codigoPedidoDetalle, $codigoProgramacion) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $objMensaje = $this->get('mensajes_brasa');
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
@@ -237,9 +242,8 @@ class ProgramacionController extends Controller
     /**
      * @Route("/tur/movimiento/programacion/detalle/nuevo/{codigoProgramacion}/{codigoPuesto}", name="brs_tur_movimiento_programacion_detalle_nuevo")
      */        
-    public function detalleNuevoAction($codigoProgramacion, $codigoPuesto) {
-        $request = $this->getRequest();
-        $session = $this->getRequest()->getSession();
+    public function detalleNuevoAction(Request $request, $codigoProgramacion, $codigoPuesto) {
+        $session = new session;
         $em = $this->getDoctrine()->getManager();
         $arProgramacion = new \Brasa\TurnoBundle\Entity\TurProgramacion();
         $arProgramacion = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->find($codigoProgramacion);               
@@ -249,12 +253,12 @@ class ProgramacionController extends Controller
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('s')
                     ->orderBy('s.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => false))                  
-            ->add('TxtCodigoRecurso', 'text')
-            ->add('TxtNombreRecurso', 'text')    
-            ->add('TxtPosicion', 'number', array('data' => 1))
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->add('TxtCodigoRecurso', TextType::class)
+            ->add('TxtNombreRecurso', TextType::class)    
+            ->add('TxtPosicion', NumberType::class, array('data' => 1))
+            ->add('BtnGuardar', SubmitType::class, array('label'  => 'Guardar',))
             ->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -409,13 +413,12 @@ class ProgramacionController extends Controller
     /**
      * @Route("/tur/movimiento/programacion/detalle/pedido/nuevo/{codigoProgramacion}/{codigoProgramacionDetalle}", name="brs_tur_movimiento_programacion_detalle_pedido_nuevo")
      */        
-    public function detalleNuevoPedidoAction($codigoProgramacion, $codigoProgramacionDetalle = 0) {
-        $request = $this->getRequest();
+    public function detalleNuevoPedidoAction(Request $request, $codigoProgramacion, $codigoProgramacionDetalle = 0) {
         $em = $this->getDoctrine()->getManager();
         $arProgramacion = new \Brasa\TurnoBundle\Entity\TurProgramacion();
         $arProgramacion = $em->getRepository('BrasaTurnoBundle:TurProgramacion')->find($codigoProgramacion);
         $form = $this->createFormBuilder()
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->add('BtnGuardar', SubmitType::class, array('label'  => 'Guardar',))
             ->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -442,9 +445,8 @@ class ProgramacionController extends Controller
     /**
      * @Route("/tur/movimiento/programacion/detalle/resumen/{codigoProgramacionDetalle}", name="brs_tur_movimiento_programacion_detalle_resumen")
      */
-    public function detalleResumenAction($codigoProgramacionDetalle) {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();        
+    public function detalleResumenAction(Request $request, $codigoProgramacionDetalle) {
+        $em = $this->getDoctrine()->getManager();   
         $arProgramacionDetalle = new \Brasa\TurnoBundle\Entity\TurProgramacionDetalle();
         $arProgramacionDetalle = $em->getRepository('BrasaTurnoBundle:TurProgramacionDetalle')->find($codigoProgramacionDetalle);
         $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();       
@@ -457,7 +459,7 @@ class ProgramacionController extends Controller
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $strFechaDesde = "";
         $strFechaHasta = "";
         $filtrarFecha = $session->get('filtroProgramacionFiltrarFecha');
@@ -475,7 +477,7 @@ class ProgramacionController extends Controller
     }
 
     private function filtrar ($form) {
-        $session = $this->getRequest()->getSession();        
+        $session = new session;       
         $session->set('filtroProgramacionCodigo', $form->get('TxtCodigo')->getData());
         $session->set('filtroProgramacionEstadoAutorizado', $form->get('estadoAutorizado')->getData());          
         $session->set('filtroProgramacionEstadoAnulado', $form->get('estadoAnulado')->getData());          
@@ -489,7 +491,7 @@ class ProgramacionController extends Controller
 
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $strNombreCliente = "";
         if($session->get('filtroNit')) {
             $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $session->get('filtroNit')));
@@ -516,17 +518,17 @@ class ProgramacionController extends Controller
         $dateFechaDesde = date_create($strFechaDesde);
         $dateFechaHasta = date_create($strFechaHasta);
         $form = $this->createFormBuilder()
-            ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
-            ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))                
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $session->get('filtroProgramacionCodigo')))
-            ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $session->get('filtroProgramacionEstadoAutorizado')))                
-            ->add('estadoAnulado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ANULADO', '0' => 'SIN ANULAR'), 'data' => $session->get('filtroProgramacionEstadoAnulado')))                                
-            ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde))                            
-            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta))                
-            ->add('filtrarFecha', 'checkbox', array('required'  => false, 'data' => $session->get('filtroProgramacionFiltrarFecha')))                 
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('TxtNit', TextType::class, array('label'  => 'Nit','data' => $session->get('filtroNit')))
+            ->add('TxtNombreCliente', TextType::class, array('label'  => 'NombreCliente','data' => $strNombreCliente))                
+            ->add('TxtCodigo', TextType::class, array('label'  => 'Codigo','data' => $session->get('filtroProgramacionCodigo')))
+            ->add('estadoAutorizado', ChoiceType::class, array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $session->get('filtroProgramacionEstadoAutorizado')))                
+            ->add('estadoAnulado', ChoiceType::class, array('choices'   => array('2' => 'TODOS', '1' => 'ANULADO', '0' => 'SIN ANULAR'), 'data' => $session->get('filtroProgramacionEstadoAnulado')))                                
+            ->add('fechaDesde', DateType::class, array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde))                            
+            ->add('fechaHasta', DateType::class, array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta))                
+            ->add('filtrarFecha', CheckboxType::class, array('required'  => false, 'data' => $session->get('filtroProgramacionFiltrarFecha')))                 
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar',))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel',))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
     }    
@@ -560,21 +562,21 @@ class ProgramacionController extends Controller
             $arrBotonAprobar['disabled'] = true;
         }
         $form = $this->createFormBuilder(array(), array('csrf_protection' => false))
-                    ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)
-                    ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)
-                    ->add('BtnAprobar', 'submit', $arrBotonAprobar)
-                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)
-                    ->add('BtnAnular', 'submit', $arrBotonAnular)                    
-                    ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
-                    ->add('BtnDetalleMarcar', 'submit', $arrBotonDetalleMarcar)
-                    ->add('BtnDetalleAjuste', 'submit', $arrBotonDetalleAjuste)
+                    ->add('BtnDesAutorizar', SubmitType::class, $arrBotonDesAutorizar)
+                    ->add('BtnAutorizar', SubmitType::class, $arrBotonAutorizar)
+                    ->add('BtnAprobar', SubmitType::class, $arrBotonAprobar)
+                    ->add('BtnImprimir', SubmitType::class, $arrBotonImprimir)
+                    ->add('BtnAnular', SubmitType::class, $arrBotonAnular)                    
+                    ->add('BtnDetalleEliminar', SubmitType::class, $arrBotonDetalleEliminar)
+                    ->add('BtnDetalleMarcar', SubmitType::class, $arrBotonDetalleMarcar)
+                    ->add('BtnDetalleAjuste', SubmitType::class, $arrBotonDetalleAjuste)
                     ->getForm();
         return $form;
     }
 
     private function formularioDetalleEditar() {
         $form = $this->createFormBuilder(array(), array('csrf_protection' => false))                    
-                    ->add('BtnGuardar', 'submit', array('label' => 'Guardar'))
+                    ->add('BtnGuardar', SubmitType::class, array('label' => 'Guardar'))
                     ->getForm();
         return $form;
     }    

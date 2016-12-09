@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Brasa\TurnoBundle\Form\Type\TurPlantillaType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+
 class PlantillaController extends Controller {
 
     var $strDqlLista = "";

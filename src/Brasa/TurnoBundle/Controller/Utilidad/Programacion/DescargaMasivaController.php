@@ -7,6 +7,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use ZipArchive;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class DescargaMasivaController extends Controller
 {
@@ -14,9 +18,8 @@ class DescargaMasivaController extends Controller
     /**
      * @Route("/tur/utilidad/programacion/descarga/masiva", name="brs_tur_utilidad_programacion_descarga_masiva")
      */    
-    public function listaAction() {
+    public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 88)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }
@@ -82,9 +85,9 @@ class DescargaMasivaController extends Controller
     private function formularioLista() {                
 
         $form = $this->createFormBuilder()                        
-            ->add('fechaDesde', 'date', array('data' => new \DateTime('now'), 'format' => 'yyyyMMdd'))                
-            ->add('fechaHasta', 'date', array('data' => new \DateTime('now'), 'format' => 'yyyyMMdd'))                
-            ->add('BtnGenerar', 'submit', array('label'  => 'Generar'))    
+            ->add('fechaDesde', DateType::class, array('data' => new \DateTime('now'), 'format' => 'yyyyMMdd'))                
+            ->add('fechaHasta', DateType::class, array('data' => new \DateTime('now'), 'format' => 'yyyyMMdd'))                
+            ->add('BtnGenerar', SubmitType::class, array('label'  => 'Generar'))    
             ->getForm();        
         return $form;
     }                 

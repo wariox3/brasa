@@ -6,6 +6,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Brasa\TurnoBundle\Form\Type\TurPlantillaType;
 
 class SecuenciaController extends Controller {
@@ -93,11 +96,11 @@ class SecuenciaController extends Controller {
 
     private function formularioFiltro() {
         $form = $this->createFormBuilder()
-                ->add('TxtNombre', 'text', array('label' => 'Nombre', 'data' => $this->strNombre))
-                ->add('TxtCodigo', 'text', array('label' => 'Codigo', 'data' => $this->strCodigo))
-                ->add('BtnEliminar', 'submit', array('label' => 'Eliminar',))                
-                ->add('BtnDetalleNuevo', 'submit', array('label' => 'Nuevo',))                
-                ->add('BtnFiltrar', 'submit', array('label' => 'Filtrar'))
+                ->add('TxtNombre', TextType::class, array('label' => 'Nombre', 'data' => $this->strNombre))
+                ->add('TxtCodigo', TextType::class, array('label' => 'Codigo', 'data' => $this->strCodigo))
+                ->add('BtnEliminar', SubmitType::class, array('label' => 'Eliminar',))                
+                ->add('BtnDetalleNuevo', SubmitType::class, array('label' => 'Nuevo',))                
+                ->add('BtnFiltrar', SubmitType::class, array('label' => 'Filtrar'))
                 ->getForm();
         return $form;
     }

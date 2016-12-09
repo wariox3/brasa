@@ -7,6 +7,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use ZipArchive;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 
 class ServicioInconsistenciaController extends Controller
@@ -15,9 +19,8 @@ class ServicioInconsistenciaController extends Controller
     /**
      * @Route("/tur/utilidad/servicio/inconsistencias", name="brs_tur_utilidad_servicio_inconsistencias")
      */    
-    public function listaAction() {
+    public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 87)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }
@@ -59,10 +62,10 @@ class ServicioInconsistenciaController extends Controller
     private function formularioLista() {                
 
         $form = $this->createFormBuilder()                        
-            ->add('fecha', 'date', array('data' => new \DateTime('now'), 'format' => 'yyyyMMdd'))                            
-            ->add('BtnGenerar', 'submit', array('label'  => 'Generar'))    
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar'))    
-            ->add('BtnExportar', 'submit', array('label'  => 'Exportar'))    
+            ->add('fecha', DateType::class, array('data' => new \DateTime('now'), 'format' => 'yyyyMMdd'))                            
+            ->add('BtnGenerar', SubmitType::class, array('label'  => 'Generar'))    
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar'))    
+            ->add('BtnExportar', SubmitType::class, array('label'  => 'Exportar'))    
             ->getForm();        
         return $form;
     }    

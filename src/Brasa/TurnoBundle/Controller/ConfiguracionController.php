@@ -3,6 +3,11 @@
 namespace Brasa\TurnoBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
@@ -17,9 +22,8 @@ class ConfiguracionController extends Controller
     /**
      * @Route("/tur/configuracion/{codigoConfiguracionPk}", name="brs_tur_configuracion")
      */     
-    public function configuracionAction() {
+    public function configuracionAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 90)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }
@@ -29,21 +33,21 @@ class ConfiguracionController extends Controller
         $arConsecutivo = $em->getRepository('BrasaTurnoBundle:TurConsecutivo')->findAll();
 
         $formConfiguracion = $this->createFormBuilder()             
-            ->add('informacionLegalFactura', 'textarea', array('data' => $arConfiguracion->getInformacionLegalFactura(), 'required' => false)) 
-            ->add('informacionPagoFactura', 'textarea', array('data' => $arConfiguracion->getInformacionPagoFactura(), 'required' => false)) 
-            ->add('informacionContactoFactura', 'textarea', array('data' => $arConfiguracion->getInformacionContactoFactura(), 'required' => false)) 
-            ->add('informacionResolucionDianFactura', 'textarea', array('data' => $arConfiguracion->getInformacionResolucionDianFactura(), 'required' => false)) 
-            ->add('informacionResolucionSupervigilanciaFactura', 'textarea', array('data' => $arConfiguracion->getInformacionResolucionSupervigilanciaFactura(), 'required' => false)) 
-            ->add('codigoConceptoHorasDescansoFk', 'number', array('data' => $arConfiguracion->getCodigoConceptoHorasDescansoFk(), 'required' => false)) 
-            ->add('codigoConceptoHorasDiurnasFk', 'number', array('data' => $arConfiguracion->getCodigoConceptoHorasDiurnasFk(), 'required' => false)) 
-            ->add('codigoConceptoHorasNocturnasFk', 'number', array('data' => $arConfiguracion->getCodigoConceptoHorasNocturnasFk(), 'required' => false))                 
-            ->add('codigoConceptoHorasFestivasDiurnasFk', 'number', array('data' => $arConfiguracion->getCodigoConceptoHorasFestivasDiurnasFk(), 'required' => false)) 
-            ->add('codigoConceptoHorasFestivasNocturnasFk', 'number', array('data' => $arConfiguracion->getCodigoConceptoHorasFestivasNocturnasFk(), 'required' => false))                                 
-            ->add('codigoConceptoHorasExtrasOrdinariasDiurnasFk', 'number', array('data' => $arConfiguracion->getCodigoConceptoHorasExtrasOrdinariasDiurnasFk(), 'required' => false)) 
-            ->add('codigoConceptoHorasExtrasOrdinariasNocturnasFk', 'number', array('data' => $arConfiguracion->getCodigoConceptoHorasExtrasOrdinariasNocturnasFk(), 'required' => false))                                                 
-            ->add('codigoConceptoHorasExtrasFestivasDiurnasFk', 'number', array('data' => $arConfiguracion->getCodigoConceptoHorasExtrasFestivasDiurnasFk(), 'required' => false)) 
-            ->add('codigoConceptoHorasExtrasFestivasNocturnasFk', 'number', array('data' => $arConfiguracion->getCodigoConceptoHorasExtrasFestivasNocturnasFk(), 'required' => false))                                                                 
-            ->add('guardar', 'submit', array('label' => 'Actualizar'))
+            ->add('informacionLegalFactura', TextareaType::class, array('data' => $arConfiguracion->getInformacionLegalFactura(), 'required' => false)) 
+            ->add('informacionPagoFactura', TextareaType::class, array('data' => $arConfiguracion->getInformacionPagoFactura(), 'required' => false)) 
+            ->add('informacionContactoFactura', TextareaType::class, array('data' => $arConfiguracion->getInformacionContactoFactura(), 'required' => false)) 
+            ->add('informacionResolucionDianFactura', TextareaType::class, array('data' => $arConfiguracion->getInformacionResolucionDianFactura(), 'required' => false)) 
+            ->add('informacionResolucionSupervigilanciaFactura', TextareaType::class, array('data' => $arConfiguracion->getInformacionResolucionSupervigilanciaFactura(), 'required' => false)) 
+            ->add('codigoConceptoHorasDescansoFk', NumberType::class, array('data' => $arConfiguracion->getCodigoConceptoHorasDescansoFk(), 'required' => false)) 
+            ->add('codigoConceptoHorasDiurnasFk', NumberType::class, array('data' => $arConfiguracion->getCodigoConceptoHorasDiurnasFk(), 'required' => false)) 
+            ->add('codigoConceptoHorasNocturnasFk', NumberType::class, array('data' => $arConfiguracion->getCodigoConceptoHorasNocturnasFk(), 'required' => false))                 
+            ->add('codigoConceptoHorasFestivasDiurnasFk', NumberType::class, array('data' => $arConfiguracion->getCodigoConceptoHorasFestivasDiurnasFk(), 'required' => false)) 
+            ->add('codigoConceptoHorasFestivasNocturnasFk', NumberType::class, array('data' => $arConfiguracion->getCodigoConceptoHorasFestivasNocturnasFk(), 'required' => false))                                 
+            ->add('codigoConceptoHorasExtrasOrdinariasDiurnasFk', NumberType::class, array('data' => $arConfiguracion->getCodigoConceptoHorasExtrasOrdinariasDiurnasFk(), 'required' => false)) 
+            ->add('codigoConceptoHorasExtrasOrdinariasNocturnasFk', NumberType::class, array('data' => $arConfiguracion->getCodigoConceptoHorasExtrasOrdinariasNocturnasFk(), 'required' => false))                                                 
+            ->add('codigoConceptoHorasExtrasFestivasDiurnasFk', NumberType::class, array('data' => $arConfiguracion->getCodigoConceptoHorasExtrasFestivasDiurnasFk(), 'required' => false)) 
+            ->add('codigoConceptoHorasExtrasFestivasNocturnasFk', NumberType::class, array('data' => $arConfiguracion->getCodigoConceptoHorasExtrasFestivasNocturnasFk(), 'required' => false))                                                                 
+            ->add('guardar', SubmitType::class, array('label' => 'Actualizar'))
             ->getForm();
         $formConfiguracion->handleRequest($request);
         if ($formConfiguracion->isValid()) {

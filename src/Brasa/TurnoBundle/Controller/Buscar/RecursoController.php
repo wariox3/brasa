@@ -7,6 +7,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class RecursoController extends Controller
 {
@@ -63,7 +66,7 @@ class RecursoController extends Controller
     }
 
     private function lista() {
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaTurnoBundle:TurRecurso')->buscarDQL(
                 $this->strNombre,
@@ -75,13 +78,13 @@ class RecursoController extends Controller
     }
 
     private function formularioLista() {
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $form = $this->createFormBuilder()
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $this->strNombre))
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->strCodigo))
-            ->add('inactivos', 'checkbox', array('required'  => false, 'data' => $session->get('filtroTurnoRecursoInactivo')))
-            ->add('TxtNumeroIdentificacion', 'text', array('label'  => 'Identificacion','data' => $session->get('filtroTurnoNumeroIdentificacion')))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('TxtNombre', TextType::class, array('label'  => 'Nombre','data' => $this->strNombre))
+            ->add('TxtCodigo', TextType::class, array('label'  => 'Codigo','data' => $this->strCodigo))
+            ->add('inactivos', CheckboxType::class, array('required'  => false, 'data' => $session->get('filtroTurnoRecursoInactivo')))
+            ->add('TxtNumeroIdentificacion', TextType::class, array('label'  => 'Identificacion','data' => $session->get('filtroTurnoNumeroIdentificacion')))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
     }

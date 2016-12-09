@@ -1,13 +1,16 @@
 <?php
 namespace Brasa\TurnoBundle\Controller\Base;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Brasa\TurnoBundle\Form\Type\TurTurnoType;
 use Brasa\TurnoBundle\Form\Type\TurTurnoDetalleType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
 
 class TurnoController extends Controller
 {
@@ -85,7 +88,7 @@ class TurnoController extends Controller
     }
 
     private function filtrar ($form) {
-        $session = $this->getRequest()->getSession();         
+        $session = new session;      
     }
     
     private function formularioFiltro() {
@@ -102,7 +105,7 @@ class TurnoController extends Controller
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $objPHPExcel = new \PHPExcel();
         // Set document properties
         $objPHPExcel->getProperties()->setCreator("EMPRESA")

@@ -1,12 +1,22 @@
 <?php
 namespace Brasa\TurnoBundle\Controller\Movimiento;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Brasa\TurnoBundle\Form\Type\TurServicioType;
 use Brasa\TurnoBundle\Form\Type\TurServicioDetalleType;
 use Brasa\TurnoBundle\Form\Type\TurServicioDetalleCompuestoType;
+
 class ServicioController extends Controller
 {
     var $strListaDql = "";
@@ -18,9 +28,8 @@ class ServicioController extends Controller
     /**
      * @Route("/tur/movimiento/servicio", name="brs_tur_movimiento_servicio")
      */    
-    public function listaAction() {
+    public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 26, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }
@@ -57,8 +66,7 @@ class ServicioController extends Controller
     /**
      * @Route("/tur/movimiento/servicio/nuevo/{codigoServicio}", name="brs_tur_movimiento_servicio_nuevo")
      */
-    public function nuevoAction($codigoServicio) {
-        $request = $this->getRequest();
+    public function nuevoAction(Request $request, $codigoServicio) {
         $em = $this->getDoctrine()->getManager();
         $arServicio = new \Brasa\TurnoBundle\Entity\TurServicio();
         if($codigoServicio != 0) {
@@ -102,9 +110,8 @@ class ServicioController extends Controller
     /**
      * @Route("/tur/movimiento/servicio/detalle/{codigoServicio}", name="brs_tur_movimiento_servicio_detalle")
      */    
-    public function detalleAction($codigoServicio) {
+    public function detalleAction(Request $request, $codigoServicio) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $objMensaje = $this->get('mensajes_brasa');
         $arServicio = new \Brasa\TurnoBundle\Entity\TurServicio();
@@ -211,9 +218,8 @@ class ServicioController extends Controller
     /**
      * @Route("/tur/movimiento/servicio/compuesto/detalle/{codigoServicioDetalle}", name="brs_tur_movimiento_servicio_compuesto_detalle")
      */    
-    public function detalleCompuestoAction($codigoServicioDetalle) {
+    public function detalleCompuestoAction(Request $request, $codigoServicioDetalle) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $objMensaje = $this->get('mensajes_brasa');
         $arServicioDetalle = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
@@ -247,8 +253,7 @@ class ServicioController extends Controller
     /**
      * @Route("/tur/movimiento/servicio/compuesto/detalle/nuevo/{codigoServicioDetalle}/{codigoServicioDetalleCompuesto}", name="brs_tur_movimiento_servicio_compuesto_detalle_nuevo")
      */    
-    public function detalleCompuestoNuevoAction($codigoServicioDetalle, $codigoServicioDetalleCompuesto = 0) {
-        $request = $this->getRequest();
+    public function detalleCompuestoNuevoAction(Request $request, $codigoServicioDetalle, $codigoServicioDetalleCompuesto = 0) {
         $em = $this->getDoctrine()->getManager();
         $arServicioDetalle = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
         $arServicioDetalle = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($codigoServicioDetalle);
@@ -288,8 +293,7 @@ class ServicioController extends Controller
     /**
      * @Route("/tur/movimiento/servicio/detalle/concepto/nuevo/{codigoServicio}", name="brs_tur_movimiento_servicio_detalle_concepto_nuevo")
      */
-    public function detalleConceptoNuevoAction($codigoServicio) {
-        $request = $this->getRequest();
+    public function detalleConceptoNuevoAction(Request $request, $codigoServicio) {
         $paginator  = $this->get('knp_paginator');
         $em = $this->getDoctrine()->getManager();
         $arServicio = new \Brasa\TurnoBundle\Entity\TurServicio();
@@ -344,8 +348,7 @@ class ServicioController extends Controller
     /**
      * @Route("/tur/movimiento/servicio/detalle/nuevo/{codigoServicio}/{codigoServicioDetalle}", name="brs_tur_movimiento_servicio_detalle_nuevo")
      */    
-    public function detalleNuevoAction($codigoServicio, $codigoServicioDetalle = 0) {
-        $request = $this->getRequest();
+    public function detalleNuevoAction(Request $request, $codigoServicio, $codigoServicioDetalle = 0) {
         $em = $this->getDoctrine()->getManager();
         $arServicio = new \Brasa\TurnoBundle\Entity\TurServicio();
         $arServicio = $em->getRepository('BrasaTurnoBundle:TurServicio')->find($codigoServicio);
@@ -392,21 +395,20 @@ class ServicioController extends Controller
     /**
      * @Route("/tur/movimiento/servicio/detalle/cotizacion/nuevo/{codigoServicio}/{codigoServicioDetalle}", name="brs_tur_movimiento_servicio_detalle_cotizacion_nuevo")
      */    
-    public function detalleNuevoCotizacionAction($codigoServicio, $codigoServicioDetalle = 0) {
-        $request = $this->getRequest();
+    public function detalleNuevoCotizacionAction(Request $request, $codigoServicio, $codigoServicioDetalle = 0) {
         $em = $this->getDoctrine()->getManager();
         $arServicio = new \Brasa\TurnoBundle\Entity\TurServicio();
         $arServicio = $em->getRepository('BrasaTurnoBundle:TurServicio')->find($codigoServicio);
         $form = $this->createFormBuilder()
-            ->add('prospectoRel', 'entity', array(
+            ->add('prospectoRel', EntityType::class, array(
                 'class' => 'BrasaTurnoBundle:TurProspecto',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('p')
                     ->orderBy('p.nombreCorto', 'ASC');},
-                'property' => 'nombreCorto',
+                'choice_label' => 'nombreCorto',
                 'required' => false))                 
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar',))
+            ->add('BtnGuardar', SubmitType::class, array('label'  => 'Guardar',))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar',))
             ->getForm();
         $form->handleRequest($request);
         $codigoProspecto = "";
@@ -466,8 +468,7 @@ class ServicioController extends Controller
     /**
      * @Route("/tur/movimiento/servicio/detalle/recurso/{codigoServicioDetalle}", name="brs_tur_movimiento_servicio_detalle_recurso")
      */     
-    public function detalleRecursoAction($codigoServicioDetalle = 0) {
-        $request = $this->getRequest();
+    public function detalleRecursoAction(Request $request, $codigoServicioDetalle = 0) {
         $paginator  = $this->get('knp_paginator');
         $objMensaje = $this->get('mensajes_brasa');
         $em = $this->getDoctrine()->getManager();
@@ -540,18 +541,17 @@ class ServicioController extends Controller
     /**
      * @Route("/tur/movimiento/servicio/detalle/recurso/nuevo/{codigoServicioDetalle}", name="brs_tur_movimiento_servicio_detalle_recurso_nuevo")
      */     
-    public function detalleRecursoNuevoAction($codigoServicioDetalle = 0) {
-        $request = $this->getRequest();
+    public function detalleRecursoNuevoAction(Request $request, $codigoServicioDetalle = 0) {
         $objMensaje = $this->get('mensajes_brasa');
         $paginator  = $this->get('knp_paginator');
         $em = $this->getDoctrine()->getManager();
         $arServicioDetalle = new \Brasa\TurnoBundle\Entity\TurServicioDetalle();
         $arServicioDetalle = $em->getRepository('BrasaTurnoBundle:TurServicioDetalle')->find($codigoServicioDetalle);        
         $form = $this->createFormBuilder()            
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $this->nombreRecurso))
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->codigoRecurso))                            
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))                
+            ->add('TxtNombre', TextType::class, array('label'  => 'Nombre','data' => $this->nombreRecurso))
+            ->add('TxtCodigo', TextType::class, array('label'  => 'Codigo','data' => $this->codigoRecurso))                            
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
+            ->add('BtnGuardar', SubmitType::class, array('label'  => 'Guardar'))                
                 
             ->getForm();        
         $form->handleRequest($request);
@@ -586,7 +586,7 @@ class ServicioController extends Controller
     
     private function lista() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();        
+        $session = new Session;     
         $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurServicio')->listaDQL(
                 $session->get('filtroServicioCodigo'), 
                 $session->get('filtroCodigoCliente'), 
@@ -604,7 +604,7 @@ class ServicioController extends Controller
     }     
     
     private function filtrar ($form) {        
-        $session = $this->getRequest()->getSession();        
+        $session = new Session;  
         $session->set('filtroServicioCodigo', $form->get('TxtCodigo')->getData());
         $session->set('filtroServicioEstadoAutorizado', $form->get('estadoAutorizado')->getData());
         $session->set('filtroServicioEstadoCerrado', $form->get('estadoCerrado')->getData());
@@ -618,7 +618,7 @@ class ServicioController extends Controller
     
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new Session;
         $strNombreCliente = "";
         if($session->get('filtroNit')) {
             $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $session->get('filtroNit')));
@@ -633,14 +633,14 @@ class ServicioController extends Controller
             $session->set('filtroCodigoCliente', null);
         }
         $form = $this->createFormBuilder()
-            ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
-            ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))                
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $session->get('filtroServicioCodigo'))) 
-            ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $session->get('filtroServicioEstadoAutorizado')))
-            ->add('estadoCerrado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'CERRADO', '0' => 'SIN CERRAR'), 'data' => $session->get('filtroServicioEstadoCerrado')))
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('TxtNit', TextType::class, array('label'  => 'Nit','data' => $session->get('filtroNit')))
+            ->add('TxtNombreCliente', TextType::class, array('label'  => 'NombreCliente','data' => $strNombreCliente))                
+            ->add('TxtCodigo', TextType::class, array('label'  => 'Codigo','data' => $session->get('filtroServicioCodigo'))) 
+            ->add('estadoAutorizado', ChoiceType::class, array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $session->get('filtroServicioEstadoAutorizado')))
+            ->add('estadoCerrado', ChoiceType::class, array('choices'   => array('2' => 'TODOS', '1' => 'CERRADO', '0' => 'SIN CERRAR'), 'data' => $session->get('filtroServicioEstadoCerrado')))
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar',))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel',))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
     }
@@ -676,18 +676,18 @@ class ServicioController extends Controller
             $arrBotonCerrar['disabled'] = true;
         }         
         $form = $this->createFormBuilder()
-                    ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
-                    ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)                 
-                    ->add('BtnCerrar', 'submit', $arrBotonCerrar)                                     
-                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)
-                    ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
-                    ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
-                    ->add('BtnDetalleCerrar', 'submit', $arrBotonDetalleCerrar)    
-                    ->add('BtnDetalleAbrir', 'submit', $arrBotonDetalleAbrir)    
-                    ->add('BtnDetalleMarcar', 'submit', $arrBotonDetalleMarcar)
-                    ->add('BtnDetalleAjuste', 'submit', $arrBotonDetalleAjuste)
-                    ->add('BtnDetalleConceptoActualizar', 'submit', $arrBotonDetalleConceptoActualizar)
-                    ->add('BtnDetalleConceptoEliminar', 'submit', $arrBotonDetalleConceptoEliminar)                                    
+                    ->add('BtnDesAutorizar', SubmitType::class, $arrBotonDesAutorizar)            
+                    ->add('BtnAutorizar', SubmitType::class, $arrBotonAutorizar)                 
+                    ->add('BtnCerrar', SubmitType::class, $arrBotonCerrar)                                     
+                    ->add('BtnImprimir', SubmitType::class, $arrBotonImprimir)
+                    ->add('BtnDetalleActualizar', SubmitType::class, $arrBotonDetalleActualizar)
+                    ->add('BtnDetalleEliminar', SubmitType::class, $arrBotonDetalleEliminar)
+                    ->add('BtnDetalleCerrar', SubmitType::class, $arrBotonDetalleCerrar)    
+                    ->add('BtnDetalleAbrir', SubmitType::class, $arrBotonDetalleAbrir)    
+                    ->add('BtnDetalleMarcar', SubmitType::class, $arrBotonDetalleMarcar)
+                    ->add('BtnDetalleAjuste', SubmitType::class, $arrBotonDetalleAjuste)
+                    ->add('BtnDetalleConceptoActualizar', SubmitType::class, $arrBotonDetalleConceptoActualizar)
+                    ->add('BtnDetalleConceptoEliminar', SubmitType::class, $arrBotonDetalleConceptoEliminar)                                    
                     ->getForm();
         return $form;
     }
@@ -702,48 +702,48 @@ class ServicioController extends Controller
         }
           
         $form = $this->createFormBuilder()
-                    ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
-                    ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
+                    ->add('BtnDetalleActualizar', SubmitType::class, $arrBotonDetalleActualizar)
+                    ->add('BtnDetalleEliminar', SubmitType::class, $arrBotonDetalleEliminar)
                     ->getForm();
         return $form;
     }    
     
     private function formularioRecurso($intDiasSecuencia, $fechaIniciaPlantilla, $arPlantilla) {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new Session;
         $form = $this->createFormBuilder()      
-            ->add('plantillaRel', 'entity', array(
+            ->add('plantillaRel', EntityType::class, array(
                 'class' => 'BrasaTurnoBundle:TurPlantilla',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('p')
                     ->orderBy('p.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'data' => $arPlantilla,
                 'required' => false))                 
-            ->add('TxtDiasSecuencia', 'text', array('label'  => 'Codigo','data' => $intDiasSecuencia)) 
-            ->add('fechaIniciaPlantilla', 'date', array('data'  => $fechaIniciaPlantilla, 'format' => 'y MMMM d'))
-            ->add('BtnDetalleEliminar', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnDetalleActualizar', 'submit', array('label'  => 'Actualizar',))            
-            ->add('BtnPlantillaNuevo', 'submit', array('label'  => 'Nuevo',))                
-            ->add('BtnPlantillaEliminar', 'submit', array('label'  => 'Eliminar',))                
-            ->add('BtnPlantillaActualizar', 'submit', array('label'  => 'Actualizar',))                
-            ->add('BtnGuardarServicioDetalle', 'submit', array('label'  => 'Guardar',))                            
+            ->add('TxtDiasSecuencia', TextType::class, array('label'  => 'Codigo','data' => $intDiasSecuencia)) 
+            ->add('fechaIniciaPlantilla', DateType::class, array('data'  => $fechaIniciaPlantilla, 'format' => 'y MMMM d'))
+            ->add('BtnDetalleEliminar', SubmitType::class, array('label'  => 'Eliminar',))
+            ->add('BtnDetalleActualizar', SubmitType::class, array('label'  => 'Actualizar',))            
+            ->add('BtnPlantillaNuevo', SubmitType::class, array('label'  => 'Nuevo',))                
+            ->add('BtnPlantillaEliminar', SubmitType::class, array('label'  => 'Eliminar',))                
+            ->add('BtnPlantillaActualizar', SubmitType::class, array('label'  => 'Actualizar',))                
+            ->add('BtnGuardarServicioDetalle', SubmitType::class, array('label'  => 'Guardar',))                            
             ->getForm();
         return $form;
     }    
     
     private function formularioDetalleOtroNuevo($codigoCliente) {
         $form = $this->createFormBuilder()
-            ->add('puestoRel', 'entity', array(
+            ->add('puestoRel', EntityType::class, array(
                 'class' => 'BrasaTurnoBundle:TurPuesto',
                 'query_builder' => function (EntityRepository $er) use($codigoCliente) {
                     return $er->createQueryBuilder('p')
                     ->where('p.codigoClienteFk = :cliente')
                     ->setParameter('cliente', $codigoCliente)
                     ->orderBy('p.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => true))                 
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->add('BtnGuardar', SubmitType::class, array('label'  => 'Guardar',))
             ->getForm();
         return $form;
     }     

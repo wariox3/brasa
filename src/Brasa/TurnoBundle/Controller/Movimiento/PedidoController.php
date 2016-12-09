@@ -1,12 +1,21 @@
 <?php
 namespace Brasa\TurnoBundle\Controller\Movimiento;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Brasa\TurnoBundle\Form\Type\TurPedidoType;
 use Brasa\TurnoBundle\Form\Type\TurPedidoDetalleType;
 use Brasa\TurnoBundle\Form\Type\TurPedidoDetalleCompuestoType;
+
 use PHPExcel_Style_Border;
 class PedidoController extends Controller
 {
@@ -18,9 +27,8 @@ class PedidoController extends Controller
     /**
      * @Route("/tur/movimiento/pedido", name="brs_tur_movimiento_pedido")
      */    
-    public function listaAction() {
+    public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 27, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }
@@ -57,8 +65,7 @@ class PedidoController extends Controller
     /**
      * @Route("/tur/movimiento/pedido/nuevo/{codigoPedido}", name="brs_tur_movimiento_pedido_nuevo")
      */     
-    public function nuevoAction($codigoPedido) {
-        $request = $this->getRequest();
+    public function nuevoAction(Request $request, $codigoPedido) {
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $em = $this->getDoctrine()->getManager();        
@@ -117,9 +124,8 @@ class PedidoController extends Controller
     /**
      * @Route("/tur/movimiento/pedido/detalle/{codigoPedido}", name="brs_tur_movimiento_pedido_detalle")
      */     
-    public function detalleAction($codigoPedido) {
+    public function detalleAction(Request $request, $codigoPedido) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $objMensaje = $this->get('mensajes_brasa');
         $arPedido = new \Brasa\TurnoBundle\Entity\TurPedido();
@@ -254,9 +260,8 @@ class PedidoController extends Controller
     /**
      * @Route("/tur/movimiento/pedido/compuesto/detalle/{codigoPedidoDetalle}", name="brs_tur_movimiento_pedido_compuesto_detalle")
      */     
-    public function detalleCompuestoAction($codigoPedidoDetalle) {
+    public function detalleCompuestoAction(Request $request, $codigoPedidoDetalle) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $objMensaje = $this->get('mensajes_brasa');
         $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
@@ -290,8 +295,7 @@ class PedidoController extends Controller
     /**
      * @Route("/tur/movimiento/pedido/detalle/concepto/nuevo/{codigoPedido}", name="brs_tur_movimiento_pedido_detalle_concepto_nuevo")
      */
-    public function detalleConceptoNuevoAction($codigoPedido) {
-        $request = $this->getRequest();
+    public function detalleConceptoNuevoAction(Request $request, $codigoPedido) {
         $paginator  = $this->get('knp_paginator');
         $em = $this->getDoctrine()->getManager();
         $arPedido = new \Brasa\TurnoBundle\Entity\TurPedido();
@@ -346,14 +350,13 @@ class PedidoController extends Controller
     /**
      * @Route("/tur/movimiento/pedido/detalle/concepto/Servicio/nuevo/{codigoPedido}", name="brs_tur_movimiento_pedido_detalle_concepto_servicio_nuevo")
      */     
-    public function detalleNuevoConceptoServicioAction($codigoPedido) {
-        $request = $this->getRequest();
+    public function detalleNuevoConceptoServicioAction(Request $request, $codigoPedido) {
         $paginator  = $this->get('knp_paginator');
         $em = $this->getDoctrine()->getManager();
         $arPedido = new \Brasa\TurnoBundle\Entity\TurPedido();
         $arPedido = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido);
         $form = $this->createFormBuilder()
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->add('BtnGuardar', SubmitType::class, array('label'  => 'Guardar',))
             ->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -394,8 +397,7 @@ class PedidoController extends Controller
     /**
      * @Route("/tur/movimiento/pedido/detalle/nuevo/{codigoPedido}/{codigoPedidoDetalle}", name="brs_tur_movimiento_pedido_detalle_nuevo")
      */    
-    public function detalleNuevoAction($codigoPedido, $codigoPedidoDetalle = 0) {
-        $request = $this->getRequest();
+    public function detalleNuevoAction(Request $request, $codigoPedido, $codigoPedidoDetalle = 0) {
         $em = $this->getDoctrine()->getManager();
         $arPedido = new \Brasa\TurnoBundle\Entity\TurPedido();
         $arPedido = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido);
@@ -450,8 +452,7 @@ class PedidoController extends Controller
     /**
      * @Route("/tur/movimiento/pedido/compuesto/detalle/nuevo/{codigoPedidoDetalle}/{codigoPedidoDetalleCompuesto}", name="brs_tur_movimiento_pedido_compuesto_detalle_nuevo")
      */    
-    public function detalleCompuestoNuevoAction($codigoPedidoDetalle, $codigoPedidoDetalleCompuesto = 0) {
-        $request = $this->getRequest();
+    public function detalleCompuestoNuevoAction(Request $request, $codigoPedidoDetalle, $codigoPedidoDetalleCompuesto = 0) {
         $em = $this->getDoctrine()->getManager();
         $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
         $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigoPedidoDetalle);
@@ -498,13 +499,12 @@ class PedidoController extends Controller
     /**
      * @Route("/tur/movimiento/pedido/detalle/cotizacion/nuevo/{codigoPedido}/{codigoPedidoDetalle}", name="brs_tur_movimiento_pedido_detalle_cotizacion_nuevo")
      */    
-    public function detalleNuevoCotizacionAction($codigoPedido, $codigoPedidoDetalle = 0) {
-        $request = $this->getRequest();
+    public function detalleNuevoCotizacionAction(Request $request, $codigoPedido, $codigoPedidoDetalle = 0) {
         $em = $this->getDoctrine()->getManager();
         $arPedido = new \Brasa\TurnoBundle\Entity\TurPedido();
         $arPedido = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido);
         $form = $this->createFormBuilder()
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->add('BtnGuardar', SubmitType::class, array('label'  => 'Guardar',))
             ->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -600,13 +600,12 @@ class PedidoController extends Controller
     /**
      * @Route("/tur/movimiento/pedido/detalle/Servicio/nuevo/{codigoPedido}/{codigoPedidoDetalle}", name="brs_tur_movimiento_pedido_detalle_servicio_nuevo")
      */     
-    public function detalleNuevoServicioAction($codigoPedido, $codigoPedidoDetalle = 0) {
-        $request = $this->getRequest();
+    public function detalleNuevoServicioAction(Request $request, $codigoPedido, $codigoPedidoDetalle = 0) {
         $em = $this->getDoctrine()->getManager();
         $arPedido = new \Brasa\TurnoBundle\Entity\TurPedido();
         $arPedido = $em->getRepository('BrasaTurnoBundle:TurPedido')->find($codigoPedido);
         $form = $this->createFormBuilder()
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->add('BtnGuardar', SubmitType::class, array('label'  => 'Guardar',))
             ->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -790,8 +789,7 @@ class PedidoController extends Controller
     /**
      * @Route("/tur/movimiento/pedido/detalle/recurso/{codigoPedidoDetalle}", name="brs_tur_movimiento_pedido_detalle_recurso")
      */    
-    public function detalleRecursoAction($codigoPedidoDetalle = 0) {
-        $request = $this->getRequest();
+    public function detalleRecursoAction(Request $request, $codigoPedidoDetalle = 0) {
         $paginator  = $this->get('knp_paginator');
         $objMensaje = $this->get('mensajes_brasa');
         $em = $this->getDoctrine()->getManager();
@@ -835,18 +833,17 @@ class PedidoController extends Controller
     /**
      * @Route("/tur/movimiento/pedido/detalle/recurso/nuevo/{codigoPedidoDetalle}", name="brs_tur_movimiento_pedido_detalle_recurso_nuevo")
      */    
-    public function detalleRecursoNuevoAction($codigoPedidoDetalle = 0) {
-        $request = $this->getRequest();
+    public function detalleRecursoNuevoAction(Request $request, $codigoPedidoDetalle = 0) {
         $objMensaje = $this->get('mensajes_brasa');
         $paginator  = $this->get('knp_paginator');
         $em = $this->getDoctrine()->getManager();
         $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
         $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigoPedidoDetalle);        
         $form = $this->createFormBuilder()
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $this->nombreRecurso))
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->codigoRecurso))                            
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))                
+            ->add('TxtNombre', TextType::class, array('label'  => 'Nombre','data' => $this->nombreRecurso))
+            ->add('TxtCodigo', TextType::class, array('label'  => 'Codigo','data' => $this->codigoRecurso))                            
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
+            ->add('BtnGuardar', SubmitType::class, array('label'  => 'Guardar'))                
                 
             ->getForm();        
         $form->handleRequest($request);
@@ -882,9 +879,8 @@ class PedidoController extends Controller
     /**
      * @Route("/tur/movimiento/pedido/detalle/resumen/{codigoPedidoDetalle}", name="brs_tur_movimiento_pedido_detalle_resumen")
      */    
-    public function detalleResumenAction($codigoPedidoDetalle) {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();        
+    public function detalleResumenAction(Request $request, $codigoPedidoDetalle) {
+        $em = $this->getDoctrine()->getManager(); 
         $arPedidoDetalle = new \Brasa\TurnoBundle\Entity\TurPedidoDetalle();
         $arPedidoDetalle = $em->getRepository('BrasaTurnoBundle:TurPedidoDetalle')->find($codigoPedidoDetalle);
         $arFacturaDetalles = new \Brasa\TurnoBundle\Entity\TurFacturaDetalle();       
@@ -904,7 +900,7 @@ class PedidoController extends Controller
     }    
     
     private function lista() {   
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $em = $this->getDoctrine()->getManager();
         $strFechaDesde = "";
         $strFechaHasta = "";        
@@ -933,7 +929,7 @@ class PedidoController extends Controller
     }    
     
     private function filtrar ($form) {
-        $session = $this->getRequest()->getSession();        
+        $session = new session;    
         $session->set('filtroPedidoNumero', $form->get('TxtNumero')->getData());
         $session->set('filtroPedidoEstadoAutorizado', $form->get('estadoAutorizado')->getData());          
         $session->set('filtroPedidoEstadoProgramado', $form->get('estadoProgramado')->getData());          
@@ -954,7 +950,7 @@ class PedidoController extends Controller
     
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $strNombreCliente = "";
         if($session->get('filtroNit')) {
             $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->findOneBy(array('nit' => $session->get('filtroNit')));
@@ -981,19 +977,19 @@ class PedidoController extends Controller
         $dateFechaDesde = date_create($strFechaDesde);
         $dateFechaHasta = date_create($strFechaHasta);
         $form = $this->createFormBuilder()
-            ->add('TxtNit', 'text', array('label'  => 'Nit','data' => $session->get('filtroNit')))
-            ->add('TxtNombreCliente', 'text', array('label'  => 'NombreCliente','data' => $strNombreCliente))                
-            ->add('TxtNumero', 'text', array('label'  => 'Codigo','data' => $session->get('filtroPedidoNumero')))
-            ->add('estadoAutorizado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $session->get('filtroPedidoEstadoAutorizado')))                
-            ->add('estadoProgramado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'PROGRAMADO', '0' => 'SIN PROGRAMAR'), 'data' => $session->get('filtroPedidoEstadoProgramado')))                                
-            ->add('estadoFacturado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'FACTURADO', '0' => 'SIN FACTURAR'), 'data' => $session->get('filtroPedidoEstadoFacturado')))                                
-            ->add('estadoAnulado', 'choice', array('choices'   => array('2' => 'TODOS', '1' => 'ANULADO', '0' => 'SIN ANULAR'), 'data' => $session->get('filtroPedidoEstadoAnulado')))                                
-            ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde))                            
-            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta))                
-            ->add('filtrarFecha', 'checkbox', array('required'  => false, 'data' => $session->get('filtroPedidoFiltrarFecha')))                 
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('TxtNit', TextType::class, array('label'  => 'Nit','data' => $session->get('filtroNit')))
+            ->add('TxtNombreCliente', TextType::class, array('label'  => 'NombreCliente','data' => $strNombreCliente))                
+            ->add('TxtNumero', TextType::class, array('label'  => 'Codigo','data' => $session->get('filtroPedidoNumero')))
+            ->add('estadoAutorizado', ChoiceType::class, array('choices'   => array('2' => 'TODOS', '1' => 'AUTORIZADO', '0' => 'SIN AUTORIZAR'), 'data' => $session->get('filtroPedidoEstadoAutorizado')))                
+            ->add('estadoProgramado', ChoiceType::class, array('choices'   => array('2' => 'TODOS', '1' => 'PROGRAMADO', '0' => 'SIN PROGRAMAR'), 'data' => $session->get('filtroPedidoEstadoProgramado')))                                
+            ->add('estadoFacturado', ChoiceType::class, array('choices'   => array('2' => 'TODOS', '1' => 'FACTURADO', '0' => 'SIN FACTURAR'), 'data' => $session->get('filtroPedidoEstadoFacturado')))                                
+            ->add('estadoAnulado', ChoiceType::class, array('choices'   => array('2' => 'TODOS', '1' => 'ANULADO', '0' => 'SIN ANULAR'), 'data' => $session->get('filtroPedidoEstadoAnulado')))                                
+            ->add('fechaDesde', DateType::class, array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde))                            
+            ->add('fechaHasta', DateType::class, array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta))                
+            ->add('filtrarFecha', CheckboxType::class, array('required'  => false, 'data' => $session->get('filtroPedidoFiltrarFecha')))                 
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar',))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel',))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
     }
@@ -1044,21 +1040,21 @@ class PedidoController extends Controller
             $arrBotonProgramar['disabled'] = true; 
         } 
         $form = $this->createFormBuilder()
-                    ->add('BtnFacturar', 'submit', $arrBotonFacturar)                
-                    ->add('BtnProgramar', 'submit', $arrBotonProgramar)            
-                    ->add('BtnDesAutorizar', 'submit', $arrBotonDesAutorizar)            
-                    ->add('BtnAutorizar', 'submit', $arrBotonAutorizar)                 
-                    ->add('BtnAnular', 'submit', $arrBotonAnular)                                     
-                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)
-                    ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
-                    ->add('BtnDetalleExcel', 'submit', $arrBotonDetalleExcel)
-                    ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
-                    ->add('BtnDetalleDesprogramar', 'submit', $arrBotonDetalleDesprogramar)
-                    ->add('BtnDetalleMarcar', 'submit', $arrBotonDetalleMarcar)
-                    ->add('BtnDetalleAjuste', 'submit', $arrBotonDetalleAjuste)                
-                    ->add('BtnDesprogramar', 'submit', $arrBotonDesprogramar)  
-                    ->add('BtnDetalleConceptoActualizar', 'submit', $arrBotonDetalleConceptoActualizar)
-                    ->add('BtnDetalleConceptoEliminar', 'submit', $arrBotonDetalleConceptoEliminar)                                
+                    ->add('BtnFacturar', SubmitType::class, $arrBotonFacturar)                
+                    ->add('BtnProgramar', SubmitType::class, $arrBotonProgramar)            
+                    ->add('BtnDesAutorizar', SubmitType::class, $arrBotonDesAutorizar)            
+                    ->add('BtnAutorizar', SubmitType::class, $arrBotonAutorizar)                 
+                    ->add('BtnAnular', SubmitType::class, $arrBotonAnular)                                     
+                    ->add('BtnImprimir', SubmitType::class, $arrBotonImprimir)
+                    ->add('BtnDetalleActualizar', SubmitType::class, $arrBotonDetalleActualizar)
+                    ->add('BtnDetalleExcel', SubmitType::class, $arrBotonDetalleExcel)
+                    ->add('BtnDetalleEliminar', SubmitType::class, $arrBotonDetalleEliminar)
+                    ->add('BtnDetalleDesprogramar', SubmitType::class, $arrBotonDetalleDesprogramar)
+                    ->add('BtnDetalleMarcar', SubmitType::class, $arrBotonDetalleMarcar)
+                    ->add('BtnDetalleAjuste', SubmitType::class, $arrBotonDetalleAjuste)                
+                    ->add('BtnDesprogramar', SubmitType::class, $arrBotonDesprogramar)  
+                    ->add('BtnDetalleConceptoActualizar', SubmitType::class, $arrBotonDetalleConceptoActualizar)
+                    ->add('BtnDetalleConceptoEliminar', SubmitType::class, $arrBotonDetalleConceptoEliminar)                                
                     ->getForm();
         return $form;
     }
@@ -1073,44 +1069,44 @@ class PedidoController extends Controller
         } 
 
         $form = $this->createFormBuilder()
-                    ->add('BtnDetalleActualizar', 'submit', $arrBotonDetalleActualizar)
-                    ->add('BtnDetalleEliminar', 'submit', $arrBotonDetalleEliminar)
+                    ->add('BtnDetalleActualizar', SubmitType::class, $arrBotonDetalleActualizar)
+                    ->add('BtnDetalleEliminar', SubmitType::class, $arrBotonDetalleEliminar)
                     ->getForm();
         return $form;
     }    
     
     private function formularioRecurso($fechaIniciaPlantilla, $arPlantilla) {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new session;
         $form = $this->createFormBuilder()
-            ->add('plantillaRel', 'entity', array(
+            ->add('plantillaRel', EntityType::class, array(
                 'class' => 'BrasaTurnoBundle:TurPlantilla',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('p')
                     ->orderBy('p.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'data' => $arPlantilla,
                 'required' => false))                 
-            ->add('fechaIniciaPlantilla', 'date', array('data'  => $fechaIniciaPlantilla, 'format' => 'y MMMM d'))                            
-            ->add('BtnDetalleEliminar', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnDetalleActualizar', 'submit', array('label'  => 'Actualizar',))            
-            ->add('BtnGuardarPedidoDetalle', 'submit', array('label'  => 'Guardar',))                            
+            ->add('fechaIniciaPlantilla', DateType::class, array('data'  => $fechaIniciaPlantilla, 'format' => 'y MMMM d'))                            
+            ->add('BtnDetalleEliminar', SubmitType::class, array('label'  => 'Eliminar',))
+            ->add('BtnDetalleActualizar', SubmitType::class, array('label'  => 'Actualizar',))            
+            ->add('BtnGuardarPedidoDetalle', SubmitType::class, array('label'  => 'Guardar',))                            
             ->getForm();
         return $form;
     }    
 
     private function formularioDetalleOtroNuevo($codigoCliente) {
         $form = $this->createFormBuilder()
-            ->add('puestoRel', 'entity', array(
+            ->add('puestoRel', EntityType::class, array(
                 'class' => 'BrasaTurnoBundle:TurPuesto',
                 'query_builder' => function (EntityRepository $er) use($codigoCliente) {
                     return $er->createQueryBuilder('p')
                     ->where('p.codigoClienteFk = :cliente')
                     ->setParameter('cliente', $codigoCliente)
                     ->orderBy('p.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => true))                
-            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar',))
+            ->add('BtnGuardar', SubmitType::class, array('label'  => 'Guardar',))
             ->getForm();
         return $form;
     } 

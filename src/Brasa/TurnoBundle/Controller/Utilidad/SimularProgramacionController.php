@@ -7,6 +7,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use ZipArchive;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 
 class SimularProgramacionController extends Controller
@@ -15,9 +19,8 @@ class SimularProgramacionController extends Controller
     /**
      * @Route("/tur/utilidad/simular/programacion/{codigoServicio}/{codigoServicioDetalle}", name="brs_tur_utilidad_simular_programacion")
      */    
-    public function listaAction($codigoServicio, $codigoServicioDetalle) {
+    public function listaAction(Request $request, $codigoServicio, $codigoServicioDetalle) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();  
         $paginator  = $this->get('knp_paginator'); 
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         $form = $this->formularioLista();
@@ -296,11 +299,11 @@ class SimularProgramacionController extends Controller
         $arConfiguracion = new \Brasa\TurnoBundle\Entity\TurConfiguracion();
         $arConfiguracion = $em->getRepository('BrasaTurnoBundle:TurConfiguracion')->find(1);         
         $form = $this->createFormBuilder()                        
-            ->add('fecha', 'date', array('data' => $arConfiguracion->getFechaUltimaSimulacion(), 'format' => 'yyyyMMdd'))                            
-            ->add('BtnGenerarSoportePago', 'submit', array('label'  => 'Generar soporte pago'))       
-            ->add('BtnGenerar', 'submit', array('label'  => 'Generar'))       
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel'))       
-            ->add('BtnPdf', 'submit', array('label'  => 'PDF'))       
+            ->add('fecha', DateType::class, array('data' => $arConfiguracion->getFechaUltimaSimulacion(), 'format' => 'yyyyMMdd'))                            
+            ->add('BtnGenerarSoportePago', SubmitType::class, array('label'  => 'Generar soporte pago'))       
+            ->add('BtnGenerar', SubmitType::class, array('label'  => 'Generar'))       
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel'))       
+            ->add('BtnPdf', SubmitType::class, array('label'  => 'PDF'))       
             ->getForm();        
         return $form;
     }           

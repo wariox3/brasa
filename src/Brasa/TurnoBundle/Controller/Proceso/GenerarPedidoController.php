@@ -1,9 +1,13 @@
 <?php
 namespace Brasa\TurnoBundle\Controller\Proceso;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class GenerarPedidoController extends Controller
 {
@@ -12,12 +16,11 @@ class GenerarPedidoController extends Controller
     /**
      * @Route("/tur/proceso/generar/pedido/lista", name="brs_tur_proceso_generar_pedido_lista")
      */     
-    public function listaAction() {
+    public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();                     
         if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 3)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }                    
-        $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $mensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->formularioLista();
@@ -439,22 +442,22 @@ class GenerarPedidoController extends Controller
         $anio = $fecha->format('Y');
         $mes = $fecha->format('m');
         $form = $this->createFormBuilder()
-            ->add('mes', 'choice', array(
+            ->add('mes', ChoiceType::class, array(
                 'choices'  => array(
                     '01' => 'Enero','02' => 'Febrero','03' => 'Marzo','04' => 'Abril','05' => 'Mayo','06' => 'Junio','07' => 'Julio',
                     '08' => 'Agosto','09' => 'Septiembre','10' => 'Octubre','11' => 'Noviembre','12' => 'Diciembre',
                 ),
                 'data' => $mes,
             ))   
-            ->add('anio', 'choice', array(
+            ->add('anio', ChoiceType::class, array(
                 'choices'  => array(
                     $anio -1 => $anio -1, $anio => $anio, $anio +1 =>$anio+1
                 ),
                 'data' => $anio,
             ))                
-            ->add('BtnGenerar', 'submit', array('label'  => 'Generar seleccionados'))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel'))
+            ->add('BtnGenerar', SubmitType::class, array('label'  => 'Generar seleccionados'))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel'))
             ->getForm();
         return $form;
     }        

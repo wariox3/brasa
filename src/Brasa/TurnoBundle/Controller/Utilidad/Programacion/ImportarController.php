@@ -7,6 +7,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use ZipArchive;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 
 class ImportarController extends Controller
@@ -15,9 +19,8 @@ class ImportarController extends Controller
     /**
      * @Route("/tur/utilidad/programacion/importar", name="brs_tur_utilidad_programacion_importar")
      */    
-    public function listaAction() {
+    public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 87)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }
@@ -120,8 +123,8 @@ class ImportarController extends Controller
     private function formularioLista() {                
 
         $form = $this->createFormBuilder()                        
-            ->add('attachment', 'file')
-            ->add('BtnCargar', 'submit', array('label'  => 'Cargar'))   
+            ->add('attachment', FileType::class)
+            ->add('BtnCargar', SubmitType::class, array('label'  => 'Cargar'))   
             ->getForm();        
         return $form;
     }        

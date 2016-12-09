@@ -1,20 +1,22 @@
 <?php
 namespace Brasa\TurnoBundle\Controller\Proceso;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+
 class CierreMesController extends Controller
 {
     /**
      * @Route("/tur/proceso/cierre/mes", name="brs_tur_proceso_cierre_mes")
      */    
-    public function listaAction() {
+    public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 8)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
-        $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioGenerar();
         $form->handleRequest($request);        

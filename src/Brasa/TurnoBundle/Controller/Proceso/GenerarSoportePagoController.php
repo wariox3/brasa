@@ -1,11 +1,18 @@
 <?php
 namespace Brasa\TurnoBundle\Controller\Proceso;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Brasa\TurnoBundle\Form\Type\TurSoportePagoPeriodoType;
 use Brasa\TurnoBundle\Form\Type\TurSoportePagoType;
+
+
 class GenerarSoportePagoController extends Controller
 {
     var $strListaDql = "";
@@ -14,12 +21,11 @@ class GenerarSoportePagoController extends Controller
     /**
      * @Route("/tur/proceso/generar/soporte/pago", name="brs_tur_proceso_generar_soporte_pago")
      */     
-    public function listaAction() {
+    public function listaAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 7)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
         }        
-        $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $form = $this->formularioGenerar();
@@ -271,9 +277,8 @@ class GenerarSoportePagoController extends Controller
     /**
      * @Route("/tur/proceso/generar/soporte/pago/detalle/{codigoSoportePagoPeriodo}", name="brs_tur_proceso_generar_soporte_pago_detalle")
      */     
-    public function detalleAction($codigoSoportePagoPeriodo) {
+    public function detalleAction(Request $request, $codigoSoportePagoPeriodo) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
         $arSoportePagoPeriodo = $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);        
@@ -331,8 +336,7 @@ class GenerarSoportePagoController extends Controller
     /**
      * @Route("/tur/proceso/generar/soporte/pago/nuevo/{codigoSoportePagoPeriodo}", name="brs_tur_proceso_generar_soporte_pago_nuevo")
      */    
-    public function nuevoAction($codigoSoportePagoPeriodo) {
-        $request = $this->getRequest();
+    public function nuevoAction(Request $request, $codigoSoportePagoPeriodo) {
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();                 
         $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
@@ -376,8 +380,7 @@ class GenerarSoportePagoController extends Controller
     /**
      * @Route("/tur/proceso/generar/soporte/pago/editar/{codigoSoportePago}", name="brs_tur_proceso_generar_soporte_pago_editar")
      */     
-    public function editarAction($codigoSoportePago) {
-        $request = $this->getRequest();
+    public function editarAction(Request $request, $codigoSoportePago) {
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();                 
         $arSoportePago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
@@ -400,9 +403,8 @@ class GenerarSoportePagoController extends Controller
     /**
      * @Route("/tur/proceso/generar/soporte/pago/detalle/ver/{codigoSoportePago}", name="brs_tur_proceso_generar_soporte_pago_detalle_ver")
      */    
-    public function verAction($codigoSoportePago) {
+    public function verAction(Request $request, $codigoSoportePago) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones(); 
         $arSoportePago = new \Brasa\TurnoBundle\Entity\TurSoportePago();
@@ -461,9 +463,8 @@ class GenerarSoportePagoController extends Controller
     /**
      * @Route("/tur/proceso/generar/soporte/pago/inconsistencia/{codigoSoportePagoPeriodo}", name="brs_tur_proceso_generar_soporte_pago_inconsistencia")
      */    
-    public function inconsistenciasAction($codigoSoportePagoPeriodo) {
+    public function inconsistenciasAction(Request $request, $codigoSoportePagoPeriodo) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
         $arSoportePagoPeriodo =  $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);                                        
@@ -486,9 +487,8 @@ class GenerarSoportePagoController extends Controller
     /**
      * @Route("/tur/proceso/generar/soporte/pago/ver/programacion/{codigoSoportePagoPeriodo}", name="brs_tur_proceso_generar_soporte_pago_ver_programacion")
      */    
-    public function verProgramacionAction($codigoSoportePagoPeriodo) {
+    public function verProgramacionAction(Request $request, $codigoSoportePagoPeriodo) {
         $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
         $paginator  = $this->get('knp_paginator');
         $arSoportePagoPeriodo = new \Brasa\TurnoBundle\Entity\TurSoportePagoPeriodo();
         $arSoportePagoPeriodo =  $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->find($codigoSoportePagoPeriodo);                                        
@@ -519,7 +519,7 @@ class GenerarSoportePagoController extends Controller
     }     
     
     private function listaPeriodo() {
-        $session = $this->getRequest()->getSession();
+        $session = new Session;
         $em = $this->getDoctrine()->getManager();
         $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurSoportePagoPeriodo')->listaDql(                
                 $session->get('filtroSoportePagoEstadoCerrado')
@@ -527,7 +527,7 @@ class GenerarSoportePagoController extends Controller
     }    
     
     private function lista($codigoSoportePagoPeriodo) {
-        $session = $this->getRequest()->getSession();
+        $session = new Session;
         $em = $this->getDoctrine()->getManager();
         $this->strListaDql =  $em->getRepository('BrasaTurnoBundle:TurSoportePago')->listaDql(
                 $codigoSoportePagoPeriodo,
@@ -541,22 +541,22 @@ class GenerarSoportePagoController extends Controller
     }    
 
     private function filtrar ($form) {
-        $session = $this->getRequest()->getSession();        
+        $session = new Session;      
         $session->set('filtroSoportePagoEstadoCerrado', $form->get('estadoCerrado')->getData());          
     }    
     
     private function formularioGenerar() {
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
+        $session = new Session;
         $arrayPropiedadesRecursoGrupo = array(
                 'class' => 'BrasaTurnoBundle:TurRecursoGrupo',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('rg')
                     ->orderBy('rg.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => false,
                 'empty_data' => "",
-                'empty_value' => "TODOS",
+                'placeholder' => "TODOS",
                 'data' => ""
             );
         if($session->get('filtroCodigoRecursoGrupo')) {
@@ -566,10 +566,10 @@ class GenerarSoportePagoController extends Controller
             $session->set('filtroSoportePagoEstadoCerrado', 0); 
         }
         $form = $this->createFormBuilder()
-            ->add('recursoGrupoRel', 'entity', $arrayPropiedadesRecursoGrupo)
-            ->add('estadoCerrado', 'choice', array('choices'   => array('0' => 'SIN CERRAR', '1' => 'CERRADO', '2' => 'TODOS'), 'data' => $session->get('filtroSoportePagoEstadoCerrado')))                                            
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar')) 
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))         
+            ->add('recursoGrupoRel', EntityType::class, $arrayPropiedadesRecursoGrupo)
+            ->add('estadoCerrado', ChoiceType::class, array('choices'   => array('0' => 'SIN CERRAR', '1' => 'CERRADO', '2' => 'TODOS'), 'data' => $session->get('filtroSoportePagoEstadoCerrado')))                                            
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar')) 
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))         
             ->getForm();
         return $form;
     }
@@ -598,13 +598,13 @@ class GenerarSoportePagoController extends Controller
             $arrBotonEliminarDetalle['disabled'] = true;
         }        
         $form = $this->createFormBuilder()
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel'))                        
-            ->add('BtnExcelPago', 'submit', array('label'  => 'Excel pago'))                        
-            ->add('BtnLiquidar', 'submit', $arrBotonLiquidar)                                    
-            ->add('BtnLiquidarCompensacion2', 'submit', $arrBotonLiquidarCompensacion)                                    
-            ->add('BtnGenerarProgramacionAlterna', 'submit', $arrBotonGenerarProgramacionAlterna)                        
-            ->add('BtnAjustarDevengado', 'submit', $arrBotonAjustarDevengado)
-            ->add('BtnEliminarDetalle', 'submit', $arrBotonEliminarDetalle)            
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel'))                        
+            ->add('BtnExcelPago', SubmitType::class, array('label'  => 'Excel pago'))                        
+            ->add('BtnLiquidar', SubmitType::class, $arrBotonLiquidar)                                    
+            ->add('BtnLiquidarCompensacion2', SubmitType::class, $arrBotonLiquidarCompensacion)                                    
+            ->add('BtnGenerarProgramacionAlterna', SubmitType::class, $arrBotonGenerarProgramacionAlterna)                        
+            ->add('BtnAjustarDevengado', SubmitType::class, $arrBotonAjustarDevengado)
+            ->add('BtnEliminarDetalle', SubmitType::class, $arrBotonEliminarDetalle)            
             ->getForm();
         return $form;
     }
@@ -615,14 +615,14 @@ class GenerarSoportePagoController extends Controller
             $arrBotonActualizar['disabled'] = true;
         }
         $form = $this->createFormBuilder()     
-            ->add('BtnActualizar', 'submit', $arrBotonActualizar)               
+            ->add('BtnActualizar', SubmitType::class, $arrBotonActualizar)               
             ->getForm();
         return $form;
     }
     
     private function formularioInconsistencias() {
         $form = $this->createFormBuilder()     
-            ->add('BtnAnalizar', 'submit', array('label'  => 'Analizar'))                
+            ->add('BtnAnalizar', SubmitType::class, array('label'  => 'Analizar'))                
             ->getForm();
         return $form;
     }    

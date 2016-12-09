@@ -1,9 +1,12 @@
 <?php
 namespace Brasa\TurnoBundle\Controller\Base;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Brasa\TurnoBundle\Form\Type\TurClienteType;
 use Brasa\TurnoBundle\Form\Type\TurClientePuestoType;
 use Brasa\TurnoBundle\Form\Type\TurProyectoType;
@@ -11,6 +14,7 @@ use Brasa\TurnoBundle\Form\Type\TurGrupoFacturacionType;
 use Brasa\TurnoBundle\Form\Type\TurClienteDireccionType;
 use PHPExcel_Shared_Date;
 use PHPExcel_Style_NumberFormat;
+
 class ClienteController extends Controller
 {
     var $strDqlLista = "";
@@ -276,13 +280,13 @@ class ClienteController extends Controller
     
     private function formularioFiltro() {
         $form = $this->createFormBuilder()            
-            ->add('TxtNombre', 'text', array('label'  => 'Nombre','data' => $this->strNombre))
-            ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $this->strCodigo))                            
-            ->add('TxtNit', 'text', array('label'  => 'Codigo','data' => $this->strNit))                                            
-            ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))            
-            ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
-            ->add('BtnInterfaz', 'submit', array('label'  => 'Interfaz',))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))
+            ->add('TxtNombre', TextType::class, array('label'  => 'Nombre','data' => $this->strNombre))
+            ->add('TxtCodigo', TextType::class, array('label'  => 'Codigo','data' => $this->strCodigo))                            
+            ->add('TxtNit', TextType::class, array('label'  => 'Codigo','data' => $this->strNit))                                            
+            ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar',))            
+            ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel',))
+            ->add('BtnInterfaz', SubmitType::class, array('label'  => 'Interfaz',))
+            ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
     }
@@ -294,10 +298,10 @@ class ClienteController extends Controller
         $arrBotonEliminarDireccion = array('label' => 'Eliminar', 'disabled' => false);                
        
         $form = $this->createFormBuilder()    
-                    ->add('BtnImprimir', 'submit', $arrBotonImprimir)            
-                    ->add('BtnEliminarPuesto', 'submit', $arrBotonEliminarPuesto)            
-                    ->add('BtnEliminarProyecto', 'submit', $arrBotonEliminarProyecto)            
-                    ->add('BtnEliminarDireccion', 'submit', $arrBotonEliminarDireccion)            
+                    ->add('BtnImprimir', SubmitType::class, $arrBotonImprimir)            
+                    ->add('BtnEliminarPuesto', SubmitType::class, $arrBotonEliminarPuesto)            
+                    ->add('BtnEliminarProyecto', SubmitType::class, $arrBotonEliminarProyecto)            
+                    ->add('BtnEliminarDireccion', SubmitType::class, $arrBotonEliminarDireccion)            
                     ->getForm();  
         return $form;
     }
