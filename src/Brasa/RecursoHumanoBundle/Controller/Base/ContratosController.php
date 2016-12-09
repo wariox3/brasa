@@ -489,15 +489,17 @@ class ContratosController extends Controller
                                         if($arContrato->getCodigoSalarioTipoFk() == 2) {
                                             if($arLiquidacion->getCodigoMotivoTerminacionContratoFk() != 5 && $arLiquidacion->getCodigoMotivoTerminacionContratoFk() != 4) {
                                                 $intDiasLaborados = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($arContrato->getFechaDesde(), $arContrato->getFechaHasta());                                
-                                                if($intDiasLaborados < 30) {
-                                                    $arLiquidacion->setLiquidarSalario(1);
-                                                } else {
-                                                    if($intDiasLaborados <= 120) {
-                                                        $arLiquidacion->setPorcentajeIbp(95);
-                                                    } else {
-                                                        $arLiquidacion->setPorcentajeIbp(90);
+                                                $arParametrosPrestacion = new \Brasa\RecursoHumanoBundle\Entity\RhuParametroPrestacion();
+                                                $arParametrosPrestacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuParametroPrestacion')->findBy(array('tipo' => 'LIQ'));                                
+                                                foreach ($arParametrosPrestacion as $arParametroPrestacion) {
+                                                    if($intDiasLaborados >= $arParametroPrestacion->getDiaDesde() && $intDiasLaborados <= $arParametroPrestacion->getDiaHasta()) {
+                                                        if($arParametroPrestacion->getOrigen() == 'SAL') {
+                                                            $arLiquidacion->setLiquidarSalario(1);
+                                                        } else {
+                                                            $arLiquidacion->getPorcentajeIbp($arParametroPrestacion->getPorcentaje());
+                                                        }
                                                     }
-                                                }                                             
+                                                }                                            
                                             }                                   
                                         }                                        
                                     }                                    

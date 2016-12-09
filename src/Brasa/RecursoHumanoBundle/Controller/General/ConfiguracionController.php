@@ -1,6 +1,6 @@
 <?php
 
-namespace Brasa\RecursoHumanoBundle\Controller;
+namespace Brasa\RecursoHumanoBundle\Controller\General;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -287,4 +287,54 @@ class ConfiguracionController extends Controller
         ));
     }
 
+    /**
+     * @Route("/rhu/configuracion/nomina/parametros/prestaciones/", name="brs_rhu_configuracion_nomina_parametros_prestaciones")
+     */
+    public function configuracionParametrosPrestacionAction() {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 115)) {
+            return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));
+        }
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $form = $this->createFormBuilder()            
+            ->add('BtnGuardar', 'submit', array('label' => 'Guardar'))            
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            if($form->get('BtnGuardar')->isClicked()) {                                            
+                $arrControles = $request->request->All();
+                foreach ($arrControles['LblCodigo'] as $codigo) {
+                    $arParametroPrestacion = new \Brasa\RecursoHumanoBundle\Entity\RhuParametroPrestacion();
+                    $arParametroPrestacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuParametroPrestacion')->find($codigo);
+                    if($arParametroPrestacion) {
+                        if($arrControles['TxtTipo'.$codigo] != "" ) {                                
+                            $arParametroPrestacion->setTipo($arrControles['TxtTipo'.$codigo]);                                
+                        }
+                        if($arrControles['TxtDesde'.$codigo] != "" ) {                                
+                            $arParametroPrestacion->setDiaDesde($arrControles['TxtDesde'.$codigo]);                                
+                        }                        
+                        if($arrControles['TxtHasta'.$codigo] != "" ) {                                
+                            $arParametroPrestacion->setDiaHasta($arrControles['TxtDesde'.$codigo]);                                
+                        }            
+                        if($arrControles['TxtPorcentaje'.$codigo] != "" ) {                                
+                            $arParametroPrestacion->setPorcentaje($arrControles['TxtPorcentaje'.$codigo]);                                
+                        }     
+                        if($arrControles['TxtOrigen'.$codigo] != "" ) {                                
+                            $arParametroPrestacion->setOrigen($arrControles['TxtOrigen'.$codigo]);                                
+                        }                        
+                        $em->persist($arParametroPrestacion);
+                    }
+                }
+                $em->flush();
+            }
+        }
+        $arParametrosPrestacion = new \Brasa\RecursoHumanoBundle\Entity\RhuParametroPrestacion();
+        $arParametrosPrestacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuParametroPrestacion')->findAll();
+        return $this->render('BrasaRecursoHumanoBundle:Configuracion:ConfiguracionParametrosPrestacion.html.twig', array(
+            'form' => $form->createView(),
+            'arParametrosPrestacion' => $arParametrosPrestacion
+        ));
+    }    
+    
 }

@@ -58,7 +58,8 @@ class RhuProgramacionPagoRepository extends EntityRepository {
             if($arProgramacionPagoProcesar->getFechaDesde()->format('Y') <= $arConfiguracion->getAnioActual()) {
                 $arCentroCosto = new \Brasa\RecursoHumanoBundle\Entity\RhuCentroCosto();
                 $arCentroCosto = $em->getRepository('BrasaRecursoHumanoBundle:RhuCentroCosto')->find($arProgramacionPagoProcesar->getCodigoCentroCostoFk());
-                //Nomina
+                
+                //Nomina && primas
                 if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 1 || $arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 2) { 
                     ini_set("memory_limit", -1);
                     $strSql = "DELETE rhu_pago_detalle FROM rhu_pago_detalle LEFT JOIN rhu_pago on rhu_pago_detalle.codigo_pago_fk = rhu_pago.codigo_pago_pk WHERE rhu_pago.codigo_programacion_pago_fk = " . $codigoProgramacionPago;                           
@@ -661,6 +662,8 @@ class RhuProgramacionPagoRepository extends EntityRepository {
             $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
             $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
             $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);
+            $arParametrosPrestacionPrima = new \Brasa\RecursoHumanoBundle\Entity\RhuParametroPrestacion();
+            $arParametrosPrestacionPrima = $em->getRepository('BrasaRecursoHumanoBundle:RhuParametroPrestacion')->findBy(array('tipo' => 'PRI'));                                                                
             $salarioMinimo = $arConfiguracion->getVrSalario();
             $auxilioTransporte = $arConfiguracion->getVrAuxilioTransporte();            
             $dql   = "SELECT c FROM BrasaRecursoHumanoBundle:RhuContrato c "
@@ -701,20 +704,20 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 if($arConfiguracion->getPrestacionesAplicaPorcentajeSalario()) {                            
                     if($arContrato->getCodigoSalarioTipoFk() == 2) {                                    
                         $intDiasLaborados = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($arContrato->getFechaDesde(), $dateFechaHasta);                                
-                        if($intDiasLaborados <= 30) {
-                            if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
-                                $salarioPromedioPrimas = $douSalario + $auxilioTransporte;
-                            } else {
-                                $salarioPromedioPrimas = $douSalario;
-                            } 
-                        } else {
-                            if($intDiasLaborados <= 120) {
-                                $porcentaje = $arConfiguracion->getPrestacionesPorcentajeSalario1();
-                            } else {
-                                $porcentaje = $arConfiguracion->getPrestacionesPorcentajeSalario2();
+                        foreach ($arParametrosPrestacionPrima as $arParametroPrestacion) {
+                            if($intDiasLaborados >= $arParametroPrestacion->getDiaDesde() && $intDiasLaborados <= $arParametroPrestacion->getDiaHasta()) {
+                                if($arParametroPrestacion->getOrigen() == 'SAL') {
+                                    if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
+                                        $salarioPromedioPrimas = $douSalario + $auxilioTransporte;
+                                    } else {
+                                        $salarioPromedioPrimas = $douSalario;
+                                    } 
+                                } else {
+                                    $porcentaje = $arParametroPrestacion->getPorcentaje();
+                                    $salarioPromedioPrimas = ($salarioPromedioPrimas * $porcentaje)/100;                                
+                                }                                            
                             }
-                        }
-                        $salarioPromedioPrimas = ($salarioPromedioPrimas * $porcentaje)/100;                                
+                        }                               
                     }                                                        
                 }                        
                 $salarioPromedioPrimas = round($salarioPromedioPrimas);                                                
