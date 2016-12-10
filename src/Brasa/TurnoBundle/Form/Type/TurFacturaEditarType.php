@@ -20,7 +20,7 @@ class TurFacturaEditarType extends AbstractType
             ->add('guardar', SubmitType::class);
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'form';
     }

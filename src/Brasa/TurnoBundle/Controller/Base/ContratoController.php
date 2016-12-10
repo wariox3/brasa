@@ -61,7 +61,8 @@ class ContratoController extends Controller
         if($codigoContrato != '' && $codigoContrato != '0') {
             $arContrato = $em->getRepository('BrasaTurnoBundle:TurContrato')->find($codigoContrato);
         }        
-        $form = $this->createForm(new TurContratoType, $arContrato);
+        
+        $form = $this->createForm(TurContratoType::class, $arContrato);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arContrato = $form->getData();

@@ -58,7 +58,7 @@ class OperacionController extends Controller
         if($codigoOperacion != '' && $codigoOperacion != '0') {
             $arOperacion = $em->getRepository('BrasaTurnoBundle:TurOperacion')->find($codigoOperacion);
         }        
-        $form = $this->createForm(new TurOperacionType, $arOperacion);
+        $form = $this->createForm(TurOperacionType::class, $arOperacion);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arOperacion = $form->getData();                        

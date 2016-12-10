@@ -60,7 +60,7 @@ class ConceptoServicioController extends Controller
         if($codigoConceptoServicio != 0) {
             $arConceptoServicio = $em->getRepository('BrasaTurnoBundle:TurConceptoServicio')->find($codigoConceptoServicio);
         }        
-        $form = $this->createForm(new TurConceptoServicioType, $arConceptoServicio);
+        $form = $this->createForm(TurConceptoServicioType::class, $arConceptoServicio);
         $form->handleRequest($request);
         if ($form->isValid()) {
             //$arrControles = $request->request->All();

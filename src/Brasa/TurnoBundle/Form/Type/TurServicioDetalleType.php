@@ -4,63 +4,68 @@ namespace Brasa\TurnoBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class TurServicioDetalleType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {       
         $builder   
-            ->add('grupoFacturacionRel', 'entity', array(
+            ->add('grupoFacturacionRel', EntityType::class, array(
                 'class' => 'BrasaTurnoBundle:TurGrupoFacturacion',
                 'query_builder' => function (EntityRepository $er) use ($options) {
                     return $er->createQueryBuilder('gf')
                     ->where('gf.codigoClienteFk = :codigoCliente ')
                     ->setParameter('codigoCliente', $options['data']->getServicioRel()->getCodigoClienteFk())
                     ->orderBy('gf.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => false))                             
-            ->add('puestoRel', 'entity', array(
+            ->add('puestoRel', EntityType::class, array(
                 'class' => 'BrasaTurnoBundle:TurPuesto',
                 'query_builder' => function (EntityRepository $er) use ($options) {
                     return $er->createQueryBuilder('p')
                     ->where('p.codigoClienteFk = :codigoCliente ')
                     ->setParameter('codigoCliente', $options['data']->getServicioRel()->getCodigoClienteFk())
                     ->orderBy('p.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => true))                
-            ->add('conceptoServicioRel', 'entity', array(
+            ->add('conceptoServicioRel', EntityType::class, array(
                 'class' => 'BrasaTurnoBundle:TurConceptoServicio',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('cs')
                     ->orderBy('cs.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => true))               
-            ->add('modalidadServicioRel', 'entity', array(
+            ->add('modalidadServicioRel', EntityType::class, array(
                 'class' => 'BrasaTurnoBundle:TurModalidadServicio',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('ms')
                     ->orderBy('ms.nombre', 'ASC');},
-                'property' => 'nombre',
+                'choice_label' => 'nombre',
                 'required' => true))                             
-            ->add('cantidad', 'number')
-            ->add('fechaDesde', 'date', array('format' => 'yyyyMMdd')) 
-            ->add('fechaHasta', 'date', array('format' => 'yyyyMMdd')) 
-            ->add('lunes', 'checkbox', array('required'  => false))
-            ->add('martes', 'checkbox', array('required'  => false))
-            ->add('miercoles', 'checkbox', array('required'  => false))
-            ->add('jueves', 'checkbox', array('required'  => false))
-            ->add('viernes', 'checkbox', array('required'  => false))
-            ->add('sabado', 'checkbox', array('required'  => false))
-            ->add('domingo', 'checkbox', array('required'  => false))
-            ->add('festivo', 'checkbox', array('required'  => false))                                              
-            ->add('dia31', 'checkbox', array('required'  => false))                            
-            ->add('liquidarDiasReales', 'checkbox', array('required'  => false))                            
-            ->add('compuesto', 'checkbox', array('required'  => false))                            
-            ->add('guardar', 'submit')
-            ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
+            ->add('cantidad', NumberType::class)
+            ->add('fechaDesde', DateType::class, array('format' => 'yyyyMMdd')) 
+            ->add('fechaHasta', DateType::class, array('format' => 'yyyyMMdd')) 
+            ->add('lunes', CheckboxType::class, array('required'  => false))
+            ->add('martes', CheckboxType::class, array('required'  => false))
+            ->add('miercoles', CheckboxType::class, array('required'  => false))
+            ->add('jueves', CheckboxType::class, array('required'  => false))
+            ->add('viernes', CheckboxType::class, array('required'  => false))
+            ->add('sabado', CheckboxType::class, array('required'  => false))
+            ->add('domingo', CheckboxType::class, array('required'  => false))
+            ->add('festivo', CheckboxType::class, array('required'  => false))                                              
+            ->add('dia31', CheckboxType::class, array('required'  => false))                            
+            ->add('liquidarDiasReales', CheckboxType::class, array('required'  => false))                            
+            ->add('compuesto', CheckboxType::class, array('required'  => false))                            
+            ->add('guardar', SubmitType::class)
+            ->add('guardarnuevo', SubmitType::class, array('label'  => 'Guardar y Nuevo'));
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'form';
     }

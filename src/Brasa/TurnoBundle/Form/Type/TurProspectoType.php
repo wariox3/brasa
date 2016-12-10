@@ -3,24 +3,28 @@ namespace Brasa\TurnoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class TurProspectoType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder            
-            ->add('nit', 'number', array('required' => true))
-            ->add('nombreCorto', 'text', array('required' => true))  
-            ->add('estrato', 'text', array('required' => false))                                   
-            ->add('contacto', 'text', array('required' => false))                  
-            ->add('celularContacto', 'text', array('required' => false))  
-            ->add('telefonoContacto', 'text', array('required' => false))  
-            ->add('comentarios', 'textarea', array('required' => false))
-            ->add('guardar', 'submit')
-            ->add('guardarnuevo', 'submit', array('label'  => 'Guardar y Nuevo'));
+            ->add('nit', NumberType::class, array('required' => true))
+            ->add('nombreCorto', TextType::class, array('required' => true))  
+            ->add('estrato', TextType::class, array('required' => false))                                   
+            ->add('contacto', TextType::class, array('required' => false))                  
+            ->add('celularContacto', TextType::class, array('required' => false))  
+            ->add('telefonoContacto', TextType::class, array('required' => false))  
+            ->add('comentarios', TextareaType::class, array('required' => false))
+            ->add('guardar', SubmitType::class)
+            ->add('guardarnuevo', SubmitType::class, array('label'  => 'Guardar y Nuevo'));
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'form';
     }

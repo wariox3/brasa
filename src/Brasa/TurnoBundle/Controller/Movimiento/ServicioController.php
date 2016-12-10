@@ -72,7 +72,7 @@ class ServicioController extends Controller
         if($codigoServicio != 0) {
             $arServicio = $em->getRepository('BrasaTurnoBundle:TurServicio')->find($codigoServicio);
         }
-        $form = $this->createForm(new TurServicioType, $arServicio);
+        $form = $this->createForm(TurServicioType::class, $arServicio);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arServicio = $form->getData();            

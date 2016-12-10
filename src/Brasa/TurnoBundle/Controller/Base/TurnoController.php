@@ -62,7 +62,7 @@ class TurnoController extends Controller
         if($codigoTurno != '' && $codigoTurno != '0') {
             $arTurno = $em->getRepository('BrasaTurnoBundle:TurTurno')->find($codigoTurno);
         }        
-        $form = $this->createForm(new TurTurnoType, $arTurno);
+        $form = $this->createForm(TurTurnoType::class, $arTurno);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arTurno = $form->getData(); 

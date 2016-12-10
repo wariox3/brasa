@@ -71,7 +71,7 @@ class ProgramacionController extends Controller
         }else{
             $arProgramacion->setFecha(new \DateTime('now'));
         }
-        $form = $this->createForm(new TurProgramacionType, $arProgramacion);
+        $form = $this->createForm(TurProgramacionType::class, $arProgramacion);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arProgramacion = $form->getData();

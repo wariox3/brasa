@@ -57,7 +57,7 @@ class ElementoDotacionController extends Controller
         if($codigoElementoDotacion != '' && $codigoElementoDotacion != '0') {
             $arElementoDotacion = $em->getRepository('BrasaTurnoBundle:TurElementoDotacion')->find($codigoElementoDotacion);
         }        
-        $form = $this->createForm(new TurElementoDotacionType, $arElementoDotacion);
+        $form = $this->createForm(TurElementoDotacionType::class, $arElementoDotacion);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arElementoDotacion = $form->getData();                        

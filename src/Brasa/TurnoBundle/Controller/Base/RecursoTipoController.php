@@ -60,7 +60,7 @@ class RecursoTipoController extends Controller
         if($codigoRecursoTipo != '' && $codigoRecursoTipo != '0') {
             $arRecursoTipo = $em->getRepository('BrasaTurnoBundle:TurRecursoTipo')->find($codigoRecursoTipo);
         }        
-        $form = $this->createForm(new TurRecursoTipoType, $arRecursoTipo);
+        $form = $this->createForm(TurRecursoTipoType::class, $arRecursoTipo);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arRecursoTipo = $form->getData();            

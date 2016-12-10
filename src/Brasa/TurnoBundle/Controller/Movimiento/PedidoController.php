@@ -77,7 +77,7 @@ class PedidoController extends Controller
             $arPedido->setFecha(new \DateTime('now'));            
             $arPedido->setFechaProgramacion(new \DateTime('now'));            
         }
-        $form = $this->createForm(new TurPedidoType, $arPedido);
+        $form = $this->createForm(TurPedidoType::class, $arPedido);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arPedido = $form->getData();            

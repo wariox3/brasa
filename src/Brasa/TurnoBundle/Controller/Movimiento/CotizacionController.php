@@ -72,7 +72,7 @@ class CotizacionController extends Controller
             $arCotizacion->setFecha(new \DateTime('now'));
             $arCotizacion->setFechaVence(new \DateTime('now'));
         }
-        $form = $this->createForm(new TurCotizacionType, $arCotizacion);
+        $form = $this->createForm(TurCotizacionType::class, $arCotizacion);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arCotizacion = $form->getData();
@@ -220,7 +220,7 @@ class CotizacionController extends Controller
             $arCotizacionDetalle->setFechaDesde(new \DateTime('now'));
             $arCotizacionDetalle->setFechaHasta(new \DateTime('now'));
         }
-        $form = $this->createForm(new TurCotizacionDetalleType, $arCotizacionDetalle);
+        $form = $this->createForm(TurCotizacionDetalleType::class, $arCotizacionDetalle);
         $form->handleRequest($request);
         if ($form->isValid()) {            
             $arCotizacionDetalle = $form->getData();

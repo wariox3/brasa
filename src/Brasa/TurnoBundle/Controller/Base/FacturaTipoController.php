@@ -58,7 +58,7 @@ class FacturaTipoController extends Controller
         if($codigoFacturaTipo != '' && $codigoFacturaTipo != '0') {
             $arFacturaTipo = $em->getRepository('BrasaTurnoBundle:TurFacturaTipo')->find($codigoFacturaTipo);
         }        
-        $form = $this->createForm(new TurFacturaTipoType, $arFacturaTipo);
+        $form = $this->createForm(TurFacturaTipoType::class, $arFacturaTipo);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arFacturaTipo = $form->getData();                        

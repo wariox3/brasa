@@ -57,7 +57,7 @@ class RecursoGrupoController extends Controller
         if($codigoRecursoGrupo != '' && $codigoRecursoGrupo != '0') {
             $arRecursoGrupo = $em->getRepository('BrasaTurnoBundle:TurRecursoGrupo')->find($codigoRecursoGrupo);
         }        
-        $form = $this->createForm(new TurRecursoGrupoType, $arRecursoGrupo);
+        $form = $this->createForm(TurRecursoGrupoType::class, $arRecursoGrupo);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arRecursoGrupo = $form->getData();                        

@@ -59,7 +59,7 @@ class ProspectoController extends Controller
         if($codigoProspecto != '' && $codigoProspecto != '0') {
             $arProspecto = $em->getRepository('BrasaTurnoBundle:TurProspecto')->find($codigoProspecto);
         }        
-        $form = $this->createForm(new TurProspectoType, $arProspecto);
+        $form = $this->createForm(TurProspectoType::class, $arProspecto);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arProspecto = $form->getData(); 

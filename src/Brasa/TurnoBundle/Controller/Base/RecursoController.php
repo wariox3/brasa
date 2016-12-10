@@ -94,7 +94,7 @@ class RecursoController extends Controller
                 } 
             }
         }        
-        $form = $this->createForm(new TurRecursoType, $arRecurso);
+        $form = $this->createForm(TurRecursoType::class, $arRecurso);
         $form->handleRequest($request);
         if ($form->isValid()) {
             if($form->get('guardar')->isClicked() || $form->get('guardarnuevo')->isClicked()) {
@@ -265,7 +265,7 @@ class RecursoController extends Controller
     
     private function formularioFiltro() {
         $em = $this->getDoctrine()->getManager();
-        $session = new session;  
+    $session = new Session;  
         $arrayPropiedadesRecursoGrupo = array(
                 'class' => 'BrasaTurnoBundle:TurRecursoGrupo',
                 'query_builder' => function (EntityRepository $er) {

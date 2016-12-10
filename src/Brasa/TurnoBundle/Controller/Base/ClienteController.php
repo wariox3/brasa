@@ -70,7 +70,7 @@ class ClienteController extends Controller
         if($codigoCliente != '' && $codigoCliente != '0') {
             $arCliente = $em->getRepository('BrasaTurnoBundle:TurCliente')->find($codigoCliente);
         }        
-        $form = $this->createForm(new TurClienteType, $arCliente);
+        $form = $this->createForm(TurClienteType::class, $arCliente);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arCliente = $form->getData();
@@ -153,7 +153,7 @@ class ClienteController extends Controller
         if($codigoPuesto != '' && $codigoPuesto != '0') {
             $arPuesto = $em->getRepository('BrasaTurnoBundle:TurPuesto')->find($codigoPuesto);
         }        
-        $form = $this->createForm(new TurClientePuestoType, $arPuesto);
+        $form = $this->createForm(TurClientePuestoType::class, $arPuesto);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arPuesto = $form->getData();
@@ -183,7 +183,7 @@ class ClienteController extends Controller
         if($codigoProyecto != '' && $codigoProyecto != '0') {
             $arProyecto = $em->getRepository('BrasaTurnoBundle:TurProyecto')->find($codigoProyecto);
         }        
-        $form = $this->createForm(new TurProyectoType, $arProyecto);
+        $form = $this->createForm(TurProyectoType::class, $arProyecto);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arProyecto = $form->getData();
@@ -213,7 +213,7 @@ class ClienteController extends Controller
         if($codigoGrupoFacturacion != '' && $codigoGrupoFacturacion != '0') {
             $arGrupoFacturacion = $em->getRepository('BrasaTurnoBundle:TurGrupoFacturacion')->find($codigoGrupoFacturacion);
         }        
-        $form = $this->createForm(new TurGrupoFacturacionType, $arGrupoFacturacion);
+        $form = $this->createForm(TurGrupoFacturacionType::class, $arGrupoFacturacion);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arGrupoFacturacion = $form->getData();
@@ -243,7 +243,7 @@ class ClienteController extends Controller
         if($codigoDireccion != '' && $codigoDireccion != '0') {
             $arClienteDireccion = $em->getRepository('BrasaTurnoBundle:TurClienteDireccion')->find($codigoDireccion);
         }        
-        $form = $this->createForm(new TurClienteDireccionType, $arClienteDireccion);
+        $form = $this->createForm(TurClienteDireccionType::class, $arClienteDireccion);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arClienteDireccion = $form->getData();

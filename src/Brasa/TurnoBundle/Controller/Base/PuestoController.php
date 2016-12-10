@@ -61,7 +61,7 @@ class PuestoController extends Controller
         if($codigoPuesto != '' && $codigoPuesto != '0') {
             $arPuesto = $em->getRepository('BrasaTurnoBundle:TurPuesto')->find($codigoPuesto);
         }        
-        $form = $this->createForm(new TurPuestoType, $arPuesto);
+        $form = $this->createForm(TurPuestoType::class, $arPuesto);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arPuesto = $form->getData();

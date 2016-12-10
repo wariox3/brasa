@@ -74,7 +74,7 @@ class NovedadController extends Controller
             $arNovedad->setFechaDesde(new \DateTime('now'));
             $arNovedad->setFechaHasta(new \DateTime('now'));
         }
-        $form = $this->createForm(new TurNovedadType, $arNovedad);
+        $form = $this->createForm(TurNovedadType::class, $arNovedad);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arNovedad = $form->getData();

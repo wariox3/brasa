@@ -57,7 +57,7 @@ class ProyectoController extends Controller
         if($codigoProyecto != '' && $codigoProyecto != '0') {
             $arProyecto = $em->getRepository('BrasaTurnoBundle:TurProyecto')->find($codigoProyecto);
         }        
-        $form = $this->createForm(new TurProyectoType, $arProyecto);
+        $form = $this->createForm(TurProyectoType::class, $arProyecto);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arProyecto = $form->getData();                        

@@ -59,7 +59,7 @@ class PlantillaController extends Controller {
         if ($codigoPlantilla != 0) {
             $arPlantilla = $em->getRepository('BrasaTurnoBundle:TurPlantilla')->find($codigoPlantilla);
         }
-        $form = $this->createForm(new TurPlantillaType, $arPlantilla);
+        $form = $this->createForm(TurPlantillaType::class, $arPlantilla);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arPlantilla = $form->getData();

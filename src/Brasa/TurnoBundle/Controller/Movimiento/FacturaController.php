@@ -108,7 +108,7 @@ class FacturaController extends Controller
             $arFactura->setFecha(new \DateTime('now'));
             $arFactura->setFechaVence(new \DateTime('now'));
         }
-        $form = $this->createForm(new TurFacturaType, $arFactura);
+        $form = $this->createForm(TurFacturaType::class, $arFactura);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arFactura = $form->getData();            
@@ -169,7 +169,7 @@ class FacturaController extends Controller
             $arFactura->setFecha(new \DateTime('now'));
             $arFactura->setFechaVence(new \DateTime('now'));
         }
-        $form = $this->createForm(new TurNotaCreditoType, $arFactura);
+        $form = $this->createForm(TurNotaCreditoType::class, $arFactura);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arFactura = $form->getData();            

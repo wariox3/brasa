@@ -58,7 +58,7 @@ class NovedadTipoController extends Controller
         if($codigoNovedadTipo != '' && $codigoNovedadTipo != '0') {
             $arNovedadTipo = $em->getRepository('BrasaTurnoBundle:TurNovedadTipo')->find($codigoNovedadTipo);
         }        
-        $form = $this->createForm(new TurNovedadTipoType, $arNovedadTipo);
+        $form = $this->createForm(TurNovedadTipoType::class, $arNovedadTipo);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arNovedadTipo = $form->getData();                        
