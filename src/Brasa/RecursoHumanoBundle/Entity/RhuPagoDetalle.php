@@ -138,6 +138,16 @@ class RhuPagoDetalle
     private $cotizacion = 0;
     
     /**
+     * @ORM\Column(name="salud", type="boolean")
+     */    
+    private $salud = false;
+
+    /**
+     * @ORM\Column(name="pension", type="boolean")
+     */    
+    private $pension = false;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuPago", inversedBy="pagosDetallesPagoRel")
      * @ORM\JoinColumn(name="codigo_pago_fk", referencedColumnName="codigo_pago_pk")
      */
@@ -845,5 +855,53 @@ class RhuPagoDetalle
     public function getVrIngresoBaseCotizacionIncapacidad()
     {
         return $this->vrIngresoBaseCotizacionIncapacidad;
+    }
+
+    /**
+     * Set salud
+     *
+     * @param boolean $salud
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setSalud($salud)
+    {
+        $this->salud = $salud;
+
+        return $this;
+    }
+
+    /**
+     * Get salud
+     *
+     * @return boolean
+     */
+    public function getSalud()
+    {
+        return $this->salud;
+    }
+
+    /**
+     * Set pension
+     *
+     * @param boolean $pension
+     *
+     * @return RhuPagoDetalle
+     */
+    public function setPension($pension)
+    {
+        $this->pension = $pension;
+
+        return $this;
+    }
+
+    /**
+     * Get pension
+     *
+     * @return boolean
+     */
+    public function getPension()
+    {
+        return $this->pension;
     }
 }

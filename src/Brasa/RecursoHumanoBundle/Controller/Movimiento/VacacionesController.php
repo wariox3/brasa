@@ -597,29 +597,32 @@ class VacacionesController extends Controller
                     ->setCategory("Test result file");
                 $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10);
                 $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-                for($col = 'A'; $col !== 'P'; $col++) {
+                for($col = 'A'; $col !== 'S'; $col++) {
                     $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
                 }
-                for($col = 'G'; $col !== 'P'; $col++) {
+                for($col = 'H'; $col !== 'S'; $col++) {
                     $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
                 }
 
                 $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A1', 'CODIGO')
-                            ->setCellValue('B1', 'GRUPO PAGO')
-                            ->setCellValue('C1', 'DESDE')
-                            ->setCellValue('D1', 'HASTA')
-                            ->setCellValue('E1', 'DOCUMENTO')
-                            ->setCellValue('F1', 'EMPLEADO')
-                            ->setCellValue('G1', 'D.DIS')
-                            ->setCellValue('H1', 'D.DIS.REALES')
-                            ->setCellValue('I1', 'D.PAG')
-                            ->setCellValue('J1', 'DIAS')
-                            ->setCellValue('K1', 'VR VACACIONES')
-                            ->setCellValue('L1', 'VR DEDUCCIONES')
-                            ->setCellValue('M1', 'VR BONIFICACIONES')
-                            ->setCellValue('N1', 'VR PAGAR')
-                            ->setCellValue('O1', 'PAGADO');
+                            ->setCellValue('B1', 'FECHA')
+                            ->setCellValue('C1', 'GRUPO PAGO')
+                            ->setCellValue('D1', 'DESDE')
+                            ->setCellValue('E1', 'HASTA')
+                            ->setCellValue('F1', 'DOCUMENTO')
+                            ->setCellValue('G1', 'EMPLEADO')
+                            ->setCellValue('H1', 'D.DIS')
+                            ->setCellValue('I1', 'D.DIS.REALES')
+                            ->setCellValue('J1', 'D.PAG')
+                            ->setCellValue('K1', 'DIAS')
+                            ->setCellValue('L1', 'VR_VACACIONES')
+                            ->setCellValue('M1', 'VR_SALUD')
+                            ->setCellValue('N1', 'VR_PENSION')
+                            ->setCellValue('O1', 'VR_DEDUCCIONES')                            
+                            ->setCellValue('P1', 'VR_BONIFICACIONES')
+                            ->setCellValue('Q1', 'VR_PAGAR')
+                            ->setCellValue('R1', 'PAGADO');
 
                 $i = 2;
                 $query = $em->createQuery($this->strSqlLista);
@@ -635,20 +638,23 @@ class VacacionesController extends Controller
 
                     $objPHPExcel->setActiveSheetIndex(0)
                             ->setCellValue('A' . $i, $arVacacion->getCodigoVacacionPk())
-                            ->setCellValue('B' . $i, $arVacacion->getCentroCostoRel()->getNombre())
-                            ->setCellValue('C' . $i, $arVacacion->getFechaDesdeDisfrute()->format('Y/m/d'))
-                            ->setCellValue('D' . $i, $arVacacion->getFechaHastaDisfrute()->format('Y/m/d'))
-                            ->setCellValue('E' . $i, $arVacacion->getEmpleadoRel()->getNumeroIdentificacion())
-                            ->setCellValue('F' . $i, $arVacacion->getEmpleadoRel()->getNombreCorto())
-                            ->setCellValue('G' . $i, $arVacacion->getDiasDisfrutados())
-                            ->setCellValue('H' . $i, $arVacacion->getDiasDisfrutadosReales())
-                            ->setCellValue('I' . $i, $arVacacion->getDiasPagados())
-                            ->setCellValue('J' . $i, $arVacacion->getDiasVacaciones())
-                            ->setCellValue('K' . $i, round($arVacacion->getVrVacacionBruto()))
-                            ->setCellValue('L' . $i, round($arVacacion->getVrDeduccion()))
-                            ->setCellValue('M' . $i, round($arVacacion->getVrBonificacion()))
-                            ->setCellValue('N' . $i, round($arVacacion->getVrVacacion()))
-                            ->setCellValue('O' . $i, $Estado);
+                            ->setCellValue('B' . $i, $arVacacion->getFecha()->format('Y/m/d'))
+                            ->setCellValue('C' . $i, $arVacacion->getCentroCostoRel()->getNombre())
+                            ->setCellValue('D' . $i, $arVacacion->getFechaDesdeDisfrute()->format('Y/m/d'))
+                            ->setCellValue('E' . $i, $arVacacion->getFechaHastaDisfrute()->format('Y/m/d'))
+                            ->setCellValue('F' . $i, $arVacacion->getEmpleadoRel()->getNumeroIdentificacion())
+                            ->setCellValue('G' . $i, $arVacacion->getEmpleadoRel()->getNombreCorto())
+                            ->setCellValue('H' . $i, $arVacacion->getDiasDisfrutados())
+                            ->setCellValue('I' . $i, $arVacacion->getDiasDisfrutadosReales())
+                            ->setCellValue('J' . $i, $arVacacion->getDiasPagados())
+                            ->setCellValue('K' . $i, $arVacacion->getDiasVacaciones())
+                            ->setCellValue('L' . $i, round($arVacacion->getVrVacacionBruto()))
+                            ->setCellValue('M' . $i, round($arVacacion->getVrPension()))
+                            ->setCellValue('N' . $i, round($arVacacion->getVrSalud()))
+                            ->setCellValue('O' . $i, round($arVacacion->getVrDeduccion()))
+                            ->setCellValue('P' . $i, round($arVacacion->getVrBonificacion()))
+                            ->setCellValue('Q' . $i, round($arVacacion->getVrVacacion()))
+                            ->setCellValue('R' . $i, $Estado);
                     $i++;
                 }
 

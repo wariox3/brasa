@@ -19,17 +19,17 @@ class RhuSsoAporteRepository extends EntityRepository {
             return $dql;
     }
     
-    public function listaAportesDQL($strIdentificacion = "", $strDesde = "", $strHasta = "") {        
+    public function listaAportesDQL($anio = "", $mes ="", $strIdentificacion = "") {        
         $em = $this->getEntityManager();
-        $dql   = "SELECT ssoa, ssoap, e FROM BrasaRecursoHumanoBundle:RhuSsoAporte ssoa JOIN ssoa.ssoPeriodoRel ssoap JOIN ssoa.empleadoRel e WHERE ssoa.codigoAportePk <> 0 ";   
+        $dql   = "SELECT ssoa, e FROM BrasaRecursoHumanoBundle:RhuSsoAporte ssoa JOIN ssoa.empleadoRel e WHERE ssoa.codigoAportePk <> 0 ";   
         if($strIdentificacion != "" ) {
             $dql .= " AND e.numeroIdentificacion = '" . $strIdentificacion . "'";
         }
-        if ($strDesde != ""){
-            $dql .= " AND ssoap.fechaDesde >='" . $strDesde . "'";
+        if ($anio != ""){
+            $dql .= " AND ssoa.anio = " . $anio;
         }
-        if($strHasta != "") {
-            $dql .= " AND ssoap.fechaHasta <='" . $strHasta . "'";
+        if($mes != "") {
+            $dql .= " AND ssoa.mes = " . $mes;
         }
         return $dql;
     }
@@ -65,4 +65,32 @@ class RhuSsoAporteRepository extends EntityRepository {
         return $arrayResultado;
     } 
     
+    public function cotizacionMes($anio, $mes, $codigoContrato) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT SUM(ssoa.cotizacionPension) as cotizacionPension, SUM(ssoa.cotizacionSalud) as cotizacionSalud, SUM(ssoa.cotizacionRiesgos) as cotizacionRiesgos, SUM(ssoa.cotizacionCaja) as cotizacionCaja, SUM(ssoa.cotizacionSena) as cotizacionSena, SUM(ssoa.cotizacionIcbf) as cotizacionIcbf FROM BrasaRecursoHumanoBundle:RhuSsoAporte ssoa "
+                . "WHERE ssoa.anio = $anio AND ssoa.mes = $mes" . " "
+                . "AND ssoa.codigoContratoFk = " . $codigoContrato;
+        $query = $em->createQuery($dql);
+        $arrayResultado = $query->getResult();
+        $resultados = $arrayResultado[0];
+        if($resultados['cotizacionRiesgos'] == null) {
+           $resultados['cotizacionRiesgos'] = 0; 
+        }
+        if($resultados['cotizacionCaja'] == null) {
+           $resultados['cotizacionCaja'] = 0; 
+        }        
+        if($resultados['cotizacionSena'] == null) {
+           $resultados['cotizacionSena'] = 0; 
+        }
+        if($resultados['cotizacionIcbf'] == null) {
+           $resultados['cotizacionIcbf'] = 0; 
+        }        
+        if($resultados['cotizacionPension'] == null) {
+           $resultados['cotizacionPension'] = 0; 
+        } 
+        if($resultados['cotizacionSalud'] == null) {
+           $resultados['cotizacionSalud'] = 0; 
+        }         
+        return $resultados;        
+    }
 }

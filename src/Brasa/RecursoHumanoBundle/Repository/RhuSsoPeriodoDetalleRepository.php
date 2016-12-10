@@ -49,14 +49,14 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                 $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arPeriodoEmpleado->getCodigoEmpleadoFk());        
                 $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
                 $arContrato = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->find($arPeriodoEmpleado->getCodigoContratoFk());        
-                $arAporte = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte();
+                $arAporte = new \Brasa\RecursoHumanoBundle\Entity\RhuSsoAporte();                
                 $arAporte->setSsoPeriodoRel($arPeriodoEmpleado->getSsoPeriodoRel());
                 $arAporte->setSsoPeriodoDetalleRel($arPeriodoDetalle);
                 $arAporte->setSsoSucursalRel($arPeriodoEmpleado->getSsoSucursalRel());
                 $arAporte->setEmpleadoRel($arPeriodoEmpleado->getEmpleadoRel());
                 $arAporte->setContratoRel($arPeriodoEmpleado->getContratoRel());
-                $arAporte->setAnio($arPeriodo->getAnioPago());
-                $arAporte->setMes($arPeriodo->getMesPago());
+                $arAporte->setAnio($arPeriodo->getAnio());
+                $arAporte->setMes($arPeriodo->getMes());
                 $arAporte->setFechaDesde($arPeriodo->getFechaDesde());
                 $arAporte->setFechaHasta($arPeriodo->getFechaHasta());
                 $arAporte->setTipoRegistro(2);
@@ -288,6 +288,8 @@ class RhuSsoPeriodoDetalleRepository extends EntityRepository {
                     $arAporte->setSsoSucursalRel($arPeriodoEmpleado->getSsoSucursalRel());
                     $arAporte->setEmpleadoRel($arPeriodoEmpleado->getEmpleadoRel());
                     $arAporte->setContratoRel($arPeriodoEmpleado->getContratoRel());
+                    $arAporte->setAnio($arPeriodo->getAnio());
+                    $arAporte->setMes($arPeriodo->getMes());                    
                     $arAporte->setTipoRegistro(2);
                     $arAporte->setSecuencia($i);
                     $arAporte->setTipoDocumento($arEmpleado->getTipoIdentificacionRel()->getCodigoInterface());

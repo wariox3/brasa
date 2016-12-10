@@ -25,7 +25,7 @@ class ProvisionController extends Controller
         if($form->isValid()) {            
             if($request->request->get('OpGenerar')) {
                 $codigoProvisionPeriodo = $request->request->get('OpGenerar');
-                $arProvisionPeriodo = new \Brasa\RecursoHumanoBundle\Entity\RhuProvisionPeriodo();
+                $arProvisionPeriodo = new \Brasa\RecursoHumanoBundle\Entity\RhuProvisionPeriodo();                
                 $arProvisionPeriodo = $em->getRepository('BrasaRecursoHumanoBundle:RhuProvisionPeriodo')->find($codigoProvisionPeriodo);
                 if($arProvisionPeriodo->getEstadoGenerado() == 0) {
                     set_time_limit(0);
@@ -52,7 +52,9 @@ class ProvisionController extends Controller
                     $riesgosTotal = 0;
                     $cajaTotal = 0;
                     $senaTotal = 0;
-                    $icbfTotal = 0;                 
+                    $icbfTotal = 0;  
+                    
+                    //p.codigoEmpleadoFk = 4153 AND
                     $dql   = "SELECT p.codigoEmpleadoFk, p.codigoContratoFk FROM BrasaRecursoHumanoBundle:RhuPago p "
                             . "WHERE p.estadoPagado = 1 AND p.fechaDesdePago >= '" . $arProvisionPeriodo->getFechaDesde()->format('Y/m/d') . "' AND p.fechaDesdePago <= '" . $arProvisionPeriodo->getFechaHasta()->format('Y/m/d') . "' "
                             . "GROUP BY p.codigoEmpleadoFk, p.codigoContratoFk";
@@ -62,8 +64,10 @@ class ProvisionController extends Controller
                         $ingresoBasePrestacion = 0;
                         $ingresoBaseCotizacion = 0;
                         $ingresoBaseIndemnizacion = 0;
-                        $ingresoBaseVacacion = 0;                    
-                        $dql   = "SELECT pd.vrIngresoBasePrestacion, pd.vrIngresoBaseCotizacion, pc.provisionIndemnizacion, pc.provisionVacacion FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p JOIN pd.pagoConceptoRel pc "
+                        $ingresoBaseVacacion = 0; 
+                        $pensionEmpleado = 0;
+                        $saludEmpleado = 0;
+                        $dql   = "SELECT pd.salud, pd.pension, pd.vrPago, pd.vrIngresoBasePrestacion, pd.vrIngresoBaseCotizacion, pc.provisionIndemnizacion, pc.provisionVacacion  FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p JOIN pd.pagoConceptoRel pc "
                                 . "WHERE p.codigoEmpleadoFk = " . $arEmpleado['codigoEmpleadoFk'] . " AND p.codigoContratoFk = " . $arEmpleado['codigoContratoFk'] . " AND p.estadoPagado = 1 AND p.fechaDesdePago >= '" . $arProvisionPeriodo->getFechaDesde()->format('Y/m/d') . "' AND p.fechaDesdePago <= '" . $arProvisionPeriodo->getFechaHasta()->format('Y/m/d') . "'";
                         $query = $em->createQuery($dql);
                         $arPagosDetalles = $query->getResult();                                         
@@ -75,8 +79,17 @@ class ProvisionController extends Controller
                             }
                             if($arPagoDetalle['provisionVacacion'] == 1) {
                                 $ingresoBaseVacacion +=  $arPagoDetalle['vrIngresoBasePrestacion'];
-                            }                         
+                            }
+                            if($arPagoDetalle['pension'] == 1) {
+                                $pensionEmpleado +=  $arPagoDetalle['vrPago'];
+                            }                            
+                            if($arPagoDetalle['salud'] == 1) {
+                                $saludEmpleado +=  $arPagoDetalle['vrPago'];
+                            }                            
                         }
+                        $arrVacacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->deduccionesAportes($arEmpleado['codigoContratoFk'], $arProvisionPeriodo->getFechaDesde(), $arProvisionPeriodo->getFechaHasta());
+                        $pensionEmpleado += $arrVacacion['vrPension'];
+                        $saludEmpleado += $arrVacacion['vrSalud'];
                         $arEmpleadoAct = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
                         $arEmpleadoAct = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arEmpleado['codigoEmpleadoFk']);                                        
                         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
@@ -96,13 +109,23 @@ class ProvisionController extends Controller
                         }
                         $vacaciones = ($ingresoBaseVacacion * $porcentajeVacaciones) / 100; // 4.17                                                
                         $indemnizacion = ($ingresoBaseIndemnizacion * $porcentajeIndemnizacion) / 100; // 4.17    
-                        //Aportes                    
-                        $riesgos = ($ingresoBaseCotizacion * $porcentajeRiesgos)/100;        
-                        $pension = ($ingresoBaseCotizacion * $porcentajePension) / 100; 
-                        $salud = 0;         
-                        $caja = ($ingresoBaseCotizacion * $porcentajeCaja) / 100; //Porcentaje 4        
-                        $sena = 0;
-                        $icbf = 0;                                
+                        
+                        //Aportes   
+                        $arrAportes = $em->getRepository('BrasaRecursoHumanoBundle:RhuSsoAporte')->cotizacionMes($arProvisionPeriodo->getAnio(), $arProvisionPeriodo->getMes(), $arEmpleado['codigoContratoFk']);                                                                        
+                        $salud = 0;
+                        if($arrAportes['cotizacionSalud'] > $saludEmpleado) {
+                            $salud =  $arrAportes['cotizacionSalud'] - $saludEmpleado;                                                                                                        
+                        }
+                        $pension = 0;
+                        if($arrAportes['cotizacionPension'] > $pensionEmpleado) {
+                            $pension =  $arrAportes['cotizacionPension'] - $pensionEmpleado;                     
+                        }
+                        
+                        $caja = $arrAportes['cotizacionCaja'];       
+                        $riesgos = $arrAportes['cotizacionRiesgos'];        
+                        $sena = $arrAportes['cotizacionSena'];
+                        $icbf = $arrAportes['cotizacionIcbf']; 
+                        
                         $salarioAporte = 0;
                         if($arContrato->getSalarioIntegral() == 1) {
                             $salarioAporte = ($ingresoBaseCotizacion * 70) / 100;
@@ -110,37 +133,21 @@ class ProvisionController extends Controller
                             $salarioAporte = $ingresoBaseCotizacion;
                         }
 
-                        if($salarioAporte > $salarioMinimo * 10) {
-                            $salud = ($ingresoBaseCotizacion * $porcentajeSalud) / 100;
-                            $sena = ($ingresoBaseCotizacion * 2) / 100;
-                            $icbf = ($ingresoBaseCotizacion * 3) / 100;
-                        }
                         //12 aprendiz y 19 practicante        
-                        if($arContrato->getCodigoTipoCotizanteFk() == '19' || $arContrato->getCodigoTipoCotizanteFk() == '12') {            
-                            $salud = ($ingresoBaseCotizacion * $porcentajeSalud) / 100;
-                            $pension = 0;            
-                            $caja = 0;
+                        if($arContrato->getCodigoTipoCotizanteFk() == '19' || $arContrato->getCodigoTipoCotizanteFk() == '12') {                                                                               
                             $cesantias = 0;
                             $interesesCesantias = 0; 
                             $primas = 0;
                             $vacaciones = 0;                    
                         }
-                        if($arContrato->getCodigoTipoCotizanteFk() == '12') {
-                            $riesgos = 0;
-                        }
+
                         $ingresoBasePrestacion = round($ingresoBasePrestacion);
                         $ingresoBaseCotizacion = round($ingresoBaseCotizacion);
                         $cesantias = round($cesantias);                    
                         $interesesCesantias = round($interesesCesantias);
                         $primas = round($primas);
                         $vacaciones = round($vacaciones);
-                        $indemnizacion = round($indemnizacion);
-                        $pension = round($pension); 
-                        $salud = round($salud);         
-                        $riesgos = round($riesgos);
-                        $caja = round($caja);
-                        $sena = round($sena);
-                        $icbf = round($icbf);
+                        $indemnizacion = round($indemnizacion);                                                                              
                         
                         $ingresoBasePrestacionTotal += $ingresoBasePrestacion;
                         $ingresoBaseCotizacionTotal += $ingresoBaseCotizacion;

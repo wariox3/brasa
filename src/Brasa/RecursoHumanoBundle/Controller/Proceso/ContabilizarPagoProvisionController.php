@@ -410,69 +410,83 @@ class ContabilizarPagoProvisionController extends Controller
 
                             //Sena
                             if($arProvision->getVrSena() > 0) {   
-                                $cuenta = $this->cuenta($arProvisionSena, $tipoEmpleado);                                
-                                $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
-                                if($arCuenta) {
-                                    $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                    $arRegistro->setComprobanteRel($arComprobanteContable); 
-                                    $arRegistro->setCentroCostoRel($arCentroCosto);
-                                    $arRegistro->setCuentaRel($arCuenta);
-                                    $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero($arProvision->getCodigoProvisionPeriodoFk());
-                                    $arRegistro->setNumeroReferencia($arProvision->getCodigoProvisionPeriodoFk());
-                                    $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
-                                    $arRegistro->setDebito($arProvision->getVrSena());                            
-                                    $arRegistro->setDescripcionContable('PROVISION SENA');
-                                    $em->persist($arRegistro);
-                                }  
-                                $cuenta = $this->cuenta($arProvisionSena2, $tipoEmpleado);                                
-                                $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
-                                if($arCuenta) {
-                                    $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                    $arRegistro->setComprobanteRel($arComprobanteContable);                                    
-                                    $arRegistro->setCuentaRel($arCuenta);
-                                    $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero($arProvision->getCodigoProvisionPeriodoFk());
-                                    $arRegistro->setNumeroReferencia($arProvision->getCodigoProvisionPeriodoFk());
-                                    $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
-                                    $arRegistro->setCredito($arProvision->getVrSena());                            
-                                    $arRegistro->setDescripcionContable('PROVISION SENA');
-                                    $em->persist($arRegistro);
-                                }                                
+                                $arTerceroSena = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arConfiguracion->getNitSena()));
+                                if($arTerceroSena) {
+                                    $cuenta = $this->cuenta($arProvisionSena, $tipoEmpleado);                                
+                                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
+                                    if($arCuenta) {
+                                        $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
+                                        $arRegistro->setComprobanteRel($arComprobanteContable); 
+                                        $arRegistro->setCentroCostoRel($arCentroCosto);
+                                        $arRegistro->setCuentaRel($arCuenta);
+                                        $arRegistro->setTerceroRel($arTerceroSena);
+                                        $arRegistro->setNumero($arProvision->getCodigoProvisionPeriodoFk());
+                                        $arRegistro->setNumeroReferencia($arProvision->getCodigoProvisionPeriodoFk());
+                                        $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
+                                        $arRegistro->setDebito($arProvision->getVrSena());                            
+                                        $arRegistro->setDescripcionContable('PROVISION SENA');
+                                        $em->persist($arRegistro);
+                                    }  
+                                    $cuenta = $this->cuenta($arProvisionSena2, $tipoEmpleado);                                
+                                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
+                                    if($arCuenta) {
+                                        $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
+                                        $arRegistro->setComprobanteRel($arComprobanteContable);                                    
+                                        $arRegistro->setCuentaRel($arCuenta);
+                                        $arRegistro->setTerceroRel($arTerceroSena);
+                                        $arRegistro->setNumero($arProvision->getCodigoProvisionPeriodoFk());
+                                        $arRegistro->setNumeroReferencia($arProvision->getCodigoProvisionPeriodoFk());
+                                        $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
+                                        $arRegistro->setCredito($arProvision->getVrSena());                            
+                                        $arRegistro->setDescripcionContable('PROVISION SENA');
+                                        $em->persist($arRegistro);
+                                    }                                     
+                                } else {
+                                    $errorDatos = true;
+                                    $objMensaje->Mensaje("error", "El empleado (" . $arProvision->getEmpleadoRel()->getNombreCorto() . ") con identificacion: " . $arProvision->getEmpleadoRel()->getNumeroIdentificacion() . ", en terceros de contabilidad no existe la entidad sena ", $this);
+                                    break 1;
+                                }                                                               
                             }                             
                             
                             //Icbf
                             if($arProvision->getVrIcbf() > 0) {   
-                                $cuenta = $this->cuenta($arProvisionIcbf, $tipoEmpleado);                                
-                                $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
-                                if($arCuenta) {
-                                    $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                    $arRegistro->setComprobanteRel($arComprobanteContable); 
-                                    $arRegistro->setCentroCostoRel($arCentroCosto);
-                                    $arRegistro->setCuentaRel($arCuenta);
-                                    $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero($arProvision->getCodigoProvisionPeriodoFk());
-                                    $arRegistro->setNumeroReferencia($arProvision->getCodigoProvisionPeriodoFk());
-                                    $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
-                                    $arRegistro->setDebito($arProvision->getVrIcbf());                            
-                                    $arRegistro->setDescripcionContable('PROVISION ICBF');
-                                    $em->persist($arRegistro);
-                                }  
-                                $cuenta = $this->cuenta($arProvisionIcbf2, $tipoEmpleado);                                
-                                $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
-                                if($arCuenta) {
-                                    $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
-                                    $arRegistro->setComprobanteRel($arComprobanteContable);
-                                    $arRegistro->setCentroCostoRel($arCentroCosto);
-                                    $arRegistro->setCuentaRel($arCuenta);
-                                    $arRegistro->setTerceroRel($arTercero);
-                                    $arRegistro->setNumero($arProvision->getCodigoProvisionPeriodoFk());
-                                    $arRegistro->setNumeroReferencia($arProvision->getCodigoProvisionPeriodoFk());
-                                    $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
-                                    $arRegistro->setCredito($arProvision->getVrIcbf());                            
-                                    $arRegistro->setDescripcionContable('PROVISION ICBF');
-                                    $em->persist($arRegistro);
-                                }                                
+                                $arTerceroIcbf = $em->getRepository('BrasaContabilidadBundle:CtbTercero')->findOneBy(array('numeroIdentificacion' => $arConfiguracion->getNitIcbf()));
+                                if($arTerceroIcbf) {
+                                    $cuenta = $this->cuenta($arProvisionIcbf, $tipoEmpleado);                                
+                                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
+                                    if($arCuenta) {
+                                        $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
+                                        $arRegistro->setComprobanteRel($arComprobanteContable); 
+                                        $arRegistro->setCentroCostoRel($arCentroCosto);
+                                        $arRegistro->setCuentaRel($arCuenta);
+                                        $arRegistro->setTerceroRel($arTerceroIcbf);
+                                        $arRegistro->setNumero($arProvision->getCodigoProvisionPeriodoFk());
+                                        $arRegistro->setNumeroReferencia($arProvision->getCodigoProvisionPeriodoFk());
+                                        $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
+                                        $arRegistro->setDebito($arProvision->getVrIcbf());                            
+                                        $arRegistro->setDescripcionContable('PROVISION ICBF');
+                                        $em->persist($arRegistro);
+                                    }  
+                                    $cuenta = $this->cuenta($arProvisionIcbf2, $tipoEmpleado);                                
+                                    $arCuenta = $em->getRepository('BrasaContabilidadBundle:CtbCuenta')->find($cuenta);                                                                                                     
+                                    if($arCuenta) {
+                                        $arRegistro = new \Brasa\ContabilidadBundle\Entity\CtbRegistro();                            
+                                        $arRegistro->setComprobanteRel($arComprobanteContable);
+                                        $arRegistro->setCentroCostoRel($arCentroCosto);
+                                        $arRegistro->setCuentaRel($arCuenta);
+                                        $arRegistro->setTerceroRel($arTerceroIcbf);
+                                        $arRegistro->setNumero($arProvision->getCodigoProvisionPeriodoFk());
+                                        $arRegistro->setNumeroReferencia($arProvision->getCodigoProvisionPeriodoFk());
+                                        $arRegistro->setFecha($arProvision->getProvisionPeriodoRel()->getFechaHasta());
+                                        $arRegistro->setCredito($arProvision->getVrIcbf());                            
+                                        $arRegistro->setDescripcionContable('PROVISION ICBF');
+                                        $em->persist($arRegistro);
+                                    }                                     
+                                } else {
+                                    $errorDatos = true;
+                                    $objMensaje->Mensaje("error", "El empleado (" . $arProvision->getEmpleadoRel()->getNombreCorto() . ") con identificacion: " . $arProvision->getEmpleadoRel()->getNumeroIdentificacion() . ", en terceros de contabilidad no existe la entidad icbf ", $this);
+                                    break 1;
+                                }                               
                             }                             
                             
                             $arProvision->setEstadoContabilizado(1);                                

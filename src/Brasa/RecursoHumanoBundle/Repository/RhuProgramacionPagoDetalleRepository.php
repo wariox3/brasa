@@ -438,6 +438,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                     $arPagoDetalle->setOperacion($intOperacion);
                     $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $intOperacion);
                     $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
+                    $arPagoDetalle->setSalud(1);
                     $em->persist($arPagoDetalle);                                
                 }                                                        
             }                        
@@ -459,6 +460,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                     $arPagoDetalle->setOperacion($intOperacion);
                     $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $intOperacion);
                     $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
+                    $arPagoDetalle->setPension(1);
                     $em->persist($arPagoDetalle);   
 
                     //Fondo de solidaridad pensional
@@ -478,6 +480,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                             $arPagoDetalle->setOperacion($intOperacion);
                             $arPagoDetalle->setVrPagoOperado($douPagoDetalle * $intOperacion);
                             $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
+                            $arPagoDetalle->setPension(1);
                             $em->persist($arPagoDetalle);                                         
                         }                                        
                     }

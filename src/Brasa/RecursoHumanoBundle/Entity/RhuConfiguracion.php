@@ -317,15 +317,14 @@ class RhuConfiguracion
     private $prestacionesAplicaPorcentajeSalario = false;     
 
     /**
-     * @ORM\Column(name="prestaciones_porcentaje_salario1", type="integer")
-     */    
-    private $prestacionesPorcentajeSalario1 = 0;    
+     * @ORM\Column(name="nit_sena", type="string", length=20, nullable=false)
+     */
+    private $nitSena;    
 
     /**
-     * @ORM\Column(name="prestaciones_porcentaje_salario2", type="integer")
-     */    
-    private $prestacionesPorcentajeSalario2 = 0;     
-    
+     * @ORM\Column(name="nit_icbf", type="string", length=20, nullable=false)
+     */
+    private $nitIcbf;    
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadRiesgoProfesional", inversedBy="configuracionEntidadRiesgoProfesionalRel")
@@ -333,8 +332,7 @@ class RhuConfiguracion
      */
     protected $entidadRiesgoProfesionalRel;  
         
-
-    
+   
 
     /**
      * Set codigoConfiguracionPk
@@ -1777,51 +1775,51 @@ class RhuConfiguracion
     }
 
     /**
-     * Set prestacionesPorcentajeSalario1
+     * Set nitSena
      *
-     * @param integer $prestacionesPorcentajeSalario1
+     * @param string $nitSena
      *
      * @return RhuConfiguracion
      */
-    public function setPrestacionesPorcentajeSalario1($prestacionesPorcentajeSalario1)
+    public function setNitSena($nitSena)
     {
-        $this->prestacionesPorcentajeSalario1 = $prestacionesPorcentajeSalario1;
+        $this->nitSena = $nitSena;
 
         return $this;
     }
 
     /**
-     * Get prestacionesPorcentajeSalario1
+     * Get nitSena
      *
-     * @return integer
+     * @return string
      */
-    public function getPrestacionesPorcentajeSalario1()
+    public function getNitSena()
     {
-        return $this->prestacionesPorcentajeSalario1;
+        return $this->nitSena;
     }
 
     /**
-     * Set prestacionesPorcentajeSalario2
+     * Set nitIcbf
      *
-     * @param integer $prestacionesPorcentajeSalario2
+     * @param string $nitIcbf
      *
      * @return RhuConfiguracion
      */
-    public function setPrestacionesPorcentajeSalario2($prestacionesPorcentajeSalario2)
+    public function setNitIcbf($nitIcbf)
     {
-        $this->prestacionesPorcentajeSalario2 = $prestacionesPorcentajeSalario2;
+        $this->nitIcbf = $nitIcbf;
 
         return $this;
     }
 
     /**
-     * Get prestacionesPorcentajeSalario2
+     * Get nitIcbf
      *
-     * @return integer
+     * @return string
      */
-    public function getPrestacionesPorcentajeSalario2()
+    public function getNitIcbf()
     {
-        return $this->prestacionesPorcentajeSalario2;
+        return $this->nitIcbf;
     }
 
     /**

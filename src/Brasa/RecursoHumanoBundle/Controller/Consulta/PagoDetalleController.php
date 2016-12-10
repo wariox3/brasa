@@ -153,6 +153,7 @@ class PagoDetalleController extends Controller
     }
 
     private function generarExcel() {
+        $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
         ob_clean();
         set_time_limit(0);
         ini_set("memory_limit", -1);
@@ -167,7 +168,7 @@ class PagoDetalleController extends Controller
             ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
-        for($col = 'A'; $col !== 'O'; $col++) {
+        for($col = 'A'; $col !== 'S'; $col++) {
                     $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                           
                 } 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
@@ -187,7 +188,9 @@ class PagoDetalleController extends Controller
                     ->setCellValue('M1', '%')
                     ->setCellValue('N1', 'VR IBC')    
                     ->setCellValue('O1', 'VR IBP')
-                    ->setCellValue('P1', 'N. CRED');
+                    ->setCellValue('P1', 'N. CRED')
+                    ->setCellValue('Q1', 'PEN')
+                    ->setCellValue('R1', 'SAL');
 
         $i = 2;
         $query = $em->createQuery($this->strDqlLista);
@@ -211,7 +214,9 @@ class PagoDetalleController extends Controller
                     ->setCellValue('M' . $i, $arPagoDetalle->getPorcentajeAplicado())
                     ->setCellValue('N' . $i, round($arPagoDetalle->getVrIngresoBaseCotizacion()))
                     ->setCellValue('O' . $i, round($arPagoDetalle->getVrIngresoBasePrestacion()))
-                    ->setCellValue('P' . $i, $arPagoDetalle->getCodigoCreditoFk());
+                    ->setCellValue('P' . $i, $arPagoDetalle->getCodigoCreditoFk())
+                    ->setCellValue('Q' . $i, $objFunciones->devuelveBoolean($arPagoDetalle->getPension()))
+                    ->setCellValue('R' . $i, $objFunciones->devuelveBoolean($arPagoDetalle->getSalud()));
             $i++;
         }
 

@@ -356,6 +356,23 @@ class RhuVacacionRepository extends EntityRepository {
         $arrayResultado = $query->getResult();
         return $arrayResultado;
     }         
+ 
+    public function deduccionesAportes($codigoContrato, $fechaDesde, $fechaHasta) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT SUM(v.vrPension) as vrPension, SUM(v.vrSalud) as vrSalud FROM BrasaRecursoHumanoBundle:RhuVacacion v "
+                . "WHERE (v.fecha >= '" . $fechaDesde->format('Y-m-d') . "' AND v.fecha <='" . $fechaHasta->format('Y-m-d') . "') "
+                . "AND v.codigoContratoFk = " . $codigoContrato;
+        $query = $em->createQuery($dql);
+        $arrayResultado = $query->getResult();
+        $resultados = $arrayResultado[0];
+        if($resultados['vrPension'] == null) {
+           $resultados['vrPension'] = 0; 
+        }
+        if($resultados['vrSalud'] == null) {
+           $resultados['vrSalud'] = 0; 
+        }                 
+        return $resultados;        
+    }    
     
 }
 
