@@ -55,7 +55,7 @@ class RhuPagoDetalleRepository extends EntityRepository {
     
     public function listaDetalleResumenDql($intNumero = 0, $strCodigoCentroCosto = "", $strIdentificacion = "", $intTipo = "", $strDesde = "", $strHasta = "", $strCodigoPagoConcepto = "") {        
         $em = $this->getEntityManager();
-        $dql   = "SELECT e.numeroIdentificacion as codigoEmpleado,e.numeroIdentificacion as Identificacion,e.nombreCorto as Empleado,pd.codigoPagoConceptoFk as codigoConcepto, pc.nombre as Concepto, SUM(pd.vrPagoOperado) as Valor FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p JOIN p.empleadoRel e JOIN pd.pagoConceptoRel pc WHERE p.codigoPagoPk <> 0";
+        $dql   = "SELECT e.numeroIdentificacion as codigoEmpleado,e.numeroIdentificacion as Identificacion,e.nombreCorto as Empleado,pd.codigoPagoConceptoFk as codigoConcepto, pc.nombre as Concepto, pd.operacion as operacion, SUM(pd.vrPago) as Valor FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p JOIN p.empleadoRel e JOIN pd.pagoConceptoRel pc WHERE p.codigoPagoPk <> 0";
         if($intNumero != "" && $intNumero != 0) {
             $dql .= " AND p.numero = " . $intNumero;
         }
@@ -77,7 +77,7 @@ class RhuPagoDetalleRepository extends EntityRepository {
         if($strHasta != "") {
             $dql .= " AND p.fechaDesde <= '" . $strHasta . "'";
         } 
-        $dql .= " GROUP BY e.numeroIdentificacion, pd.codigoPagoConceptoFk";
+        $dql .= " GROUP BY e.numeroIdentificacion, pd.codigoPagoConceptoFk, pd.operacion";
         //return $dql;
          $query = $em->createQuery($dql);
         $douRetencion = $query->getResult();

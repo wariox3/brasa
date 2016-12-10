@@ -125,6 +125,7 @@ class PagoConceptoController extends Controller
             $arConsultaPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuConsultaPagoConcepto();
             $arConsultaPagoConcepto->setOrigen('NOMINA');
             $arConsultaPagoConcepto->setNumero($arPagoDetalle->getPagoRel()->getNumero());
+            $arConsultaPagoConcepto->setCodigoEmpleadoFk($arPagoDetalle->getPagoRel()->getCodigoEmpleadoFk());
             $arConsultaPagoConcepto->setNumeroIdentificacion($arPagoDetalle->getPagoRel()->getEmpleadoRel()->getNumeroIdentificacion());
             $arConsultaPagoConcepto->setNombreCorto($arPagoDetalle->getPagoRel()->getEmpleadoRel()->getNombreCorto());
             $arConsultaPagoConcepto->setCodigoPagoConceptoFk($arPagoDetalle->getCodigoPagoConceptoFk());
@@ -153,6 +154,7 @@ class PagoConceptoController extends Controller
             $arConsultaPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuConsultaPagoConcepto();
             $arConsultaPagoConcepto->setOrigen('VACACION');
             $arConsultaPagoConcepto->setNumero($arVacacionAdicional->getCodigoVacacionFk());            
+            $arConsultaPagoConcepto->setCodigoEmpleadoFk($arPagoDetalle->getVacacionRel()->getCodigoEmpleadoFk());
             $arConsultaPagoConcepto->setNumeroIdentificacion($arVacacionAdicional->getVacacionRel()->getEmpleadoRel()->getNumeroIdentificacion());
             $arConsultaPagoConcepto->setNombreCorto($arVacacionAdicional->getVacacionRel()->getEmpleadoRel()->getNombreCorto());
             $arConsultaPagoConcepto->setCodigoPagoConceptoFk($arVacacionAdicional->getCodigoPagoConceptoFk());
@@ -170,6 +172,7 @@ class PagoConceptoController extends Controller
             $arConsultaPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuConsultaPagoConcepto();
             $arConsultaPagoConcepto->setOrigen('LIQUIDACION');
             $arConsultaPagoConcepto->setNumero($arLiquidacionAdicional->getCodigoLiquidacionFk());            
+            $arConsultaPagoConcepto->setCodigoEmpleadoFk($arPagoDetalle->getLiquidacionRel()->getCodigoEmpleadoFk());
             $arConsultaPagoConcepto->setNumeroIdentificacion($arLiquidacionAdicional->getLiquidacionRel()->getEmpleadoRel()->getNumeroIdentificacion());
             $arConsultaPagoConcepto->setNombreCorto($arLiquidacionAdicional->getLiquidacionRel()->getEmpleadoRel()->getNombreCorto());
             $arConsultaPagoConcepto->setCodigoPagoConceptoFk($arLiquidacionAdicional->getCodigoPagoConceptoFk());
@@ -199,24 +202,29 @@ class PagoConceptoController extends Controller
             ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
-        for($col = 'A'; $col !== 'K'; $col++) {
+        for($col = 'A'; $col !== 'P'; $col++) {
                     $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                           
         } 
-        for($col = 'I'; $col !== 'K'; $col++) {            
+        for($col = 'K'; $col !== 'L'; $col++) {            
             $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
         }          
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'ORIGEN')
                     ->setCellValue('B1', 'NUMERO')
-                    ->setCellValue('C1', 'IDENTIFICACIÓN')
-                    ->setCellValue('D1', 'EMPLEADO')
-                    ->setCellValue('E1', 'CODIGO')
-                    ->setCellValue('F1', 'CONCEPTO')
-                    ->setCellValue('G1', 'DESDE')
-                    ->setCellValue('H1', 'HASTA')
-                    ->setCellValue('I1', 'BONIFICACION')
-                    ->setCellValue('J1', 'DEDUCCION');
+                    ->setCellValue('C1', 'CODIGO')
+                    ->setCellValue('D1', 'DOCUMENTO')
+                    ->setCellValue('E1', 'EMPLEADO')
+                    ->setCellValue('F1', 'ESTADO')
+                    ->setCellValue('G1', 'CODIGO')
+                    ->setCellValue('H1', 'CONCEPTO')
+                    ->setCellValue('I1', 'DESDE')
+                    ->setCellValue('J1', 'HASTA')
+                    ->setCellValue('K1', 'BONIFICACION')
+                    ->setCellValue('L1', 'DEDUCCION')
+                    ->setCellValue('M1', 'ZONA')
+                    ->setCellValue('N1', 'SUBZONA')
+                    ->setCellValue('O1', 'C_COSTO');
 
         $i = 2;
         $dql   = "SELECT cpc FROM BrasaRecursoHumanoBundle:RhuConsultaPagoConcepto cpc";        
@@ -224,18 +232,36 @@ class PagoConceptoController extends Controller
         $arConsultaPagoConceptos = new \Brasa\RecursoHumanoBundle\Entity\RhuConsultaPagoConcepto();
         $arConsultaPagoConceptos = $query->getResult();
         
-        foreach ($arConsultaPagoConceptos as $arConsultaPagoConcepto) {            
+        foreach ($arConsultaPagoConceptos as $arConsultaPagoConcepto) {  
+            $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+            
+            $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($arConsultaPagoConcepto->getCodigoEmpleadoFk());
+            $estado = "RETIRADO";
+            if($arEmpleado->getEstadoContratoActivo()) {
+                $estado = "ACTIVO";
+            }
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arConsultaPagoConcepto->getOrigen())
-                    ->setCellValue('B' . $i, $arConsultaPagoConcepto->getNumero())                    
-                    ->setCellValue('C' . $i, $arConsultaPagoConcepto->getNumeroIdentificacion())
-                    ->setCellValue('D' . $i, $arConsultaPagoConcepto->getNombreCorto())
-                    ->setCellValue('E' . $i, $arConsultaPagoConcepto->getCodigoPagoConceptoFk())
-                    ->setCellValue('F' . $i, $arConsultaPagoConcepto->getNombreConcepto())
-                    ->setCellValue('G' . $i, $arConsultaPagoConcepto->getFechaDesde()->format('Y-m-d'))
-                    ->setCellValue('H' . $i, $arConsultaPagoConcepto->getFechaHasta()->format('Y-m-d'))
-                    ->setCellValue('I' . $i, $arConsultaPagoConcepto->getVrBonificacion())
-                    ->setCellValue('J' . $i, $arConsultaPagoConcepto->getVrDeduccion());
+                    ->setCellValue('B' . $i, $arConsultaPagoConcepto->getNumero())              
+                    ->setCellValue('C' . $i, $arConsultaPagoConcepto->getCodigoEmpleadoFk())
+                    ->setCellValue('D' . $i, $arConsultaPagoConcepto->getNumeroIdentificacion())
+                    ->setCellValue('E' . $i, $arConsultaPagoConcepto->getNombreCorto())
+                    ->setCellValue('F' . $i, $estado)
+                    ->setCellValue('G' . $i, $arConsultaPagoConcepto->getCodigoPagoConceptoFk())
+                    ->setCellValue('H' . $i, $arConsultaPagoConcepto->getNombreConcepto())
+                    ->setCellValue('I' . $i, $arConsultaPagoConcepto->getFechaDesde()->format('Y-m-d'))
+                    ->setCellValue('J' . $i, $arConsultaPagoConcepto->getFechaHasta()->format('Y-m-d'))
+                    ->setCellValue('K' . $i, $arConsultaPagoConcepto->getVrBonificacion())
+                    ->setCellValue('L' . $i, $arConsultaPagoConcepto->getVrDeduccion());
+            if($arEmpleado->getCodigoZonaFk()) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('M' . $i, $arEmpleado->getZonaRel()->getNombre());
+            }
+            if($arEmpleado->getCodigoSubzonaFk()) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('N' . $i, $arEmpleado->getSubzonaRel()->getNombre());
+            }   
+            if($arEmpleado->getCodigoCentroCostoContabilidadFk()) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('O' . $i, $arEmpleado->getCentroCostoContabilidadRel()->getNombre());
+            }            
             $i++;
         }
 

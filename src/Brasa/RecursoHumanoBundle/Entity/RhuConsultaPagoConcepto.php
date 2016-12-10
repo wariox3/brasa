@@ -28,6 +28,11 @@ class RhuConsultaPagoConcepto
     private $numero = 0; 
 
     /**
+     * @ORM\Column(name="codigo_empleado_fk", type="integer", nullable=true)
+     */    
+    private $codigoEmpleadoFk = 0;    
+    
+    /**
      * @ORM\Column(name="numero_identificacion", type="string", length=20, nullable=true)
      */
          
@@ -318,5 +323,29 @@ class RhuConsultaPagoConcepto
     public function getFechaHasta()
     {
         return $this->fechaHasta;
+    }
+
+    /**
+     * Set codigoEmpleadoFk
+     *
+     * @param integer $codigoEmpleadoFk
+     *
+     * @return RhuConsultaPagoConcepto
+     */
+    public function setCodigoEmpleadoFk($codigoEmpleadoFk)
+    {
+        $this->codigoEmpleadoFk = $codigoEmpleadoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEmpleadoFk
+     *
+     * @return integer
+     */
+    public function getCodigoEmpleadoFk()
+    {
+        return $this->codigoEmpleadoFk;
     }
 }

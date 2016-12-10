@@ -168,7 +168,7 @@ class PagoDetalleController extends Controller
             ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
-        for($col = 'A'; $col !== 'S'; $col++) {
+        for($col = 'A'; $col !== 'X'; $col++) {
                     $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);                           
                 } 
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
@@ -179,25 +179,38 @@ class PagoDetalleController extends Controller
                     ->setCellValue('D1', 'EMPLEADO')
                     ->setCellValue('E1', 'CODIGO')
                     ->setCellValue('F1', 'CONCEPTO')
-                    ->setCellValue('G1', 'CENTRO COSTO')
+                    ->setCellValue('G1', 'GRUPO PAGO')
                     ->setCellValue('H1', 'DESDE')
                     ->setCellValue('I1', 'HASTA')
-                    ->setCellValue('J1', 'VR PAGO')
-                    ->setCellValue('K1', 'HORAS')
-                    ->setCellValue('L1', 'DÍAS')
-                    ->setCellValue('M1', '%')
-                    ->setCellValue('N1', 'VR IBC')    
-                    ->setCellValue('O1', 'VR IBP')
-                    ->setCellValue('P1', 'N. CRED')
-                    ->setCellValue('Q1', 'PEN')
-                    ->setCellValue('R1', 'SAL');
+                    ->setCellValue('J1', 'DEVENGADO')
+                    ->setCellValue('K1', 'DEDUCCION')
+                    ->setCellValue('L1', 'HORAS')
+                    ->setCellValue('M1', 'DÍAS')
+                    ->setCellValue('N1', '%')
+                    ->setCellValue('O1', 'VR IBC')    
+                    ->setCellValue('P1', 'VR IBP')
+                    ->setCellValue('Q1', 'N. CRED')
+                    ->setCellValue('R1', 'PEN')
+                    ->setCellValue('S1', 'SAL')
+                    ->setCellValue('T1', 'ZONA')
+                    ->setCellValue('U1', 'SUBZONA')
+                    ->setCellValue('V1', 'TIPO EMPLEADO')
+                    ->setCellValue('W1', 'C_COSTO');
 
         $i = 2;
         $query = $em->createQuery($this->strDqlLista);
         $arPagosDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
         $arPagosDetalle = $query->getResult();
         
-        foreach ($arPagosDetalle as $arPagoDetalle) {            
+        foreach ($arPagosDetalle as $arPagoDetalle) {  
+            $devengado = 0;
+            $deduccion = 0;
+            if($arPagoDetalle->getOperacion() == 1) {
+                $devengado = $arPagoDetalle->getVrPago();
+            }
+            if($arPagoDetalle->getOperacion() == -1) {
+                $deduccion = $arPagoDetalle->getVrPago();
+            }            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arPagoDetalle->getPagoRel()->getNumero())
                     ->setCellValue('B' . $i, $arPagoDetalle->getPagoRel()->getEmpleadoRel()->getCodigoEmpleadoPk())
@@ -208,15 +221,28 @@ class PagoDetalleController extends Controller
                     ->setCellValue('G' . $i, $arPagoDetalle->getPagoRel()->getCentroCostoRel()->getNombre())
                     ->setCellValue('H' . $i, $arPagoDetalle->getPagoRel()->getFechaDesdePago()->format('Y-m-d'))
                     ->setCellValue('I' . $i, $arPagoDetalle->getPagoRel()->getFechaHastaPago()->format('Y-m-d'))
-                    ->setCellValue('J' . $i, round($arPagoDetalle->getVrPagoOperado()))
-                    ->setCellValue('K' . $i, $arPagoDetalle->getNumeroHoras())
-                    ->setCellValue('L' . $i, $arPagoDetalle->getNumeroDias())
-                    ->setCellValue('M' . $i, $arPagoDetalle->getPorcentajeAplicado())
-                    ->setCellValue('N' . $i, round($arPagoDetalle->getVrIngresoBaseCotizacion()))
-                    ->setCellValue('O' . $i, round($arPagoDetalle->getVrIngresoBasePrestacion()))
-                    ->setCellValue('P' . $i, $arPagoDetalle->getCodigoCreditoFk())
-                    ->setCellValue('Q' . $i, $objFunciones->devuelveBoolean($arPagoDetalle->getPension()))
-                    ->setCellValue('R' . $i, $objFunciones->devuelveBoolean($arPagoDetalle->getSalud()));
+                    ->setCellValue('J' . $i, $devengado)
+                    ->setCellValue('K' . $i, $deduccion)
+                    ->setCellValue('L' . $i, $arPagoDetalle->getNumeroHoras())
+                    ->setCellValue('M' . $i, $arPagoDetalle->getNumeroDias())
+                    ->setCellValue('N' . $i, $arPagoDetalle->getPorcentajeAplicado())
+                    ->setCellValue('O' . $i, round($arPagoDetalle->getVrIngresoBaseCotizacion()))
+                    ->setCellValue('P' . $i, round($arPagoDetalle->getVrIngresoBasePrestacion()))
+                    ->setCellValue('Q' . $i, $arPagoDetalle->getCodigoCreditoFk())
+                    ->setCellValue('R' . $i, $objFunciones->devuelveBoolean($arPagoDetalle->getPension()))
+                    ->setCellValue('S' . $i, $objFunciones->devuelveBoolean($arPagoDetalle->getSalud()));
+            if($arPagoDetalle->getPagoRel()->getEmpleadoRel()->getCodigoZonaFk()) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('T' . $i, $arPagoDetalle->getPagoRel()->getEmpleadoRel()->getZonaRel()->getNombre());
+            }
+            if($arPagoDetalle->getPagoRel()->getEmpleadoRel()->getCodigoSubzonaFk()) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('U' . $i, $arPagoDetalle->getPagoRel()->getEmpleadoRel()->getSubzonaRel()->getNombre());
+            }   
+            if($arPagoDetalle->getPagoRel()->getEmpleadoRel()->getCodigoEmpleadoTipoFk()) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V' . $i, $arPagoDetalle->getPagoRel()->getEmpleadoRel()->getEmpleadoTipoRel()->getNombre());
+            }            
+            if($arPagoDetalle->getPagoRel()->getEmpleadoRel()->getCodigoCentroCostoContabilidadFk()) {
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValue('W' . $i, $arPagoDetalle->getPagoRel()->getEmpleadoRel()->getCentroCostoContabilidadRel()->getNombre());
+            }            
             $i++;
         }
 
@@ -225,7 +251,7 @@ class PagoDetalleController extends Controller
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Pagos.xlsx"');
+        header('Content-Disposition: attachment;filename="PagosDetalle.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
@@ -264,7 +290,8 @@ class PagoDetalleController extends Controller
                     ->setCellValue('C1', 'EMPLEADO')
                     ->setCellValue('D1', 'CODIGO')
                     ->setCellValue('E1', 'CONCEPTO')
-                    ->setCellValue('F1', 'VR PAGO');
+                    ->setCellValue('F1', 'DEVENGADO')
+                    ->setCellValue('G1', 'DEDUCCION');
 
         $i = 2;
         /*$query = $em->createQuery($this->strDqlLista);
@@ -284,23 +311,32 @@ class PagoDetalleController extends Controller
         //$arPagosDetalle = $em->createQuery($arPagosDetalle);
         //$arPagosDetalle = $arPagosDetalle->getResult();
         
-        foreach ($arPagosDetalle as $arPagoDetalle) {            
+        foreach ($arPagosDetalle as $arPagoDetalle) { 
+            $devengado = 0;
+            $deduccion = 0;
+            if($arPagoDetalle['operacion'] == 1) {
+                $devengado = $arPagoDetalle['Valor'];
+            }
+            if($arPagoDetalle['operacion'] == -1) {
+                $deduccion = $arPagoDetalle['Valor'];
+            }            
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arPagoDetalle['codigoEmpleado'])
                     ->setCellValue('B' . $i, $arPagoDetalle['Identificacion'])
                     ->setCellValue('C' . $i, $arPagoDetalle['Empleado'])
                     ->setCellValue('D' . $i, $arPagoDetalle['codigoConcepto'])
                     ->setCellValue('E' . $i, $arPagoDetalle['Concepto'])
-                    ->setCellValue('F' . $i, round($arPagoDetalle['Valor']));
+                    ->setCellValue('F' . $i, $devengado)
+                    ->setCellValue('G' . $i, $deduccion);
             $i++;
         }
 
-        $objPHPExcel->getActiveSheet()->setTitle('pagosDetalle');
+        $objPHPExcel->getActiveSheet()->setTitle('pagosDetalleResumen');
         $objPHPExcel->setActiveSheetIndex(0);
 
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="pagosDetalle.xlsx"');
+        header('Content-Disposition: attachment;filename="pagosDetalleResumen.xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
