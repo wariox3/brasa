@@ -6,6 +6,7 @@ use Brasa\InventarioBundle\Form\Type\InvMovimientoType;
 use Brasa\InventarioBundle\Form\Type\InvMovimientoDetalleType;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use PHPExcel_Style_Border;
 
 
@@ -200,7 +201,6 @@ class MovimientoController extends Controller
      * @Route("/inv/movimiento/movimiento/detalle/nuevo/{codigoMovimiento}", name="brs_inv_movimiento_movimiento_detalle_nuevo")
      */
     public function detalleNuevoAction(Request $request, $codigoMovimiento) {
-        $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $arMovimiento = new \Brasa\InventarioBundle\Entity\InvMovimiento();
         $arMovimiento = $em->getRepository('BrasaInventarioBundle:InvMovimiento')->find($codigoMovimiento);
@@ -265,8 +265,8 @@ class MovimientoController extends Controller
             ->add('TxtCodigo', 'text', array('label'  => 'Codigo','data' => $session->get('filtroInvCodigoMovimiento')))    
             ->add('BtnExcel', 'submit', array('label'  => 'Excel',))
             ->add('BtnEliminar', 'submit', array('label'  => 'Eliminar',))
-            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))    
-            ->getForm();
+            ->add('BtnFiltrar', 'submit', array('label'  => 'Filtrar'))             
+                ->getForm();
         return $form;
     }
 
