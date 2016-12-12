@@ -97,7 +97,7 @@ class CentroCostoController extends Controller
             $arCentroCosto->setFechaUltimoPagoPrima(new \DateTime('now'));            
             $arCentroCosto->setEstadoActivo(true);            
         }
-        $form = $this->createForm(new RhuCentroCostoType(), $arCentroCosto);
+        $form = $this->createForm(RhuCentroCostoType::class, $arCentroCosto); 
         $form->handleRequest($request);
         
         if ($form->isValid()) {

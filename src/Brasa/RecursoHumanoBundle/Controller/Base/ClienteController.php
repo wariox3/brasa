@@ -72,7 +72,7 @@ class ClienteController extends Controller
             $arCliente = $em->getRepository('BrasaRecursoHumanoBundle:RhuCliente')->find($codigoCliente);
         }
         
-        $form = $this->createForm(new RhuClienteType(), $arCliente);
+        $form = $this->createForm(RhuClienteType::class, $arCliente);        
         $form->handleRequest($request);
         
         if ($form->isValid()) {

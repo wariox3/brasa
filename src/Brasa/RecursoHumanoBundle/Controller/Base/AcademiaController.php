@@ -136,18 +136,18 @@ class AcademiaController extends Controller
         {
             $arAcademia = $em->getRepository('BrasaRecursoHumanoBundle:RhuAcademia')->find($codigoAcademiaPk);
         }    
-        $formAcademia = $this->createForm(new RhuAcademiaType(), $arAcademia);
-        $formAcademia->handleRequest($request);
-        if ($formAcademia->isValid())
+        $form = $this->createForm(RhuAcademiaType::class, $arAcademia);     
+        $form->handleRequest($request);
+        if ($form->isValid())
         {
             // guardar la tarea en la base de datos
-            $arAcademia = $formAcademia->getData();
+            $arAcademia = $form->getData();
             $em->persist($arAcademia);
             $em->flush();
             return $this->redirect($this->generateUrl('brs_rhu_base_academia_listar'));
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/Academia:nuevo.html.twig', array(
-            'formAcademia' => $formAcademia->createView(),
+            'formAcademia' => $form->createView(),
         ));
     }
     

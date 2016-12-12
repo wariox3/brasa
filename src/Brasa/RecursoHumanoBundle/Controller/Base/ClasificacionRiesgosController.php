@@ -124,18 +124,18 @@ class ClasificacionRiesgosController extends Controller
         {
             $arClasificacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuClasificacionRiesgo')->find($codigoClasificacionPk);
         }    
-        $formClasificacion = $this->createForm(new RhuClasificacionRiesgosType(), $arClasificacion);
-        $formClasificacion->handleRequest($request);
-        if ($formClasificacion->isValid())
+        $form = $this->createForm(RhuClasificacionRiesgosType::class, $arClasificacion); 
+        $form->handleRequest($request);
+        if ($form->isValid())
         {
             // guardar la tarea en la base de datos
             $em->persist($arClasificacion);
-            $arClasificacion = $formClasificacion->getData();
+            $arClasificacion = $form->getData();
             $em->flush();
             return $this->redirect($this->generateUrl('brs_rhu_base_clasificacion_listar'));
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/Clasificacion:nuevo.html.twig', array(
-            'formClasificacion' => $formClasificacion->createView(),
+            'formClasificacion' => $form->createView(),
         ));
     }
     

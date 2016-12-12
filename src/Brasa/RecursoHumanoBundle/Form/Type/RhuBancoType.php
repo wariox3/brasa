@@ -3,6 +3,10 @@ namespace Brasa\RecursoHumanoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class RhuBancoType extends AbstractType
 {
@@ -13,17 +17,17 @@ class RhuBancoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nombre', 'text', array('required' => true))
-            ->add('nit', 'text', array('required' => true))    
-            ->add('convenioNomina', 'choice', array('choices' => array('1' => 'SI', '0' => 'NO')))
-            ->add('numeroDigitos', 'number', array('required' => true))
-            ->add('codigoGeneral', 'text', array('required' => true))
-            ->add('telefono', 'text', array('required' => false))
-            ->add('direccion', 'text', array('required' => false))
-            ->add('guardar', 'submit', array('label' => 'Guardar'));
+            ->add('nombre', TextType::class, array('required' => true))
+            ->add('nit', TextType::class, array('required' => true))    
+            ->add('convenioNomina', ChoiceType::class, array('choices' => array('1' => 'SI', '0' => 'NO')))
+            ->add('numeroDigitos', NumberType::class, array('required' => true))
+            ->add('codigoGeneral', TextType::class, array('required' => true))
+            ->add('telefono', TextType::class, array('required' => false))
+            ->add('direccion', TextType::class, array('required' => false))
+            ->add('guardar', SubmitType::class, array('label' => 'Guardar'));
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'form';
     }

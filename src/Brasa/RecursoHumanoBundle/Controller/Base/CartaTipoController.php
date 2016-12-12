@@ -68,7 +68,7 @@ class CartaTipoController extends Controller
         if ($codigoCartaTipo != 0) {
             $arCartaTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuCartaTipo')->find($codigoCartaTipo);
         }    
-        $form = $this->createForm(new RhuCartaTipoType(), $arCartaTipo);
+        $form = $this->createForm(RhuCartaTipoType::class, $arCartaTipo); 
         $form->handleRequest($request);
         if ($form->isValid()) {                        
             $arCartaTipo = $form->getData();

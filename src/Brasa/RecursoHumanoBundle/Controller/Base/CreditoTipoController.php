@@ -133,13 +133,13 @@ class CreditoTipoController extends Controller
         {
             $arCreditoTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuCreditoTipo')->find($codigoCreditoTipoPk);
         }    
-        $formCreditoTipo = $this->createForm(new RhuCreditoTipoType(), $arCreditoTipo);
-        $formCreditoTipo->handleRequest($request);
-        if ($formCreditoTipo->isValid())
+        $form = $this->createForm(RhuCreditoTipoType::class, $arCreditoTipo); 
+        $form->handleRequest($request);
+        if ($form->isValid())
         {
             // guardar la tarea en la base de datos
-            $arCreditoTipo = $formCreditoTipo->getData();
-            if ($formCreditoTipo->get('pagoConceptoRel')->getData() == null){
+            $arCreditoTipo = $form->getData();
+            if ($form->get('pagoConceptoRel')->getData() == null){
                 $objMensaje->Mensaje("error", "Se debe asociar en pago concepto al tipo de credito", $this);
             } else {
                 $em->persist($arCreditoTipo);
@@ -149,7 +149,7 @@ class CreditoTipoController extends Controller
             
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/CreditoTipo:nuevo.html.twig', array(
-            'formCreditoTipo' => $formCreditoTipo->createView(),
+            'formCreditoTipo' => $form->createView(),
         ));
     }
     

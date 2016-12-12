@@ -117,18 +117,18 @@ class DepartamentoEmpresaController extends Controller
         {
             $arDepartamentoEmpresa = $em->getRepository('BrasaRecursoHumanoBundle:RhuDepartamentoEmpresa')->find($codigoDepartamentoEmpresa);
         }    
-        $formDepartamentoEmpresa = $this->createForm(new RhuDepartamentoEmpresaType(), $arDepartamentoEmpresa);
-        $formDepartamentoEmpresa->handleRequest($request);
-        if ($formDepartamentoEmpresa->isValid())
+        $form = $this->createForm(RhuDepartamentoEmpresaType::class, $arDepartamentoEmpresa); 
+        $form->handleRequest($request);
+        if ($form->isValid())
         {
             // guardar la tarea en la base de datos
             $em->persist($arDepartamentoEmpresa);
-            $arDepartamentoEmpresa = $formDepartamentoEmpresa->getData();
+            $arDepartamentoEmpresa = $form->getData();
             $em->flush();
             return $this->redirect($this->generateUrl('brs_rhu_base_departamento_empresa_listar'));
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/DepartamentosEmpresa:nuevo.html.twig', array(
-            'formDepartamentoEmpresa' => $formDepartamentoEmpresa->createView(),
+            'formDepartamentoEmpresa' => $form->createView(),
         ));
     }
 }

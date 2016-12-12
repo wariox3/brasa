@@ -127,18 +127,18 @@ class CajaController extends Controller
         {
             $arCaja = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadCaja')->find($codigoEntidadCajaPk);
         }    
-        $formCaja = $this->createForm(new RhuCajaType(), $arCaja);
-        $formCaja->handleRequest($request);
-        if ($formCaja->isValid())
+        $form = $this->createForm(RhuCajaType::class, $arCaja);   
+        $form->handleRequest($request);
+        if ($form->isValid())
         {
             // guardar la tarea en la base de datos
             $em->persist($arCaja);
-            $arCaja = $formCaja->getData();
+            $arCaja = $form->getData();
             $em->flush();
             return $this->redirect($this->generateUrl('brs_rhu_base_caja_listar'));
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/CajaCompensacion:nuevo.html.twig', array(
-            'formCaja' => $formCaja->createView(),
+            'formCaja' => $form->createView(),
         ));
     }
 }

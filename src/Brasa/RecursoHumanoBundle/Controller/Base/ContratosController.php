@@ -198,7 +198,7 @@ class ContratosController extends Controller
             }
 
         }
-        $form = $this->createForm(new RhuContratoType(), $arContrato);
+        $form = $this->createForm(RhuContratoType::class, $arContrato); 
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arUsuario = $this->get('security.context')->getToken()->getUser();

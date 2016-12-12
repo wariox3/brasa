@@ -145,18 +145,18 @@ class BancoController extends Controller
         {
             $arBanco = $em->getRepository('BrasaRecursoHumanoBundle:RhuBanco')->find($codigoBancoPk);
         }    
-        $formBanco = $this->createForm(new RhuBancoType(), $arBanco);
-        $formBanco->handleRequest($request);
-        if ($formBanco->isValid())
+        $form = $this->createForm(RhuBancoType::class, $arBanco);      
+        $form->handleRequest($request);
+        if ($form->isValid())
         {
             // guardar la tarea en la base de datos
-            $arBanco = $formBanco->getData();
+            $arBanco = $form->getData();
             $em->persist($arBanco);
             $em->flush();
             return $this->redirect($this->generateUrl('brs_rhu_base_banco_listar'));
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/Banco:nuevo.html.twig', array(
-            'formBanco' => $formBanco->createView(),
+            'formBanco' => $form->createView(),
         ));
     }
     

@@ -68,7 +68,7 @@ class ContratosTipoController extends Controller
         if ($codigoContratoTipo != 0) {
             $arContratoTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuContratoTipo')->find($codigoContratoTipo);
         }    
-        $form = $this->createForm(new RhuContratoTipoType(), $arContratoTipo);
+        $form = $this->createForm(RhuContratoTipoType::class, $arContratoTipo); 
         $form->handleRequest($request);
         if ($form->isValid()) {                        
             $arContratoTipo = $form->getData();

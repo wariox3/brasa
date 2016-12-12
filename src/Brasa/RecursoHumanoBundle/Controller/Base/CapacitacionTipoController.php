@@ -53,7 +53,7 @@ class CapacitacionTipoController extends Controller
         }
         $arCapacitacionTipos = new \Brasa\RecursoHumanoBundle\Entity\RhuCapacitacionTipo();
         $query = $em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacionTipo')->findAll();
-        $arCapacitacionTipos = $paginator->paginate($query, $this->get('request')->query->get('page', 1),20);
+        $arCapacitacionTipos = $paginator->paginate($query, $this->get('Request')->query->get('page', 1),20);
 
         return $this->render('BrasaRecursoHumanoBundle:Base/CapacitacionTipo:listar.html.twig', array(
                     'arCapacitacionTipos' => $arCapacitacionTipos,
@@ -72,7 +72,7 @@ class CapacitacionTipoController extends Controller
         {
             $arCapacitacionTipos = $em->getRepository('BrasaRecursoHumanoBundle:RhuCapacitacionTipo')->find($codigoTipoCapacitacion);
         }    
-        $form = $this->createForm(new RhuCapacitacionTipoType(), $arCapacitacionTipos);
+        $form = $this->createForm(RhuCapacitacionTipoType::class, $arCapacitacionTipos);   
         $form->handleRequest($request);
         if ($form->isValid())
         {

@@ -85,18 +85,18 @@ class CargoController extends Controller
         {
             $arCargo = $em->getRepository('BrasaRecursoHumanoBundle:RhuCargo')->find($codigoCargoPk);
         }    
-        $formCargo = $this->createForm(new RhuCargoType(), $arCargo);
-        $formCargo->handleRequest($request);
-        if ($formCargo->isValid())
+        $form = $this->createForm(RhuCargoType::class, $arCargo); 
+        $form->handleRequest($request);
+        if ($form->isValid())
         {
             // guardar la tarea en la base de datos
             $em->persist($arCargo);
-            $arCargo = $formCargo->getData();
+            $arCargo = $form->getData();
             $em->flush();
             return $this->redirect($this->generateUrl('brs_rhu_base_cargo'));
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/Cargo:nuevo.html.twig', array(
-            'formCargo' => $formCargo->createView(),
+            'formCargo' => $form->createView(),
         ));
     }
     
@@ -109,7 +109,7 @@ class CargoController extends Controller
     
     private function formularioLista() {
         $em = $this->getDoctrine()->getManager();
-        $session = new session;     
+        $session = new Session;     
         $form = $this->createFormBuilder()                                    
             ->add('TxtNombre', TextType::class, array('label'  => 'Nombre','data' => "", 'required' => false))
             ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar',))

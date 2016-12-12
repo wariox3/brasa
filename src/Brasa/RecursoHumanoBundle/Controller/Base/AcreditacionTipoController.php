@@ -129,18 +129,18 @@ class AcreditacionTipoController extends Controller
         {
             $arAcreditacionTipo = $em->getRepository('BrasaRecursoHumanoBundle:RhuAcreditacionTipo')->find($codigoAcreditacionTipoPk);
         }    
-        $formAcreditacionTipo = $this->createForm(new RhuAcreditacionTipoType(), $arAcreditacionTipo);
-        $formAcreditacionTipo->handleRequest($request);
-        if ($formAcreditacionTipo->isValid())
+        $form = $this->createForm(RhuAcreditacionTipoType::class, $arAcreditacionTipo);    
+        $form->handleRequest($request);
+        if ($form->isValid())
         {
             // guardar la tarea en la base de datos
-            $arAcreditacionTipo = $formAcreditacionTipo->getData();
+            $arAcreditacionTipo = $form->getData();
             $em->persist($arAcreditacionTipo);
             $em->flush();
             return $this->redirect($this->generateUrl('brs_rhu_base_acreditacion_tipo_lista'));
         }
         return $this->render('BrasaRecursoHumanoBundle:Base/AcreditacionTipo:nuevo.html.twig', array(
-            'formAcreditacionTipo' => $formAcreditacionTipo->createView(),
+            'formAcreditacionTipo' => $form->createView(),
         ));
     }
     
