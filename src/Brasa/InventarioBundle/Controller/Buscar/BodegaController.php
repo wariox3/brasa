@@ -4,6 +4,7 @@ namespace Brasa\InventarioBundle\Controller\Buscar;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityRepository;
 
 class BodegaController extends Controller
@@ -15,9 +16,8 @@ class BodegaController extends Controller
     /**
      * @Route("/inv/burcar/bodega/{campoCodigo}", name="brs_inv_buscar_bodega")
      */      
-    public function listaAction($campoCodigo) {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->getRequest();
+    public function listaAction(Request $request, $campoCodigo) {
+        $em = $this->getDoctrine()->getManager();        
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioLista();
         $form->handleRequest($request);

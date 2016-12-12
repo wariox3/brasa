@@ -14,9 +14,9 @@ class MovimientoController extends Controller
     var $strListaDql = "";
 
     /**
-     * @Route("/inv/movimiento/movimiento/ingreso", name="brs_inv_movimiento_movimiento_ingreso")
+     * @Route("/inv/movimiento/movimiento/ingreso/{codigoTipoDocumento}", name="brs_inv_movimiento_movimiento_ingreso")
      */
-    public function ingresoAction(Request $request) {
+    public function ingresoAction(Request $request, $codigoTipoDocumento) {
         $em = $this->getDoctrine()->getManager();
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioIngreso();
@@ -24,7 +24,7 @@ class MovimientoController extends Controller
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));
         }
         $form->handleRequest($request);
-        $this->listaIngreso();
+        $this->listaIngreso($codigoTipoDocumento);
         if ($form->isValid()) {
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrarIngreso($form);
@@ -50,17 +50,17 @@ class MovimientoController extends Controller
         $arDocumento = $em->getRepository('BrasaInventarioBundle:InvDocumento')->find($codigoDocumento);        
         $form = $this->formularioLista($arDocumento);
         $form->handleRequest($request);
-        $this->lista();
+        $this->lista($codigoDocumento);
         if ($form->isValid()) {
             if ($form->get('BtnExcel')->isClicked()) {
                 $this->filtrarLista($form);
-                $this->lista();
+                $this->lista($codigoDocumento);
                 $this->generarExcel($codigoDocumento);
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrarLista($form);
                 $form = $this->formularioLista();
-                $this->lista();
+                $this->lista($codigoDocumento);
             }
             if ($form->get('BtnEliminar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
@@ -235,16 +235,17 @@ class MovimientoController extends Controller
             'form' => $form->createView()));
     }
 
-    private function listaIngreso() {
+    private function listaIngreso($codigoTipoDocumento) {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        $this->strListaDql =  $em->getRepository('BrasaInventarioBundle:InvDocumento')->listaDql();
+        $this->strListaDql =  $em->getRepository('BrasaInventarioBundle:InvDocumento')->listaDql($codigoTipoDocumento);
     }
     
-    private function lista() {
+    private function lista($codigoDocumento) {
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();        
         $this->strListaDql =  $em->getRepository('BrasaInventarioBundle:InvMovimiento')->listaDql(
+            $codigoDocumento,
             $session->get('filtroInvCodigoMovimiento'), 
             $session->get('filtroInvNumeroMovimiento')
             );

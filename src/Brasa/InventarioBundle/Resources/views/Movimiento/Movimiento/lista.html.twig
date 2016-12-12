@@ -38,7 +38,7 @@
                 <th>FECHA</th>
                 <th>NUMERO</th>                
                 <th>TERCERO</th>
-                <th>AUTORIZADO</th>
+                <th>AUT</th>
                 <th></th>
                 <th></th>
                 <th align="center"><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodos(this);"/></th>
@@ -57,9 +57,6 @@
             
             {% endfor %}
         </table>
-        <div class="btn-group">
-            <a  class="btn btn-default btn-sm" href="{{ path('brs_inv_movimiento_movimiento_ingreso') }}">Volver</a>
-        </div>
         <div class="btn-group" style="float: left">
             <div class="btn btn-default btn-sm">Registros <span class="badge">{{ arMovimientos.getTotalItemCount }}</span></div>                        
         </div>

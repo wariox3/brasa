@@ -172,7 +172,7 @@ class ContratosController extends Controller
      */
     public function nuevoAction(Request $request, $codigoContrato, $codigoEmpleado) {
         $em = $this->getDoctrine()->getManager();        
-        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();
+        $arEmpleado = new \Brasa\RecursoHumanoBundle\Entity\RhuEmpleado();        
         $arEmpleado = $em->getRepository('BrasaRecursoHumanoBundle:RhuEmpleado')->find($codigoEmpleado);
         $arContrato = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
@@ -258,7 +258,7 @@ class ContratosController extends Controller
 
                                     //Insertar el recurso en recursos
                                     if($codigoContrato == 0) {
-                                        if($arEmpleado->getCodigoEmpleadoTipoFk() == 3) {
+                                        if($arEmpleado->getEmpleadoTipoRel()->getTipo() == 2) {
                                             $arRecurso = new \Brasa\TurnoBundle\Entity\TurRecurso();
                                             $arRecurso = $em->getRepository('BrasaTurnoBundle:TurRecurso')->findOneBy(array('codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk()));
                                             if($arRecurso) {                                                

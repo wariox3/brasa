@@ -7,42 +7,41 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityRepository;
 
-class TerceroController extends Controller
+class LoteController extends Controller
 {
     var $strDqlLista = "";     
     var $strNit = "";
     var $strNombre = "";
     
     /**
-     * @Route("/inv/burcar/tercero/{campoNit}/{campoNombre}", name="brs_inv_buscar_tercero")
+     * @Route("/inv/burcar/lote/{codigoItem}/{campoLote}", name="brs_inv_buscar_lote")
      */      
-    public function listaAction(Request $request, $campoNit,$campoNombre) {
+    public function listaAction(Request $request, $codigoItem, $campoLote) {
         $em = $this->getDoctrine()->getManager();        
         $paginator  = $this->get('knp_paginator');
         $form = $this->formularioLista();
         $form->handleRequest($request);
-        $this->lista();
+        $this->lista($codigoItem);
         if ($form->isValid()) {            
             if($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrarLista($form);
-                $this->lista();
+                $this->lista($codigoItem);
             }
         }
-        $arTercero = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 20);
-        return $this->render('BrasaInventarioBundle:Buscar:tercero.html.twig', array(
-            'arTerceros' => $arTercero,
-            'campoNit' => $campoNit,
-            'campoNombre' => $campoNombre,
+        $query = $em->createQuery($this->strDqlLista);        
+        $arResultados = $query->getResult();
+        $arLotes = $paginator->paginate($arResultados, $request->query->get('page', 1), 50);                
+        return $this->render('BrasaInventarioBundle:Buscar:lote.html.twig', array(
+            'arLotes' => $arLotes,
+            'campoLote' => $campoLote,
             'form' => $form->createView()
             ));
     }        
     
-    private function lista() {                        
+    private function lista($codigoItem) {                        
         $em = $this->getDoctrine()->getManager();
-        $this->strDqlLista = $em->getRepository('BrasaInventarioBundle:InvTercero')->listaDQL(
-                $this->strNit,
-                $this->strNombre
-                );
+        $this->strDqlLista = $em->getRepository('BrasaInventarioBundle:InvLote')->consultaDisponibleDQL(
+                $codigoItem);
     }       
     
     private function formularioLista() {                

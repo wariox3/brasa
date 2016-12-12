@@ -12,14 +12,14 @@ use Doctrine\ORM\EntityRepository;
  */
 class InvMovimientoRepository extends EntityRepository { 
     
-    public function listaDql($strCodigo = '', $strNumero = '') {
-        $dql   = "SELECT m FROM BrasaInventarioBundle:InvMovimiento m WHERE m.codigoMovimientoPk <> 0 ";
+    public function listaDql($codigoDocumento = '', $strCodigo = '', $strNumero = '') {
+        $dql   = "SELECT m FROM BrasaInventarioBundle:InvMovimiento m WHERE m.codigoDocumentoFk = $codigoDocumento ";
         if($strNumero != "" ) {
             $dql .= " AND m.numero = " . $strNumero;
         }
         if($strCodigo != "" ) {
             $dql .= " AND m.codigoMovimientoPk = " . $strCodigo;
-        }
+        }       
         $dql .= " ORDER BY m.codigoMovimientoPk";
         return $dql;
     }

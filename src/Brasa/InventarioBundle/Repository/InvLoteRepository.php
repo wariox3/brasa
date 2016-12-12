@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class InvLoteRepository extends EntityRepository {
 
-    public function consultaDisponibleDql($strCodigoItem = '') {
+    public function consultaExistenciaDql($strCodigoItem = '') {
         $dql   = "SELECT l FROM BrasaInventarioBundle:InvLote l WHERE l.cantidadExistencia > 0";        
         if($strCodigoItem != "" ) {
             $dql .= " AND l.codigoItemFk = " . $strCodigoItem;
@@ -20,6 +20,15 @@ class InvLoteRepository extends EntityRepository {
         $dql .= " ORDER BY l.loteFk";
         return $dql;
     }
+    
+    public function consultaDisponibleDql($codigoItem = '') {
+        $dql   = "SELECT l FROM BrasaInventarioBundle:InvLote l WHERE l.cantidadDisponible > 0";        
+        if($codigoItem != "" ) {
+            $dql .= " AND l.codigoItemFk = " . $codigoItem;
+        }
+        $dql .= " ORDER BY l.loteFk";
+        return $dql;
+    }    
     
     public function afectar($tipo, $operacion, $codigoItem, $codigoLote, $fechaVecimiento, $codigoBodega, $cantidad) {
         $em = $this->getEntityManager();
