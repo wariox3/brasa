@@ -692,7 +692,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 $ibpPrimas += $ibpPrimasInicial;                                            
                 $salarioPromedioPrimas = 0;
                 if($arContrato->getCodigoSalarioTipoFk() == 2) {
-                     $salarioPromedioPrimas = ($ibpPrimas / $intDiasPrimaLiquidar) * 30;                                    
+                     $salarioPromedioPrimas = ($ibpPrimas / 150) * 30;                                    
                 } else {
                     if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
                         $salarioPromedioPrimas = $douSalario + $auxilioTransporte;
