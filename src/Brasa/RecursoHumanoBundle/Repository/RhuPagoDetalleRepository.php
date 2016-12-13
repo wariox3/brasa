@@ -191,21 +191,7 @@ class RhuPagoDetalleRepository extends EntityRepository {
             $ibp = 0;
         }
         return $ibp;
-    }     
-
-    public function ibc($fechaDesde, $fechaHasta, $codigoContrato) {
-        $em = $this->getEntityManager();
-        $dql   = "SELECT SUM(pd.vrIngresoBaseCotizacion) as ibc FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p "
-                . "WHERE p.estadoPagado = 1 AND p.codigoContratoFk = " . $codigoContrato . " "
-                . "AND p.fechaDesdePago >= '" . $fechaDesde . "' AND p.fechaDesdePago <= '" . $fechaHasta . "'";
-        $query = $em->createQuery($dql);
-        $arrayResultado = $query->getResult();
-        $ibc = $arrayResultado[0]['ibc'];
-        if($ibc == null) {
-            $ibc = 0;
-        }
-        return $ibc;
-    }     
+    }        
     
     //Este no incluye concepto de auxilio transporte
     public function ibpVacaciones($fechaDesde, $fechaHasta, $codigoContrato) {
@@ -221,6 +207,34 @@ class RhuPagoDetalleRepository extends EntityRepository {
         }
         return $ibp;
     }    
+    
+    public function ibpConceptos($fechaDesde, $fechaHasta, $codigoContrato) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT SUM(pd.vrIngresoBasePrestacion) as ibp FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p JOIN pd.pagoConceptoRel pc "
+                . "WHERE pc.conceptoComision = 1 AND p.estadoPagado = 1 AND p.codigoContratoFk = " . $codigoContrato . " "
+                . "AND p.fechaDesdePago >= '" . $fechaDesde . "' AND p.fechaDesdePago <= '" . $fechaHasta . "'";
+        $query = $em->createQuery($dql);
+        $arrayResultado = $query->getResult();
+        $ibp = $arrayResultado[0]['ibp'];
+        if($ibp == null) {
+            $ibp = 0;
+        }
+        return $ibp;
+    }         
+    
+    public function ibc($fechaDesde, $fechaHasta, $codigoContrato) {
+        $em = $this->getEntityManager();
+        $dql   = "SELECT SUM(pd.vrIngresoBaseCotizacion) as ibc FROM BrasaRecursoHumanoBundle:RhuPagoDetalle pd JOIN pd.pagoRel p "
+                . "WHERE p.estadoPagado = 1 AND p.codigoContratoFk = " . $codigoContrato . " "
+                . "AND p.fechaDesdePago >= '" . $fechaDesde . "' AND p.fechaDesdePago <= '" . $fechaHasta . "'";
+        $query = $em->createQuery($dql);
+        $arrayResultado = $query->getResult();
+        $ibc = $arrayResultado[0]['ibc'];
+        if($ibc == null) {
+            $ibc = 0;
+        }
+        return $ibc;
+    }         
     
     public function ibcVacaciones($fechaDesde, $fechaHasta, $codigoContrato) {
         $em = $this->getEntityManager();
