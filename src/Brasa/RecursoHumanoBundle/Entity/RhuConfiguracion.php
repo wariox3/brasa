@@ -327,6 +327,12 @@ class RhuConfiguracion
     private $nitIcbf;    
     
     /**
+     * Si se tiene en cuenta o no los dias de ausentismo en primas
+     * @ORM\Column(name="dias_ausentismo_primas", type="boolean")
+     */
+    private $diasAusentismoPrimas = false;      
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadRiesgoProfesional", inversedBy="configuracionEntidadRiesgoProfesionalRel")
      * @ORM\JoinColumn(name="codigo_entidad_riesgo_fk", referencedColumnName="codigo_entidad_riesgo_pk")
      */
@@ -1844,5 +1850,29 @@ class RhuConfiguracion
     public function getEntidadRiesgoProfesionalRel()
     {
         return $this->entidadRiesgoProfesionalRel;
+    }
+
+    /**
+     * Set diasAusentismoPrimas
+     *
+     * @param boolean $diasAusentismoPrimas
+     *
+     * @return RhuConfiguracion
+     */
+    public function setDiasAusentismoPrimas($diasAusentismoPrimas)
+    {
+        $this->diasAusentismoPrimas = $diasAusentismoPrimas;
+
+        return $this;
+    }
+
+    /**
+     * Get diasAusentismoPrimas
+     *
+     * @return boolean
+     */
+    public function getDiasAusentismoPrimas()
+    {
+        return $this->diasAusentismoPrimas;
     }
 }
