@@ -582,6 +582,8 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
         
         //Prima
         if($arProgramacionPagoProcesar->getCodigoPagoTipoFk() == 2) {
+            $douVrSalarioMinimo = $arConfiguracion->getVrSalario();
+            
             $arContrato = $arProgramacionPagoDetalle->getContratoRel();
             $arPago = new \Brasa\RecursoHumanoBundle\Entity\RhuPago();                                                          
             $arPago->setPagoTipoRel($arProgramacionPagoProcesar->getPagoTipoRel());                        
@@ -686,21 +688,21 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
                     $douPagoDetalle = ($devengado * $arEmbargo->getPorcentaje()) / 100;
                     $douPagoDetalle = round($douPagoDetalle);
                 }     
-                /*if($arEmbargo->getPorcentajeExcedaSalarioMinimo()) {
-                    $salarioMinimoDevengado = ($douVrSalarioMinimo / 30) * $arProgramacionPagoDetalle->getDiasTransporte();
+                if($arEmbargo->getPorcentajeExcedaSalarioMinimo()) {
+                    $salarioMinimoDevengado = ($douVrSalarioMinimo/2);
                     $baseDescuento = $devengado - $salarioMinimoDevengado;
                     if($baseDescuento > 0) {             
                         $douPagoDetalle = ($baseDescuento * $arEmbargo->getPorcentaje()) / 100;
                         $douPagoDetalle = round($douPagoDetalle);                                                
                     }                    
-                }*/
-                /*if($arEmbargo->getPartesExcedaSalarioMinimo()) {
-                    $salarioMinimoDevengado = ($douVrSalarioMinimo / 30) * $arProgramacionPagoDetalle->getDiasTransporte();
+                }
+                if($arEmbargo->getPartesExcedaSalarioMinimo()) {
+                    $salarioMinimoDevengado = ($douVrSalarioMinimo/2);
                     $baseDescuento = $devengado - $salarioMinimoDevengado;
                     if($baseDescuento > 0) {                        
                         $douPagoDetalle = $baseDescuento / $arEmbargo->getPartes();
                     }
-                }*/
+                }
                 if($douPagoDetalle > 0) {
                     $arPagoConcepto = $arEmbargo->getEmbargoTipoRel()->getPagoConceptoRel();
                     $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
