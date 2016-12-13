@@ -98,6 +98,11 @@ class RhuPagoConcepto
     private $conceptoVacacion = false;
     
     /**
+     * @ORM\Column(name="concepto_comision", type="boolean")
+     */    
+    private $conceptoComision = false;     
+    
+    /**
      * @ORM\Column(name="codigo_cuenta_fk", type="string", length=20, nullable=true)
      */     
     private $codigoCuentaFk;     
@@ -1297,5 +1302,29 @@ class RhuPagoConcepto
     public function getVacacionesAdicionalesPagoConceptoRel()
     {
         return $this->vacacionesAdicionalesPagoConceptoRel;
+    }
+
+    /**
+     * Set conceptoComision
+     *
+     * @param boolean $conceptoComision
+     *
+     * @return RhuPagoConcepto
+     */
+    public function setConceptoComision($conceptoComision)
+    {
+        $this->conceptoComision = $conceptoComision;
+
+        return $this;
+    }
+
+    /**
+     * Get conceptoComision
+     *
+     * @return boolean
+     */
+    public function getConceptoComision()
+    {
+        return $this->conceptoComision;
     }
 }
