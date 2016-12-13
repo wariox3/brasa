@@ -696,7 +696,15 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 $salarioPromedioPrimas = 0;
                 if($arContrato->getCodigoSalarioTipoFk() == 2) {
                     if($intDiasSalrioPromedio > 0) {
-                        $salarioPromedioPrimas = ($ibpPrimas / $intDiasSalrioPromedio) * 30;     
+                        //Se realiza para seracis
+                        if($arConfiguracion->getPromedioPrimasLaborado()) {
+                            $salarioPromedioPrimas = ($ibpPrimas / $intDiasPrima) * 30;
+                            if($salarioPromedioPrimas < $salarioMinimo) {
+                                $salarioPromedioPrimas = $salarioMinimo + $auxilioTransporte;
+                            }
+                        } else {
+                            $salarioPromedioPrimas = ($ibpPrimas / $intDiasSalrioPromedio) * 30;     
+                        }                                                 
                     } else {
                         if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
                             $salarioPromedioPrimas = $douSalario + $auxilioTransporte;
@@ -988,7 +996,15 @@ class RhuProgramacionPagoRepository extends EntityRepository {
             $salarioPromedioPrimas = 0;
             if($arContrato->getCodigoSalarioTipoFk() == 2) {
                 if($intDiasSalrioPromedio > 0) {
-                    $salarioPromedioPrimas = ($ibpPrimas / $intDiasSalrioPromedio) * 30;     
+                    //Se realiza para seracis
+                    if($arConfiguracion->getPromedioPrimasLaborado()) {
+                        $salarioPromedioPrimas = ($ibpPrimas / $intDiasPrima) * 30;
+                        if($salarioPromedioPrimas < $salarioMinimo) {
+                            $salarioPromedioPrimas = $salarioMinimo + $auxilioTransporte;
+                        }
+                    } else {
+                        $salarioPromedioPrimas = ($ibpPrimas / $intDiasSalrioPromedio) * 30;     
+                    }                    
                 } else {
                     if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
                         $salarioPromedioPrimas = $douSalario + $auxilioTransporte;
