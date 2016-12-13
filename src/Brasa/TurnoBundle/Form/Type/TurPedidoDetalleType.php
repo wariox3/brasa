@@ -71,7 +71,7 @@ class TurPedidoDetalleType extends AbstractType
             ->add('liquidarDiasReales', CheckboxType::class, array('required'  => false))
             ->add('compuesto', CheckboxType::class, array('required'  => false))
             ->add('detalle', TextareaType::class, array('required' => false)) 
-            ->add('detallePuesto', TextType, array('required' => false))                            
+            ->add('detallePuesto', TextType::class, array('required' => false))                            
             ->add('guardar', SubmitType::class)
             ->add('guardarnuevo', SubmitType::class, array('label'  => 'Guardar y Nuevo'));
     }
