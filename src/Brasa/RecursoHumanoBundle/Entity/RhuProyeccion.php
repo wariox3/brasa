@@ -98,6 +98,11 @@ class RhuProyeccion
     private $vrDiferenciaPrimas = 0;
     
     /**
+     * @ORM\Column(name="dias_ausentismo_primas", type="integer")
+     */
+    private $diasAusentismoPrimas = 0;     
+    
+    /**
      * @ORM\Column(name="dias_cesantias", type="integer")
      */
     private $diasCesantias = 0;    
@@ -870,5 +875,29 @@ class RhuProyeccion
     public function getVrDiferenciaInteresesCesantias()
     {
         return $this->vrDiferenciaInteresesCesantias;
+    }
+
+    /**
+     * Set diasAusentismoPrimas
+     *
+     * @param integer $diasAusentismoPrimas
+     *
+     * @return RhuProyeccion
+     */
+    public function setDiasAusentismoPrimas($diasAusentismoPrimas)
+    {
+        $this->diasAusentismoPrimas = $diasAusentismoPrimas;
+
+        return $this;
+    }
+
+    /**
+     * Get diasAusentismoPrimas
+     *
+     * @return integer
+     */
+    public function getDiasAusentismoPrimas()
+    {
+        return $this->diasAusentismoPrimas;
     }
 }
