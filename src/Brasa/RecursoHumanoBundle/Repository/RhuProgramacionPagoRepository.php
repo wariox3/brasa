@@ -680,19 +680,30 @@ class RhuProgramacionPagoRepository extends EntityRepository {
             foreach ($arContratos as $arContrato) {
                 $dateFechaDesde = $arContrato->getFechaUltimoPagoPrimas();
                 $dateFechaHasta = $arProgramacionPago->getFechaHasta();
+                $dateFechaHastaPago = $arContrato->getFechaUltimoPago();
                 $douSalario = $arContrato->getVrSalarioPago();
                 $intDiasPrima = 0;                                
-                $intDiasPrima = $objFunciones->diasPrestaciones($dateFechaDesde, $dateFechaHasta);    
+                $intDiasPrima = $objFunciones->diasPrestaciones($dateFechaDesde, $dateFechaHasta);
+                $intDiasSalrioPromedio = $objFunciones->diasPrestaciones($dateFechaDesde, $dateFechaHastaPago);
                 $intDiasPrimaLiquidar = $intDiasPrima;
                 if($dateFechaDesde->format('m-d') == '06-30' || $dateFechaDesde->format('m-d') == '12-30') {
-                    $intDiasPrimaLiquidar = $intDiasPrimaLiquidar - 1;
+                    $intDiasPrimaLiquidar -= 1;
+                    $intDiasSalrioPromedio -= 1;
                 }
                 $ibpPrimasInicial = $arContrato->getIbpPrimasInicial();                    
-                $ibpPrimas = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->ibp($dateFechaDesde->format('Y-m-d'), $dateFechaHasta->format('Y-m-d'), $arContrato->getCodigoContratoPk());                
+                $ibpPrimas = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->ibp($dateFechaDesde->format('Y-m-d'), $dateFechaHastaPago->format('Y-m-d'), $arContrato->getCodigoContratoPk());                
                 $ibpPrimas += $ibpPrimasInicial;                                            
                 $salarioPromedioPrimas = 0;
                 if($arContrato->getCodigoSalarioTipoFk() == 2) {
-                     $salarioPromedioPrimas = ($ibpPrimas / 150) * 30;                                    
+                    if($intDiasSalrioPromedio > 0) {
+                        $salarioPromedioPrimas = ($ibpPrimas / $intDiasSalrioPromedio) * 30;     
+                    } else {
+                        if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
+                            $salarioPromedioPrimas = $douSalario + $auxilioTransporte;
+                        } else {
+                            $salarioPromedioPrimas = $douSalario;
+                        }                         
+                    }                                                        
                 } else {
                     if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
                         $salarioPromedioPrimas = $douSalario + $auxilioTransporte;
@@ -719,7 +730,11 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                             }
                         }                               
                     }                                                        
-                }                        
+                }   
+                $diasAusentismo = 0;
+                if($arConfiguracion->getDiasAusentismoPrimas()) {
+                    $diasAusentismo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->diasAusentismo($dateFechaDesde->format('Y-m-d'), $dateFechaHasta->format('Y-m-d'), $arContrato->getCodigoContratoPk());                                                
+                }
                 $salarioPromedioPrimas = round($salarioPromedioPrimas);                                                
                 $arProgramacionPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuProgramacionPagoDetalle();
                 $arProgramacionPagoDetalle->setProgramacionPagoRel($arProgramacionPago);
@@ -734,6 +749,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 $arProgramacionPagoDetalle->setDias($intDiasPrimaLiquidar);
                 $arProgramacionPagoDetalle->setDiasReales($intDiasPrimaLiquidar);
                 $arProgramacionPagoDetalle->setPorcentajeIbp($porcentaje);
+                $arProgramacionPagoDetalle->setDiasAusentismo($diasAusentismo);
                 $em->persist($arProgramacionPagoDetalle);
                 $intNumeroEmpleados++;
                 
