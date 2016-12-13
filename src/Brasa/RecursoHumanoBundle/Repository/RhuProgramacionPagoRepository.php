@@ -710,10 +710,15 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     } else {
                         $salarioPromedioPrimas = $douSalario;
                     }                                                
-                }                                                                                
+                }      
+                $aplicaPorcentaje = true;
+                if($arContrato->getEmpleadoRel()->getPagadoEntidadSalud()) {
+                    $salarioPromedioPrimas = $douSalario;
+                    $aplicaPorcentaje = false;                
+                }                 
                 $porcentaje = 100;                                               
                 if($arConfiguracion->getPrestacionesAplicaPorcentajeSalario()) {                            
-                    if($arContrato->getCodigoSalarioTipoFk() == 2) {                                    
+                    if($arContrato->getCodigoSalarioTipoFk() == 2 && $aplicaPorcentaje) {                                    
                         $intDiasLaborados = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($arContrato->getFechaDesde(), $dateFechaHasta);                                
                         foreach ($arParametrosPrestacionPrima as $arParametroPrestacion) {
                             if($intDiasLaborados >= $arParametroPrestacion->getDiaDesde() && $intDiasLaborados <= $arParametroPrestacion->getDiaHasta()) {
@@ -953,42 +958,76 @@ class RhuProgramacionPagoRepository extends EntityRepository {
             $objFunciones = new \Brasa\GeneralBundle\MisClases\Funciones();
             $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
             $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1);
+            $arParametrosPrestacionPrima = new \Brasa\RecursoHumanoBundle\Entity\RhuParametroPrestacion();
+            $arParametrosPrestacionPrima = $em->getRepository('BrasaRecursoHumanoBundle:RhuParametroPrestacion')->findBy(array('tipo' => 'PRI'));                                                                
             $salarioMinimo = $arConfiguracion->getVrSalario();
             $auxilioTransporte = $arConfiguracion->getVrAuxilioTransporte();            
             $arContrato = $arProgramacionPagoDetalle->getContratoRel();            
+            
             $dateFechaDesde = $arContrato->getFechaUltimoPagoPrimas();
             $dateFechaHasta = $arProgramacionPago->getFechaHasta();
+            $dateFechaHastaPago = $arContrato->getFechaUltimoPago();
             $douSalario = $arContrato->getVrSalarioPago();
             $intDiasPrima = 0;                                
-            $intDiasPrima = $objFunciones->diasPrestaciones($dateFechaDesde, $dateFechaHasta);    
+            $intDiasPrima = $objFunciones->diasPrestaciones($dateFechaDesde, $dateFechaHasta);
+            $intDiasSalrioPromedio = $objFunciones->diasPrestaciones($dateFechaDesde, $dateFechaHastaPago);
             $intDiasPrimaLiquidar = $intDiasPrima;
             if($dateFechaDesde->format('m-d') == '06-30' || $dateFechaDesde->format('m-d') == '12-30') {
-                $intDiasPrimaLiquidar = $intDiasPrimaLiquidar - 1;
+                $intDiasPrimaLiquidar -= 1;
+                $intDiasSalrioPromedio -= 1;
             }
             $ibpPrimasInicial = $arContrato->getIbpPrimasInicial();                    
-            $ibpPrimas = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->ibp($dateFechaDesde->format('Y-m-d'), $dateFechaHasta->format('Y-m-d'), $arContrato->getCodigoContratoPk());                
+            $ibpPrimas = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->ibp($dateFechaDesde->format('Y-m-d'), $dateFechaHastaPago->format('Y-m-d'), $arContrato->getCodigoContratoPk());                
             $ibpPrimas += $ibpPrimasInicial;                                            
             $salarioPromedioPrimas = 0;
             if($arContrato->getCodigoSalarioTipoFk() == 2) {
-                 $salarioPromedioPrimas = ($ibpPrimas / $intDiasPrimaLiquidar) * 30;                                    
+                if($intDiasSalrioPromedio > 0) {
+                    $salarioPromedioPrimas = ($ibpPrimas / $intDiasSalrioPromedio) * 30;     
+                } else {
+                    if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
+                        $salarioPromedioPrimas = $douSalario + $auxilioTransporte;
+                    } else {
+                        $salarioPromedioPrimas = $douSalario;
+                    }                         
+                }                                                        
             } else {
                 if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
                     $salarioPromedioPrimas = $douSalario + $auxilioTransporte;
                 } else {
                     $salarioPromedioPrimas = $douSalario;
                 }                                                
-            }                                                                                
-
+            }   
+            $aplicaPorcentaje = true;
+            if($arContrato->getEmpleadoRel()->getPagadoEntidadSalud()) {
+                $salarioPromedioPrimas = $douSalario;
+                $aplicaPorcentaje = false;                
+            }             
+                                                                                
+            $porcentaje = 100;                                               
             if($arConfiguracion->getPrestacionesAplicaPorcentajeSalario()) {                            
-                if($arContrato->getCodigoSalarioTipoFk() == 2) {            
-                    $porcentaje = $arProgramacionPagoDetalle->getPorcentajeIbp();
-                    $salarioPromedioPrimas = ($salarioPromedioPrimas * $porcentaje)/100;                                
+                if($arContrato->getCodigoSalarioTipoFk() == 2 && $aplicaPorcentaje) {                                    
+                    $intDiasLaborados = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($arContrato->getFechaDesde(), $dateFechaHasta);                                
+                    foreach ($arParametrosPrestacionPrima as $arParametroPrestacion) {
+                        if($intDiasLaborados >= $arParametroPrestacion->getDiaDesde() && $intDiasLaborados <= $arParametroPrestacion->getDiaHasta()) {
+                            if($arParametroPrestacion->getOrigen() == 'SAL') {
+                                if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
+                                    $salarioPromedioPrimas = $douSalario + $auxilioTransporte;
+                                } else {
+                                    $salarioPromedioPrimas = $douSalario;
+                                } 
+                            } else {
+                                $porcentaje = $arParametroPrestacion->getPorcentaje();
+                                $salarioPromedioPrimas = ($salarioPromedioPrimas * $porcentaje)/100;                                
+                            }                                            
+                        }
+                    }                               
                 }                                                        
-            }                        
-            if($arProgramacionPagoDetalle->getVrSalarioPrimaPropuesto() > 0) {
-                $salarioPromedioPrimas = $arProgramacionPagoDetalle->getVrSalarioPrimaPropuesto();
+            }   
+            $diasAusentismo = 0;
+            if($arConfiguracion->getDiasAusentismoPrimas()) {
+                $diasAusentismo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->diasAusentismo($dateFechaDesde->format('Y-m-d'), $dateFechaHasta->format('Y-m-d'), $arContrato->getCodigoContratoPk());                                                
             }
-            $salarioPromedioPrimas = round($salarioPromedioPrimas);                                                                                                
+            $salarioPromedioPrimas = round($salarioPromedioPrimas);                                                                                                 
             $arProgramacionPagoDetalle->setVrSalario($arContrato->getVrSalario());
             $arProgramacionPagoDetalle->setVrSalarioPrima($salarioPromedioPrimas);
             $arProgramacionPagoDetalle->setIndefinido($arContrato->getIndefinido());                
