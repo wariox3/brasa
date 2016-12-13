@@ -68,7 +68,7 @@ class PagoMasivo1 extends \FPDF_FPDF {
     public function EncabezadoDetalles() {
         $this->SetXY(10, 53);
         //$this->Ln(45);
-        $header = array('CODIGO', 'CONCEPTO DE PAGO', 'HORAS', 'VR. HORA', '%', 'DEVENGADO', 'DEDUCCION');
+        $header = array('CODIGO', 'CONCEPTO DE PAGO', 'HORAS', 'DIAS', 'VR. HORA', '%', 'DEVENGADO', 'DEDUCCION');
         $this->SetFillColor(200, 200, 200);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -76,7 +76,7 @@ class PagoMasivo1 extends \FPDF_FPDF {
         $this->SetFont('', 'B', 6.8);
 
         //creamos la cabecera de la tabla.
-        $w = array(13,87, 10, 22, 7, 27, 27);
+        $w = array(13,77, 10, 10, 22, 7, 27, 27);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -226,10 +226,11 @@ class PagoMasivo1 extends \FPDF_FPDF {
             foreach ($arPagoDetalles as $arPagoDetalle) {            
                 $pdf->SetFont('Arial', '', 5.4);
                 $pdf->Cell(13, 4, $arPagoDetalle->getCodigoPagoConceptoFk(), 1, 0, 'L');
-                $pdf->Cell(87, 4, utf8_decode($arPagoDetalle->getPagoConceptoRel()->getNombre()), 1, 0, 'L');
+                $pdf->Cell(77, 4, utf8_decode($arPagoDetalle->getPagoConceptoRel()->getNombre()), 1, 0, 'L');
                 $pdf->SetFont('Arial', '', 5.5);            
                 $pdf->SetFont('Arial', '', 7);
                 $pdf->Cell(10, 4, number_format($arPagoDetalle->getNumeroHoras(), 0, '.', ','), 1, 0, 'R');
+                $pdf->Cell(10, 4, number_format($arPagoDetalle->getNumeroDias(), 0, '.', ','), 1, 0, 'R');
                 $pdf->Cell(22, 4, number_format($arPagoDetalle->getVrHora(), 0, '.', ','), 1, 0, 'R');
                 $pdf->Cell(7, 4, number_format($arPagoDetalle->getPorcentajeAplicado(), 0, '.', ','), 1, 0, 'R');
                 if($arPagoDetalle->getOperacion() == 1) {
