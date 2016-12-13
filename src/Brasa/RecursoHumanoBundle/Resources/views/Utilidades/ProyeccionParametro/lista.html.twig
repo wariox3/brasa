@@ -49,6 +49,7 @@
                 <th>PRIMAS</th>
                 <th>DIF</th>
                 <th>DIAS</th>
+                <th>AUS</th>
                 <th>U.PAGO</th>                
                 <th>SAL_REAL</th>
                 <th>POR</th>
@@ -78,6 +79,7 @@
                 <td style="text-align: right">{{ arProyecciones.vrPrimas | number_format(0, '.', ',') }}</td>
                 <td style="text-align: right">{{ arProyecciones.vrDiferenciaPrimas | number_format(0, '.', ',') }}</td>                
                 <td style="text-align: right">{{ arProyecciones.diasPrima | number_format(0, '.', ',') }}</td>
+                <td style="text-align: right">{{ arProyecciones.diasAusentismoPrimas | number_format(0, '.', ',') }}</td>
                 <td>{{ arProyecciones.fechaDesdePrima |date('Y-m-d')  }}</td>                                
                 <td style="text-align: right">{{ arProyecciones.vrSalarioPromedioCesantiasReal | number_format(0, '.', ',') }}</td>                
                 <td style="text-align: right">{{ arProyecciones.porcentajeCesantias | number_format(0, '.', ',') }}</td>                
