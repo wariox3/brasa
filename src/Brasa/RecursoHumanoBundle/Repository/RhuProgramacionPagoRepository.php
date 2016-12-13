@@ -705,10 +705,16 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         }                         
                     }                                                        
                 } else {
+                    //Comisiones
+                    $ibpConceptos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->ibpConceptos($dateFechaDesde->format('Y-m-d'), $dateFechaHastaPago->format('Y-m-d'), $arContrato->getCodigoContratoPk());                
+                    $otrosConceptos = 0;
+                    if($intDiasSalrioPromedio > 0) {
+                        $otrosConceptos = ($ibpConceptos / $intDiasSalrioPromedio) * 30;
+                    }                    
                     if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
-                        $salarioPromedioPrimas = $douSalario + $auxilioTransporte;
+                        $salarioPromedioPrimas = $douSalario + $auxilioTransporte + $otrosConceptos;
                     } else {
-                        $salarioPromedioPrimas = $douSalario;
+                        $salarioPromedioPrimas = $douSalario + $otrosConceptos;
                     }                                                
                 }      
                 $aplicaPorcentaje = true;
@@ -991,10 +997,16 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     }                         
                 }                                                        
             } else {
+                //Comisiones
+                $ibpConceptos = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->ibpConceptos($dateFechaDesde->format('Y-m-d'), $dateFechaHastaPago->format('Y-m-d'), $arContrato->getCodigoContratoPk());                
+                $otrosConceptos = 0;
+                if($intDiasSalrioPromedio > 0) {
+                    $otrosConceptos = ($ibpConceptos / $intDiasSalrioPromedio) * 30;
+                }
                 if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
-                    $salarioPromedioPrimas = $douSalario + $auxilioTransporte;
+                    $salarioPromedioPrimas = $douSalario + $auxilioTransporte + $otrosConceptos;
                 } else {
-                    $salarioPromedioPrimas = $douSalario;
+                    $salarioPromedioPrimas = $douSalario + $otrosConceptos;
                 }                                                
             }   
             $aplicaPorcentaje = true;
