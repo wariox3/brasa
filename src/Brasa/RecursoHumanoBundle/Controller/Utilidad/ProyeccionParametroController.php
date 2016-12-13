@@ -36,12 +36,13 @@ class ProyeccionParametroController extends Controller
                     ini_set("memory_limit", -1);
                     $strSql = "DELETE FROM rhu_proyeccion WHERE 1";
                     $em->getConnection()->executeQuery($strSql);
-                    $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+                    $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();                    
                     $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);
                     $arParametrosPrestacionPrima = new \Brasa\RecursoHumanoBundle\Entity\RhuParametroPrestacion();
                     $arParametrosPrestacionPrima = $em->getRepository('BrasaRecursoHumanoBundle:RhuParametroPrestacion')->findBy(array('tipo' => 'PRI'));
                     $arParametrosPrestacionCesantia = new \Brasa\RecursoHumanoBundle\Entity\RhuParametroPrestacion();
                     $arParametrosPrestacionCesantia = $em->getRepository('BrasaRecursoHumanoBundle:RhuParametroPrestacion')->findBy(array('tipo' => 'CES'));
+                    $salarioMinimo = $arConfiguracion->getVrSalario();
                     $douAuxilioTransporte = $arConfiguracion->getVrAuxilioTransporte();
                     $arContratos = new \Brasa\RecursoHumanoBundle\Entity\RhuContrato();
                     $arContratos = $em->getRepository('BrasaRecursoHumanoBundle:RhuContrato')->findBy(array('estadoActivo' => 1));
@@ -67,7 +68,7 @@ class ProyeccionParametroController extends Controller
                             $intDiasAusentismo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->diasAusentismo($dateFechaDesde->format('Y-m-d'), $dateFechaHastaCesantias->format('Y-m-d'), $arContrato->getCodigoContratoPk());
                             $salarioPromedioCesantias = 0;
                             if($arContrato->getCodigoSalarioTipoFk() == 2) {
-                                if($intDiasCesantiasSalarioPromedio > 0) {
+                                if($intDiasCesantiasSalarioPromedio > 0) {                                    
                                     $salarioPromedioCesantias = ($ibpCesantias / $intDiasCesantiasSalarioPromedio) * 30;
                                 } else {
                                     if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
@@ -149,7 +150,15 @@ class ProyeccionParametroController extends Controller
                             $salarioPromedioPrimas = 0;
                             if($arContrato->getCodigoSalarioTipoFk() == 2) {
                                 if($intDiasPrimaSalarioPromedio > 0) {
-                                    $salarioPromedioPrimas = ($ibpPrimas / $intDiasPrimaSalarioPromedio) * 30;
+                                    //Se realiza para seracis
+                                    if($arConfiguracion->getPromedioPrimasLaborado()) {
+                                        $salarioPromedioPrimas = ($ibpPrimas / $intDiasPrima) * 30;
+                                        if($salarioPromedioPrimas < $salarioMinimo) {
+                                            $salarioPromedioPrimas = $salarioMinimo + $auxilioTransporte;
+                                        }
+                                    } else {
+                                        $salarioPromedioPrimas = ($ibpPrimas / $intDiasPrimaSalarioPromedio) * 30;     
+                                    }                                                                        
                                 } else {
                                     if($arContrato->getEmpleadoRel()->getAuxilioTransporte() == 1) {
                                         $salarioPromedioPrimas = $douSalario + $auxilioTransporte;
