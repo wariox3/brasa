@@ -333,6 +333,12 @@ class RhuConfiguracion
     private $diasAusentismoPrimas = false;      
     
     /**
+     * Promedio primas utilizado por seracis
+     * @ORM\Column(name="promedio_primas_laborado", type="boolean")
+     */
+    private $promedioPrimasLaborado = false;     
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadRiesgoProfesional", inversedBy="configuracionEntidadRiesgoProfesionalRel")
      * @ORM\JoinColumn(name="codigo_entidad_riesgo_fk", referencedColumnName="codigo_entidad_riesgo_pk")
      */
@@ -1874,5 +1880,29 @@ class RhuConfiguracion
     public function getDiasAusentismoPrimas()
     {
         return $this->diasAusentismoPrimas;
+    }
+
+    /**
+     * Set promedioPrimasLaborado
+     *
+     * @param boolean $promedioPrimasLaborado
+     *
+     * @return RhuConfiguracion
+     */
+    public function setPromedioPrimasLaborado($promedioPrimasLaborado)
+    {
+        $this->promedioPrimasLaborado = $promedioPrimasLaborado;
+
+        return $this;
+    }
+
+    /**
+     * Get promedioPrimasLaborado
+     *
+     * @return boolean
+     */
+    public function getPromedioPrimasLaborado()
+    {
+        return $this->promedioPrimasLaborado;
     }
 }
