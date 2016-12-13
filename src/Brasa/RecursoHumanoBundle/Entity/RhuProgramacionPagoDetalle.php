@@ -268,6 +268,11 @@ class RhuProgramacionPagoDetalle
      * @ORM\Column(name="vr_salario_prima_propuesto", type="float")
      */
     private $vrSalarioPrimaPropuesto = 0;    
+
+    /**
+     * @ORM\Column(name="dias_ausentismo", type="integer")
+     */
+    private $diasAusentismo = 0;  
     
     /**
      * @ORM\ManyToOne(targetEntity="RhuProgramacionPago", inversedBy="programacionesPagosDetallesProgramacionPagoRel")
@@ -1695,5 +1700,29 @@ class RhuProgramacionPagoDetalle
     public function getPagosProgramacionPagoDetalleRel()
     {
         return $this->pagosProgramacionPagoDetalleRel;
+    }
+
+    /**
+     * Set diasAusentismo
+     *
+     * @param integer $diasAusentismo
+     *
+     * @return RhuProgramacionPagoDetalle
+     */
+    public function setDiasAusentismo($diasAusentismo)
+    {
+        $this->diasAusentismo = $diasAusentismo;
+
+        return $this;
+    }
+
+    /**
+     * Get diasAusentismo
+     *
+     * @return integer
+     */
+    public function getDiasAusentismo()
+    {
+        return $this->diasAusentismo;
     }
 }
