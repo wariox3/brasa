@@ -601,9 +601,17 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
             $arPago->setComentarios($arProgramacionPagoDetalle->getComentarios());
             $arPago->setCodigoSoportePagoFk($arProgramacionPagoDetalle->getCodigoSoportePagoFk());                                   
             $em->persist($arPago);
-
+            
             //Prima
-            $douPrima = ($arProgramacionPagoDetalle->getVrSalarioPrima() * $arProgramacionPagoDetalle->getDias()) / 360;
+            $dias = $arProgramacionPagoDetalle->getDias();
+            if($arConfiguracion->getDiasAusentismoPrimas()) {                    
+                $dias = $arProgramacionPagoDetalle->getDias() - $arProgramacionPagoDetalle->getDiasAusentismo();
+            }
+            $salarioPrima = $arProgramacionPagoDetalle->getVrSalarioPrima();
+            if($arProgramacionPagoDetalle->getVrSalarioPrimaPropuesto() > 0) {
+                $salarioPrima = $arProgramacionPagoDetalle->getVrSalarioPrimaPropuesto();
+            }
+            $douPrima = ($salarioPrima * $dias) / 360;            
             $douPrima = round($douPrima);
             $arPagoConcepto = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoConcepto')->find($arConfiguracion->getCodigoPrima());
             $arPagoDetalle = new \Brasa\RecursoHumanoBundle\Entity\RhuPagoDetalle();
@@ -611,7 +619,7 @@ class RhuProgramacionPagoDetalleRepository extends EntityRepository {
             $arPagoDetalle->setPagoConceptoRel($arPagoConcepto);
             $arPagoDetalle->setDetalle('');
             $arPagoDetalle->setVrPago($douPrima);
-            $arPagoDetalle->setNumeroDias($arProgramacionPagoDetalle->getDias());
+            $arPagoDetalle->setNumeroDias($dias);
             $arPagoDetalle->setOperacion($arPagoConcepto->getOperacion());
             $arPagoDetalle->setVrPagoOperado($douPrima * $arPagoConcepto->getOperacion());
             $arPagoDetalle->setProgramacionPagoDetalleRel($arProgramacionPagoDetalle);
