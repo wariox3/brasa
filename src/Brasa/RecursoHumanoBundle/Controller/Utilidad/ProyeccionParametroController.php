@@ -130,7 +130,7 @@ class ProyeccionParametroController extends Controller
                         }
 
                         //Primas
-                        if($arContrato->getSalarioIntegral() == 0) {
+                        if($arContrato->getSalarioIntegral() == 0 && $arContrato->getCodigoContratoClaseFk() <> 4 && $arContrato->getCodigoContratoClaseFk() <> 5) {
                             $dateFechaDesde = $arContrato->getFechaUltimoPagoPrimas();
                             $dateFechaHastaPrimas = $arContrato->getFechaUltimoPago();
                             $intDiasPrima = 0;
@@ -164,10 +164,15 @@ class ProyeccionParametroController extends Controller
                                     $salarioPromedioPrimas = $douSalario;
                                 }
                             }
+                            $aplicaPorcentaje = true;
+                            if($arContrato->getEmpleadoRel()->getPagadoEntidadSalud()) {
+                                $salarioPromedioPrimas = $douSalario;
+                                $aplicaPorcentaje = false;                
+                            }                             
                             $salarioPromedioPrimasReal = $salarioPromedioPrimas;
                             $porcentaje = 100;
                             if($arConfiguracion->getPrestacionesAplicaPorcentajeSalario()) {
-                                if($arContrato->getCodigoSalarioTipoFk() == 2) {
+                                if($arContrato->getCodigoSalarioTipoFk() == 2 && $aplicaPorcentaje) {
                                     $intDiasLaborados = $em->getRepository('BrasaRecursoHumanoBundle:RhuLiquidacion')->diasPrestaciones($arContrato->getFechaDesde(), $dateFechaHasta);
                                     foreach ($arParametrosPrestacionPrima as $arParametroPrestacion) {
                                         if($intDiasLaborados >= $arParametroPrestacion->getDiaDesde() && $intDiasLaborados <= $arParametroPrestacion->getDiaHasta()) {
@@ -186,6 +191,11 @@ class ProyeccionParametroController extends Controller
                                     }
                                 }
                             }
+                            $diasAusentismo = 0;
+                            if($arConfiguracion->getDiasAusentismoPrimas()) {
+                                $diasAusentismo = $em->getRepository('BrasaRecursoHumanoBundle:RhuPago')->diasAusentismo($dateFechaDesde->format('Y-m-d'), $dateFechaHasta->format('Y-m-d'), $arContrato->getCodigoContratoPk());                                                
+                                $intDiasPrimaLiquidar = $intDiasPrimaLiquidar - $diasAusentismo;
+                            }                            
                             $salarioPromedioPrimas = round($salarioPromedioPrimas);
                             $salarioPromedioPrimasReal = round($salarioPromedioPrimasReal);
                             $douPrima = ($salarioPromedioPrimas * $intDiasPrimaLiquidar) / 360;
@@ -200,6 +210,7 @@ class ProyeccionParametroController extends Controller
                             $arProyeccion->setVrPrimas($douPrima);
                             $arProyeccion->setVrPrimasReal($douPrimaReal);
                             $arProyeccion->setDiasPrima($intDiasPrimaLiquidar);
+                            $arProyeccion->setDiasAusentismoPrimas($diasAusentismo);
                             $arProyeccion->setFechaDesdePrima($dateFechaDesde);
                         } else {
                             $arProyeccion->setFechaDesdePrima($dateFechaHasta);
