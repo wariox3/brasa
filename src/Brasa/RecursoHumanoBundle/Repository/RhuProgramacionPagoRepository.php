@@ -1036,6 +1036,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
             $arProgramacionPagoDetalle->setFechaDesdePago($dateFechaDesde);
             $arProgramacionPagoDetalle->setDias($intDiasPrimaLiquidar);
             $arProgramacionPagoDetalle->setDiasReales($intDiasPrimaLiquidar);
+            $arProgramacionPagoDetalle->setDiasAusentismo($diasAusentismo);
             $em->persist($arProgramacionPagoDetalle);                
             $em->flush();            
         }
