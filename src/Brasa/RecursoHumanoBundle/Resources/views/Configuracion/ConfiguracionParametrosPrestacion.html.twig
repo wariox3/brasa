@@ -36,18 +36,34 @@
                     <td style="text-align: center"><input type="checkbox" name="ChkSeleccionar[]" value="{{ arParametrosPrestacion.codigoParametroPrestacionPk }}" /></td>                    
                 </tr>
                 {% endfor %}
-            </table>                  
+            </table>                                                                                   
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">Parametros prima</div>
+      <div class="panel-body">                                     
+        <div class="form-group form-group-sm">
+            <label class="col-sm-5 control-label">Promedio primas laborado:</label>
+            <div class="col-sm-7">
+                    {{ form_widget(form.promedioPrimasLaborado) }}
+            </div>
+        </div>                 
+        <div class="form-group form-group-sm">
+            <label class="col-sm-5 control-label">Promedio primas laborado dias:</label>
+            <div class="col-sm-7">
+                    {{ form_widget(form.promedioPrimasLaboradoDias, { 'attr': {'class': 'form-control'} }) }}
+            </div>
+        </div>                                                                
+      </div>
+    </div>                
             <div class="btn-toolbar" style="float: right">                
                 <div class="btn-group">                
                     {{ form_widget(form.BtnNuevo, { 'attr': {'class': 'btn btn-default btn-sm'} }) }}
                     {{ form_widget(form.BtnEliminar, { 'attr': {'class': 'btn btn-danger btn-sm'} }) }}
                     {{ form_widget(form.BtnGuardar, { 'attr': {'class': 'btn btn-primary btn-sm'} }) }}
                 </div>           
-            </div>                                             
-            {{ form_rest(form) }}
-        {{ form_end(form) }}
-      </div>
-    </div>
+            </div>             
+    {{ form_rest(form) }}
     {{ form_end(form) }}
 </div>      
 {% endblock %}
