@@ -702,7 +702,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                             if($arConfiguracion->getPromedioPrimasLaboradoDias() > 0) {
                                 $intDiasPrima = $arConfiguracion->getPromedioPrimasLaboradoDias();
                             }                            
-                            $salarioPromedioPrimas = ($ibpPrimas / $intDiasPrima) * 30;
+                            $salarioPromedioPrimas = ($ibpPrimas / ($intDiasPrima-15)) * 30;
                             if($salarioPromedioPrimas < $salarioMinimo) {
                                 $salarioPromedioPrimas = $salarioMinimo + $auxilioTransporte;
                             }
@@ -1006,7 +1006,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                         if($arConfiguracion->getPromedioPrimasLaboradoDias() > 0) {
                             $intDiasPrima = $arConfiguracion->getPromedioPrimasLaboradoDias();
                         }                        
-                        $salarioPromedioPrimas = ($ibpPrimas / $intDiasPrima) * 30;
+                        $salarioPromedioPrimas = ($ibpPrimas / ($intDiasPrima - 15)) * 30;
                         if($salarioPromedioPrimas < $salarioMinimo) {
                             $salarioPromedioPrimas = $salarioMinimo + $auxilioTransporte;
                         }

@@ -623,8 +623,9 @@ class PagosAdicionalesController extends Controller
                     ->setCellValue('F1', 'EMPLEADO')
                     ->setCellValue('G1', 'CANTIDAD')
                     ->setCellValue('H1', 'VALOR')                    
-                    ->setCellValue('I1', 'PERMANENTE')
-                    ->setCellValue('J1', 'APLICA DIA LABORADO');
+                    ->setCellValue('I1', 'PER')
+                    ->setCellValue('J1', 'ACT')
+                    ->setCellValue('K1', 'ADL');
 
         $i = 2;
         $query = $em->createQuery($this->strDqlLista);
@@ -646,7 +647,8 @@ class PagosAdicionalesController extends Controller
                 ->setCellValue('G' . $i, $arPagoAdicional->getCantidad())                    
                 ->setCellValue('H' . $i, $arPagoAdicional->getValor())
                 ->setCellValue('I' . $i, $objFunciones->devuelveBoolean($arPagoAdicional->getPermanente()))
-                ->setCellValue('J' . $i, $objFunciones->devuelveBoolean($arPagoAdicional->getAplicaDiaLaborado()));
+                ->setCellValue('J' . $i, $objFunciones->devuelveBoolean($arPagoAdicional->getEstadoInactivo()))
+                ->setCellValue('K' . $i, $objFunciones->devuelveBoolean($arPagoAdicional->getAplicaDiaLaborado()));
             $i++;
         }
 

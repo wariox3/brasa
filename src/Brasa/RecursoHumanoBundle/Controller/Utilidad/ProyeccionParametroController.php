@@ -149,6 +149,9 @@ class ProyeccionParametroController extends Controller
                             $ibpPrimas += $ibpPrimasInicial;
                             $ibpPrimas = round($ibpPrimas);
                             $salarioPromedioPrimas = 0;
+                            if($arContrato->getCodigoEmpleadoFk() == 5386) {
+                                echo "hola";
+                            }
                             if($arContrato->getCodigoSalarioTipoFk() == 2) {
                                 if($intDiasPrimaSalarioPromedio > 0) {
                                     //Se realiza para seracis
@@ -156,7 +159,7 @@ class ProyeccionParametroController extends Controller
                                         if($arConfiguracion->getPromedioPrimasLaboradoDias() > 0) {
                                             $intDiasPrima = $arConfiguracion->getPromedioPrimasLaboradoDias();
                                         }
-                                        $salarioPromedioPrimas = ($ibpPrimas / $intDiasPrima) * 30;
+                                        $salarioPromedioPrimas = ($ibpPrimas / ($intDiasPrima - 15)) * 30;
                                         if($salarioPromedioPrimas < $salarioMinimo) {
                                             $salarioPromedioPrimas = $salarioMinimo + $auxilioTransporte;
                                         }
