@@ -295,17 +295,22 @@ class ConfiguracionController extends Controller
         $request = $this->getRequest();
         if(!$em->getRepository('BrasaSeguridadBundle:SegUsuarioPermisoEspecial')->permisoEspecial($this->getUser(), 115)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));
-        }
+        }        
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        $form = $this->createFormBuilder()            
+        $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
+        $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->find(1);        
+        $form = $this->createFormBuilder()                     
+            ->add('promedioPrimasLaborado', 'checkbox', array('data' => $arConfiguracion->getPromedioPrimasLaborado(), 'required' => false))
+            ->add('promedioPrimasLaboradoDias', 'number', array('data' => $arConfiguracion->getPromedioPrimasLaboradoDias(), 'required' => true))                
             ->add('BtnGuardar', 'submit', array('label' => 'Guardar'))            
             ->add('BtnNuevo', 'submit', array('label' => 'Nuevo'))            
             ->add('BtnEliminar', 'submit', array('label' => 'Eliminar'))            
             ->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
-            if($form->get('BtnGuardar')->isClicked()) {                                            
+            if($form->get('BtnGuardar')->isClicked()) {                
                 $arrControles = $request->request->All();
+                $controles = $request->request->get('form');
                 foreach ($arrControles['LblCodigo'] as $codigo) {
                     $arParametroPrestacion = new \Brasa\RecursoHumanoBundle\Entity\RhuParametroPrestacion();
                     $arParametroPrestacion = $em->getRepository('BrasaRecursoHumanoBundle:RhuParametroPrestacion')->find($codigo);
@@ -330,7 +335,9 @@ class ConfiguracionController extends Controller
                         }                        
                         $em->persist($arParametroPrestacion);
                     }
-                }
+                }                
+                $arConfiguracion->setPromedioPrimasLaborado($controles['promedioPrimasLaborado']);
+                $arConfiguracion->setPromedioPrimasLaboradoDias($controles['promedioPrimasLaboradoDias']);
                 $em->flush();
             }
             
