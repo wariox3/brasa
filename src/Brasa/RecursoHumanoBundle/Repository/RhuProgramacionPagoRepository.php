@@ -689,6 +689,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 if($dateFechaDesde->format('m-d') == '06-30' || $dateFechaDesde->format('m-d') == '12-30') {
                     $intDiasPrimaLiquidar -= 1;
                     $intDiasSalrioPromedio -= 1;
+                    $intDiasPrima -= 1;
                 }
                 $ibpPrimasInicial = $arContrato->getIbpPrimasInicial();                    
                 $ibpPrimas = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->ibp($dateFechaDesde->format('Y-m-d'), $dateFechaHastaPago->format('Y-m-d'), $arContrato->getCodigoContratoPk());                
@@ -698,6 +699,9 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                     if($intDiasSalrioPromedio > 0) {
                         //Se realiza para seracis
                         if($arConfiguracion->getPromedioPrimasLaborado()) {
+                            if($arConfiguracion->getPromedioPrimasLaboradoDias() > 0) {
+                                $intDiasPrima = $arConfiguracion->getPromedioPrimasLaboradoDias();
+                            }                            
                             $salarioPromedioPrimas = ($ibpPrimas / $intDiasPrima) * 30;
                             if($salarioPromedioPrimas < $salarioMinimo) {
                                 $salarioPromedioPrimas = $salarioMinimo + $auxilioTransporte;
@@ -989,6 +993,7 @@ class RhuProgramacionPagoRepository extends EntityRepository {
             if($dateFechaDesde->format('m-d') == '06-30' || $dateFechaDesde->format('m-d') == '12-30') {
                 $intDiasPrimaLiquidar -= 1;
                 $intDiasSalrioPromedio -= 1;
+                $intDiasPrima -= 1;
             }
             $ibpPrimasInicial = $arContrato->getIbpPrimasInicial();                    
             $ibpPrimas = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->ibp($dateFechaDesde->format('Y-m-d'), $dateFechaHastaPago->format('Y-m-d'), $arContrato->getCodigoContratoPk());                
@@ -998,6 +1003,9 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 if($intDiasSalrioPromedio > 0) {
                     //Se realiza para seracis
                     if($arConfiguracion->getPromedioPrimasLaborado()) {
+                        if($arConfiguracion->getPromedioPrimasLaboradoDias() > 0) {
+                            $intDiasPrima = $arConfiguracion->getPromedioPrimasLaboradoDias();
+                        }                        
                         $salarioPromedioPrimas = ($ibpPrimas / $intDiasPrima) * 30;
                         if($salarioPromedioPrimas < $salarioMinimo) {
                             $salarioPromedioPrimas = $salarioMinimo + $auxilioTransporte;
