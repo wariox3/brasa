@@ -339,6 +339,12 @@ class RhuConfiguracion
     private $promedioPrimasLaborado = false;     
     
     /**
+     * Si estos dias tiene valor el sistema divide el promedio en estos dias
+     * @ORM\Column(name="promedio_primas_laborado_dias", type="integer")
+     */    
+    private $promedioPrimasLaboradoDias = 0;    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadRiesgoProfesional", inversedBy="configuracionEntidadRiesgoProfesionalRel")
      * @ORM\JoinColumn(name="codigo_entidad_riesgo_fk", referencedColumnName="codigo_entidad_riesgo_pk")
      */
@@ -1904,5 +1910,29 @@ class RhuConfiguracion
     public function getPromedioPrimasLaborado()
     {
         return $this->promedioPrimasLaborado;
+    }
+
+    /**
+     * Set promedioPrimasLaboradoDias
+     *
+     * @param integer $promedioPrimasLaboradoDias
+     *
+     * @return RhuConfiguracion
+     */
+    public function setPromedioPrimasLaboradoDias($promedioPrimasLaboradoDias)
+    {
+        $this->promedioPrimasLaboradoDias = $promedioPrimasLaboradoDias;
+
+        return $this;
+    }
+
+    /**
+     * Get promedioPrimasLaboradoDias
+     *
+     * @return integer
+     */
+    public function getPromedioPrimasLaboradoDias()
+    {
+        return $this->promedioPrimasLaboradoDias;
     }
 }
