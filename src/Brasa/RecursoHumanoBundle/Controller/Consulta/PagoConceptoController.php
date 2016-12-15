@@ -154,7 +154,7 @@ class PagoConceptoController extends Controller
             $arConsultaPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuConsultaPagoConcepto();
             $arConsultaPagoConcepto->setOrigen('VACACION');
             $arConsultaPagoConcepto->setNumero($arVacacionAdicional->getCodigoVacacionFk());            
-            $arConsultaPagoConcepto->setCodigoEmpleadoFk($arPagoDetalle->getVacacionRel()->getCodigoEmpleadoFk());
+            $arConsultaPagoConcepto->setCodigoEmpleadoFk($arVacacionAdicional->getVacacionRel()->getCodigoEmpleadoFk());
             $arConsultaPagoConcepto->setNumeroIdentificacion($arVacacionAdicional->getVacacionRel()->getEmpleadoRel()->getNumeroIdentificacion());
             $arConsultaPagoConcepto->setNombreCorto($arVacacionAdicional->getVacacionRel()->getEmpleadoRel()->getNombreCorto());
             $arConsultaPagoConcepto->setCodigoPagoConceptoFk($arVacacionAdicional->getCodigoPagoConceptoFk());
@@ -172,7 +172,7 @@ class PagoConceptoController extends Controller
             $arConsultaPagoConcepto = new \Brasa\RecursoHumanoBundle\Entity\RhuConsultaPagoConcepto();
             $arConsultaPagoConcepto->setOrigen('LIQUIDACION');
             $arConsultaPagoConcepto->setNumero($arLiquidacionAdicional->getCodigoLiquidacionFk());            
-            $arConsultaPagoConcepto->setCodigoEmpleadoFk($arPagoDetalle->getLiquidacionRel()->getCodigoEmpleadoFk());
+            $arConsultaPagoConcepto->setCodigoEmpleadoFk($arLiquidacionAdicional->getLiquidacionRel()->getCodigoEmpleadoFk());
             $arConsultaPagoConcepto->setNumeroIdentificacion($arLiquidacionAdicional->getLiquidacionRel()->getEmpleadoRel()->getNumeroIdentificacion());
             $arConsultaPagoConcepto->setNombreCorto($arLiquidacionAdicional->getLiquidacionRel()->getEmpleadoRel()->getNombreCorto());
             $arConsultaPagoConcepto->setCodigoPagoConceptoFk($arLiquidacionAdicional->getCodigoPagoConceptoFk());

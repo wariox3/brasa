@@ -335,8 +335,12 @@ class ConfiguracionController extends Controller
                         }                        
                         $em->persist($arParametroPrestacion);
                     }
+                } 
+                if(isset($controles['promedioPrimasLaborado'])) {
+                    $arConfiguracion->setPromedioPrimasLaborado(1);
+                } else {
+                    $arConfiguracion->setPromedioPrimasLaborado(0);
                 }                
-                $arConfiguracion->setPromedioPrimasLaborado($controles['promedioPrimasLaborado']);
                 $arConfiguracion->setPromedioPrimasLaboradoDias($controles['promedioPrimasLaboradoDias']);
                 $em->flush();
             }
