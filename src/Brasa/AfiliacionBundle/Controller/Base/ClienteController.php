@@ -63,8 +63,42 @@ class ClienteController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {
             $arCliente = $form->getData();                        
-            $em->persist($arCliente);
-            $em->flush();            
+            $em->persist($arCliente);            
+            $em->flush();
+            $nitClienteAfiliacion = $arCliente->getNit();
+            $arClienteCartera = $em->getRepository('BrasaCarteraBundle:CarCliente')->findOneBy(array('nit' => $nitClienteAfiliacion));
+            if ($arClienteCartera == null){
+                $arClienteNuevo = new \Brasa\CarteraBundle\Entity\CarCliente();
+                $arClienteNuevo->setNit($arCliente->getNit());
+                $arClienteNuevo->setAsesorRel($arCliente->getAsesorRel());
+                $arClienteNuevo->setCiudadRel($arCliente->getCiudadRel());
+                $arClienteNuevo->setDigitoVerificacion($arCliente->getDigitoVerificacion());
+                $arClienteNuevo->setNombreCorto($arCliente->getNombreCorto());
+                $arClienteNuevo->setFormaPagoRel($arCliente->getFormaPagoRel());
+                $arClienteNuevo->setPlazoPago($arCliente->getPlazoPago());
+                $arClienteNuevo->setDireccion($arCliente->getDireccion());
+                $arClienteNuevo->setCelular($arCliente->getCelular());
+                $arClienteNuevo->setTelefono($arCliente->getTelefono());
+                $arClienteNuevo->setFax($arCliente->getFax());
+                $arClienteNuevo->setEmail($arCliente->getEmail());
+                $em->persist($arClienteNuevo);            
+                $em->flush();
+            } else {
+                $arClienteCartera->setNit($arCliente->getNit());
+                $arClienteCartera->setAsesorRel($arCliente->getAsesorRel());
+                $arClienteCartera->setCiudadRel($arCliente->getCiudadRel());
+                $arClienteCartera->setDigitoVerificacion($arCliente->getDigitoVerificacion());
+                $arClienteCartera->setNombreCorto($arCliente->getNombreCorto());
+                $arClienteCartera->setFormaPagoRel($arCliente->getFormaPagoRel());
+                $arClienteCartera->setPlazoPago($arCliente->getPlazoPago());
+                $arClienteCartera->setDireccion($arCliente->getDireccion());
+                $arClienteCartera->setCelular($arCliente->getCelular());
+                $arClienteCartera->setTelefono($arCliente->getTelefono());
+                $arClienteCartera->setFax($arCliente->getFax());
+                $arClienteCartera->setEmail($arCliente->getEmail());
+                $em->persist($arClienteCartera);            
+                $em->flush();
+            }
             if($form->get('guardarnuevo')->isClicked()) {
                 return $this->redirect($this->generateUrl('brs_afi_base_cliente_nuevo', array('codigoCliente' => 0 )));
             } else {
