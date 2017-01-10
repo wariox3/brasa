@@ -82,11 +82,16 @@ class NovedadController extends Controller
                         $arContrato = new \Brasa\AfiliacionBundle\Entity\AfiContrato();
                         $arContrato = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->find($arEmpleado->getCodigoContratoActivo());                                                                
                         $arNovedad->setContratoRel($arContrato);
+                        $em->persist($arNovedad);
+                        $em->flush();
+                    } else {
+                        $objMensaje->Mensaje("error", "El empleado con numero identificacion " .$arrControles['txtNumeroIdentificacion'] ." no tiene contrato activo", $this);
+                        return $this->redirect($this->generateUrl('brs_afi_movimiento_novedad_nuevo', array('codigoNovedad' => 0 )));
                     }                    
                 }   
             }
-            $em->persist($arNovedad);
-            $em->flush();            
+            
+                        
             if($form->get('guardarnuevo')->isClicked()) {
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_novedad_nuevo', array('codigoNovedad' => 0 )));
             } else {

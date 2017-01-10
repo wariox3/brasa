@@ -14,6 +14,7 @@ class EmpleadoController extends Controller
     var $strDqlLista = "";     
     var $strCodigo = "";
     var $strNombre = "";
+    var $strIdentificacion = "";
     
     /**
      * @Route("/afi/buscar/empleado/{campoCodigo}/{campoNombre}", name="brs_afi_buscar_empleado")
@@ -44,14 +45,16 @@ class EmpleadoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiEmpleado')->listaDQL(
                 $this->strNombre,                
-                $this->strCodigo   
+                $this->strCodigo,
+                $this->strIdentificacion
                 ); 
     }       
     
     private function formularioLista() {                
         $form = $this->createFormBuilder()                                                
             ->add('TxtNombre', TextType::class, array('label'  => 'Nombre','data' => $this->strNombre))
-            ->add('TxtCodigo', TextType::class, array('label'  => 'Codigo','data' => $this->strCodigo))                            
+            ->add('TxtCodigo', TextType::class, array('label'  => 'Codigo','data' => $this->strCodigo))
+            ->add('TxtIdentificacion', TextType::class, array('label'  => 'Identificacion','data' => $this->strIdentificacion))
             ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
             ->getForm();        
         return $form;
@@ -62,6 +65,8 @@ class EmpleadoController extends Controller
         $request = $this->getRequest();
         $controles = $request->request->get('form');
         $this->strNombre = $form->get('TxtNombre')->getData();
+        $this->strCodigo = $form->get('TxtCodigo')->getData();
+        $this->strIdentificacion = $form->get('TxtIdentificacion')->getData();
     }    
           
 }

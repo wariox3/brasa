@@ -76,21 +76,26 @@ class AfiPeriodoRepository extends EntityRepository {
             $riesgos = 0;
             $sena = 0;
             $icbf = 0;
+            $empleado = $arContrato->getEmpleadoRel()->getNombreCorto();
+            $intDiasCotizarRiesgos = 0;
+            $intDiasVacaciones = 0;//$arPeriodoEmpleado->getDiasVacaciones();            
+            $intDiasVacaciones = $em->getRepository('BrasaAfiliacionBundle:AfiNovedad')->diasVacaciones($arPeriodo->getFechaDesde(), $arPeriodo->getFechaHasta(), $arContrato->getCodigoEmpleadoFk(), 9);
             if($arContrato->getGeneraPension() == 1) {
                 $pension = ($salarioPeriodo * $arContrato->getPorcentajePension())/100;
-                $pension = $this->redondearAporte($arContrato->getVrSalario(), $salarioPeriodo, $arContrato->getPorcentajePension(), $intDias, $salarioMinimo);
+                $pension = $this->redondearAporte($arContrato->getVrSalario(), $salarioPeriodo, $arContrato->getPorcentajePension(), $intDias, $salarioMinimo,"");
             }
             if($arContrato->getGeneraSalud() == 1) {
                 $salud = ($salarioPeriodo * $arContrato->getPorcentajeSalud())/100;
-                $salud = $this->redondearAporte($salarioPeriodo, $salarioPeriodo, $arContrato->getPorcentajeSalud(), $intDias, $salarioMinimo);
+                $salud = $this->redondearAporte($salarioPeriodo, $salarioPeriodo, $arContrato->getPorcentajeSalud(), $intDias, $salarioMinimo,"");
             }
             if($arContrato->getGeneraCaja() == 1) {
                 $caja = ($salarioPeriodo * $arContrato->getPorcentajeCaja())/100;
-                $caja = $this->redondearAporte($salarioPeriodo, $salarioPeriodo, $arContrato->getPorcentajeCaja(), $intDias, $salarioMinimo);
+                $caja = $this->redondearAporte($salarioPeriodo, $salarioPeriodo, $arContrato->getPorcentajeCaja(), $intDias, $salarioMinimo,"");
             }
             if($arContrato->getGeneraRiesgos() == 1) {
+                $intDiasCotizarRiesgos = $intDias - $intDiasVacaciones;
                 $riesgos = ($salarioPeriodo * $arContrato->getClasificacionRiesgoRel()->getPorcentaje())/100;
-                $riesgos = $this->redondearAporte($salarioPeriodo, $salarioPeriodo, $arContrato->getClasificacionRiesgoRel()->getPorcentaje(), $intDias, $salarioMinimo);
+                $riesgos = $this->redondearAporte($salarioPeriodo, $salarioPeriodo, $arContrato->getClasificacionRiesgoRel()->getPorcentaje(), $intDiasCotizarRiesgos, $salarioMinimo,$intDiasVacaciones);
             }            
 
             /*if($salarioPeriodo >= $salarioMinimo * 4) {
@@ -221,7 +226,7 @@ class AfiPeriodoRepository extends EntityRepository {
             $intDiasSuspension = $em->getRepository('BrasaAfiliacionBundle:AfiNovedad')->diasLicencia($arPeriodo->getFechaDesde(), $arPeriodo->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk(), 8);
             
             $floIbcIncapacidades = 0;
-            
+            $empleado = $arEmpleado->getNombreCorto();
             $intDiasIncapacidadGeneral = 0; 
             $intDiasIncapacidadGeneral = $em->getRepository('BrasaAfiliacionBundle:AfiNovedad')->diasLicencia($arPeriodo->getFechaDesde(), $arPeriodo->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk(), 1);
             $intDiasIncapacidadLaboral = 0; 
@@ -231,6 +236,7 @@ class AfiPeriodoRepository extends EntityRepository {
             $intDiasLicenciaMaternidad = $em->getRepository('BrasaAfiliacionBundle:AfiNovedad')->diasLicencia($arPeriodo->getFechaDesde(), $arPeriodo->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk(), 5);
             $intDiasVacaciones = 0;//$arPeriodoEmpleado->getDiasVacaciones();
             //$intDiasVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->diasVacacionesDisfrute($arPeriodo->getFechaDesde(), $arPeriodo->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk(), $arContrato->getCodigoContratoPk());
+            $intDiasVacaciones = $em->getRepository('BrasaAfiliacionBundle:AfiNovedad')->diasVacaciones($arPeriodo->getFechaDesde(), $arPeriodo->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk(), 9);
             $intDiasCotizarPension = $intDiasLicenciaNoRemunerada;
             $intDiasCotizarSalud = $intDiasLicenciaNoRemunerada;
             $intDiasCotizarRiesgos = $intDiasLicenciaNoRemunerada;
@@ -350,16 +356,16 @@ class AfiPeriodoRepository extends EntityRepository {
             $floCotizacionFSPSubsistencia = 0;            
             $floAporteVoluntarioFondoPensionesObligatorias = 0;
             $floCotizacionVoluntariaFondoPensionesObligatorias = 0;
-            $floCotizacionPension = $this->redondearAporte($floSalario, $floIbcPension, $floTarifaPension, $intDiasCotizarPension, $salarioMinimo);            
+            $floCotizacionPension = $this->redondearAporte($floSalario, $floIbcPension, $floTarifaPension, $intDiasCotizarPension, $salarioMinimo,"");            
             if($floSalario >= ($salarioMinimo * 4)) {
                 $floCotizacionFSPSolidaridad = round($floIbcPension * 0.005, -2, PHP_ROUND_HALF_DOWN);
                 $floCotizacionFSPSubsistencia = round($floIbcPension * 0.005, -2, PHP_ROUND_HALF_DOWN);
             }
-            $floCotizacionSalud = $this->redondearAporte($floSalario + $floSuplementario, $floIbcSalud, $floTarifaSalud, $intDiasCotizarSalud, $salarioMinimo);
-            $floCotizacionRiesgos = $this->redondearAporte($floSalario + $floSuplementario, $floIbcRiesgos, $floTarifaRiesgos, $intDiasCotizarRiesgos, $salarioMinimo);
-            $floCotizacionCaja = $this->redondearAporte($floSalario + $floSuplementario, $floIbcCaja, $floTarifaCaja, $intDiasCotizarCaja, $salarioMinimo);
-            $floCotizacionIcbf = $this->redondearAporte($floSalario + $floSuplementario, $floIbcCaja, $floTarifaIcbf, $intDiasCotizarCaja, $salarioMinimo);
-            $floCotizacionSena = $this->redondearAporte($floSalario + $floSuplementario, $floIbcCaja, $floTarifaSena, $intDiasCotizarCaja, $salarioMinimo);
+            $floCotizacionSalud = $this->redondearAporte($floSalario + $floSuplementario, $floIbcSalud, $floTarifaSalud, $intDiasCotizarSalud, $salarioMinimo,"");
+            $floCotizacionRiesgos = $this->redondearAporte($floSalario + $floSuplementario, $floIbcRiesgos, $floTarifaRiesgos, $intDiasCotizarRiesgos, $salarioMinimo,"");
+            $floCotizacionCaja = $this->redondearAporte($floSalario + $floSuplementario, $floIbcCaja, $floTarifaCaja, $intDiasCotizarCaja, $salarioMinimo,"");
+            $floCotizacionIcbf = $this->redondearAporte($floSalario + $floSuplementario, $floIbcCaja, $floTarifaIcbf, $intDiasCotizarCaja, $salarioMinimo,"");
+            $floCotizacionSena = $this->redondearAporte($floSalario + $floSuplementario, $floIbcCaja, $floTarifaSena, $intDiasCotizarCaja, $salarioMinimo,"");
             $floTotalCotizacionFondos = $floAporteVoluntarioFondoPensionesObligatorias + $floCotizacionVoluntariaFondoPensionesObligatorias + $floCotizacionPension;
             $floTotalFondoSolidaridad = $floCotizacionFSPSolidaridad + $floCotizacionFSPSubsistencia;
             $arPeriodoDetallePago->setAporteVoluntarioFondoPensionesObligatorias($floAporteVoluntarioFondoPensionesObligatorias);
@@ -482,16 +488,16 @@ class AfiPeriodoRepository extends EntityRepository {
                 $floCotizacionFSPSubsistencia = 0; 
                 $floAporteVoluntarioFondoPensionesObligatorias = 0;
                 $floCotizacionVoluntariaFondoPensionesObligatorias = 0;
-                $floCotizacionPension = $this->redondearAporte($floSalario + $floSuplementario, $floIbcPension, $floTarifaPension, $intDiasCotizarPension, $salarioMinimo);            
+                $floCotizacionPension = $this->redondearAporte($floSalario + $floSuplementario, $floIbcPension, $floTarifaPension, $intDiasCotizarPension, $salarioMinimo,"");            
                 if($floSalario >= ($salarioMinimo * 4)) {
                     //$floCotizacionFSPSolidaridad = 0;
                     //$floCotizacionFSPSubsistencia = 0;
                     $floCotizacionFSPSolidaridad = round($floIbcPension * 0.005, -2, PHP_ROUND_HALF_DOWN);
                     $floCotizacionFSPSubsistencia = round($floIbcPension * 0.005, -2, PHP_ROUND_HALF_DOWN);
                 }
-                $floCotizacionSalud = $this->redondearAporte($floSalario + $floSuplementario, $floIbcSalud, $floTarifaSalud, $intDiasCotizarSalud, $salarioMinimo);
-                $floCotizacionRiesgos = $this->redondearAporte($floSalario + $floSuplementario, $floIbcRiesgos, $floTarifaRiesgos, $intDiasCotizarRiesgos, $salarioMinimo);
-                $floCotizacionCaja = $this->redondearAporte($floSalario + $floSuplementario, $floIbcCaja, $floTarifaCaja, $intDiasCotizarCaja, $salarioMinimo);
+                $floCotizacionSalud = $this->redondearAporte($floSalario + $floSuplementario, $floIbcSalud, $floTarifaSalud, $intDiasCotizarSalud, $salarioMinimo,"");
+                $floCotizacionRiesgos = $this->redondearAporte($floSalario + $floSuplementario, $floIbcRiesgos, $floTarifaRiesgos, $intDiasCotizarRiesgos, $salarioMinimo,"");
+                $floCotizacionCaja = $this->redondearAporte($floSalario + $floSuplementario, $floIbcCaja, $floTarifaCaja, $intDiasCotizarCaja, $salarioMinimo,"");
                 $floTotalCotizacionFondos = $floAporteVoluntarioFondoPensionesObligatorias + $floCotizacionVoluntariaFondoPensionesObligatorias + $floCotizacionPension;
                 $floTotalFondoSolidaridad = $floCotizacionFSPSolidaridad + $floCotizacionFSPSubsistencia;
                 $arPeriodoDetallePago->setAporteVoluntarioFondoPensionesObligatorias($floAporteVoluntarioFondoPensionesObligatorias);
@@ -618,7 +624,7 @@ class AfiPeriodoRepository extends EntityRepository {
         return $floIbcBruto;
     }     
     
-    public function redondearAporte($floIbcTotal, $floIbc, $floTarifa, $intDias, $salarioMinimo) {
+    public function redondearAporte($floIbcTotal, $floIbc, $floTarifa, $intDias, $salarioMinimo, $intDiasVacaciones) {
         $floTarifa = $floTarifa / 100;
         $floIbcBruto = ($floIbcTotal / 30) * $intDias;        
         $floCotizacionRedondeada = round($floIbc * $floTarifa, -2, PHP_ROUND_HALF_DOWN);        
@@ -643,7 +649,13 @@ class AfiPeriodoRepository extends EntityRepository {
                 $floCotizacion = ceil($floCotizacionRedondeada);                                
             }
         } else {
-            $floCotizacion = $floCotizacionRedondeada;
+            
+            if ($intDiasVacaciones == 0){
+                $floCotizacion = $floCotizacionRedondeada;
+            } else {
+                $floCotizacion = $floCotizacionMinimo;
+            }
+            
         }
         return $floCotizacion;
     }
