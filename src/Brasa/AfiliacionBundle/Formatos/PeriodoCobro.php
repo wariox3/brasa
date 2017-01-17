@@ -196,7 +196,7 @@ class PeriodoCobro extends \FPDF_FPDF {
         }
             $pdf->SetFont('Arial', 'B', 7);
             $pdf->Cell(218, 5, "SUBTOTAL:", 0, 0, 'R');
-            $pdf->Cell(15, 5, number_format('3468354',0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(15, 5, number_format($var3,0, '.', ','), 1, 0, 'R');
             
             $pdf->Cell(10, 5, "TOTAL:", 0, 0, 'R');
             $pdf->Cell(15, 5, number_format($var,0, '.', ','), 1, 0, 'R');
