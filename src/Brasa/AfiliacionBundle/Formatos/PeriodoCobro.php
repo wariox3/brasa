@@ -174,10 +174,26 @@ class PeriodoCobro extends \FPDF_FPDF {
                 $pdf->Cell(8, 4, $arPeriodoDetalle->getDias(), 1, 0, 'L');
                 $pdf->Cell(15, 4, number_format($arPeriodoDetalle->getSalario(), 0, '.', ','), 1, 0, 'R');
                 $pdf->Cell(15, 4, $arPeriodoDetalle->getContratoRel()->getFechaDesde()->format('Y-m-d'), 1, 0, 'L');
-                $pdf->Cell(30, 4, utf8_decode(substr($arPeriodoDetalle->getContratoRel()->getEntidadPensionRel()->getNombre(),0,18)), 1, 0, 'L');
-                $pdf->Cell(30, 4, utf8_decode(substr($arPeriodoDetalle->getContratoRel()->getEntidadSaludRel()->getNombre(),0,22)), 1, 0, 'L');
-                $pdf->Cell(20, 4, utf8_decode($arPeriodoDetalle->getContratoRel()->getClasificacionRiesgoRel()->getNombre()), 1, 0, 'L');
-                $pdf->Cell(15, 4, utf8_decode(substr($arPeriodoDetalle->getContratoRel()->getEntidadCajaRel()->getNombre(),0,10)), 1, 0, 'L');
+                if ($arPeriodoDetalle->getContratoRel()->getGeneraPension() == 1){
+                    $pdf->Cell(30, 4, utf8_decode(substr($arPeriodoDetalle->getContratoRel()->getEntidadPensionRel()->getNombre(),0,18)), 1, 0, 'L');
+                } else {
+                    $pdf->Cell(30, 4, "SIN PENSION", 1, 0, 'L');
+                }
+                if ($arPeriodoDetalle->getContratoRel()->getGeneraPension() == 1){
+                    $pdf->Cell(30, 4, utf8_decode(substr($arPeriodoDetalle->getContratoRel()->getEntidadSaludRel()->getNombre(),0,22)), 1, 0, 'L');
+                } else {
+                    $pdf->Cell(30, 4, "SIN SALUD", 1, 0, 'L');
+                }                
+                if ($arPeriodoDetalle->getContratoRel()->getGeneraRiesgos() == 1){
+                    $pdf->Cell(20, 4, utf8_decode($arPeriodoDetalle->getContratoRel()->getClasificacionRiesgoRel()->getNombre()), 1, 0, 'L');
+                } else {
+                    $pdf->Cell(20, 4, "SIN RIESGO", 1, 0, 'L');
+                }
+                if ($arPeriodoDetalle->getContratoRel()->getGeneraCaja() == 1){
+                    $pdf->Cell(15, 4, utf8_decode(substr($arPeriodoDetalle->getContratoRel()->getEntidadCajaRel()->getNombre(),0,10)), 1, 0, 'L');
+                } else {
+                    $pdf->Cell(15, 4, "SIN CAJA", 1, 0, 'L');
+                }                
                 $pdf->SetFont('Arial', '', 7);
                 $pdf->Cell(11, 4, number_format($arPeriodoDetalle->getAdministracion(), 0, '.', ','), 1, 0, 'R');
                 $pdf->Cell(15, 4, number_format($arPeriodoDetalle->getSubtotal(), 0, '.', ','), 1, 0, 'R');
