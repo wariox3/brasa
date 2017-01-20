@@ -179,7 +179,7 @@ class PeriodoCobro extends \FPDF_FPDF {
                 } else {
                     $pdf->Cell(30, 4, "SIN PENSION", 1, 0, 'L');
                 }
-                if ($arPeriodoDetalle->getContratoRel()->getGeneraPension() == 1){
+                if ($arPeriodoDetalle->getContratoRel()->getGeneraSalud() == 1){
                     $pdf->Cell(30, 4, utf8_decode(substr($arPeriodoDetalle->getContratoRel()->getEntidadSaludRel()->getNombre(),0,22)), 1, 0, 'L');
                 } else {
                     $pdf->Cell(30, 4, "SIN SALUD", 1, 0, 'L');
