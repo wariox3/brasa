@@ -200,16 +200,18 @@ class ClienteController extends Controller
                     ->setCellValue('C1', 'NOMBRE')
                     ->setCellValue('D1', 'FORMAPAGO')
                     ->setCellValue('E1', 'PLAZO')
-                    ->setCellValue('F1', 'DIRECCION')
-                    ->setCellValue('G1', 'BARRIO')
-                    ->setCellValue('H1', 'CIUDAD')
-                    ->setCellValue('I1', 'TELEFONO')
-                    ->setCellValue('J1', 'CELULAR')
-                    ->setCellValue('K1', 'FAX')
-                    ->setCellValue('L1', 'EMAIL')
-                    ->setCellValue('M1', 'CONTACTO')
-                    ->setCellValue('N1', 'CELCONTACTO')
-                    ->setCellValue('O1', 'TELCONTACTO');
+                    ->setCellValue('F1', 'ADMINISTRACION')
+                    ->setCellValue('G1', 'AFILIACION')
+                    ->setCellValue('H1', 'DIRECCION')
+                    ->setCellValue('I1', 'BARRIO')
+                    ->setCellValue('J1', 'CIUDAD')
+                    ->setCellValue('K1', 'TELEFONO')
+                    ->setCellValue('L1', 'CELULAR')
+                    ->setCellValue('M1', 'FAX')
+                    ->setCellValue('N1', 'EMAIL')
+                    ->setCellValue('O1', 'CONTACTO')
+                    ->setCellValue('P1', 'CELCONTACTO')
+                    ->setCellValue('Q1', 'TELCONTACTO');
 
         $i = 2;
         
@@ -224,16 +226,18 @@ class ClienteController extends Controller
                     ->setCellValue('C' . $i, $arCliente->getNombreCorto())
                     ->setCellValue('D' . $i, $arCliente->getFormaPagoRel()->getNombre())
                     ->setCellValue('E' . $i, $arCliente->getPlazoPago())
-                    ->setCellValue('F' . $i, $arCliente->getDireccion())
-                    ->setCellValue('G' . $i, $arCliente->getBarrio())
-                    ->setCellValue('H' . $i, $arCliente->getCiudadRel()->getNombre())
-                    ->setCellValue('I' . $i, $arCliente->getTelefono())
-                    ->setCellValue('J' . $i, $arCliente->getCelular())
-                    ->setCellValue('K' . $i, $arCliente->getFax())
-                    ->setCellValue('L' . $i, $arCliente->getEmail())
-                    ->setCellValue('M' . $i, $arCliente->getContacto())
-                    ->setCellValue('N' . $i, $arCliente->getCelularContacto())
-                    ->setCellValue('O' . $i, $arCliente->getTelefonoContacto());                                    
+                    ->setCellValue('F' . $i, $arCliente->getAdministracion())
+                    ->setCellValue('G' . $i, $arCliente->getAfiliacion())
+                    ->setCellValue('H' . $i, $arCliente->getDireccion())
+                    ->setCellValue('I' . $i, $arCliente->getBarrio())
+                    ->setCellValue('J' . $i, $arCliente->getCiudadRel()->getNombre())
+                    ->setCellValue('K' . $i, $arCliente->getTelefono())
+                    ->setCellValue('L' . $i, $arCliente->getCelular())
+                    ->setCellValue('M' . $i, $arCliente->getFax())
+                    ->setCellValue('N' . $i, $arCliente->getEmail())
+                    ->setCellValue('O' . $i, $arCliente->getContacto())
+                    ->setCellValue('P' . $i, $arCliente->getCelularContacto())
+                    ->setCellValue('Q' . $i, $arCliente->getTelefonoContacto());                                    
             $i++;
         }
         
