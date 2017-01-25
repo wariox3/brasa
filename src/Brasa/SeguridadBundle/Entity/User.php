@@ -11,7 +11,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
  *
  * @ORM\Table(name="users")
  * @ORM\Entity(repositoryClass="Brasa\SeguridadBundle\Entity\UserRepository")
- * @DoctrineAssert\UniqueEntity(fields={"email"},message="Ya existe este correo") 
  */
 class User implements UserInterface, \Serializable
 {
@@ -44,7 +43,7 @@ class User implements UserInterface, \Serializable
     private $password;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true)
+     * @ORM\Column(type="string", length=255)
      */
     private $email;
 

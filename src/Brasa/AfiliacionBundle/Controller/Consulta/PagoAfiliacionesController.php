@@ -63,7 +63,7 @@ class PagoAfiliacionesController extends Controller
                 ); 
     }       
 
-    private function filtrar (Request $request, $form) {        
+    private function filtrar ($form) {        
         $session = new session;
         $request = $this->getRequest();
         $controles = $request->request->get('form');

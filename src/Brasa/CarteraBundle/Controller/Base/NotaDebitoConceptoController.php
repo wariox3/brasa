@@ -27,6 +27,9 @@ class NotaDebitoConceptoController extends Controller
         if ($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if ($form->get('BtnEliminar')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 115, 3)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaCarteraBundle:CarNotaDebitoConcepto')->eliminar($arrSeleccionados);
                 return $this->redirect($this->generateUrl('brs_cartera_base_notadebito_concepto_listar'));
@@ -55,8 +58,15 @@ class NotaDebitoConceptoController extends Controller
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arNotaDebitoConcepto = new \Brasa\CarteraBundle\Entity\CarNotaDebitoConcepto();
         if($codigoNotaDebitoConcepto != '' && $codigoNotaDebitoConcepto != '0') {
+            if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 115, 3)) {
+                return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+            }
             $arNotaDebitoConcepto = $em->getRepository('BrasaCarteraBundle:CarNotaDebitoConcepto')->find($codigoNotaDebitoConcepto);
-        }        
+        } else {
+            if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 115, 3)) {
+                return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+            }
+        }       
         $form = $this->createForm(new CarNotaDebitoConceptoType, $arNotaDebitoConcepto);
         $form->handleRequest($request);
         if ($form->isValid()) {

@@ -20,7 +20,7 @@ class UserType extends AbstractType
             ->add('nombreCorto', 'text', array('required' => true))
             ->add('username', 'text', array('required' => true))                
             ->add('email', 'text', array('required' => true))                
-            ->add('password', 'password', array('required' => true))            
+            ->add('password', 'text', array('required' => true))            
             ->add('guardar', 'submit', array('label' => 'Guardar'));
     }
 

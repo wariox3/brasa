@@ -30,6 +30,9 @@ class ClienteController extends Controller
         if ($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if ($form->get('BtnEliminar')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 115, 3)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaAfiliacionBundle:AfiCliente')->eliminar($arrSeleccionados);
                 return $this->redirect($this->generateUrl('brs_afi_base_cliente'));
@@ -57,8 +60,15 @@ class ClienteController extends Controller
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arCliente = new \Brasa\AfiliacionBundle\Entity\AfiCliente();
         if($codigoCliente != '' && $codigoCliente != '0') {
+            if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 115, 3)) {
+                return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+            }
             $arCliente = $em->getRepository('BrasaAfiliacionBundle:AfiCliente')->find($codigoCliente);
-        }        
+        } else {
+            if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 115, 2)) {
+                return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+            }
+        }       
         $form = $this->createForm(new AfiClienteType, $arCliente);
         $form->handleRequest($request);
         if ($form->isValid()) {

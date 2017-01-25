@@ -28,6 +28,9 @@ class ClienteController extends Controller
         if ($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if ($form->get('BtnEliminar')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 115, 3)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaCarteraBundle:CarCliente')->eliminar($arrSeleccionados);
                 return $this->redirect($this->generateUrl('brs_cartera_base_cliente_listar'));
@@ -56,7 +59,14 @@ class ClienteController extends Controller
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arCliente = new \Brasa\CarteraBundle\Entity\CarCliente();
         if($codigoCliente != '' && $codigoCliente != '0') {
+            if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 115, 3)) {
+                return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+            }
             $arCliente = $em->getRepository('BrasaCarteraBundle:CarCliente')->find($codigoCliente);
+        } else {
+            if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 115, 3)) {
+                return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+            }
         }        
         $form = $this->createForm(new CarClienteType, $arCliente);
         $form->handleRequest($request);

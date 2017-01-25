@@ -27,6 +27,9 @@ class ReciboTipoController extends Controller
         if ($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if ($form->get('BtnEliminar')->isClicked()) {
+                if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 115, 3)) {
+                    return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+                }
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $em->getRepository('BrasaCarteraBundle:CarReciboTipo')->eliminar($arrSeleccionados);
                 return $this->redirect($this->generateUrl('brs_cartera_base_recibo_tipo_listar'));
@@ -55,7 +58,14 @@ class ReciboTipoController extends Controller
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arReciboTipo = new \Brasa\CarteraBundle\Entity\CarReciboTipo();
         if($codigoReciboTipo != '' && $codigoReciboTipo != '0') {
+            if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 115, 3)) {
+                return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+            }
             $arReciboTipo = $em->getRepository('BrasaCarteraBundle:CarReciboTipo')->find($codigoReciboTipo);
+        } else {
+            if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 115, 3)) {
+                return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
+            }
         }        
         $form = $this->createForm(new CarReciboTipoType, $arReciboTipo);
         $form->handleRequest($request);
