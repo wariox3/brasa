@@ -69,12 +69,12 @@ class EmpleadoController extends Controller
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         $arEmpleado = new \Brasa\AfiliacionBundle\Entity\AfiEmpleado();
         if($codigoEmpleado != '' && $codigoEmpleado != '0') {
-            if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 115, 3)) {
+            if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 122, 3)) {
                 return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
             }
             $arEmpleado = $em->getRepository('BrasaAfiliacionBundle:AfiEmpleado')->find($codigoEmpleado);
         } else {
-            if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 115, 2)) {
+            if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 122, 2)) {
                 return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
             }
             $arEmpleado->setFechaNacimiento(new \DateTime('now'));
