@@ -54,6 +54,7 @@
                             <th>DESAUTORIZAR</th>
                             <th>APROBAR</th>
                             <th>ANULAR</th>
+                            <th>IMPRIMIR</th>
                             <th></th>
                             <th align="center"><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodosTabla(this, 'ChkSeleccionarPermisoDocumento[]');"/></th>
                         </tr>
@@ -71,6 +72,7 @@
                                 <td>{% if arPermisosDocumentos.desautorizar  == 1%} SI {% else %}NO{% endif%}</td>
                                 <td>{% if arPermisosDocumentos.aprobar  == 1%} SI {% else %}NO{% endif%}</td>
                                 <td>{% if arPermisosDocumentos.anular  == 1%} SI {% else %}NO{% endif%}</td>
+                                <td>{% if arPermisosDocumentos.imprimir  == 1%} SI {% else %}NO{% endif%}</td>
                                 <td><a href="javascript:abrirVentana3('{{ path('brs_seg_usuario_detalle_permiso_documento_editar', {'codigoPermisoDocumento': arPermisosDocumentos.codigoPermisoDocumentoPk }) }}', 'editarPermisoDocumento', 600, 900)"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                                                                        
                                 <td style="text-align: center"><input type="checkbox" name="ChkSeleccionarPermisoDocumento[]" value="{{ arPermisosDocumentos.codigoPermisoDocumentoPk }}" /></td>
                             </tr>
