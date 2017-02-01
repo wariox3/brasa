@@ -731,10 +731,20 @@ class AfiPeriodoRepository extends EntityRepository {
                 $dateFechaHasta = $fechaFinalizaContrato;
             }
         }
+        $diafebrero = 0;
         if($dateFechaDesde != "" && $dateFechaHasta != "") {
             $intDias = $dateFechaDesde->diff($dateFechaHasta);
             $intDias = $intDias->format('%a');
-            $intDiasDevolver = $intDias + 1;                    
+            $febrero = $dateFechaHasta->format('m');
+            if ($febrero == 02){
+                $dia = $dateFechaHasta->format('d');
+                if ($dia == 28){
+                    $diafebrero = 2;
+                } else {
+                    $diafebrero = 1;
+                }
+            }
+            $intDiasDevolver = $intDias + 1 + $diafebrero;                    
         }         
         return $intDiasDevolver;
     }
