@@ -131,6 +131,7 @@ class AfiPeriodoRepository extends EntityRepository {
             $arPeriodoDetalle->setAportesFondoSolidaridadPensionalSubsistencia($floCotizacionFSPSubsistencia);
             $arPeriodoDetalle->setSubtotal($subtotal);
             $arPeriodoDetalle->setIva($iva);
+            $arPeriodoDetalle->setPorcentajeIva($arConfiguracion->getPorcentajeIva());
             $arPeriodoDetalle->setTotal($total);
             if($arContrato->getFechaDesde() >= $arPeriodo->getFechaDesde()) {
                 $arPeriodoDetalle->setIngreso(1);

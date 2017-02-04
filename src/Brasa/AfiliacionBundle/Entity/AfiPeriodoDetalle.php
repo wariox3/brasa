@@ -98,6 +98,11 @@ class AfiPeriodoDetalle
     private $subtotal = 0;    
     
     /**
+     * @ORM\Column(name="porcentaje_iva", type="float")
+     */
+    private $porcentajeIva = 0;    
+    
+    /**
      * @ORM\Column(name="iva", type="float")
      */
     private $iva = 0;
@@ -726,5 +731,29 @@ class AfiPeriodoDetalle
     public function getContratoRel()
     {
         return $this->contratoRel;
+    }
+
+    /**
+     * Set porcentajeIva
+     *
+     * @param float $porcentajeIva
+     *
+     * @return AfiPeriodoDetalle
+     */
+    public function setPorcentajeIva($porcentajeIva)
+    {
+        $this->porcentajeIva = $porcentajeIva;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentajeIva
+     *
+     * @return float
+     */
+    public function getPorcentajeIva()
+    {
+        return $this->porcentajeIva;
     }
 }

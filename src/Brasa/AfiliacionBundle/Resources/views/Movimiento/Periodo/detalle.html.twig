@@ -78,6 +78,7 @@
                             <th>ICBF</th>
                             <th>ADMIN</th>
                             <th>SUBTOTAL</th>
+                            <th>%IVA</th>
                             <th>IVA</th>
                             <th>TOTAL</th>
                             <th align="center"><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodosTabla(this,'ChkSeleccionar[]');"/></th>
@@ -99,6 +100,7 @@
                             <td style="text-align: right">{{ arPeriodoDetalles.icbf | number_format(0, '.', ',') }}</td>
                             <td style="text-align: right">{{ arPeriodoDetalles.administracion | number_format(0, '.', ',') }}</td>
                             <td style="text-align: right">{{ arPeriodoDetalles.subtotal | number_format(0, '.', ',') }}</td>
+                            <td style="text-align: right">{{ arPeriodoDetalles.porcentajeIva | number_format(0, '.', ',') }}</td>
                             <td style="text-align: right">{{ arPeriodoDetalles.iva | number_format(0, '.', ',') }}</td>
                             <td style="text-align: right">{{ arPeriodoDetalles.total | number_format(0, '.', ',') }}</td>
                             <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arPeriodoDetalles.codigoPeriodoDetallePk }}" /></td>
