@@ -97,11 +97,19 @@ class AfiPeriodoRepository extends EntityRepository {
                 $riesgos = ($salarioPeriodo * $arContrato->getClasificacionRiesgoRel()->getPorcentaje())/100;
                 $riesgos = $this->redondearAporte($salarioPeriodo, $salarioPeriodo, $arContrato->getClasificacionRiesgoRel()->getPorcentaje(), $intDiasCotizarRiesgos, $salarioMinimo,$intDiasVacaciones);
             }            
-
-            /*if($salarioPeriodo >= $salarioMinimo * 4) {
-                $icbf = ($salarioPeriodo * $porcentajeIcbf)/100;
-                $sena = ($salarioPeriodo * $porcentajeSena)/100;
-            }*/
+            if($arContrato->getGeneraSena() == 1) {
+                if($salarioPeriodo >= $salarioMinimo ) {
+                    //$icbf = ($salarioPeriodo * $porcentajeIcbf)/100;
+                    $sena = ($salarioPeriodo * $porcentajeSena)/100;
+                }
+            }
+            if($arContrato->getGeneraIcbf() == 1) {
+                if($salarioPeriodo >= $salarioMinimo ) {
+                    $icbf = ($salarioPeriodo * $porcentajeIcbf)/100;
+                    //$sena = ($salarioPeriodo * $porcentajeSena)/100;
+                }
+            }
+            
             $floCotizacionFSPSolidaridad = 0;
             $floCotizacionFSPSubsistencia = 0;
             if($salarioPeriodo >= ($salarioMinimo * 4)) {
@@ -125,6 +133,10 @@ class AfiPeriodoRepository extends EntityRepository {
             $arPeriodoDetalle->setPension($pension);
             $arPeriodoDetalle->setSalud($salud);
             $arPeriodoDetalle->setCaja($caja);
+            
+            $arPeriodoDetalle->setIcbf($icbf);
+            $arPeriodoDetalle->setSena($sena);
+            
             $arPeriodoDetalle->setRiesgos($riesgos);
             $arPeriodoDetalle->setAdministracion($administracion);
             $arPeriodoDetalle->setAportesFondoSolidaridadPensionalSolidaridad($floCotizacionFSPSolidaridad);
@@ -333,10 +345,16 @@ class AfiPeriodoRepository extends EntityRepository {
             if($arContrato->getCodigoTipoCotizanteFk() == 19 || $arContrato->getCodigoTipoCotizanteFk() == 12) {
                 $floTarifaSalud = 12.5;
             }
-            if((($floSalario + $floSuplementario) > (10 * $salarioMinimo))) {
-                $floTarifaSalud = 12.5;  
-                $floTarifaIcbf = 3;
-                $floTarifaSena = 2;                
+            if((($floSalario + $floSuplementario) >= ($salarioMinimo))) {
+                //$floTarifaSalud = 12.5;
+                if ($arContrato->getGeneraIcbf() == 1){
+                    $floTarifaIcbf = 3;
+                }
+                if ($arContrato->getGeneraSena() == 1){
+                    $floTarifaSena = 2;                
+                }
+                //$floTarifaIcbf = 3;
+                //$floTarifaSena = 2;                
             }
             if ($floIbcRiesgos == 0){
                 $floTarifaRiesgos = 0;
