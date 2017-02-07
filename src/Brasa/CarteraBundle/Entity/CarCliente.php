@@ -59,12 +59,12 @@ class CarCliente
     private $codigoCiudadFk;         
     
     /**
-     * @ORM\Column(name="telefono", type="string", length=30, nullable=true)
+     * @ORM\Column(name="telefono", type="string", length=40, nullable=true)
      */
     private $telefono;     
     
     /**
-     * @ORM\Column(name="celular", type="string", length=20, nullable=true, nullable=true)
+     * @ORM\Column(name="celular", type="string", length=40, nullable=true, nullable=true)
      */
     private $celular;    
         
@@ -125,6 +125,7 @@ class CarCliente
      * @ORM\OneToMany(targetEntity="CarAnticipo", mappedBy="clienteRel")
      */
     protected $anticiposClienteRel;
+    
     
     
     /**
