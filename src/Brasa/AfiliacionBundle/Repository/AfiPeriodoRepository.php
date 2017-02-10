@@ -80,6 +80,9 @@ class AfiPeriodoRepository extends EntityRepository {
             $intDiasCotizarRiesgos = 0;
             $intDiasVacaciones = 0;//$arPeriodoEmpleado->getDiasVacaciones();            
             $intDiasVacaciones = $em->getRepository('BrasaAfiliacionBundle:AfiNovedad')->diasVacaciones($arPeriodo->getFechaDesde(), $arPeriodo->getFechaHasta(), $arContrato->getCodigoEmpleadoFk(), 9);
+            $intDiasIncacidadLaboral = 0;//$arPeriodoEmpleado->getDiasVacaciones();            
+            $intDiasIncacidadLaboral = $em->getRepository('BrasaAfiliacionBundle:AfiNovedad')->diasLicencia($arPeriodo->getFechaDesde(), $arPeriodo->getFechaHasta(), $arContrato->getCodigoEmpleadoFk(), 2);
+            
             if($arContrato->getGeneraPension() == 1) {
                 $pension = ($salarioPeriodo * $arContrato->getPorcentajePension())/100;
                 $pension = $this->redondearAporte($arContrato->getVrSalario(), $salarioPeriodo, $arContrato->getPorcentajePension(), $intDias, $salarioMinimo,"");
@@ -89,13 +92,29 @@ class AfiPeriodoRepository extends EntityRepository {
                 $salud = $this->redondearAporte($salarioPeriodo, $salarioPeriodo, $arContrato->getPorcentajeSalud(), $intDias, $salarioMinimo,"");
             }
             if($arContrato->getGeneraCaja() == 1) {
-                $caja = ($salarioPeriodo * $arContrato->getPorcentajeCaja())/100;
-                $caja = $this->redondearAporte($salarioPeriodo, $salarioPeriodo, $arContrato->getPorcentajeCaja(), $intDias, $salarioMinimo,"");
+                $dias = $intDias - $intDiasIncacidadLaboral;
+                if ($dias < 0){
+                    $dias = 0;
+                }
+                if ($dias == 0) {
+                    $caja = 0;
+                } else {
+                    $caja = ($salarioPeriodo * $arContrato->getPorcentajeCaja())/100;
+                    $caja = $this->redondearAporte($salarioPeriodo, $salarioPeriodo, $arContrato->getPorcentajeCaja(), $dias, $salarioMinimo,"");
+                }
+                
             }
             if($arContrato->getGeneraRiesgos() == 1) {
-                $intDiasCotizarRiesgos = $intDias - $intDiasVacaciones;
-                $riesgos = ($salarioPeriodo * $arContrato->getClasificacionRiesgoRel()->getPorcentaje())/100;
-                $riesgos = $this->redondearAporte($salarioPeriodo, $salarioPeriodo, $arContrato->getClasificacionRiesgoRel()->getPorcentaje(), $intDiasCotizarRiesgos, $salarioMinimo,$intDiasVacaciones);
+                $dias = $intDias - $intDiasIncacidadLaboral;                
+                if ($dias < 0){
+                    $dias = 0;
+                }
+                if ($dias == 0) {
+                    $riesgos = 0;
+                } else {
+                    $riesgos = ($salarioPeriodo * $arContrato->getClasificacionRiesgoRel()->getPorcentaje())/100;
+                    $riesgos = $this->redondearAporte($salarioPeriodo, $salarioPeriodo, $arContrato->getClasificacionRiesgoRel()->getPorcentaje(), $intDiasCotizarRiesgos, $salarioMinimo,$intDiasVacaciones);
+                }                
             }            
             if($arContrato->getGeneraSena() == 1) {
                 if($salarioPeriodo >= $salarioMinimo ) {
