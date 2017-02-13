@@ -82,7 +82,18 @@ class AfiPeriodoRepository extends EntityRepository {
             $intDiasVacaciones = $em->getRepository('BrasaAfiliacionBundle:AfiNovedad')->diasVacaciones($arPeriodo->getFechaDesde(), $arPeriodo->getFechaHasta(), $arContrato->getCodigoEmpleadoFk(), 9);
             $intDiasIncacidadLaboral = 0;//$arPeriodoEmpleado->getDiasVacaciones();            
             $intDiasIncacidadLaboral = $em->getRepository('BrasaAfiliacionBundle:AfiNovedad')->diasLicencia($arPeriodo->getFechaDesde(), $arPeriodo->getFechaHasta(), $arContrato->getCodigoEmpleadoFk(), 2);
-            
+            $intDiasIncacidadGeneral = 0;//$arPeriodoEmpleado->getDiasVacaciones();            
+            $intDiasIncacidadGeneral = $em->getRepository('BrasaAfiliacionBundle:AfiNovedad')->diasLicencia($arPeriodo->getFechaDesde(), $arPeriodo->getFechaHasta(), $arContrato->getCodigoEmpleadoFk(), 1);
+            $intDiasLicenciaNoRemunerada = 0;//$arPeriodoEmpleado->getDiasVacaciones();            
+            $intDiasLicenciaNoRemunerada = $em->getRepository('BrasaAfiliacionBundle:AfiNovedad')->diasLicencia($arPeriodo->getFechaDesde(), $arPeriodo->getFechaHasta(), $arContrato->getCodigoEmpleadoFk(), 3);
+            $intDiasLicenciaMaternidad = 0;//$arPeriodoEmpleado->getDiasVacaciones();            
+            $intDiasLicenciaMaternidad = $em->getRepository('BrasaAfiliacionBundle:AfiNovedad')->diasLicencia($arPeriodo->getFechaDesde(), $arPeriodo->getFechaHasta(), $arContrato->getCodigoEmpleadoFk(), 5);
+            $intDiasLicenciaPaternidad = 0;//$arPeriodoEmpleado->getDiasVacaciones();            
+            $intDiasLicenciaPaternidad = $em->getRepository('BrasaAfiliacionBundle:AfiNovedad')->diasLicencia($arPeriodo->getFechaDesde(), $arPeriodo->getFechaHasta(), $arContrato->getCodigoEmpleadoFk(), 6);
+            $intDiasLicenciaLuto = 0;//$arPeriodoEmpleado->getDiasVacaciones();            
+            $intDiasLicenciaLuto = $em->getRepository('BrasaAfiliacionBundle:AfiNovedad')->diasLicencia($arPeriodo->getFechaDesde(), $arPeriodo->getFechaHasta(), $arContrato->getCodigoEmpleadoFk(), 7);
+            $intDiasAusentimo = 0;//$arPeriodoEmpleado->getDiasVacaciones();            
+            $intDiasAusentimo = $em->getRepository('BrasaAfiliacionBundle:AfiNovedad')->diasLicencia($arPeriodo->getFechaDesde(), $arPeriodo->getFechaHasta(), $arContrato->getCodigoEmpleadoFk(), 8);
             if($arContrato->getGeneraPension() == 1) {
                 $pension = ($salarioPeriodo * $arContrato->getPorcentajePension())/100;
                 $pension = $this->redondearAporte($arContrato->getVrSalario(), $salarioPeriodo, $arContrato->getPorcentajePension(), $intDias, $salarioMinimo,"");
@@ -92,7 +103,7 @@ class AfiPeriodoRepository extends EntityRepository {
                 $salud = $this->redondearAporte($salarioPeriodo, $salarioPeriodo, $arContrato->getPorcentajeSalud(), $intDias, $salarioMinimo,"");
             }
             if($arContrato->getGeneraCaja() == 1) {
-                $dias = $intDias - $intDiasIncacidadLaboral;
+                $dias = $intDias - $intDiasIncacidadLaboral - $intDiasIncacidadGeneral - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad - $intDiasLicenciaPaternidad - $intDiasAusentimo - $intDiasLicenciaLuto;
                 if ($dias < 0){
                     $dias = 0;
                 }
@@ -105,7 +116,7 @@ class AfiPeriodoRepository extends EntityRepository {
                 
             }
             if($arContrato->getGeneraRiesgos() == 1) {
-                $dias = $intDias - $intDiasIncacidadLaboral;                
+                $dias = $intDias - $intDiasIncacidadLaboral - $intDiasIncacidadGeneral - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad - $intDiasLicenciaPaternidad - $intDiasAusentimo - $intDiasLicenciaLuto - $intDiasVacaciones;                
                 if ($dias < 0){
                     $dias = 0;
                 }
@@ -113,7 +124,7 @@ class AfiPeriodoRepository extends EntityRepository {
                     $riesgos = 0;
                 } else {
                     $riesgos = ($salarioPeriodo * $arContrato->getClasificacionRiesgoRel()->getPorcentaje())/100;
-                    $riesgos = $this->redondearAporte($salarioPeriodo, $salarioPeriodo, $arContrato->getClasificacionRiesgoRel()->getPorcentaje(), $intDiasCotizarRiesgos, $salarioMinimo,$intDiasVacaciones);
+                    $riesgos = $this->redondearAporte($salarioPeriodo, $salarioPeriodo, $arContrato->getClasificacionRiesgoRel()->getPorcentaje(), $dias, $salarioMinimo,'');
                 }                
             }            
             if($arContrato->getGeneraSena() == 1) {
@@ -259,6 +270,8 @@ class AfiPeriodoRepository extends EntityRepository {
             
             $floIbcIncapacidades = 0;
             $empleado = $arEmpleado->getNombreCorto();
+            $intDiasLicenciaLuto = 0;//$arPeriodoEmpleado->getDiasLicencia();
+            $intDiasLicenciaLuto = $em->getRepository('BrasaAfiliacionBundle:AfiNovedad')->diasLicencia($arPeriodo->getFechaDesde(), $arPeriodo->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk(), 7);
             $intDiasIncapacidadGeneral = 0; 
             $intDiasIncapacidadGeneral = $em->getRepository('BrasaAfiliacionBundle:AfiNovedad')->diasLicencia($arPeriodo->getFechaDesde(), $arPeriodo->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk(), 1);
             $intDiasIncapacidadLaboral = 0; 
@@ -266,6 +279,8 @@ class AfiPeriodoRepository extends EntityRepository {
             $intDiasIncapacidades = $intDiasIncapacidadGeneral + $intDiasIncapacidadLaboral;//$arPeriodoEmpleado->getDiasIncapacidadGeneral() + $arPeriodoEmpleado->getDiasIncapacidadLaboral();
             $intDiasLicenciaMaternidad = 0;//$arPeriodoEmpleado->getDiasLicenciaMaternidad();
             $intDiasLicenciaMaternidad = $em->getRepository('BrasaAfiliacionBundle:AfiNovedad')->diasLicencia($arPeriodo->getFechaDesde(), $arPeriodo->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk(), 5);
+            $intDiasLicenciaPaternidad = 0;//$arPeriodoEmpleado->getDiasLicenciaMaternidad();
+            $intDiasLicenciaPaternidad = $em->getRepository('BrasaAfiliacionBundle:AfiNovedad')->diasLicencia($arPeriodo->getFechaDesde(), $arPeriodo->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk(), 6);
             $intDiasVacaciones = 0;//$arPeriodoEmpleado->getDiasVacaciones();
             //$intDiasVacaciones = $em->getRepository('BrasaRecursoHumanoBundle:RhuVacacion')->diasVacacionesDisfrute($arPeriodo->getFechaDesde(), $arPeriodo->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk(), $arContrato->getCodigoContratoPk());
             $intDiasVacaciones = $em->getRepository('BrasaAfiliacionBundle:AfiNovedad')->diasVacaciones($arPeriodo->getFechaDesde(), $arPeriodo->getFechaHasta(), $arEmpleado->getCodigoEmpleadoPk(), 9);
@@ -309,8 +324,8 @@ class AfiPeriodoRepository extends EntityRepository {
             $intDiasCotizar = $this->diasContrato($arPeriodo, $arContrato);            
             $intDiasCotizarPension = $intDiasCotizar - $intDiasLicenciaNoRemunerada - $intDiasSuspension;
             $intDiasCotizarSalud = $intDiasCotizar - $intDiasLicenciaNoRemunerada - $intDiasSuspension;
-            $intDiasCotizarRiesgos = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad - $intDiasVacaciones - $intDiasSuspension;
-            $intDiasCotizarCaja = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad - $intDiasSuspension;
+            $intDiasCotizarRiesgos = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad - $intDiasVacaciones - $intDiasSuspension - $intDiasLicenciaLuto - $intDiasLicenciaPaternidad;
+            $intDiasCotizarCaja = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad - $intDiasSuspension - $intDiasLicenciaLuto - $intDiasLicenciaPaternidad;
             if($arContrato->getCodigoTipoCotizanteFk() == '19' || $arContrato->getCodigoTipoCotizanteFk() == '12' || $arContrato->getCodigoTipoCotizanteFk() == '23') {
                 $intDiasCotizarPension = 0;
                 $intDiasCotizarCaja = 0;
@@ -687,12 +702,16 @@ class AfiPeriodoRepository extends EntityRepository {
                 $floCotizacion = ceil($floCotizacionRedondeada);                                
             }
         } else {
-            
-            if ($intDiasVacaciones == 0){
-                $floCotizacion = $floCotizacionRedondeada;
+            if ($intDiasVacaciones != ""){
+                if ($intDiasVacaciones == 0){
+                    $floCotizacion = $floCotizacionRedondeada;
+                } else {
+                    $floCotizacion = $floCotizacionMinimo;
+                }
             } else {
                 $floCotizacion = $floCotizacionMinimo;
             }
+            
             
         }
         return $floCotizacion;
