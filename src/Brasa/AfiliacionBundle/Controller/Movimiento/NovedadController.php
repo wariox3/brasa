@@ -78,7 +78,7 @@ class NovedadController extends Controller
                 $arEmpleado = $em->getRepository('BrasaAfiliacionBundle:AfiEmpleado')->findOneBy(array('numeroIdentificacion' => $arrControles['txtNumeroIdentificacion']));                                        
                 if(count($arEmpleado) > 0) {
                     $arNovedad->setEmpleadoRel($arEmpleado);
-                    if($arEmpleado->getCodigoContratoActivo()) {
+                    if($arEmpleado->getEstadoActivo() == 1) {
                         $arContrato = new \Brasa\AfiliacionBundle\Entity\AfiContrato();
                         $arContrato = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->find($arEmpleado->getCodigoContratoActivo());                                                                
                         $arNovedad->setContratoRel($arContrato);
