@@ -341,6 +341,14 @@ class AfiPeriodoRepository extends EntityRepository {
                 $intDiasCotizarCaja = 0;
                 
             }
+            if ($arContrato->getGeneraCaja() == 0){ // sin caja
+                $intDiasCotizarCaja = 0;
+                
+            }
+            if ($arContrato->getGeneraRiesgos() == 0){ // sin caja
+                $intDiasCotizarRiesgos = 0;
+                
+            }
             $arPeriodoDetallePago->setDiasCotizadosPension($intDiasCotizarPension);
             $arPeriodoDetallePago->setDiasCotizadosSalud($intDiasCotizarSalud);
             $arPeriodoDetallePago->setDiasCotizadosRiesgosProfesionales($intDiasCotizarRiesgos);
@@ -709,7 +717,7 @@ class AfiPeriodoRepository extends EntityRepository {
                     $floCotizacion = $floCotizacionMinimo;
                 }
             } else {
-                $floCotizacion = $floCotizacionMinimo;
+                $floCotizacion = $floCotizacionRedondeada;//$floCotizacionMinimo;
             }
             
             
