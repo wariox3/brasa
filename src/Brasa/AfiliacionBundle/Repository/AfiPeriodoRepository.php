@@ -111,7 +111,7 @@ class AfiPeriodoRepository extends EntityRepository {
                     $caja = 0;
                 } else {
                     $caja = ($salarioPeriodo * $arContrato->getPorcentajeCaja())/100;
-                    $caja = $this->redondearAporte($salarioPeriodo, $salarioPeriodo, $arContrato->getPorcentajeCaja(), $dias, $salarioMinimo,"");
+                    $caja = $this->redondearAporte($salarioPeriodo, $salarioPeriodo, $arContrato->getPorcentajeCaja(), $dias, $salarioMinimo,"");                    
                 }
                 
             }
@@ -124,7 +124,14 @@ class AfiPeriodoRepository extends EntityRepository {
                     $riesgos = 0;
                 } else {
                     $riesgos = ($salarioPeriodo * $arContrato->getClasificacionRiesgoRel()->getPorcentaje())/100;
+                    /*if ($dias != 30){
+                        $floTarifa = $arContrato->getClasificacionRiesgoRel()->getPorcentaje();
+                        $riesgos = $this->redondearAporteMinimo($floTarifa, $intDias, $salarioMinimo);
+                    } else {
+                        $riesgos = $this->redondearAporte($salarioPeriodo, $salarioPeriodo, $arContrato->getClasificacionRiesgoRel()->getPorcentaje(), $dias, $salarioMinimo,'');
+                    }*/
                     $riesgos = $this->redondearAporte($salarioPeriodo, $salarioPeriodo, $arContrato->getClasificacionRiesgoRel()->getPorcentaje(), $dias, $salarioMinimo,'');
+                    
                 }                
             }            
             if($arContrato->getGeneraSena() == 1) {
@@ -717,7 +724,12 @@ class AfiPeriodoRepository extends EntityRepository {
                     $floCotizacion = $floCotizacionMinimo;
                 }
             } else {
-                $floCotizacion = $floCotizacionRedondeada;//$floCotizacionMinimo;
+                if ($intDias == 30){
+                    $floCotizacion = $floCotizacionRedondeada;//$floCotizacionMinimo;
+                } else {
+                    $floCotizacion = $floCotizacionMinimo;
+                }
+                
             }
             
             
