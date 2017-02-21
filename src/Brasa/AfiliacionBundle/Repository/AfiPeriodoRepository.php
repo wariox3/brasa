@@ -727,7 +727,7 @@ class AfiPeriodoRepository extends EntityRepository {
                 if ($intDias == 30){
                     $floCotizacion = $floCotizacionRedondeada;//$floCotizacionMinimo;
                 } else {
-                    $floCotizacion = $floCotizacionRedondeada;
+                    $floCotizacion = $floCotizacionMinimo;
                 }
                 
             }
