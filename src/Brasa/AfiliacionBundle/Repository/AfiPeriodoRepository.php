@@ -94,8 +94,9 @@ class AfiPeriodoRepository extends EntityRepository {
             $intDiasLicenciaLuto = $em->getRepository('BrasaAfiliacionBundle:AfiNovedad')->diasLicencia($arPeriodo->getFechaDesde(), $arPeriodo->getFechaHasta(), $arContrato->getCodigoEmpleadoFk(), 7);
             $intDiasAusentimo = 0;//$arPeriodoEmpleado->getDiasVacaciones();            
             $intDiasAusentimo = $em->getRepository('BrasaAfiliacionBundle:AfiNovedad')->diasLicencia($arPeriodo->getFechaDesde(), $arPeriodo->getFechaHasta(), $arContrato->getCodigoEmpleadoFk(), 8);
-            if($arContrato->getGeneraPension() == 1) {
+            if($arContrato->getGeneraPension() == 1) {                
                 $pension = ($salarioPeriodo * $arContrato->getPorcentajePension())/100;
+                $salarioPeriodo = $this->redondearIbc($intDias, $salarioPeriodo, $salarioMinimo);
                 $pension = $this->redondearAporte($arContrato->getVrSalario(), $salarioPeriodo, $arContrato->getPorcentajePension(), $intDias, $salarioMinimo,"");
             }
             if($arContrato->getGeneraSalud() == 1) {
@@ -123,13 +124,7 @@ class AfiPeriodoRepository extends EntityRepository {
                 if ($dias == 0) {
                     $riesgos = 0;
                 } else {
-                    $riesgos = ($salarioPeriodo * $arContrato->getClasificacionRiesgoRel()->getPorcentaje())/100;
-                    /*if ($dias != 30){
-                        $floTarifa = $arContrato->getClasificacionRiesgoRel()->getPorcentaje();
-                        $riesgos = $this->redondearAporteMinimo($floTarifa, $intDias, $salarioMinimo);
-                    } else {
-                        $riesgos = $this->redondearAporte($salarioPeriodo, $salarioPeriodo, $arContrato->getClasificacionRiesgoRel()->getPorcentaje(), $dias, $salarioMinimo,'');
-                    }*/
+                    $riesgos = ($salarioPeriodo * $arContrato->getClasificacionRiesgoRel()->getPorcentaje())/100;                    
                     $riesgos = $this->redondearAporte($salarioPeriodo, $salarioPeriodo, $arContrato->getClasificacionRiesgoRel()->getPorcentaje(), $dias, $salarioMinimo,'');
                     
                 }                
@@ -717,23 +712,31 @@ class AfiPeriodoRepository extends EntityRepository {
                 $floCotizacion = ceil($floCotizacionRedondeada);                                
             }
         } else {
-            if ($intDiasVacaciones != ""){
-                if ($intDiasVacaciones == 0){
-                    $floCotizacion = $floCotizacionRedondeada;
+            if ($floIbc <= $salarioMinimo){
+                $floCotizacion = $floCotizacionMinimo;
+                $floResiduo2 = fmod($floCotizacion, 100);
+                if($floResiduo2 > 50) {
+                    $floCotizacion = intval($floCotizacion/100) * 100 + 100;
                 } else {
-                    $floCotizacion = $floCotizacionMinimo;
+                    $floCotizacion =  $floCotizacion - $floResiduo2;
                 }
             } else {
-                if ($intDias == 30){
-                    $floCotizacion = $floCotizacionRedondeada;//$floCotizacionMinimo;
+                if($floResiduo > 50) {
+                    $floCotizacionRedondeada = intval($floCotizacionIBC/100) * 100 + 100;
                 } else {
-                    $floCotizacion = $floCotizacionMinimo;
+                    if($floCotizacionIBC - $floResiduo >= $floCotizacionCalculada) {
+                        $floCotizacionRedondeada = $floCotizacionIBC - $floResiduo;
+                    } else {
+                        $floCotizacionRedondeada = $floCotizacionIBC;
+                    }
                 }
-                
+                if(round($floCotizacionRedondeada) >= $floCotizacionCalculada) {
+                    $floCotizacion = round($floCotizacionRedondeada);
+                } else {
+                    $floCotizacion = ceil($floCotizacionRedondeada);                                
+                }                
             }
-            
-            
-        }
+        } 
         return $floCotizacion;
     }
 
