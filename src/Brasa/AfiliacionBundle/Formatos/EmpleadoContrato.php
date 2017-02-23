@@ -349,10 +349,10 @@ class EmpleadoContrato extends \FPDF_FPDF {
             }
             $this->Cell(49, 5, utf8_decode($caja), 1, 0, 'L', 1);
             $this->SetFont('Arial','B',7);
-            $this->Cell(19, 5, '', 1, 0, 'L', 1);
+            $this->Cell(19, 5, 'CODIGO: ', 1, 0, 'L', 1);
             $this->SetFont('Arial','',7);
 
-            $this->Cell(47, 5, "", 1, 0, 'L', 1);
+            $this->Cell(47, 5, $arContrato->getCodigoContratoPk(), 1, 0, 'L', 1);
             $this->SetFont('Arial','B',7);
             $this->Cell(17, 5, '' , 1, 0, 'L', 1);
             $this->SetFont('Arial','',7);
