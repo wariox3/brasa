@@ -130,16 +130,16 @@ class AfiPeriodoRepository extends EntityRepository {
                 }                
             }            
             if($arContrato->getGeneraSena() == 1) {
-                if($salarioPeriodo >= $salarioMinimo ) {
+                //if($salarioPeriodo >= $salarioMinimo ) {
                     //$icbf = ($salarioPeriodo * $porcentajeIcbf)/100;
                     $sena = ($salarioPeriodo * $porcentajeSena)/100;
-                }
+                //}
             }
             if($arContrato->getGeneraIcbf() == 1) {
-                if($salarioPeriodo >= $salarioMinimo ) {
+                //if($salarioPeriodo >= $salarioMinimo ) {
                     $icbf = ($salarioPeriodo * $porcentajeIcbf)/100;
                     //$sena = ($salarioPeriodo * $porcentajeSena)/100;
-                }
+                //}
             }
             
             $floCotizacionFSPSolidaridad = 0;
