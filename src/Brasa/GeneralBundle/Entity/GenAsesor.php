@@ -45,7 +45,12 @@ class GenAsesor
     /**
      * @ORM\Column(name="email", type="string", length=80, nullable=true)
      */
-    private $email;    
+    private $email;
+
+    /**
+     * @ORM\Column(name="estado", type="boolean")
+     */    
+    private $estado = false;
 
     /**
      * @ORM\OneToMany(targetEntity="Brasa\CarteraBundle\Entity\CarCliente", mappedBy="asesorRel")
@@ -447,5 +452,29 @@ class GenAsesor
     public function getCarAnticiposAsesorRel()
     {
         return $this->carAnticiposAsesorRel;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return GenAsesor
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 }

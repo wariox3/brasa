@@ -17,6 +17,7 @@
             <th>TELÉFONO</th>
             <th>CELULAR</th>
             <th>EMAIL</th>
+            <th>ESTADO</th>
             <th></th>
             <th></th>
         </tr>
@@ -30,6 +31,7 @@
                 <td>{{arAsesores.telefono}}</td>
                 <td>{{arAsesores.celular}}</td>
                 <td>{{arAsesores.email}}</td>
+                <td>{% if arAsesores.estado == 1%}SI {% else %}NO {% endif %}</td>
                 <td><a href="{{ path('brs_gen_base_asesor_nuevo',{'codigoAsesor': arAsesores.codigoAsesorPk})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>
                 <td><input type="checkbox" name="ChkSeleccionar[]" value="{{ arAsesores.codigoAsesorPk }}" /></td>
             {%endfor%}

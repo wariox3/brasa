@@ -29,6 +29,7 @@ class AfiClienteType extends AbstractType
                 'class' => 'BrasaGeneralBundle:GenAsesor',
                 'query_builder' => function (EntityRepository $er)  {
                     return $er->createQueryBuilder('a')
+                    ->where('a.estado = 1')        
                     ->orderBy('a.nombre', 'ASC');},
                 'choice_label' => 'nombre',
                 'required' => true))                            
