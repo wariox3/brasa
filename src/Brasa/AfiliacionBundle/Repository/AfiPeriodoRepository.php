@@ -824,7 +824,10 @@ class AfiPeriodoRepository extends EntityRepository {
                     $diafebrero = 1;
                 }
             }
-            $intDiasDevolver = $intDias + 1 + $diafebrero;                    
+            $intDiasDevolver = $intDias + 1 + $diafebrero;
+            if ($intDiasDevolver <= 27 && $febrero == 02){
+                $intDiasDevolver = $intDiasDevolver - 1;
+            }
         }         
         return $intDiasDevolver;
     }
