@@ -825,7 +825,8 @@ class PeriodoController extends Controller
                 $session->get('filtroCodigoCliente'),
                 $session->get('filtroPeriodoEstadoCerrado'),
                 $session->get('filtroDesde'),
-                $session->get('filtroHasta')
+                $session->get('filtroHasta'),
+                $session->get('filtroPeriodoEstadoCerrado')
                 );
     }
 
@@ -847,6 +848,7 @@ class PeriodoController extends Controller
         $session = new session;
         $session->set('filtroNit', $form->get('TxtNit')->getData());
         $session->set('filtroPeriodoEstadoCerrado', $form->get('estadoCerrado')->getData());
+        $session->set('filtroPeriodoEstadoFacturado', $form->get('estadoFacturado')->getData());
         $fechaDesde = $form->get('fechaDesde')->getData();
         $fechaHasta = $form->get('fechaHasta')->getData();
         if ($form->get('fechaDesde')->getData() == null || $form->get('fechaHasta')->getData() == null){
@@ -879,6 +881,7 @@ class PeriodoController extends Controller
             ->add('TxtNit', TextType::class, array('label'  => 'Nit','data' => $session->get('filtroNit')))
             ->add('TxtNombreCliente', TextType::class, array('label'  => 'NombreCliente','data' => $strNombreCliente))
             ->add('estadoCerrado', ChoiceType::class, array('choices'   => array('2' => 'TODOS', '1' => 'CERRADO', '0' => 'SIN CERRAR'), 'data' => $session->get('filtroPeriodoEstadoCerrado')))
+            ->add('estadoFacturado', ChoiceType::class, array('choices'   => array('2' => 'TODOS', '1' => 'FACTURADO', '0' => 'SIN FACTURAR'), 'data' => $session->get('filtroPeriodoEstadoFacturado')))
             ->add('fechaDesde', DateType::class, array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('fechaHasta', DateType::class, array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
             ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar',))

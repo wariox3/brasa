@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityRepository;
 
 class AfiPeriodoRepository extends EntityRepository {  
     
-    public function listaDql($codigoCliente = "", $boolEstadoCerrado = "", $strDesde = "", $strHasta = "") {
+    public function listaDql($codigoCliente = "", $boolEstadoCerrado = "", $strDesde = "", $strHasta = "", $boolEstadoFacturado = "") {
         $em = $this->getEntityManager();
         $dql   = "SELECT p,c FROM BrasaAfiliacionBundle:AfiPeriodo p JOIN p.clienteRel c WHERE p.codigoPeriodoPk <> 0";        
         if($codigoCliente != "" ) {
@@ -24,6 +24,12 @@ class AfiPeriodoRepository extends EntityRepository {
         if($strHasta != "") {
             $dql .= " AND p.fechaDesde <='" . $strHasta . "'";
         }
+        if($boolEstadoFacturado == 1 ) {
+            $dql .= " AND p.estadoFacturado = 1";
+        }
+        if($boolEstadoFacturado == "0") {
+            $dql .= " AND p.estadoFacturado = 0";
+        }        
         $dql .= " ORDER BY c.nombreCorto asc";
         return $dql;
     }            
