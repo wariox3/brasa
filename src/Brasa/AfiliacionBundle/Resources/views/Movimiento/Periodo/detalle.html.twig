@@ -70,6 +70,7 @@
                             <th>ING</th>
                             <th>DIAS</th>
                             <th>SALARIO</th>
+                            <th>IBC</th>
                             <th>PENSION</th>
                             <th>SALUD</th>
                             <th>CAJA</th>
@@ -92,6 +93,7 @@
                             <td>{% if arPeriodoDetalles.ingreso == 1 %} SI {% else %} NO {% endif %}</td>
                             <td style="text-align: right">{{ arPeriodoDetalles.dias | number_format(0, '.', ',') }}</td>
                             <td style="text-align: right">{{ arPeriodoDetalles.salario | number_format(0, '.', ',') }}</td>
+                            <td style="text-align: right">{{ arPeriodoDetalles.ibc | number_format(0, '.', ',') }}</td>
                             <td style="text-align: right">{{ arPeriodoDetalles.pension | number_format(0, '.', ',') }}</td>
                             <td style="text-align: right">{{ arPeriodoDetalles.salud | number_format(0, '.', ',') }}</td>
                             <td style="text-align: right">{{ arPeriodoDetalles.caja | number_format(0, '.', ',') }}</td>

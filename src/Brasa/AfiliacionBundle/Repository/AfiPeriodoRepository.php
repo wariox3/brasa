@@ -67,13 +67,11 @@ class AfiPeriodoRepository extends EntityRepository {
         $totalGeneral = 0;
         $arContratos = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->contratosPeriodo($arPeriodo->getFechaDesde()->format('Y/m/d'), $arPeriodo->getFechaHasta()->format('Y/m/d'), $arPeriodo->getCodigoClienteFk());      
         $numeroContratos = count($arContratos);
-        foreach($arContratos as $arContrato) {
-            
-            //$arContrato = new \Brasa\AfiliacionBundle\Entity\AfiContrato();            
+        foreach($arContratos as $arContrato) {       
             $porcentajeIcbf = 3;
             $porcentajeSena = 2;
             $intDias = $this->diasContrato($arPeriodo, $arContrato);
-            $salario = $arContrato->getVrSalario();
+            $salario = $arContrato->getVrSalario();            
             $vrDia = $salario / 30;
             $salarioPeriodo = $vrDia * $intDias;
             $pension = 0;
@@ -101,13 +99,13 @@ class AfiPeriodoRepository extends EntityRepository {
             $intDiasAusentimo = 0;//$arPeriodoEmpleado->getDiasVacaciones();            
             $intDiasAusentimo = $em->getRepository('BrasaAfiliacionBundle:AfiNovedad')->diasLicencia($arPeriodo->getFechaDesde(), $arPeriodo->getFechaHasta(), $arContrato->getCodigoEmpleadoFk(), 8);
             if($arContrato->getGeneraPension() == 1) {                
-                $pension = ($salarioPeriodo * $arContrato->getPorcentajePension())/100;
-                $salarioPeriodo = $this->redondearIbc($intDias, $salarioPeriodo, $salarioMinimo);
-                $pension = $this->redondearAporte($arContrato->getVrSalario(), $salarioPeriodo, $arContrato->getPorcentajePension(), $intDias, $salarioMinimo,"");
+                $salarioPeriodo = $this->redondearIbc2($salarioPeriodo);
+                $pension = ($salarioPeriodo * $arContrato->getPorcentajePension())/100;                
+                $pension = $this->redondearAporte2($pension);
             }
             if($arContrato->getGeneraSalud() == 1) {
                 $salud = ($salarioPeriodo * $arContrato->getPorcentajeSalud())/100;
-                $salud = $this->redondearAporte($salarioPeriodo, $salarioPeriodo, $arContrato->getPorcentajeSalud(), $intDias, $salarioMinimo,"");
+                $salud = $this->redondearAporte2($salud);
             }
             if($arContrato->getGeneraCaja() == 1) {
                 $dias = $intDias - $intDiasIncacidadLaboral - $intDiasIncacidadGeneral - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad - $intDiasLicenciaPaternidad - $intDiasAusentimo - $intDiasLicenciaLuto;
@@ -118,7 +116,7 @@ class AfiPeriodoRepository extends EntityRepository {
                     $caja = 0;
                 } else {
                     $caja = ($salarioPeriodo * $arContrato->getPorcentajeCaja())/100;
-                    $caja = $this->redondearAporte($salarioPeriodo, $salarioPeriodo, $arContrato->getPorcentajeCaja(), $dias, $salarioMinimo,"");                    
+                    $caja = $this->redondearAporte2($caja);                    
                 }
                 
             }
@@ -131,7 +129,7 @@ class AfiPeriodoRepository extends EntityRepository {
                     $riesgos = 0;
                 } else {
                     $riesgos = ($salarioPeriodo * $arContrato->getClasificacionRiesgoRel()->getPorcentaje())/100;                    
-                    $riesgos = $this->redondearAporte($salarioPeriodo, $salarioPeriodo, $arContrato->getClasificacionRiesgoRel()->getPorcentaje(), $dias, $salarioMinimo,'');
+                    $riesgos = $this->redondearAporte2($riesgos);
                     
                 }                
             }            
@@ -168,6 +166,7 @@ class AfiPeriodoRepository extends EntityRepository {
             $arPeriodoDetalle->setFechaHasta($arPeriodo->getFechaHasta());           
             $arPeriodoDetalle->setDias($intDias);
             $arPeriodoDetalle->setSalario($arContrato->getVrSalario());
+            $arPeriodoDetalle->setIbc($salarioPeriodo);
             $arPeriodoDetalle->setPension($pension);
             $arPeriodoDetalle->setSalud($salud);
             $arPeriodoDetalle->setCaja($caja);
@@ -668,6 +667,11 @@ class AfiPeriodoRepository extends EntityRepository {
         $em->flush();        
     }
     
+    public function redondearIbc2($ibc) {
+        $ibcRedondeado = round($ibc, -3);
+        return $ibcRedondeado;
+    }
+    
     public function redondearIbc($intDias, $floIbcBruto, $salarioMinimo) {
         $floIbc = 0;       
         $floIbcRedondedado = round($floIbcBruto, -3, PHP_ROUND_HALF_DOWN);
@@ -782,6 +786,11 @@ class AfiPeriodoRepository extends EntityRepository {
         }
         return $douCotizacion;
     } 
+
+    public function redondearAporte2($aporte) {
+        $aporteRedondeado = round($aporte);
+        return $aporteRedondeado;
+    }
     
     public function diasContrato($arPeriodo, $arContrato) {        
         $dateFechaDesde =  "";

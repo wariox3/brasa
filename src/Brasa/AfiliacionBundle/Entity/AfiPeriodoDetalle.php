@@ -53,6 +53,11 @@ class AfiPeriodoDetalle
     private $salario = 0;             
 
     /**
+     * @ORM\Column(name="ibc", type="float")
+     */
+    private $ibc = 0;    
+    
+    /**
      * @ORM\Column(name="salud", type="float")
      */
     private $salud = 0;
@@ -755,5 +760,29 @@ class AfiPeriodoDetalle
     public function getPorcentajeIva()
     {
         return $this->porcentajeIva;
+    }
+
+    /**
+     * Set ibc
+     *
+     * @param float $ibc
+     *
+     * @return AfiPeriodoDetalle
+     */
+    public function setIbc($ibc)
+    {
+        $this->ibc = $ibc;
+
+        return $this;
+    }
+
+    /**
+     * Get ibc
+     *
+     * @return float
+     */
+    public function getIbc()
+    {
+        return $this->ibc;
     }
 }
