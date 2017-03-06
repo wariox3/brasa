@@ -122,6 +122,11 @@ class AfiPeriodoDetalle
      */    
     private $ingreso = 0;
 
+    /**     
+     * @ORM\Column(name="retiro", type="boolean")
+     */    
+    private $retiro = 0;    
+    
     /**
      * @ORM\Column(name="aportes_fondo_solidaridad_pensional_solidaridad", type="float")
      */
@@ -784,5 +789,29 @@ class AfiPeriodoDetalle
     public function getIbc()
     {
         return $this->ibc;
+    }
+
+    /**
+     * Set retiro
+     *
+     * @param boolean $retiro
+     *
+     * @return AfiPeriodoDetalle
+     */
+    public function setRetiro($retiro)
+    {
+        $this->retiro = $retiro;
+
+        return $this;
+    }
+
+    /**
+     * Get retiro
+     *
+     * @return boolean
+     */
+    public function getRetiro()
+    {
+        return $this->retiro;
     }
 }

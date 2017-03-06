@@ -68,6 +68,7 @@
                             <th>HASTA</th>
                             <th>EMPLEADO</th>
                             <th>ING</th>
+                            <th>RET</th>
                             <th>DIAS</th>
                             <th>SALARIO</th>
                             <th>IBC</th>
@@ -91,6 +92,7 @@
                             <td>{{ arPeriodoDetalles.fechaHasta |date('Y/m/d') }}</td>
                             <td>{{ arPeriodoDetalles.empleadoRel.nombreCorto }}</td>
                             <td>{% if arPeriodoDetalles.ingreso == 1 %} SI {% else %} NO {% endif %}</td>
+                            <td>{% if arPeriodoDetalles.retiro == 1 %} SI {% else %} NO {% endif %}</td>
                             <td style="text-align: right">{{ arPeriodoDetalles.dias | number_format(0, '.', ',') }}</td>
                             <td style="text-align: right">{{ arPeriodoDetalles.salario | number_format(0, '.', ',') }}</td>
                             <td style="text-align: right">{{ arPeriodoDetalles.ibc | number_format(0, '.', ',') }}</td>

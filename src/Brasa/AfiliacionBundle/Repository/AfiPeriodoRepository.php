@@ -185,7 +185,9 @@ class AfiPeriodoRepository extends EntityRepository {
             if($arContrato->getFechaDesde() >= $arPeriodo->getFechaDesde()) {
                 $arPeriodoDetalle->setIngreso(1);
             }
-            
+            if($arContrato->getIndefinido() == 0) {
+                $arPeriodoDetalle->setRetiro(1);
+            }         
             $em->persist($arPeriodoDetalle); 
             $totalPension += $pension;
             $totalSalud += $salud;
@@ -838,8 +840,13 @@ class AfiPeriodoRepository extends EntityRepository {
                 } else {
                     $diafebrero = 1;
                 }
+                //Si se retira antes no sumarle los dias de febrero
+                if($dateFechaHasta < $arPeriodo->getFechaHasta()) {
+                    $diafebrero = 0;
+                }
             }
             $intDiasDevolver = $intDias + 1 + $diafebrero;
+            
             /*if ($intDiasDevolver < 28 && $febrero == 02){
                 $intDiasDevolver = $intDiasDevolver - 1;
             }*/
