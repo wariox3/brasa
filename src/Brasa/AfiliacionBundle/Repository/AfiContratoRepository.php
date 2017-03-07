@@ -36,7 +36,10 @@ class AfiContratoRepository extends EntityRepository {
         return $dql;
     }
 
-    public function listaConsultaGeneralDql($strEmpleado = '', $codigoCliente = '', $strIdentificacion = '',$strDesde = "", $strHasta = "", $estado = "") {
+    public function listaConsultaGeneralDql($strEmpleado = '', $codigoCliente = '', $codigoAsesor = '', $strIdentificacion = '',$strDesde = "", $strHasta = "", $estado = "") {
+        ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
         $em = $this->getEntityManager();
         /*$dql   = "SELECT c,e FROM BrasaAfiliacionBundle:AfiContrato c JOIN c.empleadoRel e WHERE c.codigoContratoPk <> 0";
         if($strEmpleado != '') {
@@ -60,6 +63,7 @@ class AfiContratoRepository extends EntityRepository {
         $strSql = "SELECT
                 afi_contrato.codigo_contrato_pk as codigoContratoPk,
                 afi_cliente.nombre_corto as cliente,
+                afi_cliente.codigo_asesor_fk as asesor,
                 afi_empleado.numero_identificacion as identificacion,
                 afi_empleado.nombre_corto as empleado,
                 afi_contrato.indefinido as indefinido,
@@ -75,7 +79,10 @@ class AfiContratoRepository extends EntityRepository {
         }
         if($codigoCliente != '') {
             $strSql .= " AND afi_contrato.codigo_cliente_fk = " . $codigoCliente;
-        } 
+        }
+        if($codigoAsesor != '') {
+            $strSql .= " AND afi_cliente.codigo_asesor_fk = " . $codigoAsesor;
+        }
         if($strIdentificacion != '') {
             $strSql .= " AND afi_empleado.numero_identificacion = " . $strIdentificacion;
         }

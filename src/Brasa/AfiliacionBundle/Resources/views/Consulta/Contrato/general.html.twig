@@ -65,6 +65,10 @@
                     <div class="col-sm-4">
                         {{ form_widget(form.fechaHasta ) }}
                     </div>
+                    <label for="form_estadoActivo" class="col-sm-2 control-label">Asesor:</label>
+                    <div class="col-sm-4">                  
+                        {{ form_widget(form.asesorRel, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
                 </div>    
                 <div class="form-group form-group-sm">
                     <div class="col-sm-offset-2 col-sm-10">
@@ -77,6 +81,7 @@
             <tr>
                 <th>{{ knp_pagination_sortable(arGeneral, 'CÓDIGO', 'e.codigoEmpleadoPk') }}</th>
                 <th>CLIENTE</th>
+                <th>ASESOR</th>
                 <th>IDENTIFICACION</th>
                 <th>NOMBRE</th>
                 <th>DESDE</th>
@@ -95,7 +100,20 @@
                         <td>{{ arContratos.clienteRel.nombreCorto  }}</td>
                     {% endif %}    
                     {% endfor %}        
-                {% endif %}                
+                {% endif %}
+                {% if arGeneral.cliente != null%}
+                    {% for arContratos in arContratos %}
+                    {% if arContratos.codigoContratoPk ==  arGeneral.codigoContratoPk %}
+                        <td>{{ arContratos.clienteRel.asesorRel.nombre  }}</td>
+                    {% endif %}    
+                    {% endfor %}
+                {% else %}
+                    {% for arContratos in arContratos %}
+                    {% if arContratos.codigoContratoPk ==  arGeneral.codigoContratoPk %}
+                        <td>{{ arContratos.clienteRel.asesorRel.nombre  }}</td>
+                    {% endif %}    
+                    {% endfor %}        
+                {% endif %}        
                 <td>{{ arGeneral.identificacion }}</td>
                 <td>{{ arGeneral.empleado }}</td>
                 <td>{{ arGeneral.desde | date('Y-m-d') }}</td>

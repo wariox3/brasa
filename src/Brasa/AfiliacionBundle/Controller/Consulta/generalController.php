@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 //use Brasa\AfiliacionBundle\Form\Type\AfiIngresoType;
 
@@ -43,18 +44,24 @@ class generalController extends Controller
         
         $arGeneral = $paginator->paginate($this->strDqlLista, $request->query->get('page', 1), 300);
         $arContratos = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->findAll();
+        $arAsesor = $em->getRepository('BrasaGeneralBundle:GenAsesor')->findAll();
         return $this->render('BrasaAfiliacionBundle:Consulta/Contrato:general.html.twig', array(
             'arGeneral' => $arGeneral,
             'arContratos' => $arContratos,
+            'arAsesor' => $arAsesor,
             'form' => $form->createView()));
     }
     
-    private function lista() {    
+    private function lista() {
+        ob_clean();
+        set_time_limit(0);
+        ini_set("memory_limit", -1);
         $session = new session;
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->listaConsultaGeneralDql(
                 $session->get('filtroEmpleadoNombre'),
                 $session->get('filtroCodigoCliente'),
+                $session->get('filtroAsesor'),
                 $session->get('filtroEmpleadoIdentificacion'),
                 $session->get('filtroDesde'),
                 $session->get('filtroHasta'),
@@ -63,8 +70,14 @@ class generalController extends Controller
     }       
 
     private function filtrar ($form) {        
-        $session = new session;                      
-        $session->set('filtroNit', $form->get('TxtNit')->getData()); 
+        $session = new session; 
+        //$controles = $request->request->get('form');
+        $session->set('filtroNit', $form->get('TxtNit')->getData());
+        $codigoAsesor = "";
+        if ($form->get('asesorRel')->getData()) {
+            $codigoAsesor = $form->get('asesorRel')->getData()->getCodigoAsesorPk();
+        }
+        $session->set('filtroAsesor', $codigoAsesor);
         $session->set('filtroEmpleadoNombre', $form->get('TxtNombre')->getData());
         $session->set('filtroEmpleadoIdentificacion', $form->get('TxtNumeroIdentificacion')->getData());
         $dateFechaDesde = $form->get('fechaDesde')->getData();
@@ -95,10 +108,26 @@ class generalController extends Controller
             }          
         } else {
             $session->set('filtroCodigoCliente', null);
-        } 
+        }
+        $arrayPropiedades = array(
+                'class' => 'BrasaGeneralBundle:GenAsesor',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->where('cc.estado = 1')        
+                    ->orderBy('cc.nombre', 'ASC');},
+                'choice_label' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'placeholder' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroAsesor')) {
+            $arrayPropiedades['data'] = $em->getReference("BrasaGeneralBundle:GenAsesor", $session->get('filtroAsesor'));
+        }
         $form = $this->createFormBuilder()            
             ->add('TxtNit', textType::class, array('label'  => 'Nit','data' => $session->get('filtroNit')))
             ->add('TxtNombreCliente', textType::class, array('label'  => 'NombreCliente','data' => $strNombreCliente))                                
+            ->add('asesorRel', EntityType::class, $arrayPropiedades)
             ->add('TxtNombre', textType::class, array('label'  => 'Nombre','data' => $session->get('filtroEmpleadoNombre')))
             ->add('TxtNumeroIdentificacion', textType::class, array('label'  => 'Nombre','data' => $session->get('filtroEmpleadoIdentificacion')))
             ->add('fechaDesde', DateType::class, array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
@@ -133,11 +162,12 @@ class generalController extends Controller
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CONTRATO')
                     ->setCellValue('B1', 'CLIENTE')
-                    ->setCellValue('C1', 'IDENTIFICACION')
-                    ->setCellValue('D1', 'EMPLEADO')
-                    ->setCellValue('E1', 'DESDE')
-                    ->setCellValue('F1', 'HASTA')
-                    ->setCellValue('G1', 'RETIRADO');
+                    ->setCellValue('C1', 'ASESOR')
+                    ->setCellValue('D1', 'IDENTIFICACION')
+                    ->setCellValue('F1', 'EMPLEADO')
+                    ->setCellValue('G1', 'DESDE')
+                    ->setCellValue('H1', 'HASTA')
+                    ->setCellValue('I1', 'RETIRADO');
         $i = 2;
         
         //$query = $em->createQuery($this->strDqlLista);
@@ -158,6 +188,17 @@ class generalController extends Controller
                $cliente = $arContrato->getClienteRel()->getNombreCorto();
            } 
         }
+        if ($arGeneral['cliente'] != null){
+            foreach ($arContratos as $arContratos) {
+               $arContrato = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->find($arGeneral['codigoContratoPk']);
+               $asesor = $arContrato->getClienteRel()->getAsesorRel()->getNombre();
+           }
+        } else {
+           foreach ($arContratos as $arContratos) {
+               $arContrato = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->find($arGeneral['codigoContratoPk']);
+               $asesor = $arContrato->getClienteRel()->getAsesorRel()->getNombre();
+           } 
+        }
         if ($arGeneral['indefinido'] == 1){
             $retirado = "NO";
         } else {
@@ -166,11 +207,12 @@ class generalController extends Controller
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arGeneral['codigoContratoPk'])
                     ->setCellValue('B' . $i, $cliente)
-                    ->setCellValue('C' . $i, $arGeneral['identificacion'])
-                    ->setCellValue('D' . $i, $arGeneral['empleado'])
-                    ->setCellValue('E' . $i, $arGeneral['desde'])
-                    ->setCellValue('F' . $i, $arGeneral['hasta'])
-                    ->setCellValue('G' . $i, $retirado);
+                    ->setCellValue('C' . $i, $asesor)
+                    ->setCellValue('D' . $i, $arGeneral['identificacion'])
+                    ->setCellValue('E' . $i, $arGeneral['empleado'])
+                    ->setCellValue('F' . $i, $arGeneral['desde'])
+                    ->setCellValue('G' . $i, $arGeneral['hasta'])
+                    ->setCellValue('H' . $i, $retirado);
             $i++;
         }
         
