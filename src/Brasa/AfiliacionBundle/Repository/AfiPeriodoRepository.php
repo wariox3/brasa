@@ -116,7 +116,12 @@ class AfiPeriodoRepository extends EntityRepository {
                     $caja = 0;
                 } else {
                     $caja = ($salarioPeriodo * $arContrato->getPorcentajeCaja())/100;
-                    $caja = $this->redondearAporte2($caja);                    
+                    //$caja = $this->redondearAporte2($caja);
+                    $tarifa = ($arContrato->getPorcentajeCaja());
+                    $floIbcBrutoCaja = ($dias * ($salario / 30)) + 0;
+                    $floIbcCaja = $this->redondearIbc($dias, $floIbcBrutoCaja, $salarioMinimo);
+                    //$caja = $this->redondearAporte2($caja);
+                    $caja = $this->redondearAporte($salario + 0, $floIbcCaja, $tarifa, $dias, $salarioMinimo,"");                                
                 }
                 
             }
@@ -129,7 +134,11 @@ class AfiPeriodoRepository extends EntityRepository {
                     $riesgos = 0;
                 } else {
                     $riesgos = ($salarioPeriodo * $arContrato->getClasificacionRiesgoRel()->getPorcentaje())/100;                    
-                    $riesgos = $this->redondearAporte2($riesgos);
+                    $tarifa = ($arContrato->getClasificacionRiesgoRel()->getPorcentaje());
+                    $floIbcBrutoRiesgos = ($dias * ($salario / 30)) + 0;
+                    $floIbcRiesgos = $this->redondearIbc($dias, $floIbcBrutoRiesgos, $salarioMinimo);
+                    //$riesgos = $this->redondearAporte2($riesgos);
+                    $riesgos = $this->redondearAporte($salario + 0, $floIbcRiesgos, $tarifa, $dias, $salarioMinimo,"");            
                     
                 }                
             }            
