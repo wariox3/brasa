@@ -125,10 +125,10 @@ class AfiPeriodoRepository extends EntityRepository {
                     $diasAdicionalFebrero = 0;
                 }
                 $diasNovedad = 0;
-                if ($intDiasIncacidadLaboral != 0 || $intDiasIncacidadGeneral != 0 || $intDiasLicenciaNoRemunerada != 0 || $intDiasLicenciaMaternidad != 0 || $intDiasLicenciaPaternidad != 0 || $intDiasAusentimo != 0 || $intDiasLicenciaLuto != 0 ){
+                /*if ($intDiasIncacidadLaboral != 0 || $intDiasIncacidadGeneral != 0 || $intDiasLicenciaNoRemunerada != 0 || $intDiasLicenciaMaternidad != 0 || $intDiasLicenciaPaternidad != 0 || $intDiasAusentimo != 0 || $intDiasLicenciaLuto != 0 ){
                     //$diasNovedad = $diasAdicionalFebrero;
                     $diasNovedad = 0;
-                }                
+                }*/                
                 $dias = $intDias - $intDiasIncacidadLaboral - $intDiasIncacidadGeneral - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad - $intDiasLicenciaPaternidad - $intDiasAusentimo - $intDiasLicenciaLuto - $diasNovedad;
                 if ($dias < 0){
                     $dias = 0;
@@ -151,11 +151,12 @@ class AfiPeriodoRepository extends EntityRepository {
                 if ($mesPeriodo == 02){
                     $diaFinalPeriodo = $arPeriodo->getFechaHasta()->format('d');
                     if ($diaFinalPeriodo == 28){
-                        if ($intDias == 30){
+                        /*if ($intDias == 30){
                             $diasAdicionalFebrero = 0;
                         } else {
                             $diasAdicionalFebrero = 2;
-                        }
+                        }*/
+                        $diasAdicionalFebrero = 2;                        
                     } else {
                         $diasAdicionalFebrero = 1;
                     }                    
@@ -163,9 +164,10 @@ class AfiPeriodoRepository extends EntityRepository {
                     $diasAdicionalFebrero = 0;
                 }
                 $diasNovedad = 0;
-                if ($intDiasIncacidadLaboral != 0 || $intDiasIncacidadGeneral != 0 || $intDiasLicenciaNoRemunerada != 0 || $intDiasLicenciaMaternidad != 0 || $intDiasLicenciaPaternidad != 0 || $intDiasAusentimo != 0 || $intDiasLicenciaLuto != 0 ){
-                    $diasNovedad = $diasAdicionalFebrero;
-                }
+                /*if ($intDiasIncacidadLaboral != 0 || $intDiasIncacidadGeneral != 0 || $intDiasLicenciaNoRemunerada != 0 || $intDiasLicenciaMaternidad != 0 || $intDiasLicenciaPaternidad != 0 || $intDiasAusentimo != 0 || $intDiasLicenciaLuto != 0 ){
+                    //$diasNovedad = $diasAdicionalFebrero;
+                    $diasNovedad = 0;
+                }*/
                 $dias = $intDias - $intDiasIncacidadLaboral - $intDiasIncacidadGeneral - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad - $intDiasLicenciaPaternidad - $intDiasAusentimo - $intDiasLicenciaLuto - $intDiasVacaciones - $diasNovedad;                
                 if ($dias < 0){
                     $dias = 0;
@@ -386,11 +388,12 @@ class AfiPeriodoRepository extends EntityRepository {
                 if ($mesPeriodo == 02){
                     $diaFinalPeriodo = $arPeriodo->getFechaHasta()->format('d');
                     if ($diaFinalPeriodo == 28){
-                        if ($intDiasCotizar == 30){
+                        /*if ($intDias == 30){
                             $diasAdicionalFebrero = 0;
                         } else {
                             $diasAdicionalFebrero = 2;
-                        }
+                        }*/
+                        $diasAdicionalFebrero = 2;                        
                     } else {
                         $diasAdicionalFebrero = 1;
                     }                    
@@ -398,13 +401,15 @@ class AfiPeriodoRepository extends EntityRepository {
                     $diasAdicionalFebrero = 0;
                 }
                 $diasNovedadRiesgos = 0;
-                if ($intDiasIncapacidades != 0 || $intDiasLicenciaNoRemunerada != 0 || $intDiasLicenciaMaternidad != 0 || $intDiasVacaciones != 0 || $intDiasSuspension != 0 || $intDiasLicenciaLuto != 0 || $intDiasLicenciaPaternidad != 0){
+                /*if ($intDiasIncapacidades != 0 || $intDiasLicenciaNoRemunerada != 0 || $intDiasLicenciaMaternidad != 0 || $intDiasVacaciones != 0 || $intDiasSuspension != 0 || $intDiasLicenciaLuto != 0 || $intDiasLicenciaPaternidad != 0){
                     $diasNovedadRiesgos = $diasAdicionalFebrero;
-                }
+                    $diasNovedadRiesgos = 0;
+                }*/
                 $diasNovedadCaja = 0;
-                if ($intDiasIncapacidades != 0 || $intDiasLicenciaNoRemunerada != 0 || $intDiasLicenciaMaternidad != 0 || $intDiasSuspension != 0 || $intDiasLicenciaLuto != 0 || $intDiasLicenciaPaternidad != 0){
+                /*if ($intDiasIncapacidades != 0 || $intDiasLicenciaNoRemunerada != 0 || $intDiasLicenciaMaternidad != 0 || $intDiasSuspension != 0 || $intDiasLicenciaLuto != 0 || $intDiasLicenciaPaternidad != 0){
                     $diasNovedadCaja = $diasAdicionalFebrero;
-                }
+                    $diasNovedadCaja = 0;
+                }*/
             $intDiasCotizarRiesgos = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad - $intDiasVacaciones - $intDiasSuspension - $intDiasLicenciaLuto - $intDiasLicenciaPaternidad - $diasNovedadRiesgos;
             $intDiasCotizarCaja = $intDiasCotizar - $intDiasIncapacidades - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad - $intDiasSuspension - $intDiasLicenciaLuto - $intDiasLicenciaPaternidad - $diasNovedadCaja;
             if($arContrato->getCodigoTipoCotizanteFk() == '19' || $arContrato->getCodigoTipoCotizanteFk() == '12' || $arContrato->getCodigoTipoCotizanteFk() == '23') {
