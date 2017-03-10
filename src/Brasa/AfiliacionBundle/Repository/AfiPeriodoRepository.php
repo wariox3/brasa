@@ -908,6 +908,10 @@ class AfiPeriodoRepository extends EntityRepository {
             if ($intDiasDevolver < 28 && $febrero == 02){
                 $intDiasDevolver = $intDiasDevolver;
             }
+            $desde = $dateFechaDesde->format('d');
+            if ($desde == 28 && $dia == 28 && $febrero == 02 && $arContrato->getIndefinido() == 0){                
+                $intDiasDevolver = 1;
+            }
             
             
         }         
