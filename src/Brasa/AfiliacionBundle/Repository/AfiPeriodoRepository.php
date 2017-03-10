@@ -112,7 +112,12 @@ class AfiPeriodoRepository extends EntityRepository {
                 if ($mesPeriodo == 02){
                     $diaFinalPeriodo = $arPeriodo->getFechaHasta()->format('d');
                     if ($diaFinalPeriodo == 28){
-                        $diasAdicionalFebrero = 2;
+                        /*if ($intDias == 30){
+                            $diasAdicionalFebrero = 0;
+                        } else {
+                            $diasAdicionalFebrero = 2;
+                        }*/
+                        $diasAdicionalFebrero = 2;                        
                     } else {
                         $diasAdicionalFebrero = 1;
                     }                    
@@ -121,7 +126,8 @@ class AfiPeriodoRepository extends EntityRepository {
                 }
                 $diasNovedad = 0;
                 if ($intDiasIncacidadLaboral != 0 || $intDiasIncacidadGeneral != 0 || $intDiasLicenciaNoRemunerada != 0 || $intDiasLicenciaMaternidad != 0 || $intDiasLicenciaPaternidad != 0 || $intDiasAusentimo != 0 || $intDiasLicenciaLuto != 0 ){
-                    $diasNovedad = $diasAdicionalFebrero;
+                    //$diasNovedad = $diasAdicionalFebrero;
+                    $diasNovedad = 0;
                 }                
                 $dias = $intDias - $intDiasIncacidadLaboral - $intDiasIncacidadGeneral - $intDiasLicenciaNoRemunerada - $intDiasLicenciaMaternidad - $intDiasLicenciaPaternidad - $intDiasAusentimo - $intDiasLicenciaLuto - $diasNovedad;
                 if ($dias < 0){
@@ -145,7 +151,11 @@ class AfiPeriodoRepository extends EntityRepository {
                 if ($mesPeriodo == 02){
                     $diaFinalPeriodo = $arPeriodo->getFechaHasta()->format('d');
                     if ($diaFinalPeriodo == 28){
-                        $diasAdicionalFebrero = 2;
+                        if ($intDias == 30){
+                            $diasAdicionalFebrero = 0;
+                        } else {
+                            $diasAdicionalFebrero = 2;
+                        }
                     } else {
                         $diasAdicionalFebrero = 1;
                     }                    
@@ -376,7 +386,11 @@ class AfiPeriodoRepository extends EntityRepository {
                 if ($mesPeriodo == 02){
                     $diaFinalPeriodo = $arPeriodo->getFechaHasta()->format('d');
                     if ($diaFinalPeriodo == 28){
-                        $diasAdicionalFebrero = 2;
+                        if ($intDiasCotizar == 30){
+                            $diasAdicionalFebrero = 0;
+                        } else {
+                            $diasAdicionalFebrero = 2;
+                        }
                     } else {
                         $diasAdicionalFebrero = 1;
                     }                    

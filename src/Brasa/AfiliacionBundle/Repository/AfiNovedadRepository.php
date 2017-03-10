@@ -52,7 +52,16 @@ class AfiNovedadRepository extends EntityRepository {
                 $intDiaInicio = $arNovedad->getFechaDesde()->format('j');
             }
             if($arNovedad->getFechaHasta() > $fechaHasta) {
-                $intDiaFin = $fechaHasta->format('j');               
+                $intDiaFin = $fechaHasta->format('j');
+                $novedadMesHasta = $fechaHasta->format('m');
+                $novedadDiaHasta = $fechaHasta->format('d');
+                if ($novedadMesHasta == 02 && $novedadDiaHasta >= 28){
+                   $intDiaFin = $intDiaFin + 2; 
+                } 
+                if ($novedadMesHasta == 02 && $novedadDiaHasta >= 29){
+                   $intDiaFin = $intDiaFin + 1; 
+                }    
+                
             } else {
                 $intDiaFin = $arNovedad->getFechaHasta()->format('j');                
             }            
@@ -61,9 +70,11 @@ class AfiNovedadRepository extends EntityRepository {
             }            
             $intDiasNovedad += (($intDiaFin - $intDiaInicio)+1);
         }
+        
         if($intDiasNovedad > 30) {
             $intDiasNovedad = 30;
         }
+        
         return $intDiasNovedad;
     } 
     
