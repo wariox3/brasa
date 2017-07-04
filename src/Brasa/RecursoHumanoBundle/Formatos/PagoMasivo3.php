@@ -191,18 +191,10 @@ class PagoMasivo3 extends \FPDF_FPDF {
             $pdf->SetXY(10, $y+20);
             $pdf->SetFont('Arial','B',6.5);
             $pdf->SetFillColor(200, 200, 200);
-            $pdf->Cell(22, 5, "ZONA:" , 1, 0, 'L', 1);                            
+            $pdf->Cell(22, 5, "DIAS LABORADOS:" , 1, 0, 'L', 1);                            
             $pdf->SetFont('Arial','',6.5);
             $pdf->SetFillColor(255, 255, 255);
-            $zona = "";
-            if($arPago->getEmpleadoRel()->getCodigoZonaFk()) {
-                $zona = $arPago->getEmpleadoRel()->getZonaRel()->getNombre();
-            }            
-            $subZona = "";
-            if($arPago->getEmpleadoRel()->getCodigoSubzonaFk()) {
-                $subZona = $arPago->getEmpleadoRel()->getSubzonaRel()->getNombre();
-            }
-            $pdf->Cell(78, 5, $zona . "-" .$subZona , 1, 0, 'L', 1);
+            $pdf->Cell(78, 5, $arPago->getDiasLaborados() , 1, 0, 'L', 1);
             $pdf->SetFont('Arial','B',6.5);
             $pdf->SetFillColor(200, 200, 200);
             $pdf->Cell(24, 5, "HASTA" , 1, 0, 'L', 1);

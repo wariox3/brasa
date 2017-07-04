@@ -6,9 +6,12 @@ use Doctrine\ORM\EntityRepository;
 
 class AfiNovedadRepository extends EntityRepository {  
     
-    public function listaDql() {
+    public function listaDql($nombre = '', $strNovedadTipo = '') {
         $em = $this->getEntityManager();
-        $dql   = "SELECT n FROM BrasaAfiliacionBundle:AfiNovedad n WHERE n.codigoNovedadPk <> 0";
+        $dql   = "SELECT n FROM BrasaAfiliacionBundle:AfiNovedad n WHERE n.codigoNovedadPk <> 0";  
+        if($strNovedadTipo != "") {
+            $dql .= " AND n.codigoNovedadTipoFk = " . $strNovedadTipo;
+        }     
         $dql .= " ORDER BY n.codigoNovedadPk";
         return $dql;
     }            

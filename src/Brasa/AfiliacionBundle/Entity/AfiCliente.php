@@ -36,7 +36,7 @@ class AfiCliente
     private $tipoIdentificacion;
     
     /**
-     * @ORM\Column(name="nombre_corto", type="string", length=50)
+     * @ORM\Column(name="nombre_corto", type="string", length=100)
      */
     private $nombreCorto;                             
     

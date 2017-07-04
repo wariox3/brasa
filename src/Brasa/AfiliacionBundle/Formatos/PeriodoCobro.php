@@ -134,7 +134,7 @@ class PeriodoCobro extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(10);
-        $header = array(utf8_decode('IDENTIFICACION'), 'NOMBRE', 'DIAS', 'SALARIO', 'FECHA ING','PENSION', 'SALUD', 'RIESGOS', 'CAJA', 'ADMON', 'SUBTOTAL', 'IVA', 'TOTAL', 'RET');
+        $header = array(utf8_decode('IDENTIFICACION'), 'NOMBRE', 'DIAS', 'SALARIO', 'FECHA ING','PENSION', 'SALUD', 'RIESGOS', 'CAJA', 'SUBTOTAL', 'ADMON', 'IVA', 'TOTAL', 'RET');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -142,7 +142,7 @@ class PeriodoCobro extends \FPDF_FPDF {
         $this->SetFont('', 'B', 6);
 
         //creamos la cabecera de la tabla.
-        $w = array(20, 54, 8, 15, 15, 30, 30, 20, 15, 11, 15, 10, 15 ,7);
+        $w = array(20, 54, 8, 15, 15, 30, 30, 20, 15, 15, 11, 10, 15 ,7);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -164,9 +164,11 @@ class PeriodoCobro extends \FPDF_FPDF {
         
         $pdf->SetX(10);
         $pdf->SetFont('Arial', '', 7);
-        $var = $arPeriodo->getTotal();
+        $totalGeneral = $arPeriodo->getTotal();
         $var2 = count($arPeriodoDetalles);
-        $var3 = 0;
+        $subtotal = 0;
+        $totalAdministracion = 0;
+        $totalIva = 0;
         foreach ($arPeriodoDetalles as $arPeriodoDetalle) {                        
             $pdf->Cell(20, 4, $arPeriodoDetalle->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
                 $pdf->SetFont('Arial', '', 6);
@@ -195,8 +197,8 @@ class PeriodoCobro extends \FPDF_FPDF {
                     $pdf->Cell(15, 4, "SIN CAJA", 1, 0, 'L');
                 }                
                 $pdf->SetFont('Arial', '', 7);
-                $pdf->Cell(11, 4, number_format($arPeriodoDetalle->getAdministracion(), 0, '.', ','), 1, 0, 'R');
                 $pdf->Cell(15, 4, number_format($arPeriodoDetalle->getSubtotal(), 0, '.', ','), 1, 0, 'R');
+                $pdf->Cell(11, 4, number_format($arPeriodoDetalle->getAdministracion(), 0, '.', ','), 1, 0, 'R');
                 $pdf->Cell(10, 4, number_format($arPeriodoDetalle->getIva(), 0, '.', ','), 1, 0, 'R');
                 $pdf->Cell(15, 4, number_format($arPeriodoDetalle->getTotal(), 0, '.', ','), 1, 0, 'R');
                 if ($arPeriodoDetalle->getContratoRel()->getIndefinido() == 1){
@@ -205,17 +207,19 @@ class PeriodoCobro extends \FPDF_FPDF {
                     $retiro = 'SI';
                 }
                 $pdf->Cell(7, 4, $retiro, 1, 0, 'L');
-                $var3 = $var3 + $arPeriodoDetalle->getSubtotal() - $arPeriodoDetalle->getAdministracion();
+                $totalAdministracion = $totalAdministracion + $arPeriodoDetalle->getAdministracion();
+                $subtotal = $subtotal + $arPeriodoDetalle->getSubtotal();
+                $totalIva = $totalIva + $arPeriodoDetalle->getIva();
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
             
         }
             $pdf->SetFont('Arial', 'B', 7);
-            $pdf->Cell(218, 5, "SUBTOTAL:", 0, 0, 'R');
-            $pdf->Cell(15, 5, number_format($var3,0, '.', ','), 1, 0, 'R');
-            
-            $pdf->Cell(10, 5, "TOTAL:", 0, 0, 'R');
-            $pdf->Cell(15, 5, number_format($var,0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(207, 5);
+            $pdf->Cell(15, 5, number_format($subtotal,0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(11, 5, number_format($totalAdministracion,0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(10, 5, number_format($totalIva,0, '.', ','), 1, 0, 'R');
+            $pdf->Cell(15, 5, number_format($totalGeneral,0, '.', ','), 1, 0, 'R');
             $pdf->Cell(7, 5, "", 0, 0, 'R');
             $pdf->Ln();
             $pdf->SetFont('Arial', 'B', 7);

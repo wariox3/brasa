@@ -5,6 +5,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Brasa\AfiliacionBundle\Form\Type\AfiNovedadType;
@@ -35,6 +36,9 @@ class NovedadController extends Controller
             }
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
+                $this->formularioFiltro();
+                $this->lista();
+                
             }
             if ($form->get('BtnExcel')->isClicked()) {
                 $this->filtrar($form);
@@ -110,32 +114,83 @@ class NovedadController extends Controller
             'arNovedad' => $arNovedad,
             'form' => $form->createView()));
     }
+    
+    /**
+     * @Route("/afi/movimiento/novedad/detalle/{codigoNovedad}", name="brs_afi_movimiento_novedad_detalle")
+     */
+    public function detalleAction(Request $request, $codigoNovedad) {
+        $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $arNovedad = new \Brasa\AfiliacionBundle\Entity\AfiNovedad();
+        $arNovedad = $em->getRepository('BrasaAfiliacionBundle:AfiNovedad')->find($codigoNovedad);
+        $form = $this->formularioDetalle($arNovedad);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            
+        }
+
+        return $this->render('BrasaAfiliacionBundle:Movimiento/Novedad:detalle.html.twig', array(
+                    'arNovedad' => $arNovedad,
+                    'form' => $form->createView()
+        ));
+    }
 
     private function lista() {
         $session = new session;
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiNovedad')->listaDQL(
-
+                $session->get('filtroNovedadNombre'),
+                $session->get('filtroNovedadTipo')              
                 );
     }
 
     private function filtrar ($form) {
         $session = new session;
+        $arNovedadTipo = $form->get('novedadTipoRel')->getData();
+        if ($arNovedadTipo == null){
+            $codigo = "";
+        } else {
+            $codigo = $arNovedadTipo->getCodigoNovedadTipoPk();
+        }
         $session->set('filtroNovedadNombre', $form->get('TxtNombre')->getData());
+        $session->set('filtroNovedadTipo', $codigo);
         $this->lista();
     }
 
     private function formularioFiltro() {
+        $em = $this->getDoctrine()->getManager();
         $session = new session;
+        $arrayNovedadTipo = array(
+                'class' => 'BrasaAfiliacionBundle:AfiNovedadTipo',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('cc')
+                    ->orderBy('cc.nombre', 'ASC');},
+                'choice_label' => 'nombre',
+                'required' => false,
+                'empty_data' => "",
+                'placeholder' => "TODOS",
+                'data' => ""
+            );
+        if($session->get('filtroNovedadTipo')) {
+            $arrayNovedadTipo['data'] = $em->getReference("BrasaAfiliacionBundle:AfiNovedadTipo", $session->get('filtroNovedadTipo'));
+        }
         $form = $this->createFormBuilder()
             ->add('TxtNombre', textType::class, array('label'  => 'Nombre','data' => $session->get('filtroNovedadNombre')))
+            ->add('novedadTipoRel', EntityType::class, $arrayNovedadTipo)
             ->add('BtnEliminar', SubmitType::class, array('label'  => 'Eliminar',))
             ->add('BtnExcel', SubmitType::class, array('label'  => 'Excel',))
             ->add('BtnFiltrar', SubmitType::class, array('label'  => 'Filtrar'))
             ->getForm();
         return $form;
     }
-
+    
+    private function formularioDetalle($ar) {
+        $form = $this->createFormBuilder()
+                ->getForm();
+        return $form;
+    }
+       
     private function generarExcel() {
         ob_clean();
         $em = $this->getDoctrine()->getManager();
@@ -151,16 +206,16 @@ class NovedadController extends Controller
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10);
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        for($col = 'A'; $col !== 'C'; $col++) {
+        for ($col = 'A'; $col !== 'S'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
         }
-        /*for($col = 'AI'; $col !== 'AK'; $col++) {
-            $objPHPExcel->getActiveSheet()->getStyle($col)->getNumberFormat()->setFormatCode('#,##0');
-        }*/
-
         $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'CÓDIG0')
-                    ->setCellValue('B1', 'TIPO');
+                    ->setCellValue('B1', 'TIPO NOVEDAD')
+                    ->setCellValue('C1', 'DOCUMENTO')
+                    ->setCellValue('D1', 'EMPLEADO')
+                    ->setCellValue('E1', 'DESDE')
+                    ->setCellValue('F1', 'HASTA');
 
         $i = 2;
 
@@ -171,7 +226,11 @@ class NovedadController extends Controller
         foreach ($arNovedades as $arNovedad) {
             $objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A' . $i, $arNovedad->getCodigoNovedadPk())
-                    ->setCellValue('B' . $i, $arNovedad->getNovedadTipoRel()->getNombre());
+                    ->setCellValue('B' . $i, $arNovedad->getNovedadTipoRel()->getNombre())
+                    ->setCellValue('C' . $i, $arNovedad->getEmpleadoRel()->getNumeroIdentificacion())
+                    ->setCellValue('D' . $i, $arNovedad->getEmpleadoRel()->getNombreCorto())
+                    ->setCellValue('E' . $i, $arNovedad->getFechaDesde()->format('Y-m-d'))
+                    ->setCellValue('F' . $i, $arNovedad->getFechaHasta()->format('Y-m-d'));
             $i++;
         }
 
