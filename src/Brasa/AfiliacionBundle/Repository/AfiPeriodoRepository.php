@@ -141,8 +141,8 @@ class AfiPeriodoRepository extends EntityRepository {
                     $tarifa = ($arContrato->getPorcentajeCaja());
                     $floIbcBrutoCaja = ($dias * ($salario / 30)) + 0;
                     $floIbcCaja = $this->redondearIbc($dias, $floIbcBrutoCaja, $salarioMinimo);
-                    //$caja = $this->redondearAporte2($caja);
-                    //$caja = $this->redondearAporte($salario + 0, $floIbcCaja, $tarifa, $dias, $salarioMinimo,"");                                
+                    $caja = $this->redondearAporte($salario + 0, $floIbcCaja, $tarifa, $dias, $salarioMinimo,"");                                
+                    $caja = $this->redondearCien($caja);
                 }
                 
             }
@@ -180,7 +180,8 @@ class AfiPeriodoRepository extends EntityRepository {
                     $tarifa = ($arContrato->getClasificacionRiesgoRel()->getPorcentaje());
                     $floIbcBrutoRiesgos = ($dias * ($salario / 30)) + 0;
                     $floIbcRiesgos = $this->redondearIbc($dias, $floIbcBrutoRiesgos, $salarioMinimo);
-                    //$riesgos = $this->redondearAporte($salario + 0, $floIbcRiesgos, $tarifa, $dias, $salarioMinimo,"");            
+                    $riesgos = $this->redondearAporte($salario + 0, $floIbcRiesgos, $tarifa, $dias, $salarioMinimo,"");
+                    $riesgos = $this->redondearCien($riesgos);
                     
                 }                
             }            
