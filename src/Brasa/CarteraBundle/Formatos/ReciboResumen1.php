@@ -114,7 +114,7 @@ class ReciboResumen1 extends \FPDF_FPDF {
             car_recibo_tipo.nombre AS tipo, 
             gen_cuenta.nombre AS cuenta, 
             COUNT(car_recibo.codigo_recibo_pk) AS numeroRecibos, 
-            SUM(car_recibo.vr_total) AS vrTotalPago
+            SUM(car_recibo.vr_total) AS vrTotal
             FROM car_recibo  
             LEFT JOIN car_recibo_tipo ON car_recibo.codigo_recibo_tipo_fk = car_recibo_tipo.codigo_recibo_tipo_pk 
             LEFT JOIN gen_cuenta ON car_recibo.codigo_cuenta_fk = gen_cuenta.codigo_cuenta_pk 
@@ -131,8 +131,8 @@ class ReciboResumen1 extends \FPDF_FPDF {
             $pdf->Cell(50, 4, $registro['tipo'], 1, 0, 'L');
             $pdf->Cell(50, 4, $registro['cuenta'], 1, 0, 'L');
             $pdf->Cell(20, 4, $registro['numeroRecibos'], 1, 0, 'L');
-            $pdf->Cell(30, 4, number_format($registro['vrTotalPago'], 2, '.', ','), 1, 0, 'R');
-            $total += $registro['vrTotalPago'];
+            $pdf->Cell(30, 4, number_format($registro['vrTotal'], 2, '.', ','), 1, 0, 'R');
+            $total += $registro['vrTotal'];
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
         }
@@ -143,7 +143,7 @@ class ReciboResumen1 extends \FPDF_FPDF {
         $pdf->Ln();
         $pdf->Ln();
 
-        $header = array('COD','TIPO', 'NRO', 'FECHA', 'CUENTA', 'CLIENTE', 'DCTO', 'AJUSTE', 'RTEICA', 'RTEIVA', 'RTEFTE', 'TOTAL');
+        $header = array('COD','TIPO', 'NRO', 'FECHA', 'CUENTA', 'CLIENTE', 'DCTO', 'AJUSTE', 'RTEICA', 'RTEIVA', 'RTEFTE', 'TOTAL', 'ANU');
         $pdf->SetFillColor(236, 236, 236);
         $pdf->SetTextColor(0);
         $pdf->SetDrawColor(0, 0, 0);
@@ -151,7 +151,7 @@ class ReciboResumen1 extends \FPDF_FPDF {
         $pdf->SetFont('', 'B', 6);
 
         //creamos la cabecera de la tabla.
-        $w = array(8,30, 8, 12, 35, 45, 8, 11, 11, 11, 11, 13);
+        $w = array(8,20, 8, 12, 35, 45, 8, 11, 11, 11, 11, 13,10);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $pdf->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -168,7 +168,7 @@ class ReciboResumen1 extends \FPDF_FPDF {
         $arRecibos = $query->getResult();
         foreach ($arRecibos as $arRecibo) {
             $pdf->Cell(8, 4, $arRecibo->getCodigoReciboPk(), 1, 0, 'L');
-            $pdf->Cell(30, 4, $arRecibo->getReciboTipoRel()->getNombre(), 1, 0, 'L');                        
+            $pdf->Cell(20, 4, $arRecibo->getReciboTipoRel()->getNombre(), 1, 0, 'L');                        
             $pdf->Cell(8, 4, $arRecibo->getNumero(), 1, 0, 'L');                        
             $pdf->Cell(12, 4, $arRecibo->getFecha()->format('Y/m/d'), 1, 0, 'L');                        
             $pdf->Cell(35, 4, $arRecibo->getCuentaRel()->getNombre(), 1, 0, 'L');                        
@@ -179,6 +179,12 @@ class ReciboResumen1 extends \FPDF_FPDF {
             $pdf->Cell(11, 4, number_format($arRecibo->getVrTotalReteIva(), 0, '.', ','), 1, 0, 'R');
             $pdf->Cell(11, 4, number_format($arRecibo->getVrTotalReteFuente(), 0, '.', ','), 1, 0, 'R');
             $pdf->Cell(13, 4, number_format($arRecibo->getVrTotal(), 0, '.', ','), 1, 0, 'R');
+            if ($arRecibo->getEstadoAnulado() == 1) {
+                $recibo = "SI";
+            } else {
+                $recibo = "NO";
+            }
+            $pdf->Cell(10, 4, $recibo, 1, 0, 'L');
             $pdf->Ln();
             $pdf->SetAutoPageBreak(true, 15);
         }        
