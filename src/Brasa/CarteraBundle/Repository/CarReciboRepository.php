@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class CarReciboRepository extends EntityRepository
 {
-   public function listaDql($numero, $codigoCliente = "", $boolEstadoImpreso = "") {
+   public function listaDql($numero, $codigoCliente = "", $boolEstadoImpreso = "", $codigoAsesor = "") {
         $dql   = "SELECT r FROM BrasaCarteraBundle:CarRecibo r WHERE r.codigoReciboPk <> 0";
         if($numero != "") {
             $dql .= " AND r.numero = " . $numero;  
@@ -24,7 +24,10 @@ class CarReciboRepository extends EntityRepository
         }
         if($boolEstadoImpreso == "0") {
             $dql .= " AND r.estadoImpreso = 0";
-        }        
+        } 
+        if($codigoAsesor != "") {
+            $dql .= " AND r.codigoAsesorFk = " . $codigoAsesor;  
+        }    
         $dql .= " ORDER BY r.fecha DESC";
         return $dql;
     }
