@@ -205,15 +205,13 @@ class EmpleadoController extends Controller {
             $em->persist($arContrato);
             $em->flush();
             if ($codigoContrato == 0 || $codigoContrato == '') {
-                if ($em->getRepository('BrasaAfiliacionBundle:AfiContrato')->findBy(array('codigoEmpleadoFk' => $codigoEmpleado, 'indefinido' => 1))) {
-                    $objMensaje->Mensaje('error', 'El empleado tiene un contrato abierto, por favor cerrar el actual para poder crear el nuevo', $this);
-                } else {
                     $arEmpleado = $em->getRepository('BrasaAfiliacionBundle:AfiEmpleado')->find($codigoEmpleado);
                     $arEmpleado->setCodigoContratoActivo($arContrato->getCodigoContratoPk());
+                    $prueba = $arContrato->getCodigoContratoPk();
                     $em->persist($arEmpleado);
-                }
-            }
-
+            }           
+            
+            $em->flush();
             echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
         }
         return $this->render('BrasaAfiliacionBundle:Base/Empleado:contratoNuevo.html.twig', array(
