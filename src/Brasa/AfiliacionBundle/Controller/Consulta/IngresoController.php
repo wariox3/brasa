@@ -234,10 +234,10 @@ class IngresoController extends Controller
             if ($arContrato->getNumeroRecibo() != null){
                 $numeroRecibo = $arContrato->getNumeroRecibo();
             }
-            if ($arContrato->getNumeroRecibo() != null){
+            if ($arContrato->getValor() != null){
                 $valor = $arContrato->getValor();
             }
-            if ($arContrato->getNumeroRecibo() != null){
+            if ($arContrato->getFormaPago() != null){
                 $formaPago = $arContrato->getFormaPago();
             }
         }
