@@ -174,6 +174,21 @@ class AfiContrato
     private $estadoHistorialContrato = false;
     
     /**
+     * @ORM\Column(name="numero_recibo", type="string", length=30, nullable=true)
+     */    
+    private $numeroRecibo; 
+
+    /**
+     * @ORM\Column(name="valor", type="float")
+     */
+    private $valor = 0; 
+    
+    /**
+     * @ORM\Column(name="forma_pago", type="string", length=30, nullable=true)
+     */    
+    private $formaPago; 
+    
+    /**
      * @ORM\ManyToOne(targetEntity="AfiEmpleado", inversedBy="contratosEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
@@ -1395,5 +1410,77 @@ class AfiContrato
     public function getFacturasDetallesAfiliacionesContratosRel()
     {
         return $this->facturasDetallesAfiliacionesContratosRel;
+    }
+
+    /**
+     * Set numeroRecibo
+     *
+     * @param string $numeroRecibo
+     *
+     * @return AfiContrato
+     */
+    public function setNumeroRecibo($numeroRecibo)
+    {
+        $this->numeroRecibo = $numeroRecibo;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroRecibo
+     *
+     * @return string
+     */
+    public function getNumeroRecibo()
+    {
+        return $this->numeroRecibo;
+    }
+
+    /**
+     * Set valor
+     *
+     * @param float $valor
+     *
+     * @return AfiContrato
+     */
+    public function setValor($valor)
+    {
+        $this->valor = $valor;
+
+        return $this;
+    }
+
+    /**
+     * Get valor
+     *
+     * @return float
+     */
+    public function getValor()
+    {
+        return $this->valor;
+    }
+
+    /**
+     * Set formaPago
+     *
+     * @param string $formaPago
+     *
+     * @return AfiContrato
+     */
+    public function setFormaPago($formaPago)
+    {
+        $this->formaPago = $formaPago;
+
+        return $this;
+    }
+
+    /**
+     * Get formaPago
+     *
+     * @return string
+     */
+    public function getFormaPago()
+    {
+        return $this->formaPago;
     }
 }

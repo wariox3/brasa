@@ -83,7 +83,9 @@ class AfiContratoType extends AbstractType
             ->add('porcentajeSalud', NumberType::class, array('required' => true))
             ->add('porcentajeCaja', NumberType::class, array('required' => true))
             ->add('comentarios', TextareaType::class, array('required' => false))
-            
+            ->add('numeroRecibo', TextType::class, array('required' => false))
+            ->add('valor', NumberType::class, array('required' => true))
+            ->add('formaPago', TextType::class, array('required' => false))
             ->add('guardar', SubmitType::class);
     }
 

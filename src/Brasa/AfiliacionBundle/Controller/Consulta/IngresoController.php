@@ -148,7 +148,10 @@ class IngresoController extends Controller
                     ->setCellValue('V1', 'ARL')
                     ->setCellValue('W1', 'CAJA')
                     ->setCellValue('X1', 'CLIENTE')
-                    ->setCellValue('Y1', 'RETIRADO');
+                    ->setCellValue('Y1', 'RETIRADO')
+                    ->setCellValue('Z1', 'RECIBO')
+                    ->setCellValue('AA1', 'VALOR')
+                    ->setCellValue('AB1', 'FORMA PAGO');
         $i = 2;
         
         $query = $em->createQuery($this->strDqlLista);
@@ -190,6 +193,11 @@ class IngresoController extends Controller
         $salud = '';
         $arl = '';
         $caja = '';
+        $indefinido = '';
+        $numeroRecibo = '';
+        $valor = '';
+        $formaPago = '';
+        
         if ($arContrato != null){
             
             if ($arContrato->getCodigoCargoFk() != null){
@@ -222,6 +230,15 @@ class IngresoController extends Controller
                 $indefinido = 'NO';
             } else {
                 $indefinido = 'SI';
+            }
+            if ($arContrato->getNumeroRecibo() != null){
+                $numeroRecibo = $arContrato->getNumeroRecibo();
+            }
+            if ($arContrato->getNumeroRecibo() != null){
+                $valor = $arContrato->getValor();
+            }
+            if ($arContrato->getNumeroRecibo() != null){
+                $formaPago = $arContrato->getFormaPago();
             }
         }
         $cliente = '';
@@ -258,7 +275,10 @@ class IngresoController extends Controller
                     ->setCellValue('V' . $i, $arl)
                     ->setCellValue('W' . $i, $caja)
                     ->setCellValue('X' . $i, $cliente)
-                    ->setCellValue('Y' . $i, $indefinido);                                    
+                    ->setCellValue('Y' . $i, $indefinido)
+                    ->setCellValue('Z' . $i, $numeroRecibo)
+                    ->setCellValue('AA' . $i, $valor)
+                    ->setCellValue('AB' . $i, $formaPago);                                    
             $i++;
         }
         

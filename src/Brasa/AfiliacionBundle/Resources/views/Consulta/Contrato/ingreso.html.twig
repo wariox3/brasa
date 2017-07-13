@@ -69,15 +69,17 @@
                 </div>
             </div>
         </div>
-        <table  class="table table-striped table-bordered table-condensed table-hover">
+        <table  class="table table-striped table-bordered table-condensed table-hover" >
             <tr>
                 <th>{{ knp_pagination_sortable(arIngresos, 'CÓDIGO', 'e.codigoEmpleadoPk') }}</th>
                 <th>CLIENTE</th>
                 <th>IDENTIFICACION</th>
                 <th>NOMBRE</th>
                 <th>FECHA INGRESO</th>
+                <th>RECIBO</th>
+                <th>FORMA PAGO</th>
+                <th>VALOR</th>
             </tr>
-            	
             {% set fechaDesde = '' %}
             {% for arIngresos in arIngresos %}
             <tr>
@@ -86,6 +88,9 @@
                 <td>{{ arIngresos.empleadoRel.numeroIdentificacion }}</td>
                 <td>{{ arIngresos.empleadoRel.nombreCorto }}</td>
                 <td>{{ arIngresos.fechaDesde | date('Y-m-d') }}</td>
+                <td>{{ arIngresos.numeroRecibo }}</td>
+                <td>{{ arIngresos.formaPago }}</td>
+                <td>{{ arIngresos.valor }}</td>
             </tr>
 
             {% endfor %}
