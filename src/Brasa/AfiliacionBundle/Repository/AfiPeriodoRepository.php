@@ -725,8 +725,8 @@ class AfiPeriodoRepository extends EntityRepository {
             if ($arPeriodo->getInteresMora() == 0){
                 $valorTotal = $arPeriodo->getTotal();
                 $valorSubtotal = $arPeriodo->getSubtotal();
-                $porcentajeInteres = 2;
-                $valorInteresMora = $valorTotal * $porcentajeInteres / 100;
+                $porcentajeInteres = 0.09;
+                $valorInteresMora = $valorTotal * $porcentajeInteres / 100 * 6;
                 $arPeriodo->setTotalAnterior($valorTotal);
                 $arPeriodo->setInteresMora($valorInteresMora);
                 $arPeriodo->setSubtotal($arPeriodo->getSubtotal() + $valorInteresMora);
@@ -735,8 +735,8 @@ class AfiPeriodoRepository extends EntityRepository {
             } else {
                 $valorTotal = $arPeriodo->getTotalAnterior();
                 $valorSubtotal = $arPeriodo->getSubtotalAnterior();
-                //$porcentajeInteres = 2;
-                $valorInteresMora = $valorTotal * $porcentajeInteres / 100;
+                $porcentajeInteres = 0.09;
+                $valorInteresMora = $valorTotal * $porcentajeInteres / 100 * 6;
                 $arPeriodo->setInteresMora($valorInteresMora);
                 $arPeriodo->setSubtotal($valorSubtotal + $valorInteresMora);
                 $arPeriodo->setTotal($this->redondearCien($valorTotal + $valorInteresMora));
@@ -875,6 +875,7 @@ class AfiPeriodoRepository extends EntityRepository {
         $dateFechaDesde =  "";
         $dateFechaHasta =  "";
         $intDiasDevolver = 0;
+        $dia = "";
         $fechaFinalizaContrato = $arContrato->getFechaHasta();
         if($arContrato->getIndefinido() == 1) {
             $fecha = date_create(date('Y-m-d'));
