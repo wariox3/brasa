@@ -13,7 +13,7 @@ class AfiContratoRepository extends EntityRepository {
         return $dql;
     }
     
-    public function listaConsultaDql($strEmpleado = '', $codigoCliente = '', $strIdentificacion = '',$strDesde = "", $strHasta = "") {
+    public function listaConsultaDql($strEmpleado = '', $codigoCliente = '', $strIdentificacion = '',$strDesde = "", $strHasta = "",$estadoPagado = "") {
         //$em = $this->getEntityManager();
         $dql   = "SELECT c,e FROM BrasaAfiliacionBundle:AfiContrato c JOIN c.empleadoRel e WHERE c.codigoContratoPk <> 0 and c.indefinido = 1 ";
         if($strEmpleado != '') {
@@ -30,6 +30,12 @@ class AfiContratoRepository extends EntityRepository {
         }
         if($strHasta != "") {
             $dql .= " AND c.fechaDesde <='" . $strHasta . "'";
+        }
+        if($estadoPagado == 1) {
+            $dql .= " AND c.valor >'0'";
+        }
+        if($estadoPagado == 0) {
+            $dql .= " AND c.valor = '0'";
         }
         
         //$dql .= " ORDER BY pd.codigoPeriodoDetallePk";
@@ -193,7 +199,72 @@ class AfiContratoRepository extends EntityRepository {
         $em = $this->getEntityManager();
         $dql   = "SELECT c FROM BrasaAfiliacionBundle:AfiContrato c WHERE c.codigoEmpleadoFk = " . $codigoEmpleado;
         return $dql;
-    }                
+    }    
+    
+    public function listaConsultaClienteSinAfiliacionesDql($codigoCliente = '') {
+        $em = $this->getEntityManager();
+        
+        $fechaActual = new \DateTime('now');
+        $fechaActual = $fechaActual->format("Y-m-d");
+        $arSinAfiliacion = "";
+        $arIds = "";
+        if($codigoCliente != '')
+        {
+            $dql= $em->createQuery("SELECT DISTINCT c.codigoClienteFk "
+                . "FROM BrasaAfiliacionBundle:AfiContrato c "
+                . "WHERE c.codigoContratoPk <> 0 "
+                . "AND c.codigoClienteFk = {$codigoCliente} ");
+            $arClientes = $dql->getResult();
+            foreach ($arClientes as $arClientes)
+            {
+                $dql = $em->createQuery("SELECT COUNT(c.codigoContratoPk)"
+                        . "FROM BrasaAfiliacionBundle:AfiContrato c "
+                        . "WHERE c.codigoContratoPk <> 0 "
+                        . "AND c.codigoClienteFk = {$codigoCliente} "
+                        . "AND c.fechaHasta >= '$fechaActual'");
+                $arCliente = $dql->getResult();
+                $arConteo = $arCliente[0][1];
+                $arConteo = (int)$arConteo;
+                if($arConteo == 0)
+                {
+                    $arIds .= $arClientes['codigoClienteFk'];
+                }
+                else
+                {
+                    $arIds = "0";
+                }
+            }
+            $dql=" SELECT c FROM BrasaAfiliacionBundle:AfiCliente c "
+                . " WHERE c.codigoClientePk  = $arIds";
+        }
+        else
+        {
+            $dql= $em->createQuery("SELECT DISTINCT c.codigoClienteFk "
+                . "FROM BrasaAfiliacionBundle:AfiContrato c "
+                . "WHERE c.codigoContratoPk <> 0 ");
+            $arClientes = $dql->getResult();
+            foreach ($arClientes as $arClientes)
+            {
+                $dql = $em->createQuery("SELECT COUNT(c.codigoContratoPk)"
+                        . "FROM BrasaAfiliacionBundle:AfiContrato c "
+                        . "WHERE c.codigoContratoPk <> 0 "
+                        . "AND c.codigoClienteFk = {$arClientes['codigoClienteFk']} "
+                        . "AND c.fechaHasta >= '$fechaActual'");
+                $arCliente = $dql->getResult();
+                $arConteo = $arCliente[0][1];
+                $arConteo = (int)$arConteo;
+                if($arConteo == 0)
+                {
+                    $arSinAfiliacion .= $arClientes['codigoClienteFk'].",";
+                }
+            }
+            $arIds = substr($arSinAfiliacion, 0, -1);
+            $dql=" SELECT c FROM BrasaAfiliacionBundle:AfiCliente c "
+                . " WHERE c.codigoClientePk IN({$arIds})";
+        }
+        
+        return $dql;
+    }
     
     public function eliminar($arrSeleccionados,$codigoEmpleado) {
         $em = $this->getEntityManager();
@@ -259,4 +330,5 @@ class AfiContratoRepository extends EntityRepository {
         }        
         return $estado;
     }
+    
 }
