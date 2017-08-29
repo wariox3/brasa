@@ -210,9 +210,9 @@ class AfiContratoRepository extends EntityRepository {
         $arIds = "";
         if($codigoCliente != '')
         {
-            $dql= $em->createQuery("SELECT DISTINCT c.codigoClienteFk "
+            $dql= $em->createQuery("SELECT c.codigoClienteFk "
                 . "FROM BrasaAfiliacionBundle:AfiContrato c "
-                . "WHERE c.codigoContratoPk <> 0 "
+                . "WHERE c.codigoClienteFk <> 0 "
                 . "AND c.codigoClienteFk = {$codigoCliente} ");
             $arClientes = $dql->getResult();
             foreach ($arClientes as $arClientes)
@@ -239,9 +239,9 @@ class AfiContratoRepository extends EntityRepository {
         }
         else
         {
-            $dql= $em->createQuery("SELECT DISTINCT c.codigoClienteFk "
+            $dql= $em->createQuery("SELECT c.codigoClienteFk "
                 . "FROM BrasaAfiliacionBundle:AfiContrato c "
-                . "WHERE c.codigoContratoPk <> 0 ");
+                . "WHERE c.codigoClienteFk <> 0 ");
             $arClientes = $dql->getResult();
             foreach ($arClientes as $arClientes)
             {
@@ -260,10 +260,52 @@ class AfiContratoRepository extends EntityRepository {
             }
             $arIds = substr($arSinAfiliacion, 0, -1);
             $dql=" SELECT c FROM BrasaAfiliacionBundle:AfiCliente c "
-                . " WHERE c.codigoClientePk IN({$arIds})";
+                . " WHERE c.codigoClientePk IN({$arIds})"
+                . " ORDER BY c.codigoClientePk";
         }
         
         return $dql;
+    }
+    public function fechaMayor()
+    {
+        $em = $this->getEntityManager();
+        $fechaActual = new \DateTime('now');
+        $fechaActual = $fechaActual->format("Y-m-d");
+        $arSinAfiliacion = "";
+        $strIds = "";
+        $strFecha="";
+        $i = 0;
+        $dql= $em->createQuery("SELECT c.codigoClientePk "
+                . "FROM BrasaAfiliacionBundle:AfiCliente c "
+                . "WHERE c.codigoClientePk <> 0 ");
+        $arClientes = $dql->getResult();
+        foreach ($arClientes as $arCliente)
+        {
+            $dql = $em->createQuery("SELECT COUNT(c.codigoContratoPk)"
+                    . "FROM BrasaAfiliacionBundle:AfiContrato c "
+                    . "WHERE c.codigoContratoPk <> 0 "
+                    . "AND c.codigoClienteFk = {$arCliente['codigoClientePk']} "
+                    . "AND c.fechaHasta >= '$fechaActual'");
+            $arCountContratos = $dql->getResult();
+            $dql2 = $em->createQuery("SELECT MAX(c.fechaHasta) "
+                    . "FROM BrasaAfiliacionBundle:AfiContrato c "
+                    . "WHERE c.codigoContratoPk <> 0 "
+                    . "AND c.codigoClienteFk = {$arCliente['codigoClientePk']} "
+                    . "AND c.fechaHasta < '$fechaActual'");
+            $arResult = $dql2->getResult();
+            if($arResult != null)
+            {
+                do{
+                    $arFechas[$i][0] = $arCliente['codigoClientePk'];
+                    $arFechas[$i][1] = $arResult[0][1];
+                    
+                    $i++;
+                }while($i<count($arFechas));
+            }
+        }
+//        var_dump($arFechas);
+//        exit();
+        return $arFechas;
     }
     
     public function eliminar($arrSeleccionados,$codigoEmpleado) {

@@ -53,17 +53,21 @@
                 <th>TELEFONO</th>
                 <th>CORREO</th>
                 <th>VALOR</th>
+                <th>F.ULTIMA AFILIACI&Oacute;N</th>
             </tr>
-
-            
             {% for arContratos in arContratos %}
-                    <tr>
-                        <td>{{ arContratos.codigoClientePk  }}</td>
-                        <td>{{ arContratos.nombreCorto |default('')  }}</td>  
-                        <td>{{ arContratos.telefono }}</td>
-                        <td>{{ arContratos.email }}</td>
-                        <td style="text-align: right">{{ arContratos.afiliacion | number_format(0, '.', ',') }}</td>
-                    </tr>
+                <tr>
+                    <td>{{ arContratos.codigoClientePk  }}</td>
+                    <td>{{ arContratos.nombreCorto |default('')  }}</td>  
+                    <td>{{ arContratos.telefono }}</td>
+                    <td>{{ arContratos.email }}</td>
+                    <td style="text-align: right">{{ arContratos.afiliacion | number_format(0, '.', ',') }}</td>
+                    {% for key,arFecha in arFechas %}
+                        {% if arContratos.codigoClientePk == arFecha[0] %}
+                            <td>{{ arFecha[1] }}</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
             {% endfor %}
         </table>
 

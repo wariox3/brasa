@@ -43,8 +43,10 @@ class ClienteSinAfiliacionController extends Controller {
         }
 
         $arContratos = $paginator->paginate($em->createQuery($this->strDqlLista), $request->query->get('page', 1), 70);
+        $arFechas = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->fechaMayor();
         return $this->render('BrasaAfiliacionBundle:Consulta/Contrato:clienteSinAfiliacion.html.twig', array(
                     'arContratos' => $arContratos,
+                    'arFechas' => $arFechas,
                     'form' => $form->createView()));
     }
 
