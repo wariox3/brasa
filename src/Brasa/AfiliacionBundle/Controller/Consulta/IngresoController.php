@@ -102,7 +102,8 @@ class IngresoController extends Controller {
                     'choices' => array(
                         '2' => 'TODOS',
                         '0' => 'NO',
-                        '1' => 'SI'
+                        '1' => 'SI',
+                        '3' => 'CONVENIO'
                     ),
                     'data' => $session->get('estadoPagado'),
                 ))

@@ -35,7 +35,10 @@ class AfiContratoRepository extends EntityRepository {
             $dql .= " AND c.valor >'0'";
         }
         if($estadoPagado == 0) {
-            $dql .= " AND c.valor = '0'";
+            $dql .= " AND c.valor = '0' AND c.formaPago IS NULL ";
+        }
+        if($estadoPagado == 3){
+            $dql .= " AND c.valor = '0' AND c.formaPago LIKE '%convenio%' ";
         }
         
         //$dql .= " ORDER BY pd.codigoPeriodoDetallePk";
