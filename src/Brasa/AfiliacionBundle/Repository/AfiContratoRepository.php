@@ -221,7 +221,7 @@ class AfiContratoRepository extends EntityRepository {
                         . "FROM BrasaAfiliacionBundle:AfiContrato c "
                         . "WHERE c.codigoContratoPk <> 0 "
                         . "AND c.codigoClienteFk = {$codigoCliente} "
-                        . "AND c.fechaHasta >= '$fechaActual'");
+                        . "AND c.indefinido = 1");
                 $arCliente = $dql->getResult();
                 $arConteo = $arCliente[0][1];
                 $arConteo = (int)$arConteo;
@@ -249,7 +249,7 @@ class AfiContratoRepository extends EntityRepository {
                         . "FROM BrasaAfiliacionBundle:AfiContrato c "
                         . "WHERE c.codigoContratoPk <> 0 "
                         . "AND c.codigoClienteFk = {$arClientes['codigoClienteFk']} "
-                        . "AND c.fechaHasta >= '$fechaActual'");
+                        . "AND c.indefinido = 1");
                 $arCliente = $dql->getResult();
                 $arConteo = $arCliente[0][1];
                 $arConteo = (int)$arConteo;
@@ -291,7 +291,7 @@ class AfiContratoRepository extends EntityRepository {
                     . "FROM BrasaAfiliacionBundle:AfiContrato c "
                     . "WHERE c.codigoContratoPk <> 0 "
                     . "AND c.codigoClienteFk = {$arCliente['codigoClientePk']} "
-                    . "AND c.fechaHasta < '$fechaActual'");
+                    . "AND c.indefinido = 0");
             $arResult = $dql2->getResult();
             if($arResult != null)
             {
