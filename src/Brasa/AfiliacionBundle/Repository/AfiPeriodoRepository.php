@@ -718,13 +718,13 @@ class AfiPeriodoRepository extends EntityRepository {
             $anioActual = $fechaActual->format('Y');
             $arPeriodoFechaPago = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoFechaPago')->DiaHabilPagar($anioActual, $dosUltimosDigitosNitCliente);
             $diasHabiles = $this->dias_semana($fechaActual->format('Y/m/') . "01", $fechaActual);
-            if ($diasHabiles >= $arPeriodoFechaPago->getDiaHabil()) {
+//            if ($diasHabiles >= $arPeriodoFechaPago->getDiaHabil()) { Se comentarea mientas ana maria hace el proceso de generar desgenerar
                 //se valida si el interes de mora esta en 0.
                 if ($arPeriodo->getInteresMora() == 0) {
                     $valorTotal = $arPeriodo->getTotal();
                     $valorSubtotal = $arPeriodo->getSubtotal();
                     $porcentajeInteres = 0.09;
-                    $valorInteresMora = $valorSubtotal * $porcentajeInteres / 100 * 6;
+                    $valorInteresMora = $valorSubtotal * $porcentajeInteres / 100 * 5;
                     $arPeriodo->setTotalAnterior($valorTotal);
                     $arPeriodo->setInteresMora($valorInteresMora);
                     $arPeriodo->setSubtotal($arPeriodo->getSubtotal() + $valorInteresMora);
@@ -734,12 +734,12 @@ class AfiPeriodoRepository extends EntityRepository {
                     $valorTotal = $arPeriodo->getTotalAnterior();
                     $valorSubtotal = $arPeriodo->getSubtotalAnterior();
                     $porcentajeInteres = 0.09;
-                    $valorInteresMora = $valorTotal * $porcentajeInteres / 100 * 6;
+                    $valorInteresMora = $valorTotal * $porcentajeInteres / 100 * 5;
                     $arPeriodo->setInteresMora($valorInteresMora);
                     $arPeriodo->setSubtotal($valorSubtotal + $valorInteresMora);
                     $arPeriodo->setTotal($this->redondearCien($valorTotal + $valorInteresMora));
                 }
-            }
+//            }
         }
         $em->persist($arPeriodo);
         $em->flush();
