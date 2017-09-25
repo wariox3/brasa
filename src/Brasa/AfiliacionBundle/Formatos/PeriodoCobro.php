@@ -134,7 +134,7 @@ class PeriodoCobro extends \FPDF_FPDF {
 
     public function EncabezadoDetalles() {
         $this->Ln(10);
-        $header = array(utf8_decode('IDENTIFICACION'), 'NOMBRE', 'DIAS', 'SALARIO', 'FECHA ING','PENSION', 'SALUD', 'RIESGOS', 'CAJA', 'SUBTOTAL', 'ADMON', 'IVA', 'TOTAL', 'RET');
+        $header = array('TIPO',utf8_decode('IDENTIFICACION'), 'NOMBRE', 'DIAS', 'SALARIO', 'FECHA ING','PENSION', 'SALUD', 'RIESGOS', 'CAJA', 'SUBTOTAL', 'ADMON', 'IVA', 'TOTAL', 'RET');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);
@@ -142,7 +142,7 @@ class PeriodoCobro extends \FPDF_FPDF {
         $this->SetFont('', 'B', 6);
 
         //creamos la cabecera de la tabla.
-        $w = array(20, 54, 8, 15, 15, 30, 30, 20, 15, 15, 11, 10, 15 ,7);
+        $w = array(6,20, 50, 8, 15, 15, 28, 30, 20, 15, 15, 11, 10, 15 ,7);
         for ($i = 0; $i < count($header); $i++)
             if ($i == 0 || $i == 1)
                 $this->Cell($w[$i], 4, $header[$i], 1, 0, 'L', 1);
@@ -170,14 +170,15 @@ class PeriodoCobro extends \FPDF_FPDF {
         $totalAdministracion = 0;
         $totalIva = 0;
         foreach ($arPeriodoDetalles as $arPeriodoDetalle) {                        
-            $pdf->Cell(20, 4, $arPeriodoDetalle->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
+                $pdf->Cell(6, 4, utf8_decode($arPeriodoDetalle->getEmpleadoRel()->getTipoIdentificacionRel()->getCodigoInterface()), 1, 0, 'L');
+                $pdf->Cell(20, 4, $arPeriodoDetalle->getEmpleadoRel()->getNumeroIdentificacion(), 1, 0, 'L');
                 $pdf->SetFont('Arial', '', 6);
-                $pdf->Cell(54, 4, utf8_decode($arPeriodoDetalle->getEmpleadoRel()->getNombreCorto()), 1, 0, 'L');                            
+                $pdf->Cell(50, 4, utf8_decode($arPeriodoDetalle->getEmpleadoRel()->getNombreCorto()), 1, 0, 'L');                            
                 $pdf->Cell(8, 4, $arPeriodoDetalle->getDias(), 1, 0, 'L');
                 $pdf->Cell(15, 4, number_format($arPeriodoDetalle->getSalario(), 0, '.', ','), 1, 0, 'R');
                 $pdf->Cell(15, 4, $arPeriodoDetalle->getContratoRel()->getFechaDesde()->format('Y-m-d'), 1, 0, 'L');
                 if ($arPeriodoDetalle->getContratoRel()->getGeneraPension() == 1){
-                    $pdf->Cell(30, 4, utf8_decode(substr($arPeriodoDetalle->getContratoRel()->getEntidadPensionRel()->getNombre(),0,18)), 1, 0, 'L');
+                    $pdf->Cell(28, 4, utf8_decode(substr($arPeriodoDetalle->getContratoRel()->getEntidadPensionRel()->getNombre(),0,18)), 1, 0, 'L');
                 } else {
                     $pdf->Cell(30, 4, "SIN PENSION", 1, 0, 'L');
                 }
