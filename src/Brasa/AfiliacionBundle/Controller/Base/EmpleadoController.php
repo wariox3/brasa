@@ -191,7 +191,7 @@ class EmpleadoController extends Controller {
         $form = $this->createForm(new AfiContratoType, $arContrato);
         $form->handleRequest($request);
         if ($form->isValid()) {
-
+            $respuesta = "";
             $arUsuario = $this->get('security.context')->getToken()->getUser();
             if ($codigoContrato == 0) {
                 $arContrato->setCodigoUsuario($arUsuario->getUserName());
@@ -203,16 +203,23 @@ class EmpleadoController extends Controller {
                 }
             }
             $em->persist($arContrato);
-            $em->flush();
-            if ($codigoContrato == 0 || $codigoContrato == '') {
+            if ($arContrato->getIndefinido() == 0) {
+                $respuesta = $em->getRepository('BrasaAfiliacionBundle:AfiNovedad')->dqlNovedades($codigoEmpleado, $arContrato->getFechaHasta());
+            }
+            if ($respuesta != "") {
+                $objMensaje->Mensaje('error', $respuesta, $this);
+            } else {
+                $em->flush();
+                if ($codigoContrato == 0 || $codigoContrato == '') {
                     $arEmpleado = $em->getRepository('BrasaAfiliacionBundle:AfiEmpleado')->find($codigoEmpleado);
                     $arEmpleado->setCodigoContratoActivo($arContrato->getCodigoContratoPk());
                     $prueba = $arContrato->getCodigoContratoPk();
                     $em->persist($arEmpleado);
-            }           
-            
-            $em->flush();
-            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                }
+
+                $em->flush();
+                echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+            }
         }
         return $this->render('BrasaAfiliacionBundle:Base/Empleado:contratoNuevo.html.twig', array(
                     'form' => $form->createView()));

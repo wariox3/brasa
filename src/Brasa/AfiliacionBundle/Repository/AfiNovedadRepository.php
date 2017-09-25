@@ -124,4 +124,17 @@ class AfiNovedadRepository extends EntityRepository {
         return $intDiasNovedad;
     }
     
+    public function dqlNovedades($codigoEmpleado,$fechaHasta) {
+        $respuesta = "";
+        $em = $this->getEntityManager();
+        $strFechaHasta = $fechaHasta->format('Y-m-d');
+        $dql = "SELECT an FROM BrasaAfiliacionBundle:AfiNovedad an WHERE an.codigoEmpleadoFk = {$codigoEmpleado} AND an.fechaHasta >= '{$strFechaHasta}'";
+        $objQuery = $em->createQuery($dql);  
+        $arNovedades = $objQuery->getResult();
+        if (count($arNovedades)>=1){
+            $respuesta = "No se puede retirar el empleado tiene novedades con fecha posterior a la terminacion del contrato.";
+        }
+        return $respuesta;
+    }
+    
 }
