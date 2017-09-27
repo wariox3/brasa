@@ -145,5 +145,52 @@ class AfiPeriodoDetalleRepository extends EntityRepository {
         }
     }
     
+    public function actualizarDetalleCobro($codigoPeriodo){
+        set_time_limit(0);
+        ob_clean();
+        $em = $this->getEntityManager();
+        $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
+        $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);
+        $totalPension = 0;
+        $totalSalud = 0;
+        $totalCaja = 0;
+        $totalRiesgos = 0;
+        $totalSena = 0;
+        $totalIcbf = 0;
+        $totalAdministracion = 0;
+        $subtotalGeneral = 0;
+        $ivaGeneral = 0;
+        $totalGeneral = 0;
+        $arPeriodoDetalle = new \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetalle();
+        $arPeriodoDetalles = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetalle')->findBy(array('codigoPeriodoFk'=>$codigoPeriodo));
+        $numeroRegistros = count($arPeriodoDetalles);
+        foreach ($arPeriodoDetalles as $arPeriodoDetalle){
+            $totalPension += $arPeriodoDetalle->getPension();
+            $totalSalud += $arPeriodoDetalle->getSalud();
+            $totalCaja += $arPeriodoDetalle->getCaja();
+            $totalRiesgos += $arPeriodoDetalle->getRiesgos();
+            $totalSena += $arPeriodoDetalle->getSena();
+            $totalIcbf += $arPeriodoDetalle->getIcbf();
+            $totalAdministracion += $arPeriodoDetalle->getAdministracion();
+            $subtotalGeneral += $arPeriodoDetalle->getSubtotal();
+            $ivaGeneral += $arPeriodoDetalle->getIva();
+            $totalGeneral += $arPeriodoDetalle->getTotal();
+        }
+        $arPeriodo->setEstadoGenerado(1);
+        $arPeriodo->setPension($totalPension);
+        $arPeriodo->setSalud($totalSalud);
+        $arPeriodo->setCaja($totalCaja);
+        $arPeriodo->setRiesgos($totalRiesgos);
+        $arPeriodo->setSena($totalSena);
+        $arPeriodo->setIcbf($totalIcbf);
+        $arPeriodo->setAdministracion($totalAdministracion);
+        $arPeriodo->setSubtotal($subtotalGeneral);
+        $arPeriodo->setIva($ivaGeneral);
+        $arPeriodo->setTotal($totalGeneral);
+        $arPeriodo->setNumeroEmpleados($numeroRegistros);
+        $em->persist($arPeriodo);
+        $em->flush();        
+        $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->generarInteresMora($codigoPeriodo);
+    }
 
 }
