@@ -801,7 +801,8 @@ class AfiPeriodoRepository extends EntityRepository {
             }
         } else {
             if ($floIbc <= $salarioMinimo) {
-                $floCotizacion = $floCotizacionMinimo;
+                #$floCotizacion = $floCotizacionMinimo; Validar bien este proceso.
+                $floCotizacion = $floCotizacionIBC;
                 $floResiduo2 = fmod($floCotizacion, 100);
                 if ($floResiduo2 > 50) {
                     $floCotizacion = intval($floCotizacion / 100) * 100 + 100;
