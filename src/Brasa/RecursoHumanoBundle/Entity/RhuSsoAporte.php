@@ -15,109 +15,109 @@ class RhuSsoAporte
      * @ORM\Column(name="codigo_aporte_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoAportePk;   
-    
+    private $codigoAportePk;
+
     /**
      * @ORM\Column(name="codigo_periodo_fk", type="integer")
-     */    
-    private $codigoPeriodoFk;    
-    
+     */
+    private $codigoPeriodoFk;
+
     /**
      * @ORM\Column(name="codigo_periodo_detalle_fk", type="integer")
-     */    
-    private $codigoPeriodoDetalleFk;     
-    
+     */
+    private $codigoPeriodoDetalleFk;
+
     /**
      * @ORM\Column(name="codigo_sucursal_fk", type="integer")
-     */    
-    private $codigoSucursalFk; 
+     */
+    private $codigoSucursalFk;
 
     /**
      * @ORM\Column(name="codigo_empleado_fk", type="integer")
-     */    
+     */
     private $codigoEmpleadoFk;
 
     /**
      * @ORM\Column(name="codigo_contrato_fk", type="integer")
-     */    
-    private $codigoContratoFk;  
-    
+     */
+    private $codigoContratoFk;
+
     /**
      * @ORM\Column(name="anio", type="integer")
      */
     private $anio = 0;
-    
+
     /**
      * @ORM\Column(name="mes", type="integer")
      */
     private $mes = 0;
-    
+
     /**
      * @ORM\Column(name="fecha_desde", type="date", nullable=true)
-     */    
-    private $fechaDesde;    
-    
+     */
+    private $fechaDesde;
+
     /**
      * @ORM\Column(name="fecha_hasta", type="date", nullable=true)
-     */    
-    private $fechaHasta;    
-    
-    
+     */
+    private $fechaHasta;
+
+
     /**
      * @ORM\Column(name="tipo_registro", type="bigint")
-     */    
-    private $tipoRegistro;    
+     */
+    private $tipoRegistro;
 
     /**
      * @ORM\Column(name="secuencia", type="smallint")
-     */    
-    private $secuencia;        
+     */
+    private $secuencia;
 
     /**
      * @ORM\Column(name="tipo_documento", type="string", length=2)
-     */    
-    private $tipoDocumento;    
-    
+     */
+    private $tipoDocumento;
+
     /**
      * @ORM\Column(name="tipo_cotizante", type="smallint")
-     */    
-    private $tipoCotizante;    
+     */
+    private $tipoCotizante;
 
     /**
      * @ORM\Column(name="subtipo_cotizante", type="smallint")
-     */    
-    private $subtipoCotizante;    
-    
+     */
+    private $subtipoCotizante;
+
     /**
      * @ORM\Column(name="extranjero_no_obligado_cotizar_pension", type="string", length=1)
-     */    
+     */
     private $extranjeroNoObligadoCotizarPension;
-    
+
     /**
      * @ORM\Column(name="colombiano_residente_exterior", type="string", length=1)
-     */    
-    private $colombianoResidenteExterior;    
+     */
+    private $colombianoResidenteExterior;
 
     /**
      * @ORM\Column(name="codigo_departamento_ubicacion_laboral", type="string", length=2)
-     */    
-    private $codigoDepartamentoUbicacionlaboral;    
+     */
+    private $codigoDepartamentoUbicacionlaboral;
 
     /**
      * @ORM\Column(name="codigo_municipio_ubicacion_laboral", type="string", length=3)
-     */    
-    private $codigoMunicipioUbicacionlaboral;        
-    
+     */
+    private $codigoMunicipioUbicacionlaboral;
+
     /**
      * @ORM\Column(name="primer_nombre", type="string", length=20)
      */
-    private $primerNombre;     
+    private $primerNombre;
 
     /**
      * @ORM\Column(name="segundo_nombre", type="string", length=30, nullable=true)
      */
-    private $segundoNombre;    
-    
+    private $segundoNombre;
+
     /**
      * @ORM\Column(name="primer_apellido", type="string", length=20)
      */
@@ -126,18 +126,18 @@ class RhuSsoAporte
     /**
      * @ORM\Column(name="segundo_apellido", type="string", length=30, nullable=true)
      */
-    private $segundoApellido;    
-    
+    private $segundoApellido;
+
     /**
      * @ORM\Column(name="ingreso", type="string", length=1)
      */
-    private $ingreso = ' ';    
+    private $ingreso = ' ';
 
     /**
      * @ORM\Column(name="retiro", type="string", length=1)
      */
-    private $retiro = ' ';    
-    
+    private $retiro = ' ';
+
     /**
      * @ORM\Column(name="traslado_desde_otra_eps", type="string", length=1)
      */
@@ -146,8 +146,8 @@ class RhuSsoAporte
     /**
      * @ORM\Column(name="traslado_a_otra_eps", type="string", length=1)
      */
-    private $trasladoAOtraEps = ' ';    
-    
+    private $trasladoAOtraEps = ' ';
+
     /**
      * @ORM\Column(name="traslado_desde_otra_pension", type="string", length=1)
      */
@@ -156,423 +156,513 @@ class RhuSsoAporte
     /**
      * @ORM\Column(name="traslado_a_otra_pension", type="string", length=1)
      */
-    private $trasladoAOtraPension = ' ';    
+    private $trasladoAOtraPension = ' ';
 
     /**
      * @ORM\Column(name="variacion_permanente_salario", type="string", length=1)
      */
-    private $variacionPermanenteSalario = ' ';    
-    
+    private $variacionPermanenteSalario = ' ';
+
     /**
      * @ORM\Column(name="correcciones", type="string", length=1)
      */
-    private $correcciones = ' '; 
-    
+    private $correcciones = ' ';
+
     /**
      * @ORM\Column(name="variacion_transitoria_salario", type="string", length=1)
      */
-    private $variacionTransitoriaSalario = ' ';      
-    
+    private $variacionTransitoriaSalario = ' ';
+
     /**
      * @ORM\Column(name="suspension_temporal_contrato_licencia_servicios", type="string", length=1)
      */
-    private $suspensionTemporalContratoLicenciaServicios = ' ';    
-    
+    private $suspensionTemporalContratoLicenciaServicios = ' ';
+
     /**
      * @ORM\Column(name="dias_licencia", type="integer")
-     */    
-    private $diasLicencia = 0;     
-    
+     */
+    private $diasLicencia = 0;
+
     /**
      * @ORM\Column(name="incapacidad_general", type="string", length=1)
      */
-    private $incapacidadGeneral = ' ';    
-    
+    private $incapacidadGeneral = ' ';
+
     /**
      * @ORM\Column(name="dias_incapacidad_general", type="integer")
      */
-    private $diasIncapacidadGeneral = 0;    
-    
+    private $diasIncapacidadGeneral = 0;
+
     /**
      * @ORM\Column(name="licencia_maternidad", type="string", length=1)
      */
-    private $licenciaMaternidad = ' ';        
+    private $licenciaMaternidad = ' ';
 
     /**
      * @ORM\Column(name="dias_licencia_maternidad", type="integer")
      */
-    private $diasLicenciaMaternidad = 0;    
-    
+    private $diasLicenciaMaternidad = 0;
+
     /**
      * @ORM\Column(name="vacaciones", type="string", length=1)
      */
-    private $vacaciones = ' ';     
+    private $vacaciones = ' ';
 
     /**
      * @ORM\Column(name="dias_vacaciones", type="integer")
      */
-    private $diasVacaciones = 0;     
-    
+    private $diasVacaciones = 0;
+
     /**
      * @ORM\Column(name="aporte_voluntario", type="string", length=1)
      */
-    private $aporteVoluntario = ' ';     
+    private $aporteVoluntario = ' ';
 
     /**
      * @ORM\Column(name="variacion_centros_trabajo", type="string", length=1)
      */
-    private $variacionCentrosTrabajo = ' ';         
-    
+    private $variacionCentrosTrabajo = ' ';
+
     /**
      * @ORM\Column(name="incapacidad_accidente_trabajo_enfermedad_profesional", type="integer")
      */
-    private $incapacidadAccidenteTrabajoEnfermedadProfesional = 0;    
-    
+    private $incapacidadAccidenteTrabajoEnfermedadProfesional = 0;
+
     /**
      * @ORM\Column(name="codigo_entidad_pension_pertenece", type="string", length=6)
      */
-    private $codigoEntidadPensionPertenece;     
-    
+    private $codigoEntidadPensionPertenece;
+
     /**
      * @ORM\Column(name="codigo_entidad_pension_traslada", type="string", length=6, nullable=true)
      */
-    private $codigoEntidadPensionTraslada;    
-    
+    private $codigoEntidadPensionTraslada;
+
     /**
      * @ORM\Column(name="codigo_entidad_salud_pertenece", type="string", length=6, nullable=true)
      */
-    private $codigoEntidadSaludPertenece;     
-    
+    private $codigoEntidadSaludPertenece;
+
     /**
      * @ORM\Column(name="codigo_entidad_salud_traslada", type="string", length=6, nullable=true)
      */
-    private $codigoEntidadSaludTraslada;    
-    
+    private $codigoEntidadSaludTraslada;
+
     /**
      * @ORM\Column(name="codigo_entidad_caja_pertenece", type="string", length=6)
      */
-    private $codigoEntidadCajaPertenece;    
-    
+    private $codigoEntidadCajaPertenece;
+
     /**
      * @ORM\Column(name="dias_cotizados_pension", type="integer")
      */
     private $diasCotizadosPension = 0;
-    
+
     /**
      * @ORM\Column(name="dias_cotizados_salud", type="integer")
      */
-    private $diasCotizadosSalud = 0;    
+    private $diasCotizadosSalud = 0;
 
     /**
      * @ORM\Column(name="dias_cotizados_riesgos_profesionales", type="integer")
      */
-    private $diasCotizadosRiesgosProfesionales = 0;    
-        
+    private $diasCotizadosRiesgosProfesionales = 0;
+
     /**
      * @ORM\Column(name="dias_cotizados_caja_compensacion", type="integer")
      */
-    private $diasCotizadosCajaCompensacion = 0;    
-    
+    private $diasCotizadosCajaCompensacion = 0;
+
     /**
      * @ORM\Column(name="salario_basico", type="float")
      */
     private $salarioBasico = 0;
-    
+
     /**
      * @ORM\Column(name="salario_mes_anterior", type="float")
      */
-    private $salarioMesAnterior = 0;    
-    
+    private $salarioMesAnterior = 0;
+
     /**
      * @ORM\Column(name="vr_vacaciones", type="float")
      */
-    private $vrVacaciones = 0;    
-    
+    private $vrVacaciones = 0;
+
     /**
      * @ORM\Column(name="salario_integral", type="string", length=1)
      */
-    private $salarioIntegral = ' ';    
-    
+    private $salarioIntegral = ' ';
+
     /**
      * @ORM\Column(name="suplementario", type="float")
      */
-    private $suplementario = 0;     
+    private $suplementario = 0;
 
     /**
      * @ORM\Column(name="vr_ingreso_base_cotizacion", type="float")
      */
-    private $vrIngresoBaseCotizacion = 0; 
-    
+    private $vrIngresoBaseCotizacion = 0;
+
     /**
      * @ORM\Column(name="ibc_pension", type="float")
      */
-    private $ibcPension = 0;     
+    private $ibcPension = 0;
 
     /**
      * @ORM\Column(name="ibc_salud", type="float")
      */
-    private $ibcSalud = 0;    
-    
+    private $ibcSalud = 0;
+
     /**
      * @ORM\Column(name="ibc_riesgos_profesionales", type="float")
      */
-    private $ibcRiesgosProfesionales = 0;    
-    
+    private $ibcRiesgosProfesionales = 0;
+
     /**
      * @ORM\Column(name="ibc_caja", type="float")
      */
-    private $ibcCaja = 0;     
-    
+    private $ibcCaja = 0;
+
     /**
      * @ORM\Column(name="tarifa_pension", type="float")
      */
-    private $tarifaPension = 0;         
+    private $tarifaPension = 0;
 
     /**
      * @ORM\Column(name="tarifa_salud", type="float")
      */
     private $tarifaSalud = 0;
-    
+
     /**
      * @ORM\Column(name="tarifa_riesgos", type="float")
      */
-    private $tarifaRiesgos = 0;    
-    
+    private $tarifaRiesgos = 0;
+
     /**
      * @ORM\Column(name="tarifa_caja", type="float")
      */
-    private $tarifaCaja = 0;  
-    
+    private $tarifaCaja = 0;
+
     /**
      * @ORM\Column(name="tarifa_sena", type="float")
      */
-    private $tarifaSena = 0;     
-    
+    private $tarifaSena = 0;
+
     /**
      * @ORM\Column(name="tarifa_icbf", type="float")
      */
-    private $tarifaIcbf = 0;     
-    
+    private $tarifaIcbf = 0;
+
     /**
      * @ORM\Column(name="cotizacion_pension", type="float")
      */
-    private $cotizacionPension = 0;    
+    private $cotizacionPension = 0;
 
     /**
      * @ORM\Column(name="cotizacion_salud", type="float")
      */
-    private $cotizacionSalud = 0; 
-    
+    private $cotizacionSalud = 0;
+
     /**
      * @ORM\Column(name="cotizacion_riesgos", type="float")
      */
     private $cotizacionRiesgos = 0;
-    
+
     /**
      * @ORM\Column(name="cotizacion_caja", type="float")
      */
     private $cotizacionCaja = 0;
-    
+
     /**
      * @ORM\Column(name="cotizacion_sena", type="float")
      */
-    private $cotizacionSena = 0;    
-    
+    private $cotizacionSena = 0;
+
     /**
      * @ORM\Column(name="cotizacion_icbf", type="float")
      */
-    private $cotizacionIcbf = 0;    
-    
+    private $cotizacionIcbf = 0;
+
     /**
      * @ORM\Column(name="aporte_voluntario_fondo_pensiones_obligatorias", type="string", length=9, nullable=true)
      */
-    private $aporteVoluntarioFondoPensionesObligatorias;    
-    
+    private $aporteVoluntarioFondoPensionesObligatorias;
+
     /**
      * @ORM\Column(name="cotizacion_voluntario_fondo_pensiones_obligatorias", type="string", length=9, nullable=true)
      */
-    private $cotizacionVoluntarioFondoPensionesObligatorias;    
-    
+    private $cotizacionVoluntarioFondoPensionesObligatorias;
+
     /**
      * @ORM\Column(name="total_cotizacion_fondos", type="float")
      */
-    private $totalCotizacionFondos;       
-    
+    private $totalCotizacionFondos;
+
     /**
      * @ORM\Column(name="aportes_fondo_solidaridad_pensional_solidaridad", type="float")
      */
-    private $aportesFondoSolidaridadPensionalSolidaridad = 0;    
-    
+    private $aportesFondoSolidaridadPensionalSolidaridad = 0;
+
     /**
      * @ORM\Column(name="aportes_fondo_solidaridad_pensional_subsistencia", type="float")
      */
     private $aportesFondoSolidaridadPensionalSubsistencia = 0;
-    
+
     /**
      * @ORM\Column(name="valor_upc_adicional", type="float")
      */
     private $valorUpcAdicional = 0;
-    
+
     /**
      * @ORM\Column(name="numero_autorizacion_incapacidad_enfermedad_general", type="string", length=30, nullable=true)
      */
     private $numeroAutorizacionIncapacidadEnfermedadGeneral;
-    
+
     /**
      * @ORM\Column(name="valor_incapacidad_enfermedad_general", type="float")
      */
     private $valorIncapacidadEnfermedadGeneral = 0;
-    
+
     /**
      * @ORM\Column(name="numero_autorizacion_licencia_maternidad_paternidad", type="string", length=30, nullable=true)
      */
     private $numeroAutorizacionLicenciaMaternidadPaternidad;
-    
+
     /**
      * @ORM\Column(name="valor_incapacidad_licencia_maternidad_paternidad", type="float")
      */
     private $valorIncapacidadLicenciaMaternidadPaternidad = 0;
-    
+
     /**
      * @ORM\Column(name="centro_trabajo_codigo_ct", type="string", length=30, nullable=true)
      */
     private $centroTrabajoCodigoCt;
-    
+
     /**
      * @ORM\Column(name="codigo_cargo_fk", type="integer", nullable=true)
-     */    
+     */
     private $codigoCargoFk;
-    
+
     /**
      * @ORM\Column(name="tarifa_aporte_esap", type="float")
      */
     private $tarifaAportesESAP = 0;
-    
+
     /**
      * @ORM\Column(name="valor_aporte_esap", type="float")
      */
     private $valorAportesESAP = 0;
-    
+
     /**
      * @ORM\Column(name="tarifa_aporte_men", type="float")
      */
     private $tarifaAportesMEN = 0;
-    
+
     /**
      * @ORM\Column(name="valor_aporte_men", type="float")
      */
     private $valorAportesMEN = 0;
-    
+
     /**
      * @ORM\Column(name="tipo_documento_responsable_upc", type="string", length=4, nullable=true)
-     */    
+     */
     private $tipoDocumentoResponsableUPC;
-    
+
     /**
      * @ORM\Column(name="numero_identificacion_responsable_upc_adicional", type="string", length=30, nullable=true)
-     */    
+     */
     private $numeroIdentificacionResponsableUPCAdicional;
-    
+
     /**
      * @ORM\Column(name="cotizante_exonerado_pago_aporte_parafiscales_salud", type="string", length=20, nullable=true)
-     */    
+     */
     private $cotizanteExoneradoPagoAporteParafiscalesSalud;
-    
+
     /**
      * @ORM\Column(name="codigo_administradora_riesgos_laborales", type="string", length=20, nullable=true)
-     */    
+     */
     private $codigoAdministradoraRiesgosLaborales;
-    
+
     /**
      * @ORM\Column(name="clase_riesgo_afiliado", type="string", length=20, nullable=true)
-     */    
+     */
     private $claseRiesgoAfiliado;
-        
+
     /**
      * @ORM\Column(name="total_cotizacion", type="float")
      */
-    private $totalCotizacion;        
-    
+    private $totalCotizacion;
+
     /**
      * @ORM\Column(name="codigo_entidad_pension_fk", type="integer", nullable=true)
-     */    
-    private $codigoEntidadPensionFk;     
-    
+     */
+    private $codigoEntidadPensionFk;
+
     /**
      * @ORM\Column(name="codigo_entidad_salud_fk", type="integer", nullable=true)
-     */    
-    private $codigoEntidadSaludFk;       
-    
-     /**
+     */
+    private $codigoEntidadSaludFk;
+
+    /**
      * @ORM\Column(name="codigo_entidad_riesgo_fk", type="integer", nullable=true)
-     */    
-    private $codigoEntidadRiesgoFk;    
-    
-     /**
+     */
+    private $codigoEntidadRiesgoFk;
+
+    /**
      * @ORM\Column(name="codigo_entidad_caja_fk", type="integer", nullable=true)
-     */    
-    private $codigoEntidadCajaFk;    
-    
+     */
+    private $codigoEntidadCajaFk;
+
+    /**
+     * @ORM\Column(name="indicador_tarifa_especial_pensiones", type="string", length=1, nullable=true)
+     */
+    private $indicadorTarifaEspecialPensiones;
+
+    /**
+     * @ORM\Column(name="fecha_ingreso", type="string", length=10, nullable=true)
+     */
+    private $fechaIngreso;
+
+    /**
+     * @ORM\Column(name="fecha_retiro", type="string", length=10, nullable=true)
+     */
+    private $fechaRetiro;
+
+    /**
+     * @ORM\Column(name="fecha_inicio_vsp", type="string", length=10, nullable=true)
+     */
+    private $fechaInicioVsp;
+
+    /**
+     * @ORM\Column(name="fecha_inicio_sln", type="string", length=10, nullable=true)
+     */
+    private $fechaInicioSln;
+
+    /**
+     * @ORM\Column(name="fecha_fin_sln", type="string", length=10, nullable=true)
+     */
+    private $fechaFinSln;
+
+    /**
+     * @ORM\Column(name="fecha_inicio_ige", type="string", length=10, nullable=true)
+     */
+    private $fechaInicioIge;
+
+    /**
+     * @ORM\Column(name="fecha_fin_ige", type="string", length=10, nullable=true)
+     */
+    private $fechaFinIge;
+
+    /**
+     * @ORM\Column(name="fecha_inicio_lma", type="string", length=10, nullable=true)
+     */
+    private $fechaInicioLma;
+
+    /**
+     * @ORM\Column(name="fecha_fin_lma", type="string", length=10, nullable=true)
+     */
+    private $fechaFinLma;
+
+    /**
+     * @ORM\Column(name="fecha_inicio_vac_lr", type="string", length=10, nullable=true)
+     */
+    private $fechaInicioVacLr;
+
+    /**
+     * @ORM\Column(name="fecha_fin_vac_lr", type="string", length=10, nullable=true)
+     */
+    private $fechaFinVacLr;
+
+    /**
+     * @ORM\Column(name="fecha_inicio_vct", type="string", length=10, nullable=true)
+     */
+    private $fechaInicioVct;
+
+    /**
+     * @ORM\Column(name="fecha_fin_vct", type="string", length=10, nullable=true)
+     */
+    private $fechaFinVct;
+
+    /**
+     * @ORM\Column(name="fecha_inicio_irl", type="string", length=10, nullable=true)
+     */
+    private $fechaInicioIrl;
+
+    /**
+     * @ORM\Column(name="fecha_fin_irl", type="string", length=10, nullable=true)
+     */
+    private $fechaFinIrl;
+
+    /**
+     * @ORM\Column(name="ibc_otros_parafiscales_diferentes_ccf", type="float", nullable=true)
+     */
+    private $ibcOtrosParafiscalesDiferentesCcf = 0;
+
+    /**
+     * @ORM\Column(name="numero_horas_laboradas", type="float", nullable=true)
+     */
+    private $numeroHorasLaboradas = 0;
+
     /**
      * @ORM\ManyToOne(targetEntity="RhuSsoPeriodo", inversedBy="ssoAportesSsoPeriodoRel")
      * @ORM\JoinColumn(name="codigo_periodo_fk", referencedColumnName="codigo_periodo_pk")
      */
-    protected $ssoPeriodoRel;    
+    protected $ssoPeriodoRel;
 
     /**
      * @ORM\ManyToOne(targetEntity="RhuSsoPeriodoDetalle", inversedBy="ssoAportesSsoPeriodoDetalleRel")
      * @ORM\JoinColumn(name="codigo_periodo_detalle_fk", referencedColumnName="codigo_periodo_detalle_pk")
      */
-    protected $ssoPeriodoDetalleRel;    
-    
+    protected $ssoPeriodoDetalleRel;
+
     /**
      * @ORM\ManyToOne(targetEntity="RhuSsoSucursal", inversedBy="ssoAportesSsoSucursalRel")
      * @ORM\JoinColumn(name="codigo_sucursal_fk", referencedColumnName="codigo_sucursal_pk")
      */
-    protected $ssoSucursalRel;       
-    
+    protected $ssoSucursalRel;
+
     /**
      * @ORM\ManyToOne(targetEntity="RhuEmpleado", inversedBy="ssoAportesEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
-    protected $empleadoRel;      
+    protected $empleadoRel;
 
     /**
      * @ORM\ManyToOne(targetEntity="RhuContrato", inversedBy="ssoAportesContratoRel")
      * @ORM\JoinColumn(name="codigo_contrato_fk", referencedColumnName="codigo_contrato_pk")
      */
-    protected $contratoRel;          
+    protected $contratoRel;
 
     /**
      * @ORM\ManyToOne(targetEntity="RhuCargo", inversedBy="ssoAportesCargoRel")
      * @ORM\JoinColumn(name="codigo_cargo_fk", referencedColumnName="codigo_cargo_pk")
      */
-    protected $cargoRel;     
-    
+    protected $cargoRel;
+
     /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadPension", inversedBy="ssoAportesEntidadPensionRel")
      * @ORM\JoinColumn(name="codigo_entidad_pension_fk", referencedColumnName="codigo_entidad_pension_pk")
      */
-    protected $entidadPensionRel;     
-    
+    protected $entidadPensionRel;
+
     /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadSalud", inversedBy="ssoAportesEntidadSaludRel")
      * @ORM\JoinColumn(name="codigo_entidad_salud_fk", referencedColumnName="codigo_entidad_salud_pk")
      */
-    protected $entidadSaludRel;       
-   
+    protected $entidadSaludRel;
+
     /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadRiesgoProfesional", inversedBy="ssoAportesEntidadRiesgoProfesionalRel")
      * @ORM\JoinColumn(name="codigo_entidad_riesgo_fk", referencedColumnName="codigo_entidad_riesgo_pk")
      */
-    protected $entidadRiesgoProfesionalRel;    
-    
+    protected $entidadRiesgoProfesionalRel;
+
     /**
      * @ORM\ManyToOne(targetEntity="RhuEntidadCaja", inversedBy="ssoAportesEntidadCajaRel")
      * @ORM\JoinColumn(name="codigo_entidad_caja_fk", referencedColumnName="codigo_entidad_caja_pk")
      */
-    protected $entidadCajaRel;    
-    
+    protected $entidadCajaRel;
+
 
     /**
      * Get codigoAportePk
@@ -3198,5 +3288,437 @@ class RhuSsoAporte
     public function getEntidadCajaRel()
     {
         return $this->entidadCajaRel;
+    }
+
+    /**
+     * Set indicadorTarifaEspecialPensiones
+     *
+     * @param string $indicadorTarifaEspecialPensiones
+     *
+     * @return RhuSsoAporte
+     */
+    public function setIndicadorTarifaEspecialPensiones($indicadorTarifaEspecialPensiones)
+    {
+        $this->indicadorTarifaEspecialPensiones = $indicadorTarifaEspecialPensiones;
+
+        return $this;
+    }
+
+    /**
+     * Get indicadorTarifaEspecialPensiones
+     *
+     * @return string
+     */
+    public function getIndicadorTarifaEspecialPensiones()
+    {
+        return $this->indicadorTarifaEspecialPensiones;
+    }
+
+    /**
+     * Set fechaIngreso
+     *
+     * @param string $fechaIngreso
+     *
+     * @return RhuSsoAporte
+     */
+    public function setFechaIngreso($fechaIngreso)
+    {
+        $this->fechaIngreso = $fechaIngreso;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaIngreso
+     *
+     * @return string
+     */
+    public function getFechaIngreso()
+    {
+        return $this->fechaIngreso;
+    }
+
+    /**
+     * Set fechaRetiro
+     *
+     * @param string $fechaRetiro
+     *
+     * @return RhuSsoAporte
+     */
+    public function setFechaRetiro($fechaRetiro)
+    {
+        $this->fechaRetiro = $fechaRetiro;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaRetiro
+     *
+     * @return string
+     */
+    public function getFechaRetiro()
+    {
+        return $this->fechaRetiro;
+    }
+
+    /**
+     * Set fechaInicioVsp
+     *
+     * @param string $fechaInicioVsp
+     *
+     * @return RhuSsoAporte
+     */
+    public function setFechaInicioVsp($fechaInicioVsp)
+    {
+        $this->fechaInicioVsp = $fechaInicioVsp;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaInicioVsp
+     *
+     * @return string
+     */
+    public function getFechaInicioVsp()
+    {
+        return $this->fechaInicioVsp;
+    }
+
+    /**
+     * Set fechaInicioSln
+     *
+     * @param string $fechaInicioSln
+     *
+     * @return RhuSsoAporte
+     */
+    public function setFechaInicioSln($fechaInicioSln)
+    {
+        $this->fechaInicioSln = $fechaInicioSln;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaInicioSln
+     *
+     * @return string
+     */
+    public function getFechaInicioSln()
+    {
+        return $this->fechaInicioSln;
+    }
+
+    /**
+     * Set fechaFinSln
+     *
+     * @param string $fechaFinSln
+     *
+     * @return RhuSsoAporte
+     */
+    public function setFechaFinSln($fechaFinSln)
+    {
+        $this->fechaFinSln = $fechaFinSln;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaFinSln
+     *
+     * @return string
+     */
+    public function getFechaFinSln()
+    {
+        return $this->fechaFinSln;
+    }
+
+    /**
+     * Set fechaInicioIge
+     *
+     * @param string $fechaInicioIge
+     *
+     * @return RhuSsoAporte
+     */
+    public function setFechaInicioIge($fechaInicioIge)
+    {
+        $this->fechaInicioIge = $fechaInicioIge;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaInicioIge
+     *
+     * @return string
+     */
+    public function getFechaInicioIge()
+    {
+        return $this->fechaInicioIge;
+    }
+
+    /**
+     * Set fechaFinIge
+     *
+     * @param string $fechaFinIge
+     *
+     * @return RhuSsoAporte
+     */
+    public function setFechaFinIge($fechaFinIge)
+    {
+        $this->fechaFinIge = $fechaFinIge;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaFinIge
+     *
+     * @return string
+     */
+    public function getFechaFinIge()
+    {
+        return $this->fechaFinIge;
+    }
+
+    /**
+     * Set fechaInicioLma
+     *
+     * @param string $fechaInicioLma
+     *
+     * @return RhuSsoAporte
+     */
+    public function setFechaInicioLma($fechaInicioLma)
+    {
+        $this->fechaInicioLma = $fechaInicioLma;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaInicioLma
+     *
+     * @return string
+     */
+    public function getFechaInicioLma()
+    {
+        return $this->fechaInicioLma;
+    }
+
+    /**
+     * Set fechaFinLma
+     *
+     * @param string $fechaFinLma
+     *
+     * @return RhuSsoAporte
+     */
+    public function setFechaFinLma($fechaFinLma)
+    {
+        $this->fechaFinLma = $fechaFinLma;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaFinLma
+     *
+     * @return string
+     */
+    public function getFechaFinLma()
+    {
+        return $this->fechaFinLma;
+    }
+
+    /**
+     * Set fechaInicioVacLr
+     *
+     * @param string $fechaInicioVacLr
+     *
+     * @return RhuSsoAporte
+     */
+    public function setFechaInicioVacLr($fechaInicioVacLr)
+    {
+        $this->fechaInicioVacLr = $fechaInicioVacLr;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaInicioVacLr
+     *
+     * @return string
+     */
+    public function getFechaInicioVacLr()
+    {
+        return $this->fechaInicioVacLr;
+    }
+
+    /**
+     * Set fechaFinVacLr
+     *
+     * @param string $fechaFinVacLr
+     *
+     * @return RhuSsoAporte
+     */
+    public function setFechaFinVacLr($fechaFinVacLr)
+    {
+        $this->fechaFinVacLr = $fechaFinVacLr;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaFinVacLr
+     *
+     * @return string
+     */
+    public function getFechaFinVacLr()
+    {
+        return $this->fechaFinVacLr;
+    }
+
+    /**
+     * Set fechaInicioVct
+     *
+     * @param string $fechaInicioVct
+     *
+     * @return RhuSsoAporte
+     */
+    public function setFechaInicioVct($fechaInicioVct)
+    {
+        $this->fechaInicioVct = $fechaInicioVct;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaInicioVct
+     *
+     * @return string
+     */
+    public function getFechaInicioVct()
+    {
+        return $this->fechaInicioVct;
+    }
+
+    /**
+     * Set fechaFinVct
+     *
+     * @param string $fechaFinVct
+     *
+     * @return RhuSsoAporte
+     */
+    public function setFechaFinVct($fechaFinVct)
+    {
+        $this->fechaFinVct = $fechaFinVct;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaFinVct
+     *
+     * @return string
+     */
+    public function getFechaFinVct()
+    {
+        return $this->fechaFinVct;
+    }
+
+    /**
+     * Set fechaInicioIrl
+     *
+     * @param string $fechaInicioIrl
+     *
+     * @return RhuSsoAporte
+     */
+    public function setFechaInicioIrl($fechaInicioIrl)
+    {
+        $this->fechaInicioIrl = $fechaInicioIrl;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaInicioIrl
+     *
+     * @return string
+     */
+    public function getFechaInicioIrl()
+    {
+        return $this->fechaInicioIrl;
+    }
+
+    /**
+     * Set fechaFinIrl
+     *
+     * @param string $fechaFinIrl
+     *
+     * @return RhuSsoAporte
+     */
+    public function setFechaFinIrl($fechaFinIrl)
+    {
+        $this->fechaFinIrl = $fechaFinIrl;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaFinIrl
+     *
+     * @return string
+     */
+    public function getFechaFinIrl()
+    {
+        return $this->fechaFinIrl;
+    }
+
+    /**
+     * Set ibcOtrosParafiscalesDiferentesCcf
+     *
+     * @param float $ibcOtrosParafiscalesDiferentesCcf
+     *
+     * @return RhuSsoAporte
+     */
+    public function setIbcOtrosParafiscalesDiferentesCcf($ibcOtrosParafiscalesDiferentesCcf)
+    {
+        $this->ibcOtrosParafiscalesDiferentesCcf = $ibcOtrosParafiscalesDiferentesCcf;
+
+        return $this;
+    }
+
+    /**
+     * Get ibcOtrosParafiscalesDiferentesCcf
+     *
+     * @return float
+     */
+    public function getIbcOtrosParafiscalesDiferentesCcf()
+    {
+        return $this->ibcOtrosParafiscalesDiferentesCcf;
+    }
+
+    /**
+     * Set numeroHorasLaboradas
+     *
+     * @param float $numeroHorasLaboradas
+     *
+     * @return RhuSsoAporte
+     */
+    public function setNumeroHorasLaboradas($numeroHorasLaboradas)
+    {
+        $this->numeroHorasLaboradas = $numeroHorasLaboradas;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroHorasLaboradas
+     *
+     * @return float
+     */
+    public function getNumeroHorasLaboradas()
+    {
+        return $this->numeroHorasLaboradas;
     }
 }
