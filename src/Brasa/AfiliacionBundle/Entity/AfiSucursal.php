@@ -15,29 +15,34 @@ class AfiSucursal
      * @ORM\Column(name="codigo_sucursal_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoSucursalPk;    
-          
+    private $codigoSucursalPk;
+
     /**
      * @ORM\Column(name="nombre", type="string", length=80)
      */
-    private $nombre;                             
-    
+    private $nombre;
+
     /**
      * @ORM\Column(name="codigo_interface", type="string", length=50)
      */
-    private $codigoInterface;                                                                
-    
+    private $codigoInterface;
+
     /**
      * @ORM\OneToMany(targetEntity="AfiContrato", mappedBy="sucursalRel")
      */
     protected $contratosSucursalRel;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="AfiPeriodoDetallePago", mappedBy="sucursalRel")
      */
     protected $periodosDetallesPagosSucursalRel;
 
-    
+    /**
+     * @ORM\OneToMany(targetEntity="AfiPeriodoDetallePagoDetalle", mappedBy="sucursalRel")
+     */
+    protected $periodosDetallesPagosDetallesSucursalRel;
+
+
     /**
      * Constructor
      */
@@ -171,5 +176,39 @@ class AfiSucursal
     public function getPeriodosDetallesPagosSucursalRel()
     {
         return $this->periodosDetallesPagosSucursalRel;
+    }
+
+    /**
+     * Add periodosDetallesPagosDetallesSucursalRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesSucursalRel
+     *
+     * @return AfiSucursal
+     */
+    public function addPeriodosDetallesPagosDetallesSucursalRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesSucursalRel)
+    {
+        $this->periodosDetallesPagosDetallesSucursalRel[] = $periodosDetallesPagosDetallesSucursalRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove periodosDetallesPagosDetallesSucursalRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesSucursalRel
+     */
+    public function removePeriodosDetallesPagosDetallesSucursalRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesSucursalRel)
+    {
+        $this->periodosDetallesPagosDetallesSucursalRel->removeElement($periodosDetallesPagosDetallesSucursalRel);
+    }
+
+    /**
+     * Get periodosDetallesPagosDetallesSucursalRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPeriodosDetallesPagosDetallesSucursalRel()
+    {
+        return $this->periodosDetallesPagosDetallesSucursalRel;
     }
 }

@@ -5,17 +5,22 @@ namespace Brasa\AfiliacionBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="afi_periodo_detalle_pago")
- * @ORM\Entity(repositoryClass="Brasa\AfiliacionBundle\Repository\AfiPeriodoDetallePagoRepository")
+ * @ORM\Table(name="afi_periodo_detalle_pago_detalle")
+ * @ORM\Entity(repositoryClass="Brasa\AfiliacionBundle\Repository\AfiPeriodoDetallePagoDetalleRepository")
  */
-class AfiPeriodoDetallePago
+class AfiPeriodoDetallePagoDetalle
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="codigo_periodo_detalle_pago_pk", type="integer")
+     * @ORM\Column(name="codigo_periodo_detalle_pago_detalle_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $codigoPeriodoDetallePagoPk;
+
+    /**
+     * @ORM\Column(name="codigo_periodo_detalle_pago_fk", type="integer")
+     */
+    private $codigoPeriodoDetallePagoFk;
 
     /**
      * @ORM\Column(name="codigo_periodo_fk", type="integer")
@@ -588,33 +593,35 @@ class AfiPeriodoDetallePago
     private $numeroHorasLaboradas = 0;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AfiPeriodo", inversedBy="periodosDetallesPagosPeriodoRel")
+     * @ORM\ManyToOne(targetEntity="AfiPeriodo", inversedBy="periodosDetallesPagosDetallesPeriodoRel")
      * @ORM\JoinColumn(name="codigo_periodo_fk", referencedColumnName="codigo_periodo_pk")
      */
     protected $periodoRel;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AfiEmpleado", inversedBy="periodosDetallesPagosEmpleadoRel")
+     * @ORM\ManyToOne(targetEntity="AfiEmpleado", inversedBy="periodosDetallesPagosDetallesEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
     protected $empleadoRel;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AfiContrato", inversedBy="periodosDetallesPagosContratoRel")
+     * @ORM\ManyToOne(targetEntity="AfiContrato", inversedBy="periodosDetallesPagosDetallesContratoRel")
      * @ORM\JoinColumn(name="codigo_contrato_fk", referencedColumnName="codigo_contrato_pk")
      */
     protected $contratoRel;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AfiSucursal", inversedBy="periodosDetallesPagosSucursalRel")
+     * @ORM\ManyToOne(targetEntity="AfiSucursal", inversedBy="periodosDetallesPagosDetallesSucursalRel")
      * @ORM\JoinColumn(name="codigo_sucursal_fk", referencedColumnName="codigo_sucursal_pk")
      */
     protected $sucursalRel;
 
     /**
-     * @ORM\OneToMany(targetEntity="AfiPeriodoDetallePagoDetalle", mappedBy="periodoDetallePagoRel")
+     * @ORM\ManyToOne(targetEntity="AfiPeriodoDetallePago", inversedBy="periodosDetallesPagosDetallesPeriodoDetallePagoRel")
+     * @ORM\JoinColumn(name="codigo_periodo_detalle_pago_fk", referencedColumnName="codigo_periodo_detalle_pago_pk")
      */
-    protected $periodosDetallesPagosDetallesPeriodoDetallePagoRel;
+    protected $periodoDetallePagoRel;
+
 
     /**
      * Get codigoPeriodoDetallePagoPk
@@ -627,11 +634,35 @@ class AfiPeriodoDetallePago
     }
 
     /**
+     * Set codigoPeriodoDetallePagoFk
+     *
+     * @param integer $codigoPeriodoDetallePagoFk
+     *
+     * @return AfiPeriodoDetallePagoDetalle
+     */
+    public function setCodigoPeriodoDetallePagoFk($codigoPeriodoDetallePagoFk)
+    {
+        $this->codigoPeriodoDetallePagoFk = $codigoPeriodoDetallePagoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoPeriodoDetallePagoFk
+     *
+     * @return integer
+     */
+    public function getCodigoPeriodoDetallePagoFk()
+    {
+        return $this->codigoPeriodoDetallePagoFk;
+    }
+
+    /**
      * Set codigoPeriodoFk
      *
      * @param integer $codigoPeriodoFk
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setCodigoPeriodoFk($codigoPeriodoFk)
     {
@@ -655,7 +686,7 @@ class AfiPeriodoDetallePago
      *
      * @param integer $codigoEmpleadoFk
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setCodigoEmpleadoFk($codigoEmpleadoFk)
     {
@@ -679,7 +710,7 @@ class AfiPeriodoDetallePago
      *
      * @param integer $codigoContratoFk
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setCodigoContratoFk($codigoContratoFk)
     {
@@ -703,7 +734,7 @@ class AfiPeriodoDetallePago
      *
      * @param integer $anio
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setAnio($anio)
     {
@@ -727,7 +758,7 @@ class AfiPeriodoDetallePago
      *
      * @param integer $mes
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setMes($mes)
     {
@@ -751,7 +782,7 @@ class AfiPeriodoDetallePago
      *
      * @param \DateTime $fechaDesde
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setFechaDesde($fechaDesde)
     {
@@ -775,7 +806,7 @@ class AfiPeriodoDetallePago
      *
      * @param \DateTime $fechaHasta
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setFechaHasta($fechaHasta)
     {
@@ -799,7 +830,7 @@ class AfiPeriodoDetallePago
      *
      * @param integer $tipoRegistro
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setTipoRegistro($tipoRegistro)
     {
@@ -823,7 +854,7 @@ class AfiPeriodoDetallePago
      *
      * @param integer $secuencia
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setSecuencia($secuencia)
     {
@@ -847,7 +878,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $tipoDocumento
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setTipoDocumento($tipoDocumento)
     {
@@ -871,7 +902,7 @@ class AfiPeriodoDetallePago
      *
      * @param integer $tipoCotizante
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setTipoCotizante($tipoCotizante)
     {
@@ -895,7 +926,7 @@ class AfiPeriodoDetallePago
      *
      * @param integer $subtipoCotizante
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setSubtipoCotizante($subtipoCotizante)
     {
@@ -919,7 +950,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $extranjeroNoObligadoCotizarPension
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setExtranjeroNoObligadoCotizarPension($extranjeroNoObligadoCotizarPension)
     {
@@ -943,7 +974,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $colombianoResidenteExterior
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setColombianoResidenteExterior($colombianoResidenteExterior)
     {
@@ -967,7 +998,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $codigoDepartamentoUbicacionlaboral
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setCodigoDepartamentoUbicacionlaboral($codigoDepartamentoUbicacionlaboral)
     {
@@ -991,7 +1022,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $codigoMunicipioUbicacionlaboral
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setCodigoMunicipioUbicacionlaboral($codigoMunicipioUbicacionlaboral)
     {
@@ -1015,7 +1046,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $primerNombre
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setPrimerNombre($primerNombre)
     {
@@ -1039,7 +1070,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $segundoNombre
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setSegundoNombre($segundoNombre)
     {
@@ -1063,7 +1094,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $primerApellido
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setPrimerApellido($primerApellido)
     {
@@ -1087,7 +1118,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $segundoApellido
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setSegundoApellido($segundoApellido)
     {
@@ -1111,7 +1142,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $ingreso
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setIngreso($ingreso)
     {
@@ -1135,7 +1166,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $retiro
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setRetiro($retiro)
     {
@@ -1159,7 +1190,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $trasladoDesdeOtraEps
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setTrasladoDesdeOtraEps($trasladoDesdeOtraEps)
     {
@@ -1183,7 +1214,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $trasladoAOtraEps
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setTrasladoAOtraEps($trasladoAOtraEps)
     {
@@ -1207,7 +1238,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $trasladoDesdeOtraPension
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setTrasladoDesdeOtraPension($trasladoDesdeOtraPension)
     {
@@ -1231,7 +1262,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $trasladoAOtraPension
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setTrasladoAOtraPension($trasladoAOtraPension)
     {
@@ -1255,7 +1286,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $variacionPermanenteSalario
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setVariacionPermanenteSalario($variacionPermanenteSalario)
     {
@@ -1279,7 +1310,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $correcciones
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setCorrecciones($correcciones)
     {
@@ -1303,7 +1334,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $variacionTransitoriaSalario
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setVariacionTransitoriaSalario($variacionTransitoriaSalario)
     {
@@ -1327,7 +1358,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $suspensionTemporalContratoLicenciaServicios
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setSuspensionTemporalContratoLicenciaServicios($suspensionTemporalContratoLicenciaServicios)
     {
@@ -1351,7 +1382,7 @@ class AfiPeriodoDetallePago
      *
      * @param integer $diasLicencia
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setDiasLicencia($diasLicencia)
     {
@@ -1375,7 +1406,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $incapacidadGeneral
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setIncapacidadGeneral($incapacidadGeneral)
     {
@@ -1399,7 +1430,7 @@ class AfiPeriodoDetallePago
      *
      * @param integer $diasIncapacidadGeneral
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setDiasIncapacidadGeneral($diasIncapacidadGeneral)
     {
@@ -1423,7 +1454,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $licenciaMaternidad
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setLicenciaMaternidad($licenciaMaternidad)
     {
@@ -1447,7 +1478,7 @@ class AfiPeriodoDetallePago
      *
      * @param integer $diasLicenciaMaternidad
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setDiasLicenciaMaternidad($diasLicenciaMaternidad)
     {
@@ -1471,7 +1502,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $vacaciones
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setVacaciones($vacaciones)
     {
@@ -1495,7 +1526,7 @@ class AfiPeriodoDetallePago
      *
      * @param integer $diasVacaciones
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setDiasVacaciones($diasVacaciones)
     {
@@ -1519,7 +1550,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $aporteVoluntario
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setAporteVoluntario($aporteVoluntario)
     {
@@ -1543,7 +1574,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $variacionCentrosTrabajo
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setVariacionCentrosTrabajo($variacionCentrosTrabajo)
     {
@@ -1567,7 +1598,7 @@ class AfiPeriodoDetallePago
      *
      * @param integer $incapacidadAccidenteTrabajoEnfermedadProfesional
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setIncapacidadAccidenteTrabajoEnfermedadProfesional($incapacidadAccidenteTrabajoEnfermedadProfesional)
     {
@@ -1591,7 +1622,7 @@ class AfiPeriodoDetallePago
      *
      * @param integer $diasIncapacidadLaboral
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setDiasIncapacidadLaboral($diasIncapacidadLaboral)
     {
@@ -1615,7 +1646,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $codigoEntidadPensionPertenece
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setCodigoEntidadPensionPertenece($codigoEntidadPensionPertenece)
     {
@@ -1639,7 +1670,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $codigoEntidadPensionTraslada
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setCodigoEntidadPensionTraslada($codigoEntidadPensionTraslada)
     {
@@ -1663,7 +1694,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $codigoEntidadSaludPertenece
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setCodigoEntidadSaludPertenece($codigoEntidadSaludPertenece)
     {
@@ -1687,7 +1718,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $codigoEntidadSaludTraslada
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setCodigoEntidadSaludTraslada($codigoEntidadSaludTraslada)
     {
@@ -1711,7 +1742,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $codigoEntidadCajaPertenece
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setCodigoEntidadCajaPertenece($codigoEntidadCajaPertenece)
     {
@@ -1735,7 +1766,7 @@ class AfiPeriodoDetallePago
      *
      * @param integer $diasCotizadosPension
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setDiasCotizadosPension($diasCotizadosPension)
     {
@@ -1759,7 +1790,7 @@ class AfiPeriodoDetallePago
      *
      * @param integer $diasCotizadosSalud
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setDiasCotizadosSalud($diasCotizadosSalud)
     {
@@ -1783,7 +1814,7 @@ class AfiPeriodoDetallePago
      *
      * @param integer $diasCotizadosRiesgosProfesionales
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setDiasCotizadosRiesgosProfesionales($diasCotizadosRiesgosProfesionales)
     {
@@ -1807,7 +1838,7 @@ class AfiPeriodoDetallePago
      *
      * @param integer $diasCotizadosCajaCompensacion
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setDiasCotizadosCajaCompensacion($diasCotizadosCajaCompensacion)
     {
@@ -1831,7 +1862,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $salarioBasico
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setSalarioBasico($salarioBasico)
     {
@@ -1855,7 +1886,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $salarioMesAnterior
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setSalarioMesAnterior($salarioMesAnterior)
     {
@@ -1879,7 +1910,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $salarioIntegral
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setSalarioIntegral($salarioIntegral)
     {
@@ -1903,7 +1934,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $suplementario
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setSuplementario($suplementario)
     {
@@ -1927,7 +1958,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $ibcPension
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setIbcPension($ibcPension)
     {
@@ -1951,7 +1982,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $ibcSalud
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setIbcSalud($ibcSalud)
     {
@@ -1975,7 +2006,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $ibcRiesgosProfesionales
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setIbcRiesgosProfesionales($ibcRiesgosProfesionales)
     {
@@ -1999,7 +2030,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $ibcCaja
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setIbcCaja($ibcCaja)
     {
@@ -2023,7 +2054,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $tarifaPension
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setTarifaPension($tarifaPension)
     {
@@ -2047,7 +2078,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $tarifaSalud
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setTarifaSalud($tarifaSalud)
     {
@@ -2071,7 +2102,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $tarifaRiesgos
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setTarifaRiesgos($tarifaRiesgos)
     {
@@ -2095,7 +2126,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $tarifaCaja
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setTarifaCaja($tarifaCaja)
     {
@@ -2119,7 +2150,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $tarifaSena
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setTarifaSena($tarifaSena)
     {
@@ -2143,7 +2174,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $tarifaIcbf
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setTarifaIcbf($tarifaIcbf)
     {
@@ -2167,7 +2198,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $cotizacionPension
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setCotizacionPension($cotizacionPension)
     {
@@ -2191,7 +2222,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $cotizacionSalud
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setCotizacionSalud($cotizacionSalud)
     {
@@ -2215,7 +2246,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $cotizacionRiesgos
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setCotizacionRiesgos($cotizacionRiesgos)
     {
@@ -2239,7 +2270,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $cotizacionCaja
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setCotizacionCaja($cotizacionCaja)
     {
@@ -2263,7 +2294,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $cotizacionSena
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setCotizacionSena($cotizacionSena)
     {
@@ -2287,7 +2318,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $cotizacionIcbf
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setCotizacionIcbf($cotizacionIcbf)
     {
@@ -2311,7 +2342,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $aporteVoluntarioFondoPensionesObligatorias
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setAporteVoluntarioFondoPensionesObligatorias($aporteVoluntarioFondoPensionesObligatorias)
     {
@@ -2335,7 +2366,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $cotizacionVoluntarioFondoPensionesObligatorias
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setCotizacionVoluntarioFondoPensionesObligatorias($cotizacionVoluntarioFondoPensionesObligatorias)
     {
@@ -2359,7 +2390,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $totalCotizacion
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setTotalCotizacion($totalCotizacion)
     {
@@ -2383,7 +2414,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $aportesFondoSolidaridadPensionalSolidaridad
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setAportesFondoSolidaridadPensionalSolidaridad($aportesFondoSolidaridadPensionalSolidaridad)
     {
@@ -2407,7 +2438,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $aportesFondoSolidaridadPensionalSubsistencia
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setAportesFondoSolidaridadPensionalSubsistencia($aportesFondoSolidaridadPensionalSubsistencia)
     {
@@ -2431,7 +2462,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $valorUpcAdicional
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setValorUpcAdicional($valorUpcAdicional)
     {
@@ -2455,7 +2486,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $numeroAutorizacionIncapacidadEnfermedadGeneral
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setNumeroAutorizacionIncapacidadEnfermedadGeneral($numeroAutorizacionIncapacidadEnfermedadGeneral)
     {
@@ -2479,7 +2510,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $valorIncapacidadEnfermedadGeneral
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setValorIncapacidadEnfermedadGeneral($valorIncapacidadEnfermedadGeneral)
     {
@@ -2503,7 +2534,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $numeroAutorizacionLicenciaMaternidadPaternidad
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setNumeroAutorizacionLicenciaMaternidadPaternidad($numeroAutorizacionLicenciaMaternidadPaternidad)
     {
@@ -2527,7 +2558,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $valorIncapacidadLicenciaMaternidadPaternidad
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setValorIncapacidadLicenciaMaternidadPaternidad($valorIncapacidadLicenciaMaternidadPaternidad)
     {
@@ -2551,7 +2582,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $centroTrabajoCodigoCt
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setCentroTrabajoCodigoCt($centroTrabajoCodigoCt)
     {
@@ -2575,7 +2606,7 @@ class AfiPeriodoDetallePago
      *
      * @param integer $codigoCargoFk
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setCodigoCargoFk($codigoCargoFk)
     {
@@ -2599,7 +2630,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $tarifaAportesESAP
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setTarifaAportesESAP($tarifaAportesESAP)
     {
@@ -2623,7 +2654,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $valorAportesESAP
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setValorAportesESAP($valorAportesESAP)
     {
@@ -2647,7 +2678,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $tarifaAportesMEN
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setTarifaAportesMEN($tarifaAportesMEN)
     {
@@ -2671,7 +2702,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $valorAportesMEN
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setValorAportesMEN($valorAportesMEN)
     {
@@ -2695,7 +2726,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $tipoDocumentoResponsableUPC
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setTipoDocumentoResponsableUPC($tipoDocumentoResponsableUPC)
     {
@@ -2719,7 +2750,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $numeroIdentificacionResponsableUPCAdicional
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setNumeroIdentificacionResponsableUPCAdicional($numeroIdentificacionResponsableUPCAdicional)
     {
@@ -2743,7 +2774,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $cotizanteExoneradoPagoAporteParafiscalesSalud
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setCotizanteExoneradoPagoAporteParafiscalesSalud($cotizanteExoneradoPagoAporteParafiscalesSalud)
     {
@@ -2767,7 +2798,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $codigoAdministradoraRiesgosLaborales
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setCodigoAdministradoraRiesgosLaborales($codigoAdministradoraRiesgosLaborales)
     {
@@ -2791,7 +2822,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $claseRiesgoAfiliado
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setClaseRiesgoAfiliado($claseRiesgoAfiliado)
     {
@@ -2815,7 +2846,7 @@ class AfiPeriodoDetallePago
      *
      * @param integer $codigoSucursalFk
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setCodigoSucursalFk($codigoSucursalFk)
     {
@@ -2839,7 +2870,7 @@ class AfiPeriodoDetallePago
      *
      * @param integer $codigoEntidadPensionFk
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setCodigoEntidadPensionFk($codigoEntidadPensionFk)
     {
@@ -2863,7 +2894,7 @@ class AfiPeriodoDetallePago
      *
      * @param integer $codigoEntidadSaludFk
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setCodigoEntidadSaludFk($codigoEntidadSaludFk)
     {
@@ -2887,7 +2918,7 @@ class AfiPeriodoDetallePago
      *
      * @param integer $codigoEntidadRiesgoFk
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setCodigoEntidadRiesgoFk($codigoEntidadRiesgoFk)
     {
@@ -2911,7 +2942,7 @@ class AfiPeriodoDetallePago
      *
      * @param integer $codigoEntidadCajaFk
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setCodigoEntidadCajaFk($codigoEntidadCajaFk)
     {
@@ -2935,7 +2966,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $indicadorTarifaEspecialPensiones
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setIndicadorTarifaEspecialPensiones($indicadorTarifaEspecialPensiones)
     {
@@ -2959,7 +2990,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $fechaIngreso
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setFechaIngreso($fechaIngreso)
     {
@@ -2983,7 +3014,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $fechaRetiro
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setFechaRetiro($fechaRetiro)
     {
@@ -3007,7 +3038,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $fechaInicioVsp
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setFechaInicioVsp($fechaInicioVsp)
     {
@@ -3031,7 +3062,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $fechaInicioSln
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setFechaInicioSln($fechaInicioSln)
     {
@@ -3055,7 +3086,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $fechaFinSln
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setFechaFinSln($fechaFinSln)
     {
@@ -3079,7 +3110,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $fechaInicioIge
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setFechaInicioIge($fechaInicioIge)
     {
@@ -3103,7 +3134,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $fechaFinIge
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setFechaFinIge($fechaFinIge)
     {
@@ -3127,7 +3158,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $fechaInicioLma
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setFechaInicioLma($fechaInicioLma)
     {
@@ -3151,7 +3182,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $fechaFinLma
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setFechaFinLma($fechaFinLma)
     {
@@ -3175,7 +3206,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $fechaInicioVacLr
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setFechaInicioVacLr($fechaInicioVacLr)
     {
@@ -3199,7 +3230,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $fechaFinVacLr
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setFechaFinVacLr($fechaFinVacLr)
     {
@@ -3223,7 +3254,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $fechaInicioVct
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setFechaInicioVct($fechaInicioVct)
     {
@@ -3247,7 +3278,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $fechaFinVct
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setFechaFinVct($fechaFinVct)
     {
@@ -3271,7 +3302,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $fechaInicioIrl
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setFechaInicioIrl($fechaInicioIrl)
     {
@@ -3295,7 +3326,7 @@ class AfiPeriodoDetallePago
      *
      * @param string $fechaFinIrl
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setFechaFinIrl($fechaFinIrl)
     {
@@ -3319,7 +3350,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $ibcOtrosParafiscalesDiferentesCcf
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setIbcOtrosParafiscalesDiferentesCcf($ibcOtrosParafiscalesDiferentesCcf)
     {
@@ -3343,7 +3374,7 @@ class AfiPeriodoDetallePago
      *
      * @param float $numeroHorasLaboradas
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setNumeroHorasLaboradas($numeroHorasLaboradas)
     {
@@ -3367,7 +3398,7 @@ class AfiPeriodoDetallePago
      *
      * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodo $periodoRel
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setPeriodoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodo $periodoRel = null)
     {
@@ -3391,7 +3422,7 @@ class AfiPeriodoDetallePago
      *
      * @param \Brasa\AfiliacionBundle\Entity\AfiEmpleado $empleadoRel
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setEmpleadoRel(\Brasa\AfiliacionBundle\Entity\AfiEmpleado $empleadoRel = null)
     {
@@ -3415,7 +3446,7 @@ class AfiPeriodoDetallePago
      *
      * @param \Brasa\AfiliacionBundle\Entity\AfiContrato $contratoRel
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setContratoRel(\Brasa\AfiliacionBundle\Entity\AfiContrato $contratoRel = null)
     {
@@ -3439,7 +3470,7 @@ class AfiPeriodoDetallePago
      *
      * @param \Brasa\AfiliacionBundle\Entity\AfiSucursal $sucursalRel
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
     public function setSucursalRel(\Brasa\AfiliacionBundle\Entity\AfiSucursal $sucursalRel = null)
     {
@@ -3457,45 +3488,28 @@ class AfiPeriodoDetallePago
     {
         return $this->sucursalRel;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->periodosDetallesPagosDetallesPeriodoDetallePagoRel = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
-     * Add periodosDetallesPagosDetallesPeriodoDetallePagoRel
+     * Set periodoDetallePagoRel
      *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesPeriodoDetallePagoRel
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago $periodoDetallePagoRel
      *
-     * @return AfiPeriodoDetallePago
+     * @return AfiPeriodoDetallePagoDetalle
      */
-    public function addPeriodosDetallesPagosDetallesPeriodoDetallePagoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesPeriodoDetallePagoRel)
+    public function setPeriodoDetallePagoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago $periodoDetallePagoRel = null)
     {
-        $this->periodosDetallesPagosDetallesPeriodoDetallePagoRel[] = $periodosDetallesPagosDetallesPeriodoDetallePagoRel;
+        $this->periodoDetallePagoRel = $periodoDetallePagoRel;
 
         return $this;
     }
 
     /**
-     * Remove periodosDetallesPagosDetallesPeriodoDetallePagoRel
+     * Get periodoDetallePagoRel
      *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesPeriodoDetallePagoRel
+     * @return \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePago
      */
-    public function removePeriodosDetallesPagosDetallesPeriodoDetallePagoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesPeriodoDetallePagoRel)
+    public function getPeriodoDetallePagoRel()
     {
-        $this->periodosDetallesPagosDetallesPeriodoDetallePagoRel->removeElement($periodosDetallesPagosDetallesPeriodoDetallePagoRel);
-    }
-
-    /**
-     * Get periodosDetallesPagosDetallesPeriodoDetallePagoRel
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getPeriodosDetallesPagosDetallesPeriodoDetallePagoRel()
-    {
-        return $this->periodosDetallesPagosDetallesPeriodoDetallePagoRel;
+        return $this->periodoDetallePagoRel;
     }
 }

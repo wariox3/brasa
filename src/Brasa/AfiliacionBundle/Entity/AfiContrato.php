@@ -15,239 +15,239 @@ class AfiContrato
      * @ORM\Column(name="codigo_contrato_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoContratoPk;                   
-    
+    private $codigoContratoPk;
+
     /**
      * @ORM\Column(name="fecha", type="date", nullable=true)
-     */    
-    private $fecha;           
-    
+     */
+    private $fecha;
+
     /**
      * @ORM\Column(name="codigo_empleado_fk", type="integer")
-     */    
+     */
     private $codigoEmpleadoFk;
-    
+
     /**
      * @ORM\Column(name="codigo_cliente_fk", type="integer", nullable=true)
-     */    
+     */
     private $codigoClienteFk;
-    
+
     /**
      * @ORM\Column(name="codigo_sucursal_fk", type="integer", nullable=true)
-     */    
-    private $codigoSucursalFk;    
-    
+     */
+    private $codigoSucursalFk;
+
     /**
      * @ORM\Column(name="fecha_desde", type="date", nullable=true)
-     */    
-    private $fechaDesde;    
-    
+     */
+    private $fechaDesde;
+
     /**
      * @ORM\Column(name="fecha_hasta", type="date", nullable=true)
-     */    
-    private $fechaHasta;    
-    
+     */
+    private $fechaHasta;
+
     /**
      * @ORM\Column(name="numero", type="string", length=30, nullable=true)
-     */    
-    private $numero;                
-    
+     */
+    private $numero;
+
     /**
      * @ORM\Column(name="vr_salario", type="float")
      */
-    private $VrSalario = 0;           
-    
-    /**     
+    private $VrSalario = 0;
+
+    /**
      * @ORM\Column(name="estado_activo", type="boolean")
-     */    
-    private $estadoActivo = true;     
-    
+     */
+    private $estadoActivo = true;
+
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
-     */    
-    private $comentarios;    
-    
-    /**     
+     */
+    private $comentarios;
+
+    /**
      * @ORM\Column(name="indefinido", type="boolean")
-     */    
-    private $indefinido = false;                                  
-    
+     */
+    private $indefinido = false;
+
     /**
      * @ORM\Column(name="codigo_clasificacion_riesgo_fk", type="integer")
-     */    
-    private $codigoClasificacionRiesgoFk;    
-    
+     */
+    private $codigoClasificacionRiesgoFk;
+
     /**
      * @ORM\Column(name="codigo_cargo_fk", type="integer")
-     */    
-    private $codigoCargoFk;     
-    
+     */
+    private $codigoCargoFk;
+
     /**
      * @ORM\Column(name="codigo_tipo_cotizante_fk", type="integer", nullable=false)
-     */    
-    private $codigoTipoCotizanteFk;    
+     */
+    private $codigoTipoCotizanteFk;
 
     /**
      * @ORM\Column(name="codigo_subtipo_cotizante_fk", type="integer", nullable=false)
-     */    
-    private $codigoSubtipoCotizanteFk;     
-    
-    /**     
+     */
+    private $codigoSubtipoCotizanteFk;
+
+    /**
      * @ORM\Column(name="salario_integral", type="boolean")
-     */    
-    private $salarioIntegral = false;  
-    
+     */
+    private $salarioIntegral = false;
+
     /**
      * @ORM\Column(name="codigo_entidad_salud_fk", type="integer", nullable=true)
-     */    
-    private $codigoEntidadSaludFk;    
+     */
+    private $codigoEntidadSaludFk;
 
     /**
      * @ORM\Column(name="codigo_entidad_pension_fk", type="integer", nullable=true)
-     */    
+     */
     private $codigoEntidadPensionFk;
-    
+
     /**
      * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
-     */    
+     */
     private $codigoUsuario;
 
-     /**
+    /**
      * @ORM\Column(name="codigo_entidad_caja_fk", type="integer", nullable=true)
-     */    
+     */
     private $codigoEntidadCajaFk;
-    
-    /**     
+
+    /**
      * @ORM\Column(name="genera_salud", type="boolean")
-     */    
+     */
     private $genera_salud = false;
 
     /**
      * @ORM\Column(name="porcentaje_salud", type="float")
      */
-    private $porcentajeSalud = 0;    
-    
-    /**     
+    private $porcentajeSalud = 0;
+
+    /**
      * @ORM\Column(name="genera_pension", type="boolean")
-     */    
-    private $genera_pension = false;        
+     */
+    private $genera_pension = false;
 
     /**
      * @ORM\Column(name="porcentaje_pension", type="float")
      */
-    private $porcentajePension = 0;    
-    
-    /**     
+    private $porcentajePension = 0;
+
+    /**
      * @ORM\Column(name="genera_caja", type="boolean")
-     */    
-    private $genera_caja = false;            
-    
+     */
+    private $genera_caja = false;
+
     /**
      * @ORM\Column(name="porcentaje_caja", type="float")
      */
-    private $porcentajeCaja = 0;     
-    
-    /**     
+    private $porcentajeCaja = 0;
+
+    /**
      * @ORM\Column(name="genera_riesgos", type="boolean")
-     */    
-    private $genera_riesgos = false;        
-    
-    /**     
+     */
+    private $genera_riesgos = false;
+
+    /**
      * @ORM\Column(name="genera_sena", type="boolean")
-     */    
-    private $genera_sena = false;     
-    
-    
-    /**     
+     */
+    private $genera_sena = false;
+
+
+    /**
      * @ORM\Column(name="genera_icbf", type="boolean")
-     */    
-    private $genera_icbf = false;   
-    
-    /**     
+     */
+    private $genera_icbf = false;
+
+    /**
      * @ORM\Column(name="estado_generado_cta_cobrar", type="boolean")
-     */    
+     */
     private $estadoGeneradoCtaCobrar = false;
-    
-    /**     
+
+    /**
      * @ORM\Column(name="estado_historial_contrato", type="boolean")
-     */    
+     */
     private $estadoHistorialContrato = false;
-    
+
     /**
      * @ORM\Column(name="numero_recibo", type="string", length=30, nullable=true)
-     */    
-    private $numeroRecibo; 
+     */
+    private $numeroRecibo;
 
     /**
      * @ORM\Column(name="valor", type="float")
      */
-    private $valor = 0; 
-    
+    private $valor = 0;
+
     /**
      * @ORM\Column(name="forma_pago", type="string", length=30, nullable=true)
-     */    
-    private $formaPago; 
-    
+     */
+    private $formaPago;
+
     /**
      * @ORM\ManyToOne(targetEntity="AfiEmpleado", inversedBy="contratosEmpleadoRel")
      * @ORM\JoinColumn(name="codigo_empleado_fk", referencedColumnName="codigo_empleado_pk")
      */
-    protected $empleadoRel;          
+    protected $empleadoRel;
 
     /**
      * @ORM\ManyToOne(targetEntity="AfiCliente", inversedBy="contratosClienteRel")
      * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
      */
-    protected $clienteRel;    
-   
+    protected $clienteRel;
+
     /**
      * @ORM\ManyToOne(targetEntity="AfiSucursal", inversedBy="contratosSucursalRel")
      * @ORM\JoinColumn(name="codigo_sucursal_fk", referencedColumnName="codigo_sucursal_pk")
      */
-    protected $sucursalRel;    
-    
+    protected $sucursalRel;
+
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuClasificacionRiesgo", inversedBy="afiContratosClasificacionRiesgoRel")
      * @ORM\JoinColumn(name="codigo_clasificacion_riesgo_fk", referencedColumnName="codigo_clasificacion_riesgo_pk")
      */
-    protected $clasificacionRiesgoRel; 
-    
+    protected $clasificacionRiesgoRel;
+
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuCargo", inversedBy="afiContratosCargoRel")
      * @ORM\JoinColumn(name="codigo_cargo_fk", referencedColumnName="codigo_cargo_pk")
      */
-    protected $cargoRel;            
-    
+    protected $cargoRel;
+
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuSsoTipoCotizante", inversedBy="afiContratosSsoTipoCotizanteRel")
      * @ORM\JoinColumn(name="codigo_tipo_cotizante_fk", referencedColumnName="codigo_tipo_cotizante_pk")
      */
-    protected $ssoTipoCotizanteRel;     
+    protected $ssoTipoCotizanteRel;
 
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuSsoSubtipoCotizante", inversedBy="afiContratosSsoSubtipoCotizanteRel")
      * @ORM\JoinColumn(name="codigo_subtipo_cotizante_fk", referencedColumnName="codigo_subtipo_cotizante_pk")
      */
-    protected $ssoSubtipoCotizanteRel;        
-    
+    protected $ssoSubtipoCotizanteRel;
+
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuEntidadSalud", inversedBy="afiContratosEntidadSaludRel")
      * @ORM\JoinColumn(name="codigo_entidad_salud_fk", referencedColumnName="codigo_entidad_salud_pk")
      */
     protected $entidadSaludRel;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuEntidadPension", inversedBy="afiContratosEntidadPensionRel")
      * @ORM\JoinColumn(name="codigo_entidad_pension_fk", referencedColumnName="codigo_entidad_pension_pk")
      */
     protected $entidadPensionRel;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuEntidadCaja", inversedBy="afiContratosEntidadCajaRel")
      * @ORM\JoinColumn(name="codigo_entidad_caja_fk", referencedColumnName="codigo_entidad_caja_pk")
      */
-    protected $entidadCajaRel;       
-    
+    protected $entidadCajaRel;
+
     /**
      * @ORM\OneToMany(targetEntity="AfiPeriodoDetalle", mappedBy="contratoRel")
      */
@@ -256,21 +256,24 @@ class AfiContrato
     /**
      * @ORM\OneToMany(targetEntity="AfiPeriodoDetallePago", mappedBy="contratoRel")
      */
-    protected $periodosDetallesPagosContratoRel;    
+    protected $periodosDetallesPagosContratoRel;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AfiPeriodoDetallePagoDetalle", mappedBy="contratoRel")
+     */
+    protected $periodosDetallesPagosDetallesContratoRel;
 
     /**
      * @ORM\OneToMany(targetEntity="AfiNovedad", mappedBy="contratoRel")
      */
-    protected $novedadesContratoRel; 
-    
+    protected $novedadesContratoRel;
+
     /**
      * @ORM\OneToMany(targetEntity="AfiFacturaDetalleAfiliacion", mappedBy="contratoRel")
      */
-    protected $facturasDetallesAfiliacionesContratosRel; 
-    
-    
-    
-        
+    protected $facturasDetallesAfiliacionesContratosRel;
+
+
     /**
      * Constructor
      */
@@ -1482,5 +1485,39 @@ class AfiContrato
     public function getFormaPago()
     {
         return $this->formaPago;
+    }
+
+    /**
+     * Add periodosDetallesPagosDetallesContratoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesContratoRel
+     *
+     * @return AfiContrato
+     */
+    public function addPeriodosDetallesPagosDetallesContratoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesContratoRel)
+    {
+        $this->periodosDetallesPagosDetallesContratoRel[] = $periodosDetallesPagosDetallesContratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove periodosDetallesPagosDetallesContratoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesContratoRel
+     */
+    public function removePeriodosDetallesPagosDetallesContratoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesContratoRel)
+    {
+        $this->periodosDetallesPagosDetallesContratoRel->removeElement($periodosDetallesPagosDetallesContratoRel);
+    }
+
+    /**
+     * Get periodosDetallesPagosDetallesContratoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPeriodosDetallesPagosDetallesContratoRel()
+    {
+        return $this->periodosDetallesPagosDetallesContratoRel;
     }
 }

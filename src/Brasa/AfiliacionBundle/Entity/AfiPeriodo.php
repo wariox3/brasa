@@ -15,163 +15,165 @@ class AfiPeriodo
      * @ORM\Column(name="codigo_periodo_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoPeriodoPk;    
-        
+    private $codigoPeriodoPk;
+
     /**
      * @ORM\Column(name="fecha_desde", type="date", nullable=true)
-     */    
-    private $fechaDesde;        
+     */
+    private $fechaDesde;
 
     /**
      * @ORM\Column(name="fecha_hasta", type="date", nullable=true)
-     */    
-    private $fechaHasta;     
-    
+     */
+    private $fechaHasta;
+
     /**
      * @ORM\Column(name="fecha_pago", type="date", nullable=true)
-     */    
-    private $fechaPago;    
-    
+     */
+    private $fechaPago;
+
     /**
      * @ORM\Column(name="codigo_cliente_fk", type="integer", nullable=true)
-     */    
-    private $codigoClienteFk;    
+     */
+    private $codigoClienteFk;
 
     /**
      * @ORM\Column(name="anio", type="integer", nullable=true)
-     */    
+     */
     private $anio;
-    
+
     /**
      * @ORM\Column(name="mes", type="integer", nullable=true)
-     */    
-    private $mes;    
+     */
+    private $mes;
 
     /**
      * @ORM\Column(name="anio_pago", type="integer", nullable=true)
-     */    
+     */
     private $anioPago;
-    
+
     /**
      * @ORM\Column(name="mes_pago", type="integer", nullable=true)
-     */    
+     */
     private $mesPago;
-    
-    /**     
+
+    /**
      * @ORM\Column(name="estado_facturado", type="boolean")
-     */    
-    private $estadoFacturado = false;    
-    
-    /**     
+     */
+    private $estadoFacturado = false;
+
+    /**
      * @ORM\Column(name="estado_generado", type="boolean")
-     */    
+     */
     private $estadoGenerado = false;
 
-    /**     
+    /**
      * @ORM\Column(name="estado_pago_generado", type="boolean")
-     */    
-    private $estadoPagoGenerado = false;    
-    
-    /**     
+     */
+    private $estadoPagoGenerado = false;
+
+    /**
      * @ORM\Column(name="estado_cerrado", type="boolean")
-     */    
-    private $estadoCerrado = false;    
+     */
+    private $estadoCerrado = false;
 
     /**
      * @ORM\Column(name="salud", type="float")
      */
     private $salud = 0;
-    
+
     /**
      * @ORM\Column(name="pension", type="float")
      */
-    private $pension = 0;           
+    private $pension = 0;
 
     /**
      * @ORM\Column(name="caja", type="float")
      */
     private $caja = 0;
-    
+
     /**
      * @ORM\Column(name="riesgos", type="float")
      */
     private $riesgos = 0;
-    
+
     /**
      * @ORM\Column(name="sena", type="float")
      */
-    private $sena = 0;    
-    
+    private $sena = 0;
+
     /**
      * @ORM\Column(name="icbf", type="float")
      */
-    private $icbf = 0;      
-    
+    private $icbf = 0;
+
     /**
      * @ORM\Column(name="administracion", type="float")
      */
-    private $administracion = 0;     
+    private $administracion = 0;
 
     /**
      * @ORM\Column(name="subtotal", type="float")
      */
-    private $subtotal = 0;     
-    
+    private $subtotal = 0;
+
     /**
      * @ORM\Column(name="iva", type="float")
      */
-    private $iva = 0; 
-    
+    private $iva = 0;
+
     /**
      * @ORM\Column(name="total", type="float")
      */
-    private $total = 0;    
-    
+    private $total = 0;
+
     /**
      * @ORM\Column(name="numero_empleados", type="integer", nullable=true)
-     */    
-    private $numeroEmpleados = 0; 
+     */
+    private $numeroEmpleados = 0;
 
     /**
      * @ORM\Column(name="interes_mora", type="float")
      */
     private $interesMora = 0;
-    
+
     /**
      * @ORM\Column(name="total_anterior", type="float")
      */
     private $totalAnterior = 0;
-    
+
     /**
      * @ORM\Column(name="subtotal_anterior", type="float")
      */
     private $subtotalAnterior = 0;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="AfiCliente", inversedBy="periodosClienteRel")
      * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
      */
-    protected $clienteRel;    
-    
+    protected $clienteRel;
+
     /**
      * @ORM\OneToMany(targetEntity="AfiPeriodoDetalle", mappedBy="periodoRel")
      */
-    protected $periodosDetallesPeriodoRel;     
-   
+    protected $periodosDetallesPeriodoRel;
+
     /**
      * @ORM\OneToMany(targetEntity="AfiPeriodoDetallePago", mappedBy="periodoRel")
      */
-    protected $periodosDetallesPagosPeriodoRel;     
+    protected $periodosDetallesPagosPeriodoRel;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AfiPeriodoDetallePagoDetalle", mappedBy="periodoRel")
+     */
+    protected $periodosDetallesPagosDetallesPeriodoRel;
 
     /**
      * @ORM\OneToMany(targetEntity="AfiFacturaDetalle", mappedBy="periodoRel")
      */
-    protected $facturasDetallesPeriodoRel;     
-    
-    
-    
-    
-    
+    protected $facturasDetallesPeriodoRel;
+
+
     /**
      * Constructor
      */
@@ -940,5 +942,39 @@ class AfiPeriodo
     public function getFacturasDetallesPeriodoRel()
     {
         return $this->facturasDetallesPeriodoRel;
+    }
+
+    /**
+     * Add periodosDetallesPagosDetallesPeriodoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesPeriodoRel
+     *
+     * @return AfiPeriodo
+     */
+    public function addPeriodosDetallesPagosDetallesPeriodoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesPeriodoRel)
+    {
+        $this->periodosDetallesPagosDetallesPeriodoRel[] = $periodosDetallesPagosDetallesPeriodoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove periodosDetallesPagosDetallesPeriodoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesPeriodoRel
+     */
+    public function removePeriodosDetallesPagosDetallesPeriodoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesPeriodoRel)
+    {
+        $this->periodosDetallesPagosDetallesPeriodoRel->removeElement($periodosDetallesPagosDetallesPeriodoRel);
+    }
+
+    /**
+     * Get periodosDetallesPagosDetallesPeriodoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPeriodosDetallesPagosDetallesPeriodoRel()
+    {
+        return $this->periodosDetallesPagosDetallesPeriodoRel;
     }
 }

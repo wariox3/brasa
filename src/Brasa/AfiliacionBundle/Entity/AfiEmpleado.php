@@ -1,6 +1,7 @@
 <?php
 
 namespace Brasa\AfiliacionBundle\Entity;
+
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 use Doctrine\ORM\Mapping as ORM;
@@ -8,9 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Table(name="afi_empleado")
  * @ORM\Entity(repositoryClass="Brasa\AfiliacionBundle\Repository\AfiEmpleadoRepository")
- * @DoctrineAssert\UniqueEntity(fields={"numeroIdentificacion"},message="Ya existe este número de identificación") 
+ * @DoctrineAssert\UniqueEntity(fields={"numeroIdentificacion"},message="Ya existe este número de identificación")
  */
-
 class AfiEmpleado
 {
     /**
@@ -19,170 +19,175 @@ class AfiEmpleado
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $codigoEmpleadoPk;
-    
+
     /**
      * @ORM\Column(name="codigo_tipo_identificacion_fk", type="integer")
-     */    
-    private $codigoTipoIdentificacionFk;     
-    
+     */
+    private $codigoTipoIdentificacionFk;
+
     /**
      * @ORM\Column(name="numero_identificacion", type="string", length=20, nullable=false, unique=true)
-     */         
-    private $numeroIdentificacion;    
-    
+     */
+    private $numeroIdentificacion;
+
     /**
      * @ORM\Column(name="nombre_corto", type="string", length=80, nullable=true)
-     */    
-    private $nombreCorto;    
+     */
+    private $nombreCorto;
 
     /**
      * @ORM\Column(name="nombre1", type="string", length=30, nullable=true)
-     */    
-    private $nombre1;        
-    
+     */
+    private $nombre1;
+
     /**
      * @ORM\Column(name="nombre2", type="string", length=30, nullable=true)
-     */    
-    private $nombre2;    
-    
+     */
+    private $nombre2;
+
     /**
      * @ORM\Column(name="apellido1", type="string", length=30, nullable=true)
-     */    
-    private $apellido1;    
+     */
+    private $apellido1;
 
     /**
      * @ORM\Column(name="apellido2", type="string", length=30, nullable=true)
-     */    
-    private $apellido2;    
-    
+     */
+    private $apellido2;
+
     /**
      * @ORM\Column(name="telefono", type="string", length=15, nullable=true)
-     */    
-    private $telefono;    
-    
+     */
+    private $telefono;
+
     /**
      * @ORM\Column(name="celular", type="string", length=20, nullable=true)
-     */    
-    private $celular; 
-    
+     */
+    private $celular;
+
     /**
      * @ORM\Column(name="direccion", type="string", length=80, nullable=true)
-     */    
-    private $direccion; 
-    
+     */
+    private $direccion;
+
     /**
      * @ORM\Column(name="codigo_ciudad_fk", type="integer", nullable=true)
-     */    
-    private $codigoCiudadFk;    
-    
+     */
+    private $codigoCiudadFk;
+
     /**
      * @ORM\Column(name="barrio", type="string", length=100, nullable=true)
-     */    
-    private $barrio;    
-    
+     */
+    private $barrio;
+
     /**
      * @ORM\Column(name="codigo_rh_fk", type="integer", nullable=true)
-     */    
-    private $codigoRhPk;     
-    
+     */
+    private $codigoRhPk;
+
     /**
      * @ORM\Column(name="codigo_sexo_fk", type="string", length=1, nullable=true)
-     */    
-    private $codigoSexoFk;     
-    
+     */
+    private $codigoSexoFk;
+
     /**
      * @ORM\Column(name="correo", type="string", length=80, nullable=true)
-     */    
-    private $correo;     
-        
+     */
+    private $correo;
+
     /**
      * @ORM\Column(name="fecha_nacimiento", type="date", nullable=true)
-     */ 
-    
-    private $fechaNacimiento;     
-    
-     /**
+     */
+
+    private $fechaNacimiento;
+
+    /**
      * @ORM\Column(name="codigo_estado_civil_fk", type="string", length=1, nullable=true)
      */
-    
+
     private $codigoEstadoCivilFk;
-                  
+
     /**
      * @ORM\Column(name="vr_salario", type="float")
      */
-    private $VrSalario = 0;                  
-    
-    /**     
+    private $VrSalario = 0;
+
+    /**
      * @ORM\Column(name="estado_activo", type="boolean")
-     */    
-    private $estadoActivo = 1;          
-    
+     */
+    private $estadoActivo = 1;
+
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
-     */    
-    private $comentarios;             
-        
+     */
+    private $comentarios;
+
     /**
      * @ORM\Column(name="codigo_contrato_activo", type="integer", nullable=true)
      */
-    private $codigoContratoActivo; 
-    
+    private $codigoContratoActivo;
+
     /**
      * @ORM\Column(name="codigo_usuario", type="string", length=50, nullable=true)
-     */    
+     */
     private $codigoUsuario;
-        
+
     /**
      * @ORM\Column(name="codigo_cliente_fk", type="integer", nullable=true)
-     */    
-    private $codigoClienteFk;    
-    
+     */
+    private $codigoClienteFk;
+
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenTipoIdentificacion", inversedBy="afiEmpleadosTipoIdentificacionRel")
      * @ORM\JoinColumn(name="codigo_tipo_identificacion_fk", referencedColumnName="codigo_tipo_identificacion_pk")
      */
-    protected $tipoIdentificacionRel;     
-    
+    protected $tipoIdentificacionRel;
+
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuEstadoCivil", inversedBy="afiEmpleadosEstadoCivilRel")
      * @ORM\JoinColumn(name="codigo_estado_civil_fk", referencedColumnName="codigo_estado_civil_pk")
      */
-    protected $estadoCivilRel;                    
-    
+    protected $estadoCivilRel;
+
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudad", inversedBy="afiEmpleadosCiudadRel")
      * @ORM\JoinColumn(name="codigo_ciudad_fk", referencedColumnName="codigo_ciudad_pk")
      */
-    protected $ciudadRel;    
-    
-     /**
+    protected $ciudadRel;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuRh", inversedBy="afiEmpleadosRhRel")
      * @ORM\JoinColumn(name="codigo_rh_fk", referencedColumnName="codigo_rh_pk")
      */
-    protected $rhRel; 
-       
+    protected $rhRel;
+
     /**
      * @ORM\ManyToOne(targetEntity="AfiCliente", inversedBy="empleadosClienteRel")
      * @ORM\JoinColumn(name="codigo_cliente_fk", referencedColumnName="codigo_cliente_pk")
      */
     protected $clienteRel;
 
-    
+
     /**
      * @ORM\OneToMany(targetEntity="AfiContrato", mappedBy="empleadoRel")
      */
-    protected $contratosEmpleadoRel; 
+    protected $contratosEmpleadoRel;
 
     /**
      * @ORM\OneToMany(targetEntity="AfiPeriodoDetalle", mappedBy="empleadoRel")
      */
-    protected $periodosDetallesEmpleadoRel;    
+    protected $periodosDetallesEmpleadoRel;
 
     /**
      * @ORM\OneToMany(targetEntity="AfiPeriodoDetallePago", mappedBy="empleadoRel")
      */
-    protected $periodosDetallesPagosEmpleadoRel;    
-    
+    protected $periodosDetallesPagosEmpleadoRel;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AfiPeriodoDetallePagoDetalle", mappedBy="empleadoRel")
+     */
+    protected $periodosDetallesPagosDetallesEmpleadoRel;
+
     /**
      * @ORM\OneToMany(targetEntity="AfiCurso", mappedBy="empleadoRel")
      */
@@ -192,6 +197,7 @@ class AfiEmpleado
      * @ORM\OneToMany(targetEntity="AfiNovedad", mappedBy="empleadoRel")
      */
     protected $novedadesEmpleadoRel;
+
     /**
      * Constructor
      */
@@ -1054,5 +1060,39 @@ class AfiEmpleado
     public function getNovedadesEmpleadoRel()
     {
         return $this->novedadesEmpleadoRel;
+    }
+
+    /**
+     * Add periodosDetallesPagosDetallesEmpleadoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesEmpleadoRel
+     *
+     * @return AfiEmpleado
+     */
+    public function addPeriodosDetallesPagosDetallesEmpleadoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesEmpleadoRel)
+    {
+        $this->periodosDetallesPagosDetallesEmpleadoRel[] = $periodosDetallesPagosDetallesEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove periodosDetallesPagosDetallesEmpleadoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesEmpleadoRel
+     */
+    public function removePeriodosDetallesPagosDetallesEmpleadoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesEmpleadoRel)
+    {
+        $this->periodosDetallesPagosDetallesEmpleadoRel->removeElement($periodosDetallesPagosDetallesEmpleadoRel);
+    }
+
+    /**
+     * Get periodosDetallesPagosDetallesEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPeriodosDetallesPagosDetallesEmpleadoRel()
+    {
+        return $this->periodosDetallesPagosDetallesEmpleadoRel;
     }
 }
