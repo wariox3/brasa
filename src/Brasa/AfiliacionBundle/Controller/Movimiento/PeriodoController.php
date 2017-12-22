@@ -928,7 +928,7 @@ class PeriodoController extends Controller
                 $cliente = $arConfiguracion->getNombreEmpresa();
                 $codigoSucursal = $arPeriodo->getClienteRel()->getCodigoSucursal();
                 $sucursal = "";
-                $dv = $arPeriodo->getClienteRel()->getDigitoVerificacion();
+                $dv = $arConfiguracion->getDigitoVerificacionEmpresa();
                 $formato = '01';
                 $entidad = $form->get('entidad')->getData();
             }
