@@ -867,7 +867,8 @@ class PeriodoController extends Controller
      */
     private function generarPeriodoDetallePagoDetalle($arPeriodo)
     {
-
+        $em = $this->getDoctrine()->getManager();
+        $em->getRepository("BrasaAfiliacionBundle:AfiPeriodo")->generarPagoDetalle($arPeriodo->getCodigoPeriodoPk());
     }
 
     /**
