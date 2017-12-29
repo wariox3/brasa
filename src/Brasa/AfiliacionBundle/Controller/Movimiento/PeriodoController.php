@@ -886,7 +886,7 @@ class PeriodoController extends Controller
         $arEntidadRiesgos = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional')->find($arConfiguracionNomina->getCodigoEntidadRiesgoFk());
         $codigoInterfaceRiesgos = $arEntidadRiesgos->getCodigoInterface();
         if ($arPeriodo->getFechaPago() != null && $arPeriodo->getAnio() != null && $arPeriodo->getMes() != null && $arPeriodo->getAnioPago() != null && $arPeriodo->getMesPago() != null) {
-            $arPeriodoDetallePagos = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetallePago')->findBy(array('codigoPeriodoFk' => $arPeriodo->getCodigoPeriodoPk()));
+            $arPeriodoDetallePagos = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetallePagoDetalle')->findBy(array('codigoPeriodoFk' => $arPeriodo->getCodigoPeriodoPk()));
             $totalCotizacion = 0;
             foreach ($arPeriodoDetallePagos as $arPeriodoDetallesumaTotales) {
                 $totalCotizacion += $arPeriodoDetallesumaTotales->getTotalCotizacion();
