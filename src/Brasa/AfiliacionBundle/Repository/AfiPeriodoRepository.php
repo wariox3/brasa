@@ -1481,8 +1481,8 @@ class AfiPeriodoRepository extends EntityRepository
             if ($arPeriodo->getInteresMora() == 0) {
                 $valorTotal = $arPeriodo->getTotal();
                 $valorSubtotal = $arPeriodo->getSubtotal();
-                $porcentajeInteres = 0;
-                $valorInteresMora = $valorSubtotal * $porcentajeInteres / 100 * 0;
+                $porcentajeInteres = 0.10;
+                $valorInteresMora = $valorSubtotal * $porcentajeInteres / 100 * 7;
                 $arPeriodo->setTotalAnterior($valorTotal);
                 $arPeriodo->setInteresMora($valorInteresMora);
                 $arPeriodo->setSubtotal($arPeriodo->getSubtotal() + $valorInteresMora);
@@ -1491,8 +1491,8 @@ class AfiPeriodoRepository extends EntityRepository
             } else {
                 $valorTotal = $arPeriodo->getTotalAnterior();
                 $valorSubtotal = $arPeriodo->getSubtotalAnterior();
-                $porcentajeInteres = 0;
-                $valorInteresMora = $valorTotal * $porcentajeInteres / 100 * 0;
+                $porcentajeInteres = 0.10;
+                $valorInteresMora = $valorTotal * $porcentajeInteres / 100 * 7;
                 $arPeriodo->setInteresMora($valorInteresMora);
                 $arPeriodo->setSubtotal($valorSubtotal + $valorInteresMora);
                 $arPeriodo->setTotal($this->redondearCien($valorTotal + $valorInteresMora));
