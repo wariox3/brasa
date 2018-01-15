@@ -87,6 +87,8 @@ class PeriodoController extends Controller
                 $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
                 $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);
 
+                $strSql = "DELETE FROM afi_periodo_detalle_pago_detalle WHERE codigo_periodo_fk = " . $codigoPeriodo;
+                $em->getConnection()->executeQuery($strSql);
                 $strSql = "DELETE FROM afi_periodo_detalle_pago WHERE codigo_periodo_fk = " . $codigoPeriodo;
                 $em->getConnection()->executeQuery($strSql);
                 $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();

@@ -517,6 +517,10 @@ class AfiPeriodoRepository extends EntityRepository
             $arPeriodoDetallePago->setCotizacionVoluntarioFondoPensionesObligatorias($floCotizacionVoluntariaFondoPensionesObligatorias);
             $arPeriodoDetallePago->setAportesFondoSolidaridadPensionalSolidaridad($floCotizacionFSPSolidaridad);
             $arPeriodoDetallePago->setAportesFondoSolidaridadPensionalSubsistencia($floCotizacionFSPSolidaridad);
+            $floCotizacionPension = $this->redondearCien($floCotizacionPension);
+            $floCotizacionSalud = $this->redondearCien($floCotizacionSalud);
+            $floCotizacionRiesgos = $this->redondearCien($floCotizacionRiesgos);
+            $floCotizacionCaja = $this->redondearCien($floCotizacionCaja);
             $arPeriodoDetallePago->setCotizacionPension($floCotizacionPension);
             $arPeriodoDetallePago->setCotizacionSalud($floCotizacionSalud);
             $arPeriodoDetallePago->setCotizacionRiesgos($floCotizacionRiesgos);
@@ -649,6 +653,10 @@ class AfiPeriodoRepository extends EntityRepository
                 $arPeriodoDetallePago->setAportesFondoSolidaridadPensionalSolidaridad($floCotizacionFSPSolidaridad);
                 $arPeriodoDetallePago->setAportesFondoSolidaridadPensionalSubsistencia($floCotizacionFSPSolidaridad);
                 //$arPeriodoDetallePago->setTotalCotizacionFondos($floTotalCotizacionFondos);
+                $floCotizacionPension = $this->redondearCien($floCotizacionPension);
+                $floCotizacionSalud = $this->redondearCien($floCotizacionSalud);
+                $floCotizacionRiesgos = $this->redondearCien($floCotizacionRiesgos);
+                $floCotizacionCaja = $this->redondearCien($floCotizacionCaja);
                 $arPeriodoDetallePago->setCotizacionPension($floCotizacionPension);
                 $arPeriodoDetallePago->setCotizacionSalud($floCotizacionSalud);
                 $arPeriodoDetallePago->setCotizacionRiesgos($floCotizacionRiesgos);
@@ -682,7 +690,7 @@ class AfiPeriodoRepository extends EntityRepository
         set_time_limit(0);
         ob_clean();
         $em = $this->getEntityManager();
-        $strSql = "DELETE FROM afi_periodo_detalle_pago_detalle WHERE codigo_periodo_fk = " . $codigoPeriodo;
+        $strSql = "DELETE FROM afi_periodo_detalle_pago_detalle";
         $em->getConnection()->executeQuery($strSql);
         $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);
         $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1); //SALARIO MINIMO
@@ -835,6 +843,10 @@ class AfiPeriodoRepository extends EntityRepository
                 $arPeriodoDetallePagoDetalle->setAportesFondoSolidaridadPensionalSolidaridad($floCotizacionFSPSolidaridad);
                 $arPeriodoDetallePagoDetalle->setAportesFondoSolidaridadPensionalSubsistencia($floCotizacionFSPSolidaridad);
                 //$arPeriodoDetallePago->setTotalCotizacionFondos($floTotalCotizacionFondos);
+                $floCotizacionPension = $this->redondearCien($floCotizacionPension);
+                $floCotizacionSalud = $this->redondearCien($floCotizacionSalud);
+                $floCotizacionRiesgos = $this->redondearCien($floCotizacionRiesgos);
+                $floCotizacionCaja = $this->redondearCien($floCotizacionCaja);
                 $arPeriodoDetallePagoDetalle->setCotizacionPension($floCotizacionPension);
                 $arPeriodoDetallePagoDetalle->setCotizacionSalud($floCotizacionSalud);
                 $arPeriodoDetallePagoDetalle->setCotizacionRiesgos($floCotizacionRiesgos);
@@ -1023,6 +1035,10 @@ class AfiPeriodoRepository extends EntityRepository
                 $arPeriodoDetallePagoDetalle->setCotizacionVoluntarioFondoPensionesObligatorias($floCotizacionVoluntariaFondoPensionesObligatorias);
                 $arPeriodoDetallePagoDetalle->setAportesFondoSolidaridadPensionalSolidaridad($floCotizacionFSPSolidaridad);
                 $arPeriodoDetallePagoDetalle->setAportesFondoSolidaridadPensionalSubsistencia($floCotizacionFSPSolidaridad);
+                $floCotizacionPension = $this->redondearCien($floCotizacionPension);
+                $floCotizacionSalud = $this->redondearCien($floCotizacionSalud);
+                $floCotizacionRiesgos = $this->redondearCien($floCotizacionRiesgos);
+                $floCotizacionCaja = $this->redondearCien($floCotizacionCaja);
                 $arPeriodoDetallePagoDetalle->setCotizacionPension($floCotizacionPension);
                 $arPeriodoDetallePagoDetalle->setCotizacionSalud($floCotizacionSalud);
                 $arPeriodoDetallePagoDetalle->setCotizacionRiesgos($floCotizacionRiesgos);
@@ -1221,6 +1237,10 @@ class AfiPeriodoRepository extends EntityRepository
                 $arPeriodoDetallePagoDetalle->setCotizacionVoluntarioFondoPensionesObligatorias($floCotizacionVoluntariaFondoPensionesObligatorias);
                 $arPeriodoDetallePagoDetalle->setAportesFondoSolidaridadPensionalSolidaridad($floCotizacionFSPSolidaridad);
                 $arPeriodoDetallePagoDetalle->setAportesFondoSolidaridadPensionalSubsistencia($floCotizacionFSPSolidaridad);
+                $floCotizacionPension = $this->redondearCien($floCotizacionPension);
+                $floCotizacionSalud = $this->redondearCien($floCotizacionSalud);
+                $floCotizacionRiesgos = $this->redondearCien($floCotizacionRiesgos);
+                $floCotizacionCaja = $this->redondearCien($floCotizacionCaja);
                 $arPeriodoDetallePagoDetalle->setCotizacionPension($floCotizacionPension);
                 $arPeriodoDetallePagoDetalle->setCotizacionSalud($floCotizacionSalud);
                 $arPeriodoDetallePagoDetalle->setCotizacionRiesgos($floCotizacionRiesgos);
