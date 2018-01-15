@@ -429,6 +429,37 @@ class PeriodoController extends Controller
         ));
     }
 
+    /**
+     * @Route("/afi/movimiento/periodo/parametros/intereces/{codigoPeriodo}", name="brs_afi_movimiento_periodo_parametros_intereces")
+     */
+    public function parametrosInterecesAction(Request $request, $codigoPeriodo = "")
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);
+        $form = $this->createFormBuilder()
+            ->setAction($this->generateUrl('brs_afi_movimiento_periodo_parametros_intereces', array('codigoPeriodo' => $codigoPeriodo)))
+            ->add('vrInteres', NumberType::class, array('data' => $arPeriodo->getInteresMora(), 'required' => false))
+            ->add('vrTotal', NumberType::class, array('data' => $arPeriodo->getTotal(), 'required' => false))
+            ->add('BtnGuardar', SubmitType::class, array('label' => 'Guardar'))
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $vrInteres = $form->get('vrInteres')->getData();
+            $vrTotal = $form->get('vrTotal')->getData();
+            $arPeriodo->setTotalAnterior($arPeriodo->getTotal());
+            $arPeriodo->setInteresMora($vrInteres);
+            $arPeriodo->setTotal($vrTotal);
+            $em->persist($arPeriodo);
+            $em->flush();
+            return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo'));
+        }
+        return $this->render('BrasaAfiliacionBundle:Movimiento/Periodo:parametrosPeriodo.html.twig', array(
+            'arPeriodo' => $arPeriodo,
+            'form' => $form->createView()
+        ));
+    }
+
     private function lista()
     {
         $session = new session;

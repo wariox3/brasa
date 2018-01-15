@@ -10,37 +10,46 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class AfiConfiguracion
 {
-     /**
+    /**
      * @ORM\Id
      * @ORM\Column(name="codigo_configuracion_pk", type="integer")
      */
     private $codigoConfiguracionPk;
-    
+
     /**
      * @ORM\Column(name="informacion_legal_factura", type="text", nullable=true)
-     */    
-    private $informacionLegalFactura; 
+     */
+    private $informacionLegalFactura;
 
     /**
      * @ORM\Column(name="informacion_pago_factura", type="text", nullable=true)
-     */    
-    private $informacionPagoFactura;     
-    
+     */
+    private $informacionPagoFactura;
+
     /**
      * @ORM\Column(name="informacion_contacto_factura", type="text", nullable=true)
-     */    
-    private $informacionContactoFactura;    
-    
+     */
+    private $informacionContactoFactura;
+
     /**
      * @ORM\Column(name="informacion_resolucion_dian_factura", type="text", nullable=true)
-     */    
-    private $informacionResolucionDianFactura;    
-    
+     */
+    private $informacionResolucionDianFactura;
+
     /**
      * @ORM\Column(name="informacion_resolucion_supervigilancia_factura", type="text", nullable=true)
-     */    
-    private $informacionResolucionSupervigilanciaFactura;    
-    
+     */
+    private $informacionResolucionSupervigilanciaFactura;
+
+    /**
+     * @ORM\Column(name="porcentaje_interes", type="float", nullable=true)
+     */
+    private $porcentajeInteres;
+
+    /**
+     * @ORM\Column(name="dias_interes", type="float", nullable=true)
+     */
+    private $diasInteres;
 
 
     /**
@@ -185,5 +194,53 @@ class AfiConfiguracion
     public function getInformacionResolucionSupervigilanciaFactura()
     {
         return $this->informacionResolucionSupervigilanciaFactura;
+    }
+
+    /**
+     * Set porcentajeInteres
+     *
+     * @param integer $porcentajeInteres
+     *
+     * @return AfiConfiguracion
+     */
+    public function setPorcentajeInteres($porcentajeInteres)
+    {
+        $this->porcentajeInteres = $porcentajeInteres;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentajeInteres
+     *
+     * @return integer
+     */
+    public function getPorcentajeInteres()
+    {
+        return $this->porcentajeInteres;
+    }
+
+    /**
+     * Set diasInteres
+     *
+     * @param float $diasInteres
+     *
+     * @return AfiConfiguracion
+     */
+    public function setDiasInteres($diasInteres)
+    {
+        $this->diasInteres = $diasInteres;
+
+        return $this;
+    }
+
+    /**
+     * Get diasInteres
+     *
+     * @return float
+     */
+    public function getDiasInteres()
+    {
+        return $this->diasInteres;
     }
 }

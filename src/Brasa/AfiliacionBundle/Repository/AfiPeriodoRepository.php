@@ -1424,8 +1424,7 @@ class AfiPeriodoRepository extends EntityRepository
         $em->flush();
     }
 
-    public
-    function generarInteresMora($codigoPeriodo)
+    public function generarInteresMora($codigoPeriodo)
     {
         set_time_limit(0);
         ob_clean();
@@ -1433,8 +1432,7 @@ class AfiPeriodoRepository extends EntityRepository
         $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
         $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);
 
-        $arConfiguracion = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
-        $arConfiguracion = $em->getRepository('BrasaRecursoHumanoBundle:RhuConfiguracion')->configuracionDatoCodigo(1); //SALARIO MINIMO
+        $arConfiguracionAfiliacion = $em->getRepository('BrasaAfiliacionBundle:AfiConfiguracion')->find(1); //SALARIO MINIMO
         $arPeriodo->getFechaDesde();
 
         $fecha = $arPeriodo->getFechaDesde()->format('Y-m-d');
@@ -1478,11 +1476,12 @@ class AfiPeriodoRepository extends EntityRepository
             $diasHabiles = $this->dias_semana($fechaActual->format('Y/m/') . "01", $fechaActual);
 //            if ($diasHabiles >= $arPeriodoFechaPago->getDiaHabil()) { Se comentarea mientas ana maria hace el proceso de generar desgenerar
             //se valida si el interes de mora esta en 0.
+            $porcentajeInteres = $arConfiguracionAfiliacion->getPorcentajeInteres();
+            $diasinteres = $arConfiguracionAfiliacion->getDiasInteres();
             if ($arPeriodo->getInteresMora() == 0) {
                 $valorTotal = $arPeriodo->getTotal();
                 $valorSubtotal = $arPeriodo->getSubtotal();
-                $porcentajeInteres = 0.10;
-                $valorInteresMora = $valorSubtotal * $porcentajeInteres / 100 * 7;
+                $valorInteresMora = $valorSubtotal * $porcentajeInteres / 100 * $diasinteres;
                 $arPeriodo->setTotalAnterior($valorTotal);
                 $arPeriodo->setInteresMora($valorInteresMora);
                 $arPeriodo->setSubtotal($arPeriodo->getSubtotal() + $valorInteresMora);
@@ -1491,8 +1490,7 @@ class AfiPeriodoRepository extends EntityRepository
             } else {
                 $valorTotal = $arPeriodo->getTotalAnterior();
                 $valorSubtotal = $arPeriodo->getSubtotalAnterior();
-                $porcentajeInteres = 0.10;
-                $valorInteresMora = $valorTotal * $porcentajeInteres / 100 * 7;
+                $valorInteresMora = $valorTotal * $porcentajeInteres / 100 * $diasinteres;
                 $arPeriodo->setInteresMora($valorInteresMora);
                 $arPeriodo->setSubtotal($valorSubtotal + $valorInteresMora);
                 $arPeriodo->setTotal($this->redondearCien($valorTotal + $valorInteresMora));
@@ -1503,15 +1501,13 @@ class AfiPeriodoRepository extends EntityRepository
         $em->flush();
     }
 
-    public
-    function redondearIbc2($ibc)
+    public function redondearIbc2($ibc)
     {
         $ibcRetornar = ceil($ibc);
         return $ibcRetornar;
     }
 
-    public
-    function redondearIbc($intDias, $floIbcBruto, $salarioMinimo)
+    public function redondearIbc($intDias, $floIbcBruto, $salarioMinimo)
     {
         $floIbc = 0;
         $floIbcRedondedado = round($floIbcBruto, -3, PHP_ROUND_HALF_DOWN);
@@ -1531,16 +1527,14 @@ class AfiPeriodoRepository extends EntityRepository
         return $floIbc;
     }
 
-    public
-    function redondearIbcMinimo($intDias, $salarioMinimo)
+    public function redondearIbcMinimo($intDias, $salarioMinimo)
     {
         $floValorDia = $salarioMinimo / 30;
         $floIbcBruto = intval($intDias * $floValorDia);
         return $floIbcBruto;
     }
 
-    public
-    function redondearAporte($floIbcTotal, $floIbc, $floTarifa, $intDias, $salarioMinimo, $intDiasVacaciones)
+    public function redondearAporte($floIbcTotal, $floIbc, $floTarifa, $intDias, $salarioMinimo, $intDiasVacaciones)
     {
         $floTarifa = $floTarifa / 100;
         $floIbcBruto = ($floIbcTotal / 30) * $intDias;
@@ -1595,8 +1589,7 @@ class AfiPeriodoRepository extends EntityRepository
         return $floCotizacion;
     }
 
-    public
-    function redondearAporteMinimo($floTarifa, $intDias, $salarioMinimo)
+    public function redondearAporteMinimo($floTarifa, $intDias, $salarioMinimo)
     {
         $floSalario = $salarioMinimo;
         $douValorDia = $floSalario / 30;
@@ -1633,15 +1626,13 @@ class AfiPeriodoRepository extends EntityRepository
         return $douCotizacion;
     }
 
-    public
-    function redondearAporte2($aporte)
+    public function redondearAporte2($aporte)
     {
         $aporteRedondeado = round($aporte);
         return $aporteRedondeado;
     }
 
-    public
-    function diasContrato($arPeriodo, $arContrato)
+    public function diasContrato($arPeriodo, $arContrato)
     {
         $dateFechaDesde = "";
         $dateFechaHasta = "";
@@ -1706,16 +1697,14 @@ class AfiPeriodoRepository extends EntityRepository
         return $intDiasDevolver;
     }
 
-    public
-    function pendienteDql($codigoCliente)
+    public function pendienteDql($codigoCliente)
     {
         $dql = "SELECT p FROM BrasaAfiliacionBundle:AfiPeriodo p WHERE p.estadoFacturado = 0 AND p.codigoClienteFk = " . $codigoCliente;
         $dql .= " ORDER BY p.codigoPeriodoPk DESC";
         return $dql;
     }
 
-    public
-    function redondearCien($valor)
+    public function redondearCien($valor)
     {
         $valor = round($valor);
         if ($valor != 0) {
@@ -1729,8 +1718,7 @@ class AfiPeriodoRepository extends EntityRepository
         return $valor;
     }
 
-    public
-    function liquidarIncapacidadGeneral($floSalario, $floSalarioAnterior, $intDias)
+    public function liquidarIncapacidadGeneral($floSalario, $floSalarioAnterior, $intDias)
     {
         $em = $this->getEntityManager();
         $arConfiguracionNomina = new \Brasa\RecursoHumanoBundle\Entity\RhuConfiguracion();
@@ -1756,8 +1744,7 @@ class AfiPeriodoRepository extends EntityRepository
         return $floIbcIncapacidad;
     }
 
-    public
-    function liquidarIncapacidadLaboral($floSalario, $floSalarioAnterior, $intDias)
+    public function liquidarIncapacidadLaboral($floSalario, $floSalarioAnterior, $intDias)
     {
         if ($floSalarioAnterior > 0) {
             $floSalario = $floSalarioAnterior;
@@ -1767,8 +1754,7 @@ class AfiPeriodoRepository extends EntityRepository
         return $floIbcIncapacidad;
     }
 
-    public
-    function dias_semana($fechaInicio, $fechaFin)
+    public function dias_semana($fechaInicio, $fechaFin)
     {
         $em = $this->getEntityManager();
         $arFestivo = new \Brasa\GeneralBundle\Entity\GenFestivo();
