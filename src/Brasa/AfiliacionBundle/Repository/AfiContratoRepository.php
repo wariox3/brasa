@@ -77,7 +77,8 @@ class AfiContratoRepository extends EntityRepository {
                 afi_empleado.nombre_corto as empleado,
                 afi_contrato.indefinido as indefinido,
                 afi_contrato.fecha_desde as desde,
-                afi_contrato.fecha_hasta as hasta
+                afi_contrato.fecha_hasta as hasta,
+                afi_contrato.vr_salario as vrSalario
                 FROM
                 afi_empleado
                 INNER JOIN afi_contrato ON afi_contrato.codigo_empleado_fk = afi_empleado.codigo_empleado_pk
