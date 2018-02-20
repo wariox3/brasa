@@ -2186,7 +2186,7 @@ class AfiPeriodoRepository extends EntityRepository
             $dosUltimosDigitosNitCliente = substr($arPeriodo->getClienteRel()->getNit(), -2);
             $fechaActual = new \DateTime('now');
             $anioActual = $fechaActual->format('Y');
-            $arPeriodoFechaPago = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoFechaPago')->DiaHabilPagar($anioActual, $dosUltimosDigitosNitCliente);
+            //$arPeriodoFechaPago = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoFechaPago')->DiaHabilPagar($anioActual, $dosUltimosDigitosNitCliente);
             $diasHabiles = $this->dias_semana($fechaActual->format('Y/m/') . "01", $fechaActual);
 //            if ($diasHabiles >= $arPeriodoFechaPago->getDiaHabil()) { Se comentarea mientas ana maria hace el proceso de generar desgenerar
             //se valida si el interes de mora esta en 0.
