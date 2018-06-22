@@ -686,11 +686,11 @@ class RhuProgramacionPagoRepository extends EntityRepository {
                 $intDiasPrima = $objFunciones->diasPrestaciones($dateFechaDesde, $dateFechaHasta);
                 $intDiasSalrioPromedio = $objFunciones->diasPrestaciones($dateFechaDesde, $dateFechaHastaPago);
                 $intDiasPrimaLiquidar = $intDiasPrima;
-                if($dateFechaDesde->format('m-d') == '06-30' || $dateFechaDesde->format('m-d') == '12-30') {
-                    $intDiasPrimaLiquidar -= 1;
-                    $intDiasSalrioPromedio -= 1;
-                    $intDiasPrima -= 1;
-                }
+//                if($dateFechaDesde->format('m-d') == '06-30' || $dateFechaDesde->format('m-d') == '12-30') {
+//                    $intDiasPrimaLiquidar -= 1;
+//                    $intDiasSalrioPromedio -= 1;
+//                    $intDiasPrima -= 1;
+//                }
                 $ibpPrimasInicial = $arContrato->getIbpPrimasInicial();                    
                 $ibpPrimas = $em->getRepository('BrasaRecursoHumanoBundle:RhuPagoDetalle')->ibp($dateFechaDesde->format('Y-m-d'), $dateFechaHastaPago->format('Y-m-d'), $arContrato->getCodigoContratoPk());                
                 $ibpPrimas += $ibpPrimasInicial;                                            
