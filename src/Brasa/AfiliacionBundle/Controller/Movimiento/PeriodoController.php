@@ -251,7 +251,7 @@ class PeriodoController extends Controller
                 //$arrSeleccionados = $request->request->get('ChkSeleccionar');
                 $registros = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetalle')->eliminar($arrSeleccionados);
                 if ($registros == TRUE) {
-                    $objMensaje->Mensaje('error', 'No se puede eliminar el registro', $this);
+                    $objMensaje->Mensaje('error', 'No se puede eliminar el registro por que se encuentra en una factura', $this);
                 }
                 return $this->redirect($this->generateUrl('brs_afi_movimiento_periodo_detalle', array('codigoPeriodo' => $codigoPeriodo)));
             }

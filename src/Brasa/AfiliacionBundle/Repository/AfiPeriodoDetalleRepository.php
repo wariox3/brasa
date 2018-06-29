@@ -4,37 +4,40 @@ namespace Brasa\AfiliacionBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
-class AfiPeriodoDetalleRepository extends EntityRepository {
+class AfiPeriodoDetalleRepository extends EntityRepository
+{
 
-    public function listaDql($codigoPeriodo = "") {
+    public function listaDql($codigoPeriodo = "")
+    {
         $em = $this->getEntityManager();
-        $dql   = "SELECT pd FROM BrasaAfiliacionBundle:AfiPeriodoDetalle pd WHERE pd.codigoPeriodoDetallePk <> 0";
-        if($codigoPeriodo != "") {
+        $dql = "SELECT pd FROM BrasaAfiliacionBundle:AfiPeriodoDetalle pd WHERE pd.codigoPeriodoDetallePk <> 0";
+        if ($codigoPeriodo != "") {
             $dql .= " AND pd.codigoPeriodoFk =" . $codigoPeriodo;
         }
         $dql .= " ORDER BY pd.codigoPeriodoDetallePk";
         return $dql;
     }
 
-    public function listaConsultaDql($codigo = '', $codigoCliente = '', $estadoFacturado = '',$strDesde = "", $strHasta = "", $strAsesor = "") {
+    public function listaConsultaDql($codigo = '', $codigoCliente = '', $estadoFacturado = '', $strDesde = "", $strHasta = "", $strAsesor = "")
+    {
         //$em = $this->getEntityManager();
-        $dql   = "SELECT pd FROM BrasaAfiliacionBundle:AfiPeriodoDetalle pd JOIN pd.periodoRel p JOIN p.clienteRel c WHERE pd.codigoPeriodoDetallePk <> 0 ";
-        if($codigoCliente != '') {
+        $dql = "SELECT pd FROM BrasaAfiliacionBundle:AfiPeriodoDetalle pd JOIN pd.periodoRel p JOIN p.clienteRel c WHERE pd.codigoPeriodoDetallePk <> 0 ";
+        if ($codigoCliente != '') {
             $dql .= " AND p.codigoClienteFk = " . $codigoCliente;
         }
-        if($estadoFacturado == 1 ) {
+        if ($estadoFacturado == 1) {
             $dql .= " AND p.estadoFacturado = 1";
         }
-        if($estadoFacturado == "0") {
+        if ($estadoFacturado == "0") {
             $dql .= " AND p.estadoFacturado = 0";
         }
-        if($strDesde != "") {
+        if ($strDesde != "") {
             $dql .= " AND p.fechaDesde >='" . $strDesde . "'";
         }
-        if($strHasta != "") {
+        if ($strHasta != "") {
             $dql .= " AND p.fechaDesde <='" . $strHasta . "'";
         }
-        if($strAsesor != "" ) {
+        if ($strAsesor != "") {
             $dql .= " AND c.codigoAsesorFk ='" . $strAsesor . "'";
         }
 
@@ -42,14 +45,20 @@ class AfiPeriodoDetalleRepository extends EntityRepository {
         return $dql;
     }
 
-    public function eliminar($arrSeleccionados) {
+    public function eliminar($arrSeleccionados)
+    {
         $em = $this->getEntityManager();
         $registros = false;
-        if(count($arrSeleccionados) > 0) {
+        if (count($arrSeleccionados) > 0) {
             foreach ($arrSeleccionados AS $codigo) {
                 $ar = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetalle')->find($codigo);
-                $arFacturaDetalle = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalle')->findOneBy(array('codigoPeriodoFk'=> $ar->getCodigoPeriodoFk()));
-                if ($arFacturaDetalle != null){
+                $arFacturaDetalle = $em->createQueryBuilder()->from("BrasaAfiliacionBundle:AfiFacturaDetalle", "fd")
+                    ->select("fd")
+                    ->join("fd.facturaRel", "f")
+                    ->where("fd.codigoPeriodoFk = {$ar->getCodigoPeriodoFk()}")
+                    ->andWhere("f.estadoAnulado = 0")
+                    ->getQuery()->getResult();
+                if ($arFacturaDetalle != null) {
                     $registros = true;
                 } else {
                     $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($ar->getCodigoPeriodoFk());
@@ -67,9 +76,10 @@ class AfiPeriodoDetalleRepository extends EntityRepository {
         }
     }
 
-    public function trasladoNuevo($arrSeleccionados, $codigoPeriodo) {
+    public function trasladoNuevo($arrSeleccionados, $codigoPeriodo)
+    {
         $em = $this->getEntityManager();
-        if(count($arrSeleccionados) > 0) {
+        if (count($arrSeleccionados) > 0) {
             $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);
             $arPeriodoTraslado = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
             $arPeriodoTraslado->setClienteRel($arPeriodo->getClienteRel());
@@ -131,21 +141,22 @@ class AfiPeriodoDetalleRepository extends EntityRepository {
             $arPeriodoTraslado->setSubtotal($subtotal);
             $arPeriodoTraslado->setIva($iva);
             $arPeriodoTraslado->setTotal($total);
-            
+
             $arPeriodo->setNumeroEmpleados($arPeriodo->getNumeroEmpleados() - 1);
             $arPeriodo->setAdministracion($arPeriodo->getAdministracion() - $administracion);
             $arPeriodo->setSubtotal($arPeriodo->getSubtotal() - $subtotal);
             $arPeriodo->setIva($arPeriodo->getIva() - $iva);
             $arPeriodo->setTotal($arPeriodo->getTotal() - $total);
             $arPeriodo->setNumeroEmpleados($arPeriodo->getNumeroEmpleados() - 1);
-            
+
             $em->persist($arPeriodoTraslado);
             $em->persist($arPeriodo);
             $em->flush();
         }
     }
-    
-    public function actualizarDetalleCobro($codigoPeriodo){
+
+    public function actualizarDetalleCobro($codigoPeriodo)
+    {
         set_time_limit(0);
         ob_clean();
         $em = $this->getEntityManager();
@@ -162,9 +173,9 @@ class AfiPeriodoDetalleRepository extends EntityRepository {
         $ivaGeneral = 0;
         $totalGeneral = 0;
         $arPeriodoDetalle = new \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetalle();
-        $arPeriodoDetalles = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetalle')->findBy(array('codigoPeriodoFk'=>$codigoPeriodo));
+        $arPeriodoDetalles = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetalle')->findBy(array('codigoPeriodoFk' => $codigoPeriodo));
         $numeroRegistros = count($arPeriodoDetalles);
-        foreach ($arPeriodoDetalles as $arPeriodoDetalle){
+        foreach ($arPeriodoDetalles as $arPeriodoDetalle) {
             $totalPension += $arPeriodoDetalle->getPension();
             $totalSalud += $arPeriodoDetalle->getSalud();
             $totalCaja += $arPeriodoDetalle->getCaja();
@@ -189,7 +200,7 @@ class AfiPeriodoDetalleRepository extends EntityRepository {
         $arPeriodo->setTotal($totalGeneral);
         $arPeriodo->setNumeroEmpleados($numeroRegistros);
         $em->persist($arPeriodo);
-        $em->flush();        
+        $em->flush();
         $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->generarInteresMora($codigoPeriodo);
     }
 
