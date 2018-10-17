@@ -140,7 +140,7 @@ class PeriodoCobro extends \FPDF_FPDF
     public function EncabezadoDetalles()
     {
         $this->Ln(10);
-        $header = array('TIPO', utf8_decode('IDENTIFICACION'), 'NOMBRE', 'DIAS', 'SALARIO', 'FECHA ING', 'PENSION', 'SALUD', 'RIESGOS', 'CAJA', 'SUBTOTAL', 'ADMON', 'IVA', 'TOTAL', 'RET');
+        $header = array('TIPO', utf8_decode('IDENTIFICACION'), 'NOMBRE', 'DIAS', 'SALARIO', 'FECHA ING', 'PENSION', 'SALUD', 'RIESGOS', 'CAJA', 'SUBTOTAL', 'ADMON', 'MOV. F', 'TOTAL', 'RET');
         $this->SetFillColor(236, 236, 236);
         $this->SetTextColor(0);
         $this->SetDrawColor(0, 0, 0);

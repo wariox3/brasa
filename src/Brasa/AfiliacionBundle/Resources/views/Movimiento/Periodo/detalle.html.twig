@@ -36,7 +36,7 @@
                     <tr>
                         <td class="titulo">HASTA:</td>
                         <td class="td-in-well">{{ arPeriodo.fechaHasta | date('Y/m/d') }}</td>
-                        <td class="titulo">IVA:</td>
+                        <td class="titulo">MOVIMIENTO FINANCIERO:</td>
                         <td align="right">{{ arPeriodo.iva | number_format(0, '.', ',')}}</td>
                     </tr>
                     <tr>
@@ -81,7 +81,7 @@
                             <th>SUBTOTAL</th>
                             <th>ADMIN</th>                            
                             <th>%IVA</th>
-                            <th>IVA</th>
+                            <th>MOV. F</th>
                             <th>TOTAL</th>
                             <th align="center"><input type="checkbox" name="ChkSeleccionarTodos" OnClick="ChequearTodosTabla(this,'ChkSeleccionar[]');"/></th>
                         </tr>

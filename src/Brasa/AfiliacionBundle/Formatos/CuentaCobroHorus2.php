@@ -134,7 +134,7 @@ class CuentaCobroHorus2 extends \FPDF_FPDF {
         
         $pdf->SetFont('Arial', 'B', 6);
         $pdf->Ln(10);
-        $header = array(utf8_decode('IDENTIFICACION'), 'NOMBRE','DIAS', 'SALARIO','FECHA ING','PENSION', 'SALUD', 'RIESGOS', 'C. COMP', 'ADMON', 'SUBTOTAL', 'IVA', 'TOTAL','RET');
+        $header = array(utf8_decode('IDENTIFICACION'), 'NOMBRE','DIAS', 'SALARIO','FECHA ING','PENSION', 'SALUD', 'RIESGOS', 'C. COMP', 'ADMON', 'SUBTOTAL', 'MOV. F', 'TOTAL','RET');
         $pdf->SetFillColor(236, 236, 236);
         $pdf->SetTextColor(0);
         $pdf->SetDrawColor(0, 0, 0);
