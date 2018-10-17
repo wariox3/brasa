@@ -108,6 +108,8 @@ class AfiPeriodoDetalleRepository extends EntityRepository
                 $arTraslado->setPeriodoRel($arPeriodoTraslado);
                 $arTraslado->setEmpleadoRel($arEmpleado);
                 $arTraslado->setContratoRel($arContrato);
+                $arTraslado->setIngreso($ar->getIngreso());
+                $arTraslado->setRetiro($ar->getRetiro());
                 $arTraslado->setFechaDesde($ar->getFechaDesde());
                 $arTraslado->setFechaHasta($ar->getFechaHasta());
                 $arTraslado->setDias($ar->getDias());
