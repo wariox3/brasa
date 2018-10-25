@@ -4,48 +4,52 @@ namespace Brasa\AfiliacionBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
-class AfiContratoRepository extends EntityRepository {    
-    
-    public function listaDql() {
+class AfiContratoRepository extends EntityRepository
+{
+
+    public function listaDql()
+    {
         $em = $this->getEntityManager();
-        $dql   = "SELECT c FROM BrasaAfiliacionBundle:AfiContrato c WHERE c.codigoContratoPk <> 0";
+        $dql = "SELECT c FROM BrasaAfiliacionBundle:AfiContrato c WHERE c.codigoContratoPk <> 0";
         $dql .= " ORDER BY c.codigoContratoPk";
         return $dql;
     }
-    
-    public function listaConsultaDql($strEmpleado = '', $codigoCliente = '', $strIdentificacion = '',$strDesde = "", $strHasta = "",$estadoPagado = "") {
+
+    public function listaConsultaDql($strEmpleado = '', $codigoCliente = '', $strIdentificacion = '', $strDesde = "", $strHasta = "", $estadoPagado = "")
+    {
         //$em = $this->getEntityManager();
-        $dql   = "SELECT c,e FROM BrasaAfiliacionBundle:AfiContrato c JOIN c.empleadoRel e WHERE c.codigoContratoPk <> 0 and c.indefinido = 1 ";
-        if($strEmpleado != '') {
+        $dql = "SELECT c,e FROM BrasaAfiliacionBundle:AfiContrato c JOIN c.empleadoRel e WHERE c.codigoContratoPk <> 0";
+        if ($strEmpleado != '') {
             $dql .= " AND e.nombreCorto LIKE '%" . $strEmpleado . "%'";
         }
-        if($codigoCliente != '') {
+        if ($codigoCliente != '') {
             $dql .= " AND e.codigoClienteFk = " . $codigoCliente;
-        } 
-        if($strIdentificacion != '') {
+        }
+        if ($strIdentificacion != '') {
             $dql .= " AND e.numeroIdentificacion = " . $strIdentificacion;
-        } 
-        if($strDesde != "") {
+        }
+        if ($strDesde != "") {
             $dql .= " AND c.fechaDesde >='" . $strDesde . "'";
         }
-        if($strHasta != "") {
+        if ($strHasta != "") {
             $dql .= " AND c.fechaDesde <='" . $strHasta . "'";
         }
-        if($estadoPagado == 1) {
+        if ($estadoPagado == 1) {
             $dql .= " AND c.valor >'0'";
         }
-        if($estadoPagado == 0) {
+        if ($estadoPagado == 0) {
             $dql .= " AND c.valor = '0' AND c.formaPago IS NULL ";
         }
-        if($estadoPagado == 3){
+        if ($estadoPagado == 3) {
             $dql .= " AND c.valor = '0' AND c.formaPago LIKE '%convenio%' ";
         }
-        
+
         //$dql .= " ORDER BY pd.codigoPeriodoDetallePk";
         return $dql;
     }
 
-    public function listaConsultaGeneralDql($strEmpleado = '', $codigoCliente = '', $codigoAsesor = '', $strIdentificacion = '',$strDesde = "", $strHasta = "", $estado = "") {
+    public function listaConsultaGeneralDql($strEmpleado = '', $codigoCliente = '', $codigoAsesor = '', $strIdentificacion = '', $strDesde = "", $strHasta = "", $estado = "")
+    {
         ob_clean();
         set_time_limit(0);
         ini_set("memory_limit", -1);
@@ -84,40 +88,41 @@ class AfiContratoRepository extends EntityRepository {
                 INNER JOIN afi_contrato ON afi_contrato.codigo_empleado_fk = afi_empleado.codigo_empleado_pk
                 LEFT JOIN afi_cliente ON afi_empleado.codigo_cliente_fk = afi_cliente.codigo_cliente_pk AND afi_contrato.codigo_cliente_fk = afi_cliente.codigo_cliente_pk
                 WHERE  afi_contrato.codigo_contrato_pk <> 0";
-        if($strEmpleado != '') {
+        if ($strEmpleado != '') {
             $strSql .= " AND afi_empleado.nombre_corto LIKE '%" . $strEmpleado . "%'";
         }
-        if($codigoCliente != '') {
+        if ($codigoCliente != '') {
             $strSql .= " AND afi_contrato.codigo_cliente_fk = " . $codigoCliente;
         }
-        if($codigoAsesor != '') {
+        if ($codigoAsesor != '') {
             $strSql .= " AND afi_cliente.codigo_asesor_fk = " . $codigoAsesor;
         }
-        if($strIdentificacion != '') {
+        if ($strIdentificacion != '') {
             $strSql .= " AND afi_empleado.numero_identificacion = " . $strIdentificacion;
         }
-        if($strDesde != "") {
+        if ($strDesde != "") {
             $strSql .= " AND afi_contrato.fecha_desde >='" . $strDesde . "'";
         }
-        if($strHasta != "") {
+        if ($strHasta != "") {
             $strSql .= " AND afi_contrato.fecha_hasta <='" . $strHasta . "'";
         }
-        if($estado == 1 ) {
+        if ($estado == 1) {
             $strSql .= " AND afi_contrato.indefinido = 1";
         }
-        if($estado == "0") {
+        if ($estado == "0") {
             $strSql .= " AND afi_contrato.indefinido = 0";
         }
         $connection = $em->getConnection();
-        $statement = $connection->prepare($strSql);        
+        $statement = $connection->prepare($strSql);
         $statement->execute();
         $strSql = $statement->fetchAll();
         return $strSql;
     }
-    
-    public function listaTerminacionesDql($strEmpleado = '', $codigoCliente = '', $strIdentificacion = '',$strDesde = "", $strHasta = "") {
+
+    public function listaTerminacionesDql($strEmpleado = '', $codigoCliente = '', $strIdentificacion = '', $strDesde = "", $strHasta = "")
+    {
         $em = $this->getEntityManager();
-        
+
         $strSql = "SELECT
                 afi_contrato.codigo_contrato_pk as codigoContratoPk,
                 afi_cliente.nombre_corto as cliente,
@@ -131,60 +136,62 @@ class AfiContratoRepository extends EntityRepository {
                 INNER JOIN afi_contrato ON afi_contrato.codigo_empleado_fk = afi_empleado.codigo_empleado_pk
                 LEFT JOIN afi_cliente ON afi_empleado.codigo_cliente_fk = afi_cliente.codigo_cliente_pk AND afi_contrato.codigo_cliente_fk = afi_cliente.codigo_cliente_pk
                 WHERE  afi_contrato.codigo_contrato_pk <> 0 and afi_contrato.indefinido = 1";
-        if($strEmpleado != '') {
+        if ($strEmpleado != '') {
             $strSql .= " AND afi_empleado.nombre_corto LIKE '%" . $strEmpleado . "%'";
         }
-        if($codigoCliente != '') {
+        if ($codigoCliente != '') {
             $strSql .= " AND afi_contrato.codigo_cliente_fk = " . $codigoCliente;
-        } 
-        if($strIdentificacion != '') {
+        }
+        if ($strIdentificacion != '') {
             $strSql .= " AND afi_empleado.numero_identificacion = " . $strIdentificacion;
         }
-        if($strDesde != "") {
+        if ($strDesde != "") {
             $strSql .= " AND afi_contrato.fecha_desde >='" . $strDesde . "'";
         }
-        if($strHasta != "") {
+        if ($strHasta != "") {
             $strSql .= " AND afi_contrato.fecha_hasta <='" . $strHasta . "'";
-        }        
+        }
         $connection = $em->getConnection();
-        $statement = $connection->prepare($strSql);        
+        $statement = $connection->prepare($strSql);
         $statement->execute();
         $strSql = $statement->fetchAll();
         return $strSql;
     }
-    
-    public function listaConsultaPagoPendienteDql($strEmpleado = '', $codigoCliente = '', $strIdentificacion = '',$strDesde = "", $strHasta = "") {
+
+    public function listaConsultaPagoPendienteDql($strEmpleado = '', $codigoCliente = '', $strIdentificacion = '', $strDesde = "", $strHasta = "")
+    {
         //$em = $this->getEntityManager();
-        $dql   = "SELECT c,e FROM BrasaAfiliacionBundle:AfiContrato c JOIN c.empleadoRel e WHERE c.codigoContratoPk <> 0 AND c.estadoGeneradoCtaCobrar = 0";
-        if($strEmpleado != '') {
+        $dql = "SELECT c,e FROM BrasaAfiliacionBundle:AfiContrato c JOIN c.empleadoRel e WHERE c.codigoContratoPk <> 0 AND c.estadoGeneradoCtaCobrar = 0";
+        if ($strEmpleado != '') {
             $dql .= " AND e.nombreCorto LIKE '%" . $strEmpleado . "%'";
         }
-        if($codigoCliente != '') {
+        if ($codigoCliente != '') {
             $dql .= " AND e.codigoClienteFk = " . $codigoCliente;
-        } 
-        if($strIdentificacion != '') {
+        }
+        if ($strIdentificacion != '') {
             $dql .= " AND e.numeroIdentificacion = " . $strIdentificacion;
-        } 
-        if($strDesde != "") {
+        }
+        if ($strDesde != "") {
             $dql .= " AND c.fechaDesde >='" . $strDesde . "'";
         }
-        if($strHasta != "") {
+        if ($strHasta != "") {
             $dql .= " AND c.fechaDesde <='" . $strHasta . "'";
         }
-        
+
         //$dql .= " ORDER BY pd.codigoPeriodoDetallePk";
         return $dql;
     }
-    
-    public function pendienteAfiliacionDql($codigoCliente = '') {
+
+    public function pendienteAfiliacionDql($codigoCliente = '')
+    {
         //$em = $this->getEntityManager();
-        $dql   = "SELECT c,e FROM BrasaAfiliacionBundle:AfiContrato c JOIN c.empleadoRel e WHERE c.codigoContratoPk <> 0 AND c.estadoGeneradoCtaCobrar = 0";
+        $dql = "SELECT c,e FROM BrasaAfiliacionBundle:AfiContrato c JOIN c.empleadoRel e WHERE c.codigoContratoPk <> 0 AND c.estadoGeneradoCtaCobrar = 0";
         /*if($strEmpleado != '') {
             $dql .= " AND e.nombreCorto LIKE '%" . $strEmpleado . "%'";
         }*/
-        if($codigoCliente != '') {
+        if ($codigoCliente != '') {
             $dql .= " AND c.codigoClienteFk = " . $codigoCliente;
-        } 
+        }
         /*if($strIdentificacion != '') {
             $dql .= " AND e.numeroIdentificacion = " . $strIdentificacion;
         } 
@@ -194,82 +201,76 @@ class AfiContratoRepository extends EntityRepository {
         if($strHasta != "") {
             $dql .= " AND c.fechaDesde <='" . date_format($strHasta, ('Y-m-d')) . "'";
         }*/
-        
+
         //$dql .= " ORDER BY pd.codigoPeriodoDetallePk";
         return $dql;
     }
-    
-    public function listaDetalleDql($codigoEmpleado) {
+
+    public function listaDetalleDql($codigoEmpleado)
+    {
         $em = $this->getEntityManager();
-        $dql   = "SELECT c FROM BrasaAfiliacionBundle:AfiContrato c WHERE c.codigoEmpleadoFk = " . $codigoEmpleado;
+        $dql = "SELECT c FROM BrasaAfiliacionBundle:AfiContrato c WHERE c.codigoEmpleadoFk = " . $codigoEmpleado;
         return $dql;
-    }    
-    
-    public function listaConsultaClienteSinAfiliacionesDql($codigoCliente = '') {
+    }
+
+    public function listaConsultaClienteSinAfiliacionesDql($codigoCliente = '')
+    {
         $em = $this->getEntityManager();
-        
+
         $fechaActual = new \DateTime('now');
         $fechaActual = $fechaActual->format("Y-m-d");
         $arSinAfiliacion = "";
         $arIds = "";
-        if($codigoCliente != '')
-        {
-            $dql= $em->createQuery("SELECT c.codigoClienteFk "
+        if ($codigoCliente != '') {
+            $dql = $em->createQuery("SELECT c.codigoClienteFk "
                 . "FROM BrasaAfiliacionBundle:AfiContrato c "
                 . "WHERE c.codigoClienteFk <> 0 "
                 . "AND c.codigoClienteFk = {$codigoCliente} ");
             $arClientes = $dql->getResult();
-            foreach ($arClientes as $arClientes)
-            {
+            foreach ($arClientes as $arClientes) {
                 $dql = $em->createQuery("SELECT COUNT(c.codigoContratoPk)"
-                        . "FROM BrasaAfiliacionBundle:AfiContrato c "
-                        . "WHERE c.codigoContratoPk <> 0 "
-                        . "AND c.codigoClienteFk = {$codigoCliente} "
-                        . "AND c.indefinido = 1");
+                    . "FROM BrasaAfiliacionBundle:AfiContrato c "
+                    . "WHERE c.codigoContratoPk <> 0 "
+                    . "AND c.codigoClienteFk = {$codigoCliente} "
+                    . "AND c.indefinido = 1");
                 $arCliente = $dql->getResult();
                 $arConteo = $arCliente[0][1];
                 $arConteo = (int)$arConteo;
-                if($arConteo == 0)
-                {
+                if ($arConteo == 0) {
                     $arIds .= $arClientes['codigoClienteFk'];
-                }
-                else
-                {
+                } else {
                     $arIds = "0";
                 }
             }
-            $dql=" SELECT c FROM BrasaAfiliacionBundle:AfiCliente c "
+            $dql = " SELECT c FROM BrasaAfiliacionBundle:AfiCliente c "
                 . " WHERE c.codigoClientePk  = $arIds";
-        }
-        else
-        {
-            $dql= $em->createQuery("SELECT c.codigoClienteFk "
+        } else {
+            $dql = $em->createQuery("SELECT c.codigoClienteFk "
                 . "FROM BrasaAfiliacionBundle:AfiContrato c "
                 . "WHERE c.codigoClienteFk <> 0 ");
             $arClientes = $dql->getResult();
-            foreach ($arClientes as $arClientes)
-            {
+            foreach ($arClientes as $arClientes) {
                 $dql = $em->createQuery("SELECT COUNT(c.codigoContratoPk)"
-                        . "FROM BrasaAfiliacionBundle:AfiContrato c "
-                        . "WHERE c.codigoContratoPk <> 0 "
-                        . "AND c.codigoClienteFk = {$arClientes['codigoClienteFk']} "
-                        . "AND c.indefinido = 1");
+                    . "FROM BrasaAfiliacionBundle:AfiContrato c "
+                    . "WHERE c.codigoContratoPk <> 0 "
+                    . "AND c.codigoClienteFk = {$arClientes['codigoClienteFk']} "
+                    . "AND c.indefinido = 1");
                 $arCliente = $dql->getResult();
                 $arConteo = $arCliente[0][1];
                 $arConteo = (int)$arConteo;
-                if($arConteo == 0)
-                {
-                    $arSinAfiliacion .= $arClientes['codigoClienteFk'].",";
+                if ($arConteo == 0) {
+                    $arSinAfiliacion .= $arClientes['codigoClienteFk'] . ",";
                 }
             }
             $arIds = substr($arSinAfiliacion, 0, -1);
-            $dql=" SELECT c FROM BrasaAfiliacionBundle:AfiCliente c "
+            $dql = " SELECT c FROM BrasaAfiliacionBundle:AfiCliente c "
                 . " WHERE c.codigoClientePk IN({$arIds})"
                 . " ORDER BY c.codigoClientePk";
         }
-        
+
         return $dql;
     }
+
     public function fechaMayor()
     {
         $em = $this->getEntityManager();
@@ -277,44 +278,43 @@ class AfiContratoRepository extends EntityRepository {
         $fechaActual = $fechaActual->format("Y-m-d");
         $arSinAfiliacion = "";
         $strIds = "";
-        $strFecha="";
+        $strFecha = "";
         $i = 0;
-        $dql= $em->createQuery("SELECT c.codigoClientePk "
-                . "FROM BrasaAfiliacionBundle:AfiCliente c "
-                . "WHERE c.codigoClientePk <> 0 ");
+        $dql = $em->createQuery("SELECT c.codigoClientePk "
+            . "FROM BrasaAfiliacionBundle:AfiCliente c "
+            . "WHERE c.codigoClientePk <> 0 ");
         $arClientes = $dql->getResult();
-        foreach ($arClientes as $arCliente)
-        {
+        foreach ($arClientes as $arCliente) {
             $dql = $em->createQuery("SELECT COUNT(c.codigoContratoPk)"
-                    . "FROM BrasaAfiliacionBundle:AfiContrato c "
-                    . "WHERE c.codigoContratoPk <> 0 "
-                    . "AND c.codigoClienteFk = {$arCliente['codigoClientePk']} "
-                    . "AND c.fechaHasta >= '$fechaActual'");
+                . "FROM BrasaAfiliacionBundle:AfiContrato c "
+                . "WHERE c.codigoContratoPk <> 0 "
+                . "AND c.codigoClienteFk = {$arCliente['codigoClientePk']} "
+                . "AND c.fechaHasta >= '$fechaActual'");
             $arCountContratos = $dql->getResult();
             $dql2 = $em->createQuery("SELECT MAX(c.fechaHasta) "
-                    . "FROM BrasaAfiliacionBundle:AfiContrato c "
-                    . "WHERE c.codigoContratoPk <> 0 "
-                    . "AND c.codigoClienteFk = {$arCliente['codigoClientePk']} "
-                    . "AND c.indefinido = 0");
+                . "FROM BrasaAfiliacionBundle:AfiContrato c "
+                . "WHERE c.codigoContratoPk <> 0 "
+                . "AND c.codigoClienteFk = {$arCliente['codigoClientePk']} "
+                . "AND c.indefinido = 0");
             $arResult = $dql2->getResult();
-            if($arResult != null)
-            {
-                do{
+            if ($arResult != null) {
+                do {
                     $arFechas[$i][0] = $arCliente['codigoClientePk'];
                     $arFechas[$i][1] = $arResult[0][1];
-                    
+
                     $i++;
-                }while($i<count($arFechas));
+                } while ($i < count($arFechas));
             }
         }
 //        var_dump($arFechas);
 //        exit();
         return $arFechas;
     }
-    
-    public function eliminar($arrSeleccionados,$codigoEmpleado) {
+
+    public function eliminar($arrSeleccionados, $codigoEmpleado)
+    {
         $em = $this->getEntityManager();
-        if(count($arrSeleccionados) > 0) {
+        if (count($arrSeleccionados) > 0) {
             foreach ($arrSeleccionados AS $codigo) {
                 $ar = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->find($codigo);
                 $em->remove($ar);
@@ -324,57 +324,59 @@ class AfiContratoRepository extends EntityRepository {
             }
             $em->flush();
         }
-    }  
-    
-    public function contratosPeriodo($fechaDesde = "", $fechaHasta = "", $codigoCliente = "") {        
+    }
+
+    public function contratosPeriodo($fechaDesde = "", $fechaHasta = "", $codigoCliente = "")
+    {
         $em = $this->getEntityManager();
-        $dql   = "SELECT c FROM BrasaAfiliacionBundle:AfiContrato c "
-                ." WHERE (c.fechaHasta >= '" . $fechaDesde . "' OR c.indefinido = 1) "
-                . "AND c.fechaDesde <= '" . $fechaHasta . "' AND c.codigoClienteFk=" . $codigoCliente;
-        $query = $em->createQuery($dql);        
-        $arContratos = $query->getResult();        
+        $dql = "SELECT c FROM BrasaAfiliacionBundle:AfiContrato c "
+            . " WHERE (c.fechaHasta >= '" . $fechaDesde . "' OR c.indefinido = 1) "
+            . "AND c.fechaDesde <= '" . $fechaHasta . "' AND c.codigoClienteFk=" . $codigoCliente;
+        $query = $em->createQuery($dql);
+        $arContratos = $query->getResult();
         return $arContratos;
     }
-    
-    public function historialContratos($codigoEmpleado = '', $fechaNuevoContrato = '') {        
+
+    public function historialContratos($codigoEmpleado = '', $fechaNuevoContrato = '')
+    {
         $em = $this->getEntityManager();
-        $dql   = "SELECT
+        $dql = "SELECT
             count(afi_contrato.codigo_empleado_fk) as total,
             Max(afi_contrato.codigo_contrato_pk) AS ultimocontrato            
             FROM afi_contrato
             WHERE
-            afi_contrato.codigo_empleado_fk = " .$codigoEmpleado;
-        
+            afi_contrato.codigo_empleado_fk = " . $codigoEmpleado;
+
         $connection = $em->getConnection();
-        $statement = $connection->prepare($dql);        
+        $statement = $connection->prepare($dql);
         $statement->execute();
         $dql = $statement->fetchAll();
-        foreach ($dql as $dql) {            
+        foreach ($dql as $dql) {
             $ncontratos = $dql['total'];
             $ultimoContrato = $dql['ultimocontrato'];
-            if ($ultimoContrato == null){
+            if ($ultimoContrato == null) {
                 $estadoContrato = false;
             } else {
                 $arUltimoContrato = $em->getRepository('BrasaAfiliacionBundle:AfiContrato')->find($ultimoContrato);
                 $estadoContrato = $arUltimoContrato->getIndefinido();
             }
-            
-            if ($ncontratos == 0){
+
+            if ($ncontratos == 0) {
                 $estado = 0;
             } else {
-                if ($estadoContrato == FALSE){
+                if ($estadoContrato == FALSE) {
                     $fechaUltimoContrato = $arUltimoContrato->getFechaHasta()->format('Y-m-d');
                     $fechaPlazo = date('Y-m-d', strtotime("$fechaUltimoContrato +6 month"));
                     $fechaPlazo = new \DateTime($fechaPlazo);
-                    if ($fechaPlazo > $fechaNuevoContrato){
+                    if ($fechaPlazo > $fechaNuevoContrato) {
                         $estado = 1;
                     } else {
                         $estado = 0;
-                    }                    
-                }                
+                    }
+                }
             }
-        }        
+        }
         return $estado;
     }
-    
+
 }
