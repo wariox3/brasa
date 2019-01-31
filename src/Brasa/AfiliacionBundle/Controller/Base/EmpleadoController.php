@@ -5,6 +5,7 @@ namespace Brasa\AfiliacionBundle\Controller\Base;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Brasa\AfiliacionBundle\Form\Type\AfiEmpleadoType;
@@ -12,6 +13,8 @@ use Brasa\AfiliacionBundle\Form\Type\AfiContratoType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+
 
 class EmpleadoController extends Controller {
 
@@ -225,11 +228,130 @@ class EmpleadoController extends Controller {
                     'form' => $form->createView()));
     }
 
+//    /**
+//     * @Route("/afi/base/empleado/cambioSalario", name="brs_afi_base_empleado_cambio_salario")
+//     */
+//    public function cambioSalario(Request $request){
+//        $em = $this->getDoctrine()->getManager();
+//        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+//        $form = $this->createFormBuilder()
+//            ->add('attachment', FileType::class)
+//            ->add('BtnCargar', SubmitType::class, array('label' => 'Cargar'))
+//            ->getForm();
+//        $form->handleRequest($request);
+//        if ($form->isValid()) {
+//            if ($form->get('BtnCargar')->isClicked()) {
+//                $arUsuario = $this->get('security.token_storage')->getToken()->getUser();
+//                set_time_limit(0);
+//                ini_set("memory_limit", -1);
+//
+//                $form['attachment']->getData()->move("/var/www/temporal/","example.xls");
+//                $ruta = "/var/www/temporal/example.xls";
+//                $arrCarga = array();
+//                $objPHPExcel = \PHPExcel_IOFactory::load($ruta);
+//                $valoresErroneos = [];
+//
+//                foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
+//                    $worksheetTitle = $worksheet->getTitle();
+//                    $highestRow = $worksheet->getHighestRow(); // e.g. 10
+//                    $highestColumn = $worksheet->getHighestColumn(); // e.g 'F'
+//                    $highestColumnIndex = \PHPExcel_Cell::columnIndexFromString($highestColumn);
+//                    $nrColumns = ord($highestColumn) - 64;
+//                    $estructura = true;
+//                    if (str_replace(" ","",$worksheet->getCellByColumnAndRow(0, 1)) != "CodigoContrato" || str_replace(" ","",$worksheet->getCellByColumnAndRow(1, 1)) != "Salario" || str_replace(" ","",$worksheet->getCellByColumnAndRow(2, 1)) != "DevengadoPactado") {
+//                        $estructura = false;
+//                    }
+//                    for ($row = 2; $row <= $highestRow; ++$row) {
+//                        $cell = $worksheet->getCellByColumnAndRow(0, $row);
+//                        $codigoContratoPk = $cell->getValue();
+//                        $cell = $worksheet->getCellByColumnAndRow(1, $row);
+//                        $salario = $cell->getValue();
+//                        $cell = $worksheet->getCellByColumnAndRow(2, $row);
+//                        $pactado = $cell->getValue();
+//
+//                        if (!is_numeric($codigoContratoPk)) {
+//                            $valoresErroneos[] = "- Fila {$row}: '{$codigoContratoPk}'";
+//                        }
+//                        $arrCarga[] = array(
+//                            'codigoContratoPk' => $codigoContratoPk,
+//                            'salario' => $salario,
+//                            'pactado' => $pactado
+//                        );
+//                    }
+//                }
+//                $mensaje = "";
+//
+//                if ($estructura == true) {
+//                    if (empty($valoresErroneos)) {
+//                        foreach ($arrCarga as $carga) {
+//                            var_dump($carga['codigoContratoPk']);
+//                            exit();
+//                            $arContrato = $em->getRepository("BrasaRecursoHumanoBundle:RhuContrato")->find((int)$carga['codigoContratoPk']);
+//                            if ($arContrato) {
+//                                if ($arContrato->getIndefinido() != 0) {
+//                                    if ($carga['salario']) {
+//                                        $arrCaracteres = array(",", ".");
+//                                        $intSalario = str_replace($arrCaracteres, "", $carga['salario']);
+//                                        $arCambioSalario = new \Brasa\RecursoHumanoBundle\Entity\RhuCambioSalario();
+//                                        $arCambioSalario->setContratoRel($arContrato);
+//                                        $arCambioSalario->setEmpleadoRel($arContrato->getEmpleadoRel());
+//                                        $arCambioSalario->setFechaInicio(new \DateTime('now'));
+//                                        $arCambioSalario->setFecha(new \DateTime('now'));
+//                                        $arCambioSalario->setVrSalarioAnterior($arContrato->getVrSalario());
+//                                        $arCambioSalario->setVrSalarioNuevo($intSalario);
+//
+//                                        $em->persist($arCambioSalario);
+//                                        $arContrato->setVrSalario($intSalario);
+//                                        if ($arContrato->getCodigoTipoTiempoFk() == 2) {
+//                                            $arContrato->setVrSalarioPago($intSalario / 2);
+//                                        } else {
+//                                            $arContrato->setVrSalarioPago($intSalario);
+//                                        }
+//                                        $arEmpleado = $arContrato->getEmpleadoRel();
+//                                        $arEmpleado->setVrSalario($intSalario);
+//                                        $em->persist($arEmpleado);
+//                                    }
+//                                    if ($carga['pactado']) {
+//                                        $arContrato->setVrDevengadoPactado($carga['pactado']);
+//                                    }
+//                                    $em->persist($arContrato);
+//                                }
+//                            } else {
+//                                $error = true;
+//                                $mensaje .= ($mensaje != "" ? "<hr>" : "") . "Lo siguientes valores contienen errores: <br>" . $carga["codigoContratoPk"];
+//                                $mensaje .= "<br>Contrato inexistente.";
+//                            }
+//                        }
+//                        $em->flush();
+//                        echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+//
+//                    } else {
+//                        $error = true;
+//                        $mensaje .= ($mensaje != "" ? "<hr>" : "") . "Lo siguientes valores contienen errores: <br>" . implode('<br>', $valoresErroneos);
+//                        $mensaje .= "<br>Es probable que haya usado formulas.";
+//                    }
+//                } else {
+//                    $error = true;
+//                    $mensaje .= ($mensaje != "" ? "<hr>" : "") . "Error en la estructura del archivo";
+//                }
+//            }
+//        }
+//        if ($error) {
+//            $objMensaje->Mensaje("error", $mensaje,$this);
+//        }
+//        return $this->render('BrasaAfiliacionBundle:Base/Empleado:cambioSalario.html.twig', array(
+//            'form' => $form->createView()));
+//    }
+
     private function lista() {
         $session = new Session();
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiEmpleado')->listaDQL(
-                $session->get('filtroEmpleadoNombre'), $session->get('filtroCodigoCliente'), $session->get('filtroEmpleadoIdentificacion')
+                $session->get('filtroEmpleadoNombre'),
+                $session->get('filtroCodigoCliente'),
+                $session->get('filtroEmpleadoIdentificacion'),
+                $session->get('filtroEmpleadoActivos')
+
         );
     }
 
@@ -238,6 +360,7 @@ class EmpleadoController extends Controller {
         $session->set('filtroNit', $form->get('TxtNit')->getData());
         $session->set('filtroEmpleadoNombre', $form->get('TxtNombre')->getData());
         $session->set('filtroEmpleadoIdentificacion', $form->get('TxtNumeroIdentificacion')->getData());
+        $session->set('filtroEmpleadoActivos',$form->get('estadoActivo')->getData());
         $this->lista();
     }
 
@@ -262,6 +385,7 @@ class EmpleadoController extends Controller {
                 ->add('TxtNombreCliente', textType::class, array('label' => 'NombreCliente', 'data' => $strNombreCliente))
                 ->add('TxtNombre', textType::class, array('label' => 'Nombre', 'data' => $session->get('filtroEmpleadoNombre')))
                 ->add('TxtNumeroIdentificacion', textType::class, array('label' => 'Nombre', 'data' => $session->get('filtroEmpleadoIdentificacion')))
+                ->add('estadoActivo',ChoiceType::class,array('choices' => array('' => 'TODOS','1' => 'SI', '2' => 'NO'), 'data' => $session->get('filtroEmpleadoActivos')))
                 ->add('BtnEliminar', SubmitType::class, array('label' => 'Eliminar',))
                 ->add('BtnExcel', SubmitType::class, array('label' => 'Excel',))
                 ->add('BtnFiltrar', SubmitType::class, array('label' => 'Filtrar'))
@@ -293,7 +417,7 @@ class EmpleadoController extends Controller {
                 ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10);
         $objPHPExcel->getActiveSheet()->getStyle('1')->getFont()->setBold(true);
-        for ($col = 'A'; $col !== 'R'; $col++) {
+        for ($col = 'A'; $col !== 'AE'; $col++) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
         }
         $objPHPExcel->setActiveSheetIndex(0)
@@ -322,7 +446,8 @@ class EmpleadoController extends Controller {
                 ->setCellValue('W1', 'CAJA')
                 ->setCellValue('X1', 'CLIENTE')
                 ->setCellValue('Y1', 'INDEFINIDO')
-                ->setCellValue('Z1', 'ACTIVO');
+                ->setCellValue('Z1', 'ACTIVO')
+                ->setCellValue('AA1', 'SALARIO');
         $i = 2;
 
         $query = $em->createQuery($this->strDqlLista);
@@ -364,6 +489,7 @@ class EmpleadoController extends Controller {
             $salud = '';
             $arl = '';
             $caja = '';
+            $salario = '';
             if ($arContrato != null) {
 
                 if ($arContrato->getCodigoCargoFk() != null) {
@@ -392,6 +518,7 @@ class EmpleadoController extends Controller {
                 if ($arContrato->getCodigoEntidadCajaFk() != null) {
                     $caja = $arContrato->getEntidadCajaRel()->getNombre();
                 }
+                $salario = $arContrato->getVrSalario();
             }
             $cliente = '';
             if ($arEmpleado->getCodigoClienteFk() != null) {
@@ -433,7 +560,8 @@ class EmpleadoController extends Controller {
                     ->setCellValue('W' . $i, $caja)
                     ->setCellValue('X' . $i, $cliente)
                     ->setCellValue('Y' . $i, $independiente)
-                    ->setCellValue('Z' . $i, $activo);
+                    ->setCellValue('Z' . $i, $activo)
+                    ->setCellValue('AA' . $i,$salario);
             $i++;
         }
 
