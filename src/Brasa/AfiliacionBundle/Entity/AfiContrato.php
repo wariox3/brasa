@@ -273,6 +273,12 @@ class AfiContrato
      */
     protected $facturasDetallesAfiliacionesContratosRel;
 
+    /**
+     * @ORM\OneToMany(targetEntity="AfiCambioSalario", mappedBy="contratoRel")
+     */
+    protected $cambiosSalariosContratoRel;
+
+
 
     /**
      * Constructor
@@ -281,8 +287,10 @@ class AfiContrato
     {
         $this->periodosDetallesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->periodosDetallesPagosContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->periodosDetallesPagosDetallesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->novedadesContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->facturasDetallesAfiliacionesContratosRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cambiosSalariosContratoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1040,6 +1048,78 @@ class AfiContrato
     }
 
     /**
+     * Set numeroRecibo
+     *
+     * @param string $numeroRecibo
+     *
+     * @return AfiContrato
+     */
+    public function setNumeroRecibo($numeroRecibo)
+    {
+        $this->numeroRecibo = $numeroRecibo;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroRecibo
+     *
+     * @return string
+     */
+    public function getNumeroRecibo()
+    {
+        return $this->numeroRecibo;
+    }
+
+    /**
+     * Set valor
+     *
+     * @param float $valor
+     *
+     * @return AfiContrato
+     */
+    public function setValor($valor)
+    {
+        $this->valor = $valor;
+
+        return $this;
+    }
+
+    /**
+     * Get valor
+     *
+     * @return float
+     */
+    public function getValor()
+    {
+        return $this->valor;
+    }
+
+    /**
+     * Set formaPago
+     *
+     * @param string $formaPago
+     *
+     * @return AfiContrato
+     */
+    public function setFormaPago($formaPago)
+    {
+        $this->formaPago = $formaPago;
+
+        return $this;
+    }
+
+    /**
+     * Get formaPago
+     *
+     * @return string
+     */
+    public function getFormaPago()
+    {
+        return $this->formaPago;
+    }
+
+    /**
      * Set empleadoRel
      *
      * @param \Brasa\AfiliacionBundle\Entity\AfiEmpleado $empleadoRel
@@ -1348,6 +1428,40 @@ class AfiContrato
     }
 
     /**
+     * Add periodosDetallesPagosDetallesContratoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesContratoRel
+     *
+     * @return AfiContrato
+     */
+    public function addPeriodosDetallesPagosDetallesContratoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesContratoRel)
+    {
+        $this->periodosDetallesPagosDetallesContratoRel[] = $periodosDetallesPagosDetallesContratoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove periodosDetallesPagosDetallesContratoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesContratoRel
+     */
+    public function removePeriodosDetallesPagosDetallesContratoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesContratoRel)
+    {
+        $this->periodosDetallesPagosDetallesContratoRel->removeElement($periodosDetallesPagosDetallesContratoRel);
+    }
+
+    /**
+     * Get periodosDetallesPagosDetallesContratoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPeriodosDetallesPagosDetallesContratoRel()
+    {
+        return $this->periodosDetallesPagosDetallesContratoRel;
+    }
+
+    /**
      * Add novedadesContratoRel
      *
      * @param \Brasa\AfiliacionBundle\Entity\AfiNovedad $novedadesContratoRel
@@ -1416,108 +1530,36 @@ class AfiContrato
     }
 
     /**
-     * Set numeroRecibo
+     * Add cambiosSalariosContratoRel
      *
-     * @param string $numeroRecibo
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCambioSalario $cambiosSalariosContratoRel
      *
      * @return AfiContrato
      */
-    public function setNumeroRecibo($numeroRecibo)
+    public function addCambiosSalariosContratoRel(\Brasa\AfiliacionBundle\Entity\AfiCambioSalario $cambiosSalariosContratoRel)
     {
-        $this->numeroRecibo = $numeroRecibo;
+        $this->cambiosSalariosContratoRel[] = $cambiosSalariosContratoRel;
 
         return $this;
     }
 
     /**
-     * Get numeroRecibo
+     * Remove cambiosSalariosContratoRel
      *
-     * @return string
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCambioSalario $cambiosSalariosContratoRel
      */
-    public function getNumeroRecibo()
+    public function removeCambiosSalariosContratoRel(\Brasa\AfiliacionBundle\Entity\AfiCambioSalario $cambiosSalariosContratoRel)
     {
-        return $this->numeroRecibo;
+        $this->cambiosSalariosContratoRel->removeElement($cambiosSalariosContratoRel);
     }
 
     /**
-     * Set valor
-     *
-     * @param float $valor
-     *
-     * @return AfiContrato
-     */
-    public function setValor($valor)
-    {
-        $this->valor = $valor;
-
-        return $this;
-    }
-
-    /**
-     * Get valor
-     *
-     * @return float
-     */
-    public function getValor()
-    {
-        return $this->valor;
-    }
-
-    /**
-     * Set formaPago
-     *
-     * @param string $formaPago
-     *
-     * @return AfiContrato
-     */
-    public function setFormaPago($formaPago)
-    {
-        $this->formaPago = $formaPago;
-
-        return $this;
-    }
-
-    /**
-     * Get formaPago
-     *
-     * @return string
-     */
-    public function getFormaPago()
-    {
-        return $this->formaPago;
-    }
-
-    /**
-     * Add periodosDetallesPagosDetallesContratoRel
-     *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesContratoRel
-     *
-     * @return AfiContrato
-     */
-    public function addPeriodosDetallesPagosDetallesContratoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesContratoRel)
-    {
-        $this->periodosDetallesPagosDetallesContratoRel[] = $periodosDetallesPagosDetallesContratoRel;
-
-        return $this;
-    }
-
-    /**
-     * Remove periodosDetallesPagosDetallesContratoRel
-     *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesContratoRel
-     */
-    public function removePeriodosDetallesPagosDetallesContratoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesContratoRel)
-    {
-        $this->periodosDetallesPagosDetallesContratoRel->removeElement($periodosDetallesPagosDetallesContratoRel);
-    }
-
-    /**
-     * Get periodosDetallesPagosDetallesContratoRel
+     * Get cambiosSalariosContratoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getPeriodosDetallesPagosDetallesContratoRel()
+    public function getCambiosSalariosContratoRel()
     {
-        return $this->periodosDetallesPagosDetallesContratoRel;
+        return $this->cambiosSalariosContratoRel;
     }
 }

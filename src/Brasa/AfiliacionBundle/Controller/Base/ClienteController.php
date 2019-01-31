@@ -2,6 +2,9 @@
 namespace Brasa\AfiliacionBundle\Controller\Base;
 
 
+use Brasa\AfiliacionBundle\BrasaAfiliacionBundle;
+use Brasa\AfiliacionBundle\Entity\AfiCambioSalario;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
@@ -11,6 +14,8 @@ use Brasa\AfiliacionBundle\Form\Type\AfiClienteType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+
 
 class ClienteController extends Controller
 {
@@ -144,7 +149,67 @@ class ClienteController extends Controller
             'arCliente' => $arCliente,
             'arContratos' => $arContratos, 
             'form' => $form->createView()));
-    }    
+    }
+
+    /**
+     * @Route("/afi/base/cliente/cambioSalario", name="brs_afi_base_cliente_cambio_salario")
+     */
+    public function cambioSalario(Request $request){
+        $em = $this->getDoctrine()->getManager();
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $arrPropiedadesCliente = array(
+            'class' => 'BrasaAfiliacionBundle:AfiCliente',
+            'query_builder' => function (EntityRepository $er) {
+                return $er->createQueryBuilder('ac')
+                    ->orderBy('ac.nombreCorto', 'ASC');},
+            'choice_label' => 'nombreCorto',
+            'required' => false,
+            'empty_data' => "",
+            'placeholder' => "TODOS",
+            'data' => ""
+        );
+        $form = $this->createFormBuilder()
+            ->add('clienteRel',EntityType::class , $arrPropiedadesCliente)
+            ->add('salario',IntegerType::class,array('label' => 'Salario'))
+            ->add('BtnActualizar',SubmitType::class,array('label' => 'Actualizar'))
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            if($form->get('BtnActualizar')->isClicked()){
+                $codigoCliente = $form->get("clienteRel")->getData()->getCodigoClientePk();
+                $nuevoSalario = $form->get("salario")->getData();
+                $arUsuario = $this->getUser()->getUserName();
+                $arEmpleados = $em->getRepository("BrasaAfiliacionBundle:AfiEmpleado")->findBy(array('codigoClienteFk' => $codigoCliente));
+                foreach ($arEmpleados as $arEmpleado){
+                    if($arEmpleado->getCodigoContratoActivo()){
+                        $arContrato = $em->getRepository("BrasaAfiliacionBundle:AfiContrato")->find($arEmpleado->getCodigoContratoActivo());
+                    }else{
+                        $arContrato = $em->getRepository("BrasaAfiliacionBundle:AfiContrato")->findOneBy(array('codigoEmpleadoFk' => $arEmpleado->getCodigoEmpleadoPk(),
+                            'estadoActivo'=> 1),array('codigoContratoPk' => 'DESC'));
+                    }
+                    if($arContrato){
+                        $arCambioSalario = new \Brasa\AfiliacionBundle\Entity\AfiCambioSalario();
+                        $arCambioSalario->setEmpleadoRel($arEmpleado);
+                        $arCambioSalario->setContratoRel($arContrato);
+                        $arCambioSalario->setFecha( new \DateTime('now'));
+                        $arCambioSalario->setVrSalarioAnterior($arContrato->getVrSalario());
+                        $arCambioSalario->setVrSalarioNuevo($nuevoSalario);
+                        $arCambioSalario->setCodigoUsuario($arUsuario);
+                        $arContrato->setVrSalario($nuevoSalario);
+                        $em->persist($arCambioSalario);
+                        $em->persist($arContrato);
+                    }
+                }
+                $em->flush();
+                $objMensaje->Mensaje("informacion","Salarios Actualizados",$this);
+                return $this->redirect($this->generateUrl('brs_afi_base_cliente_cambio_salario'));
+
+            }
+        }
+
+            return $this->render('BrasaAfiliacionBundle:Base/Cliente:cambioSalario.html.twig', array(
+            'form' => $form->createView()));
+    }
     
     private function lista() {  
         $session = new Session();        

@@ -199,6 +199,12 @@ class AfiEmpleado
     protected $novedadesEmpleadoRel;
 
     /**
+     * @ORM\OneToMany(targetEntity="AfiCambioSalario", mappedBy="empleadoRel")
+     */
+    protected $cambiosSalariosEmpleadoRel;
+
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -206,8 +212,10 @@ class AfiEmpleado
         $this->contratosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->periodosDetallesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->periodosDetallesPagosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->periodosDetallesPagosDetallesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->cursosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->novedadesEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cambiosSalariosEmpleadoRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -995,6 +1003,40 @@ class AfiEmpleado
     }
 
     /**
+     * Add periodosDetallesPagosDetallesEmpleadoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesEmpleadoRel
+     *
+     * @return AfiEmpleado
+     */
+    public function addPeriodosDetallesPagosDetallesEmpleadoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesEmpleadoRel)
+    {
+        $this->periodosDetallesPagosDetallesEmpleadoRel[] = $periodosDetallesPagosDetallesEmpleadoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove periodosDetallesPagosDetallesEmpleadoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesEmpleadoRel
+     */
+    public function removePeriodosDetallesPagosDetallesEmpleadoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesEmpleadoRel)
+    {
+        $this->periodosDetallesPagosDetallesEmpleadoRel->removeElement($periodosDetallesPagosDetallesEmpleadoRel);
+    }
+
+    /**
+     * Get periodosDetallesPagosDetallesEmpleadoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPeriodosDetallesPagosDetallesEmpleadoRel()
+    {
+        return $this->periodosDetallesPagosDetallesEmpleadoRel;
+    }
+
+    /**
      * Add cursosEmpleadoRel
      *
      * @param \Brasa\AfiliacionBundle\Entity\AfiCurso $cursosEmpleadoRel
@@ -1063,36 +1105,36 @@ class AfiEmpleado
     }
 
     /**
-     * Add periodosDetallesPagosDetallesEmpleadoRel
+     * Add cambiosSalariosEmpleadoRel
      *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesEmpleadoRel
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCambioSalario $cambiosSalariosEmpleadoRel
      *
      * @return AfiEmpleado
      */
-    public function addPeriodosDetallesPagosDetallesEmpleadoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesEmpleadoRel)
+    public function addCambiosSalariosEmpleadoRel(\Brasa\AfiliacionBundle\Entity\AfiCambioSalario $cambiosSalariosEmpleadoRel)
     {
-        $this->periodosDetallesPagosDetallesEmpleadoRel[] = $periodosDetallesPagosDetallesEmpleadoRel;
+        $this->cambiosSalariosEmpleadoRel[] = $cambiosSalariosEmpleadoRel;
 
         return $this;
     }
 
     /**
-     * Remove periodosDetallesPagosDetallesEmpleadoRel
+     * Remove cambiosSalariosEmpleadoRel
      *
-     * @param \Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesEmpleadoRel
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCambioSalario $cambiosSalariosEmpleadoRel
      */
-    public function removePeriodosDetallesPagosDetallesEmpleadoRel(\Brasa\AfiliacionBundle\Entity\AfiPeriodoDetallePagoDetalle $periodosDetallesPagosDetallesEmpleadoRel)
+    public function removeCambiosSalariosEmpleadoRel(\Brasa\AfiliacionBundle\Entity\AfiCambioSalario $cambiosSalariosEmpleadoRel)
     {
-        $this->periodosDetallesPagosDetallesEmpleadoRel->removeElement($periodosDetallesPagosDetallesEmpleadoRel);
+        $this->cambiosSalariosEmpleadoRel->removeElement($cambiosSalariosEmpleadoRel);
     }
 
     /**
-     * Get periodosDetallesPagosDetallesEmpleadoRel
+     * Get cambiosSalariosEmpleadoRel
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getPeriodosDetallesPagosDetallesEmpleadoRel()
+    public function getCambiosSalariosEmpleadoRel()
     {
-        return $this->periodosDetallesPagosDetallesEmpleadoRel;
+        return $this->cambiosSalariosEmpleadoRel;
     }
 }
