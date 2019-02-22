@@ -474,7 +474,7 @@ class PeriodoController extends Controller
         $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         $ruta = $arConfiguracionGeneral->getRutaTemporal();
         $correo = $arPeriodo->getClienteRel()->getEmail();
-        $nombre = $arPeriodo->getClienteRel()->getNombre();
+        $nombre = $arPeriodo->getClienteRel()->getNombreCorto();
 
         if ($correo && filter_var($correo, FILTER_VALIDATE_EMAIL)) {
             // se genera cuenta de cobro
