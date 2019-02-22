@@ -474,6 +474,7 @@ class PeriodoController extends Controller
         $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         $ruta = $arConfiguracionGeneral->getRutaTemporal();
         $correo = $arPeriodo->getClienteRel()->getEmail();
+        $nombre = $arPeriodo->getClienteRel()->getNombre();
 
         if ($correo && filter_var($correo, FILTER_VALIDATE_EMAIL)) {
             // se genera cuenta de cobro
@@ -491,7 +492,7 @@ class PeriodoController extends Controller
                 $strMensaje = "Se adjunta relacion de cobro";
                 $message = \Swift_Message::newInstance()
                     ->setFrom(array($username => $arConfiguracionGeneral->getNombreEmpresa()))
-                    ->setTo(array(strtolower($correo) => 'prueba'))
+                    ->setTo(array(strtolower($correo) => $nombre))
                     ->setSubject('Relacion de cobro ')
                     ->setBody($strMensaje, 'text/html');
 
