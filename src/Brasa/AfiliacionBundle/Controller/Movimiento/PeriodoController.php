@@ -473,10 +473,9 @@ class PeriodoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
         $ruta = $arConfiguracionGeneral->getRutaTemporal();
-        $correo = $arPeriodo->getClienteRel()->getEmail();
+        $arCorreos = explode(" ", $arPeriodo->getClienteRel()->getEmail());
         $nombre = $arPeriodo->getClienteRel()->getNombreCorto();
-
-        if ($correo && filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+        if ($arCorreos[0] && filter_var($arCorreos[0], FILTER_VALIDATE_EMAIL)) {
             // se genera cuenta de cobro
             try {
                 /** @var $mailer \Swift_Mailer */
@@ -492,10 +491,14 @@ class PeriodoController extends Controller
                 $strMensaje = "Se adjunta relacion de cobro";
                 $message = \Swift_Message::newInstance()
                     ->setFrom(array($username => $arConfiguracionGeneral->getNombreEmpresa()))
-                    ->setTo(array(strtolower($correo) => $nombre))
+                    ->setTo(array(strtolower($arCorreos[0]) => $nombre))
                     ->setSubject('Relacion de cobro ')
                     ->setBody($strMensaje, 'text/html');
-
+                if (count($arCorreos) > 0) {
+                    for ($i = 1; $i <= (count($arCorreos) - 1); $i++) {
+                        $message->addTo(strtolower($arCorreos[$i]));
+                    }
+                }
                 if (file_exists($rutaArchivo)) {
                     $message->attach(\Swift_Attachment::fromPath($rutaArchivo));
                     $flag = true;
