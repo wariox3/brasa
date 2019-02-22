@@ -3,6 +3,7 @@
 namespace Brasa\AfiliacionBundle\Controller\Movimiento;
 
 use Brasa\AfiliacionBundle\Entity\AfiPeriodo;
+use Swift_SmtpTransport;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
@@ -15,7 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Brasa\AfiliacionBundle\Form\Type\AfiPeriodoType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
-use ZipArchive;
+
 
 class PeriodoController extends Controller
 {
@@ -244,6 +245,9 @@ class PeriodoController extends Controller
                 $this->listaDetallePago($codigoPeriodo);
                 $this->generarDetallePagoExcel();
             }
+            if ($form->get('BtnEnviarEmail')->isClicked()) {
+                $this->enviarEmail($arPeriodo);
+            }
             if ($form->get('BtnDetalleActualizar')->isClicked()) {
                 $em->getRepository('BrasaAfiliacionBundle:AfiPeriodoDetalle')->actualizarDetalleCobro($codigoPeriodo);
             }
@@ -462,6 +466,53 @@ class PeriodoController extends Controller
         ));
     }
 
+    private function enviarEmail($arPeriodo)
+    {
+        $session = new session;
+        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
+        $em = $this->getDoctrine()->getManager();
+        $arConfiguracionGeneral = $em->getRepository('BrasaGeneralBundle:GenConfiguracion')->find(1);
+        $ruta = $arConfiguracionGeneral->getRutaTemporal();
+        $correo = $arPeriodo->getClienteRel()->getEmail();
+
+        if ($correo && filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+            // se genera cuenta de cobro
+            try {
+                /** @var $mailer \Swift_Mailer */
+                set_time_limit(0);
+                ini_set("memory_limit", -1);
+                $objPeriodoCobro = new \Brasa\AfiliacionBundle\Formatos\PeriodoCobro();
+                $objPeriodoCobro->Generar($this, $arPeriodo->getCodigoPeriodoPk(), $ruta);
+                $host = $this->container->getParameter("mailer_host");
+                $username = $this->container->getParameter("mailer_user");
+                $password = $this->container->getParameter("mailer_password");
+                $flag = false;// controla el envio de correo
+                $rutaArchivo = $ruta . "PeriodoCobro" . $arPeriodo->getCodigoPeriodoPk() . ".pdf";
+                $strMensaje = "Se adjunta relacion de cobro";
+                $message = \Swift_Message::newInstance()
+                    ->setFrom(array($username => $arConfiguracionGeneral->getNombreEmpresa()))
+                    ->setTo(array(strtolower($correo) => 'prueba'))
+                    ->setSubject('Relacion de cobro ')
+                    ->setBody($strMensaje, 'text/html');
+
+                if (file_exists($rutaArchivo)) {
+                    $message->attach(\Swift_Attachment::fromPath($rutaArchivo));
+                    $flag = true;
+                }
+                if ($flag) {
+                    $transport = Swift_SmtpTransport::newInstance($host, 465, 'ssl')
+                        ->setUsername($username)
+                        ->setPassword($password);
+                    $mailer = \Swift_Mailer::newInstance($transport);
+                    $mailer->send($message);
+                }
+            } catch (\Exception $e) {
+                $objMensaje->Mensaje('error', 'No se pudo enviar el correo "error:' . $e->getMessage() . '"', $this);
+            }
+        }
+
+    }
+
     private function lista()
     {
         $session = new session;
@@ -544,8 +595,9 @@ class PeriodoController extends Controller
         $session = new session;
 
         $form = $this->createFormBuilder()
-            ->add('BtnDetalleActualizar', SubmitType::class, array('label' => 'Actualizar',))
+            ->add('BtnDetalleActualizar', SubmitType::class, array('label' => 'Actualizar'))
             ->add('BtnDetalleCobroExcel', SubmitType::class, array('label' => 'Excel',))
+            ->add('BtnEnviarEmail', SubmitType::class, array('label' => 'Enviar email'))
             ->add('BtnDetalleCobroImprimir', SubmitType::class, array('label' => 'Imprimir',))
             ->add('BtnDetallePagoEliminar', SubmitType::class, array('label' => 'Eliminar',))
             ->add('BtnDetalleCobroEliminar', SubmitType::class, array('label' => 'Eliminar',))

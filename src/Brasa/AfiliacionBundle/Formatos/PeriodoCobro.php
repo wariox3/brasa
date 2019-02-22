@@ -8,7 +8,7 @@ class PeriodoCobro extends \FPDF_FPDF
     public static $em;
     public static $codigoPeriodo;
 
-    public function Generar($miThis, $codigoPeriodo)
+    public function Generar($miThis, $codigoPeriodo, $strRuta = "")
     {
         ob_clean();
         $em = $miThis->getDoctrine()->getManager();
@@ -19,7 +19,11 @@ class PeriodoCobro extends \FPDF_FPDF
         $pdf->AddPage();
         $pdf->SetFont('Times', '', 12);
         $this->Body($pdf);
-        $pdf->Output("PeriodoCobro$codigoPeriodo.pdf", 'D');
+        if ($strRuta == "") {
+            $pdf->Output("PeriodoCobro$codigoPeriodo.pdf", 'D');
+        } else {
+            $pdf->Output($strRuta . "PeriodoCobro$codigoPeriodo.pdf", 'F');
+        }
     }
 
     public function Header()
