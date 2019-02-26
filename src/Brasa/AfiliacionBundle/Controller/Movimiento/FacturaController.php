@@ -267,28 +267,29 @@ class FacturaController extends Controller
             if ($form->get('BtnGuardar')->isClicked()) {
                 $arrSeleccionados = $request->request->get('ChkSeleccionar');
                 foreach ($arrSeleccionados as $codigoPeriodo) {
-                    $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
                     $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);
-                    $arFacturaDetalle = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle();
-                    $arFacturaDetalle->setFacturaRel($arFactura);
-                    $arFacturaDetalle->setPeriodoRel($arPeriodo);
-                    $arFacturaDetalle->setFechaDesde($arPeriodo->getFechaDesde());
-                    $arFacturaDetalle->setFechaHasta($arPeriodo->getFechaHasta());
-                    $arFacturaDetalle->setPrecio($arPeriodo->getTotal());
-                    $arFacturaDetalle->setSubtotal($arPeriodo->getSubtotal());
-                    $arFacturaDetalle->setIva($arPeriodo->getIva());
-                    $arFacturaDetalle->setTotal($arPeriodo->getTotal());
-                    $arFacturaDetalle->setPension($arPeriodo->getPension());
-                    $arFacturaDetalle->setSalud($arPeriodo->getSalud());
-                    $arFacturaDetalle->setRiesgos($arPeriodo->getRiesgos());
-                    $arFacturaDetalle->setCaja($arPeriodo->getCaja());
-                    $arFacturaDetalle->setSena($arPeriodo->getSena());
-                    $arFacturaDetalle->setIcbf($arPeriodo->getIcbf());
-                    $arFacturaDetalle->setAdministracion($arPeriodo->getAdministracion());
-                    $arFacturaDetalle->setInteresMora($arPeriodo->getInteresMora());
-                    $em->persist($arFacturaDetalle);
-                    $arPeriodo->setEstadoFacturado(1);
-                    $em->persist($arPeriodo);
+                    if($arPeriodo){
+                        $arFacturaDetalle = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle();
+                        $arFacturaDetalle->setFacturaRel($arFactura);
+                        $arFacturaDetalle->setPeriodoRel($arPeriodo);
+                        $arFacturaDetalle->setFechaDesde($arPeriodo->getFechaDesde());
+                        $arFacturaDetalle->setFechaHasta($arPeriodo->getFechaHasta());
+                        $arFacturaDetalle->setPrecio($arPeriodo->getTotal());
+                        $arFacturaDetalle->setSubtotal($arPeriodo->getSubtotal());
+                        $arFacturaDetalle->setIva($arPeriodo->getIva());
+                        $arFacturaDetalle->setTotal($arPeriodo->getTotal());
+                        $arFacturaDetalle->setPension($arPeriodo->getPension());
+                        $arFacturaDetalle->setSalud($arPeriodo->getSalud());
+                        $arFacturaDetalle->setRiesgos($arPeriodo->getRiesgos());
+                        $arFacturaDetalle->setCaja($arPeriodo->getCaja());
+                        $arFacturaDetalle->setSena($arPeriodo->getSena());
+                        $arFacturaDetalle->setIcbf($arPeriodo->getIcbf());
+                        $arFacturaDetalle->setAdministracion($arPeriodo->getAdministracion());
+                        $arFacturaDetalle->setInteresMora($arPeriodo->getInteresMora());
+                        $arPeriodo->setEstadoFacturado(1);
+                        $em->persist($arFacturaDetalle);
+                        $em->persist($arPeriodo);
+                    }
                 }
                 $em->flush();
                 $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->liquidar($codigoFactura);
