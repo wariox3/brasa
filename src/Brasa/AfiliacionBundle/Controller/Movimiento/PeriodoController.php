@@ -552,11 +552,11 @@ class PeriodoController extends Controller
         $fechaHasta = "";
         $session->set('filtrarFecha',$form->get('filtrarFecha')->getData());
         if ($form->get('filtrarFecha')->getData()) {
-            $fechaDesde = $form->get('fechaDesde')->getData();
-            $fechaHasta = $form->get('fechaHasta')->getData();
+            $fechaDesde = $form->get('fechaDesde')->getData()->format('Y-m-d');
+            $fechaHasta = $form->get('fechaHasta')->getData()->format('Y-m-d');
         }
-        $session->set('filtroDesde', $fechaDesde->format('Y-m-d'));
-        $session->set('filtroHasta', $fechaHasta->format('Y-m-d'));
+        $session->set('filtroDesde', $fechaDesde);
+        $session->set('filtroHasta', $fechaHasta);
         //$this->lista();
     }
 
