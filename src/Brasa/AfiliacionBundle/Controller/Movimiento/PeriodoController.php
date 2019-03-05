@@ -488,7 +488,14 @@ class PeriodoController extends Controller
                 $password = $this->container->getParameter("mailer_password");
                 $flag = false;// controla el envio de correo
                 $rutaArchivo = $ruta . "PeriodoCobro" . $arPeriodo->getCodigoPeriodoPk() . ".pdf";
-                $strMensaje = "Se adjunta relacion de cobro";
+                $strMensaje = "Reciba un cordial saludo de HORUS.\n" .
+                    "Adjuntamos la cuenta de cobro de la Seguridad Social y quedamos atentos a las novedades a reportar, recuerde realizar el pago en la cuenta de ahorros Bancolombia N°014-000-108-00\n" .
+                    "Titular: OBRAS Y DRYWALL SAS NIT . 901089390.\n" .
+                    "Por favor enviar soporte de pago .\n" .
+                    "Le recordamos que también ofrecemos servicios en:\n" .
+                    "* Certificaciones en alturas.\n" .
+                    "* Pólizas de seguros.\n" .
+                    "* Asesoría en salud ocupacional .\n";
                 $message = \Swift_Message::newInstance()
                     ->setFrom(array($username => $arConfiguracionGeneral->getNombreEmpresa()))
                     ->setTo(array(strtolower($arCorreos[0]) => $nombre))
@@ -625,7 +632,7 @@ class PeriodoController extends Controller
             ->setLastModifiedBy("EMPRESA")
             ->setTitle("Office 2007 XLSX Test Document")
             ->setSubject("Office 2007 XLSX Test Document")
-            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes . ")
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10);
@@ -658,7 +665,7 @@ class PeriodoController extends Controller
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Periodos.xlsx"');
+        header('Content-Disposition: attachment;filename="Periodos . xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
@@ -686,7 +693,7 @@ class PeriodoController extends Controller
             ->setLastModifiedBy("EMPRESA")
             ->setTitle("Office 2007 XLSX Test Document")
             ->setSubject("Office 2007 XLSX Test Document")
-            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes . ")
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10);
@@ -747,7 +754,7 @@ class PeriodoController extends Controller
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="PeriodoDetalles.xlsx"');
+        header('Content-Disposition: attachment;filename="PeriodoDetalles . xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
@@ -775,7 +782,7 @@ class PeriodoController extends Controller
             ->setLastModifiedBy("EMPRESA")
             ->setTitle("Office 2007 XLSX Test Document")
             ->setSubject("Office 2007 XLSX Test Document")
-            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+            ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes . ")
             ->setKeywords("office 2007 openxml php")
             ->setCategory("Test result file");
         $objPHPExcel->getDefaultStyle()->getFont()->setName('Arial')->setSize(10);
@@ -882,7 +889,7 @@ class PeriodoController extends Controller
         $objPHPExcel->setActiveSheetIndex(0);
         // Redirect output to a client’s web browser (Excel2007)
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="PeriodoDetallePago.xlsx"');
+        header('Content-Disposition: attachment;filename="PeriodoDetallePago . xlsx"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
@@ -930,8 +937,8 @@ class PeriodoController extends Controller
             $handle->addEmptyDir($ruta); /* Agrega el directorio comprimido */
             $dir = opendir($ruta);
             while ($current = readdir($dir)) {
-                if ($current != "." && $current != "..") {
-                    $this->comprimir($ruta . "/" . $current, $zip_salida, $handle, true, $current); /* Comprime el subdirectorio o archivo */
+                if ($current != " . " && $current != " ..") {
+                    $this->comprimir($ruta . " / " . $current, $zip_salida, $handle, true, $current); /* Comprime el subdirectorio o archivo */
                 }
             }
             //foreach (glob($ruta . '/*') as $url) { /* Procesa cada directorio o archivo dentro de el */
@@ -1026,7 +1033,7 @@ class PeriodoController extends Controller
             $periodoPagoSalud = $arPeriodo->getAnioPago() . '-' . $this->RellenarNr($arPeriodo->getMesPago(), "0", 2, "I");
             //archivo plano
             $strRutaArchivo = $arConfiguracion->getRutaTemporal();
-            $strNombreArchivo = "pila" . date('YmdHis') . ".txt";
+            $strNombreArchivo = "pila" . date('YmdHis') . " . txt";
             ob_clean();
             $ar = fopen($strRutaArchivo . $strNombreArchivo, "a") or
             die("Problemas en la creacion del archivo plano");
@@ -1328,7 +1335,7 @@ class PeriodoController extends Controller
             if (!file_exists($strRutaGeneral)) {
                 mkdir($strRutaGeneral, 0777);
             }
-            $strRuta = $strRutaGeneral . "Pila/";
+            $strRuta = $strRutaGeneral . "Pila / ";
             if (!file_exists($strRuta)) {
                 mkdir($strRuta, 0777);
             }
@@ -1349,7 +1356,7 @@ class PeriodoController extends Controller
                 $periodoPagoDiferenteSalud = $arPeriodo->getAnio() . '-' . $this->RellenarNr($arPeriodo->getMes(), "0", 2, "I");
                 $periodoPagoSalud = $arPeriodo->getAnioPago() . '-' . $this->RellenarNr($arPeriodo->getMesPago(), "0", 2, "I");
                 $strRutaGeneral = $arConfiguracion->getRutaTemporal();
-                $strNombreArchivo = "pila" . date('YmdHis') . "-" . $codSucursal . ".txt";
+                $strNombreArchivo = "pila" . date('YmdHis') . " - " . $codSucursal . " . txt";
                 ob_clean();
                 $ar = fopen($strRuta . $strNombreArchivo, "a") or
                 die("Problemas en la creacion del archivo plano");
@@ -1613,7 +1620,7 @@ class PeriodoController extends Controller
             $this->comprimir($strRuta, $strRutaZip);
             $dir = opendir($strRuta);
             while ($current = readdir($dir)) {
-                if ($current != "." && $current != "..") {
+                if ($current != " . " && $current != " ..") {
                     unlink($strRuta . $current);
                 }
             }
