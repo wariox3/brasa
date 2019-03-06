@@ -1047,7 +1047,7 @@ class PeriodoController extends Controller
             $periodoPagoSalud = $arPeriodo->getAnioPago() . '-' . $this->RellenarNr($arPeriodo->getMesPago(), "0", 2, "I");
             //archivo plano
             $strRutaArchivo = $arConfiguracion->getRutaTemporal();
-            $strNombreArchivo = "pila" . date('YmdHis') . " . txt";
+            $strNombreArchivo = "pila" . date('YmdHis') .".txt";
             ob_clean();
             $ar = fopen($strRutaArchivo . $strNombreArchivo, "a") or
             die("Problemas en la creacion del archivo plano");
