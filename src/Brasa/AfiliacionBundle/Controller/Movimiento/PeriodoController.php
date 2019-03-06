@@ -530,7 +530,7 @@ class PeriodoController extends Controller
         $session = new session;
         $em = $this->getDoctrine()->getManager();
         $this->strDqlLista = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->listaDQL(
-            $session->get('filtroCodigoCliente'), $session->get('filtroPeriodoEstadoCerrado'), $session->get('filtroDesde'), $session->get('filtroHasta'), $session->get('filtroPeriodoEstadoCerrado')
+            $session->get('filtroCodigoCliente'), $session->get('filtroPeriodoEstadoCerrado'), $session->get('filtroPeriodoPagoDesde'), $session->get('filtroPeriodoPagoHasta'), $session->get('filtroPeriodoEstadoCerrado')
         );
     }
 
@@ -563,8 +563,8 @@ class PeriodoController extends Controller
             $fechaDesde = $form->get('fechaDesde')->getData()->format('Y-m-d');
             $fechaHasta = $form->get('fechaHasta')->getData()->format('Y-m-d');
         }
-        $session->set('filtroDesde', $fechaDesde);
-        $session->set('filtroHasta', $fechaHasta);
+        $session->set('filtroPeriodoPagoDesde', $fechaDesde);
+        $session->set('filtroPeriodoPagoHasta', $fechaHasta);
         //$this->lista();
     }
 
@@ -589,11 +589,11 @@ class PeriodoController extends Controller
         $strFechaDesde = $dateFecha->format('Y/m/') . "01";
         $intUltimoDia = date("d", (mktime(0, 0, 0, $dateFecha->format('m') + 1, 1, $dateFecha->format('Y')) - 1));
         $strFechaHasta = $dateFecha->format('Y/m/') . $intUltimoDia;
-        if ($session->get("filtroDesde")) {
-            $strFechaDesde = $session->get("filtroDesde");
+        if ($session->get("filtroPeriodoPagoDesde")) {
+            $strFechaDesde = $session->get("filtroPeriodoPagoDesde");
         }
-        if ($session->get("filtroHasta")) {
-            $strFechaDesde = $session->get("filtroHasta");
+        if ($session->get("filtroPeriodoPagoHasta")) {
+            $strFechaHasta = $session->get("filtroPeriodoPagoHasta");
         }
         $dateFechaDesde = date_create($strFechaDesde);
         $dateFechaHasta = date_create($strFechaHasta);
@@ -1047,7 +1047,7 @@ class PeriodoController extends Controller
             $periodoPagoSalud = $arPeriodo->getAnioPago() . '-' . $this->RellenarNr($arPeriodo->getMesPago(), "0", 2, "I");
             //archivo plano
             $strRutaArchivo = $arConfiguracion->getRutaTemporal();
-            $strNombreArchivo = "pila" . date('YmdHis') .".txt";
+            $strNombreArchivo = "pila" . date('YmdHis') . ".txt";
             ob_clean();
             $ar = fopen($strRutaArchivo . $strNombreArchivo, "a") or
             die("Problemas en la creacion del archivo plano");
