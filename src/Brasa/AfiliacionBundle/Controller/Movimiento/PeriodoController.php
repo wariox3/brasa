@@ -387,7 +387,7 @@ class PeriodoController extends Controller
                     ->orderBy('cc.nombre', 'ASC');
             },
             'property' => 'nombre',
-            'required' => false,
+            'required' => true,
             'empty_data' => "",
             'empty_value' => "Seleccione...",
             'data' => ""
@@ -395,8 +395,8 @@ class PeriodoController extends Controller
         $form = $this->createFormBuilder()
             ->setAction($this->generateUrl('brs_afi_movimiento_periodo_archivoplano', array('codigoPeriodo' => $codigoPeriodo)))
             ->add('arlIRel', 'entity', $arrayPropiedadesI)
-            ->add('tipo', 'choice', array('choices' => array('U' => 'Independiente', 'S' => 'Sucursal')))
-            ->add('entidad', 'choice', array('choices' => array('88' => 'Simple', '89' => 'Enlace operativo')))
+            ->add('tipo', 'choice', array('choices' => array('U' => 'Independiente', 'S' => 'Sucursal'), 'required' => true))
+            ->add('entidad', 'choice', array('choices' => array('88' => 'Simple', '89' => 'Enlace operativo'), 'required' => true))
             ->add('sucursal', 'integer', array('required' => false))
             ->getForm();
         $form->handleRequest($request);
