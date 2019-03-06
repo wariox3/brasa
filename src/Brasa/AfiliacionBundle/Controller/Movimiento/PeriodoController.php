@@ -488,14 +488,14 @@ class PeriodoController extends Controller
                 $password = $this->container->getParameter("mailer_password");
                 $flag = false;// controla el envio de correo
                 $rutaArchivo = $ruta . "PeriodoCobro" . $arPeriodo->getCodigoPeriodoPk() . ".pdf";
-                $strMensaje = "Reciba un cordial saludo de HORUS.\n" .
-                    "Adjuntamos la cuenta de cobro de la Seguridad Social y quedamos atentos a las novedades a reportar, recuerde realizar el pago en la cuenta de ahorros Bancolombia N°014-000-108-00\n" .
-                    "Titular: OBRAS Y DRYWALL SAS NIT . 901089390.\n" .
-                    "Por favor enviar soporte de pago .\n" .
-                    "Le recordamos que también ofrecemos servicios en:\n" .
-                    "* Certificaciones en alturas.\n" .
-                    "* Pólizas de seguros.\n" .
-                    "* Asesoría en salud ocupacional .\n";
+                $strMensaje = "Reciba un cordial saludo de HORUS.<br>" .
+                    "Adjuntamos la cuenta de cobro de la Seguridad Social y quedamos atentos a las novedades a reportar, recuerde realizar el pago en la cuenta de ahorros Bancolombia N°014-000-108-00<br>" .
+                    "Titular: OBRAS Y DRYWALL SAS NIT . 901089390.<br>" .
+                    "Por favor enviar soporte de pago .<br>" .
+                    "Le recordamos que también ofrecemos servicios en:<br>" .
+                    "* Certificaciones en alturas.<br>" .
+                    "* Pólizas de seguros.<br>" .
+                    "* Asesoría en salud ocupacional .<br>";
                 $message = \Swift_Message::newInstance()
                     ->setFrom(array($username => $arConfiguracionGeneral->getNombreEmpresa()))
                     ->setTo(array(strtolower($arCorreos[0]) => $nombre))
@@ -520,6 +520,7 @@ class PeriodoController extends Controller
             } catch (\Exception $e) {
                 $objMensaje->Mensaje('error', 'No se pudo enviar el correo "error:' . $e->getMessage() . '"', $this);
             }
+            $objMensaje->Mensaje("informacion", "Se han enviado los correos exitosamente", $this);
         }
 
     }
@@ -557,7 +558,7 @@ class PeriodoController extends Controller
         $session->set('filtroPeriodoEstadoFacturado', $form->get('estadoFacturado')->getData());
         $fechaDesde = "";
         $fechaHasta = "";
-        $session->set('filtrarFecha',$form->get('filtrarFecha')->getData());
+        $session->set('filtrarFecha', $form->get('filtrarFecha')->getData());
         if ($form->get('filtrarFecha')->getData()) {
             $fechaDesde = $form->get('fechaDesde')->getData()->format('Y-m-d');
             $fechaHasta = $form->get('fechaHasta')->getData()->format('Y-m-d');
@@ -588,10 +589,10 @@ class PeriodoController extends Controller
         $strFechaDesde = $dateFecha->format('Y/m/') . "01";
         $intUltimoDia = date("d", (mktime(0, 0, 0, $dateFecha->format('m') + 1, 1, $dateFecha->format('Y')) - 1));
         $strFechaHasta = $dateFecha->format('Y/m/') . $intUltimoDia;
-        if($session->get("filtroDesde")){
+        if ($session->get("filtroDesde")) {
             $strFechaDesde = $session->get("filtroDesde");
         }
-        if($session->get("filtroHasta")){
+        if ($session->get("filtroHasta")) {
             $strFechaDesde = $session->get("filtroHasta");
         }
         $dateFechaDesde = date_create($strFechaDesde);
@@ -601,14 +602,14 @@ class PeriodoController extends Controller
             ->add('TxtNombreCliente', TextType::class, array('label' => 'NombreCliente', 'data' => $strNombreCliente))
             ->add('estadoCerrado', ChoiceType::class, array('choices' => array('2' => 'TODOS', '1' => 'CERRADO', '0' => 'SIN CERRAR'), 'data' => $session->get('filtroPeriodoEstadoCerrado')))
             ->add('estadoFacturado', ChoiceType::class, array('choices' => array('2' => 'TODOS', '1' => 'FACTURADO', '0' => 'SIN FACTURAR'), 'data' => $session->get('filtroPeriodoEstadoFacturado')))
-            ->add('fechaDesde', DateType::class, array( 'format' => 'yyyyMMdd', 'data' => $dateFechaDesde,'attr' => array('class' => 'date',)))
-            ->add('fechaHasta', DateType::class, array( 'format' => 'yyyyMMdd', 'data' => $dateFechaHasta ,'attr' => array('class' => 'date',)))
+            ->add('fechaDesde', DateType::class, array('format' => 'yyyyMMdd', 'data' => $dateFechaDesde, 'attr' => array('class' => 'date',)))
+            ->add('fechaHasta', DateType::class, array('format' => 'yyyyMMdd', 'data' => $dateFechaHasta, 'attr' => array('class' => 'date',)))
             ->add('BtnEliminar', SubmitType::class, array('label' => 'Eliminar',))
             ->add('BtnExcel', SubmitType::class, array('label' => 'Excel',))
             ->add('BtnGenerarCobro', SubmitType::class, array('label' => 'Generar cobro masivo',))
             ->add('BtnGenerarPago', SubmitType::class, array('label' => 'Generar pago masivo',))
             ->add('BtnGenerarInteresMora', SubmitType::class, array('label' => 'Generar financieros',))
-            ->add('filtrarFecha',CheckboxType::class,array('required' => false,'data' => $session->get("filtrarFecha")))
+            ->add('filtrarFecha', CheckboxType::class, array('required' => false, 'data' => $session->get("filtrarFecha")))
             ->add('BtnFiltrar', SubmitType::class, array('label' => 'Filtrar'))
             ->getForm();
         return $form;
