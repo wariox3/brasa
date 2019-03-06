@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Brasa\AfiliacionBundle\Form\Type\AfiPeriodoType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
@@ -154,7 +155,6 @@ class PeriodoController extends Controller
 
             if ($form->get('BtnFiltrar')->isClicked()) {
                 $this->filtrar($form);
-                $form = $this->formularioFiltro();
                 $this->lista();
             }
 
@@ -555,15 +555,15 @@ class PeriodoController extends Controller
         $session->set('filtroNit', $form->get('TxtNit')->getData());
         $session->set('filtroPeriodoEstadoCerrado', $form->get('estadoCerrado')->getData());
         $session->set('filtroPeriodoEstadoFacturado', $form->get('estadoFacturado')->getData());
-        $fechaDesde = $form->get('fechaDesde')->getData();
-        $fechaHasta = $form->get('fechaHasta')->getData();
-        if ($form->get('fechaDesde')->getData() == null || $form->get('fechaHasta')->getData() == null) {
-            $session->set('filtroDesde', $form->get('fechaDesde')->getData());
-            $session->set('filtroHasta', $form->get('fechaHasta')->getData());
-        } else {
-            $session->set('filtroDesde', $fechaDesde->format('Y-m-d'));
-            $session->set('filtroHasta', $fechaHasta->format('Y-m-d'));
+        $fechaDesde = "";
+        $fechaHasta = "";
+        $session->set('filtrarFecha',$form->get('filtrarFecha')->getData());
+        if ($form->get('filtrarFecha')->getData()) {
+            $fechaDesde = $form->get('fechaDesde')->getData()->format('Y-m-d');
+            $fechaHasta = $form->get('fechaHasta')->getData()->format('Y-m-d');
         }
+        $session->set('filtroDesde', $fechaDesde);
+        $session->set('filtroHasta', $fechaHasta);
         //$this->lista();
     }
 
@@ -584,18 +584,31 @@ class PeriodoController extends Controller
         } else {
             $session->set('filtroCodigoCliente', null);
         }
+        $dateFecha = new \DateTime('now');
+        $strFechaDesde = $dateFecha->format('Y/m/') . "01";
+        $intUltimoDia = date("d", (mktime(0, 0, 0, $dateFecha->format('m') + 1, 1, $dateFecha->format('Y')) - 1));
+        $strFechaHasta = $dateFecha->format('Y/m/') . $intUltimoDia;
+        if($session->get("filtroDesde")){
+            $strFechaDesde = $session->get("filtroDesde");
+        }
+        if($session->get("filtroHasta")){
+            $strFechaDesde = $session->get("filtroHasta");
+        }
+        $dateFechaDesde = date_create($strFechaDesde);
+        $dateFechaHasta = date_create($strFechaHasta);
         $form = $this->createFormBuilder()
             ->add('TxtNit', TextType::class, array('label' => 'Nit', 'data' => $session->get('filtroNit')))
             ->add('TxtNombreCliente', TextType::class, array('label' => 'NombreCliente', 'data' => $strNombreCliente))
             ->add('estadoCerrado', ChoiceType::class, array('choices' => array('2' => 'TODOS', '1' => 'CERRADO', '0' => 'SIN CERRAR'), 'data' => $session->get('filtroPeriodoEstadoCerrado')))
             ->add('estadoFacturado', ChoiceType::class, array('choices' => array('2' => 'TODOS', '1' => 'FACTURADO', '0' => 'SIN FACTURAR'), 'data' => $session->get('filtroPeriodoEstadoFacturado')))
-            ->add('fechaDesde', DateType::class, array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
-            ->add('fechaHasta', DateType::class, array('widget' => 'single_text', 'format' => 'yyyy-MM-dd', 'attr' => array('class' => 'date',)))
+            ->add('fechaDesde', DateType::class, array( 'format' => 'yyyyMMdd', 'data' => $dateFechaDesde,'attr' => array('class' => 'date',)))
+            ->add('fechaHasta', DateType::class, array( 'format' => 'yyyyMMdd', 'data' => $dateFechaHasta ,'attr' => array('class' => 'date',)))
             ->add('BtnEliminar', SubmitType::class, array('label' => 'Eliminar',))
             ->add('BtnExcel', SubmitType::class, array('label' => 'Excel',))
             ->add('BtnGenerarCobro', SubmitType::class, array('label' => 'Generar cobro masivo',))
             ->add('BtnGenerarPago', SubmitType::class, array('label' => 'Generar pago masivo',))
             ->add('BtnGenerarInteresMora', SubmitType::class, array('label' => 'Generar financieros',))
+            ->add('filtrarFecha',CheckboxType::class,array('required' => false,'data' => $session->get("filtrarFecha")))
             ->add('BtnFiltrar', SubmitType::class, array('label' => 'Filtrar'))
             ->getForm();
         return $form;
