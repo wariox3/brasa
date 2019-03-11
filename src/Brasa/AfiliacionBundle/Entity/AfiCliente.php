@@ -18,43 +18,43 @@ class AfiCliente
      * @ORM\Column(name="codigo_cliente_pk", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $codigoClientePk;    
-    
+    private $codigoClientePk;
+
     /**
      * @ORM\Column(name="nit", type="string", length=15, nullable=false, unique=true)
      */
-    private $nit;        
-    
+    private $nit;
+
     /**
      * @ORM\Column(name="digito_verificacion", type="string", length=1, nullable=true)
      */
     private $digitoVerificacion;
-    
+
     /**
      * @ORM\Column(name="tipo_identificacion", type="string", length=2, nullable=true)
      */
     private $tipoIdentificacion;
-    
+
     /**
      * @ORM\Column(name="nombre_corto", type="string", length=100)
      */
-    private $nombreCorto;                             
-    
+    private $nombreCorto;
+
     /**
      * @ORM\Column(name="codigo_asesor_fk", type="integer", nullable=true)
-     */    
-    private $codigoAsesorFk;   
-    
+     */
+    private $codigoAsesorFk;
+
     /**
      * @ORM\Column(name="codigo_forma_pago_fk", type="integer", nullable=true)
-     */    
-    private $codigoFormaPagoFk;     
-    
+     */
+    private $codigoFormaPagoFk;
+
     /**
      * @ORM\Column(name="plazo_pago", type="integer")
-     */    
-    private $plazoPago = 0;    
-    
+     */
+    private $plazoPago = 0;
+
     /**
      * @ORM\Column(name="direccion", type="string", length=120, nullable=true)
      */
@@ -63,181 +63,200 @@ class AfiCliente
     /**
      * @ORM\Column(name="barrio", type="string", length=120, nullable=true)
      */
-    private $barrio;    
-    
+    private $barrio;
+
     /**
      * @ORM\Column(name="codigo_ciudad_fk", type="integer", nullable=true)
      */
-    private $codigoCiudadFk;         
-    
+    private $codigoCiudadFk;
+
+    /**
+     * @ORM\Column(name="codigo_razon_social_fk" , type="integer" , nullable=true)
+     */
+    private $codigoRazonSocialFk;
+
+    /**
+     * @ORM\Column(name="codigo_entidad_riesgo_fk" ,type="integer" ,nullable=true)
+     */
+    private $codigoEntidadRiesgoFk;
+
     /**
      * @ORM\Column(name="telefono", type="string", length=40, nullable=true)
      */
-    private $telefono;     
-    
+    private $telefono;
+
     /**
      * @ORM\Column(name="celular", type="string", length=40, nullable=true, nullable=true)
      */
-    private $celular;    
-        
+    private $celular;
+
     /**
      * @ORM\Column(name="fax", type="string", length=20, nullable=true, nullable=true)
      */
-    private $fax;    
-    
+    private $fax;
+
     /**
      * @ORM\Column(name="email", type="string", length=80, nullable=true)
      */
-    private $email;             
-    
+    private $email;
+
     /**
      * @ORM\Column(name="contacto", type="string", length=80, nullable=true)
      */
-    private $contacto;    
+    private $contacto;
 
     /**
      * @ORM\Column(name="calular_contacto", type="string", length=20, nullable=true)
      */
-    private $celularContacto;     
+    private $celularContacto;
 
     /**
      * @ORM\Column(name="telefono_contacto", type="string", length=20, nullable=true)
      */
-    private $telefonoContacto;    
-    
+    private $telefonoContacto;
+
     /**
      * @ORM\Column(name="usuario", type="string", length=50, nullable=true)
-     */    
-    private $usuario;     
-    
+     */
+    private $usuario;
+
     /**
      * @ORM\Column(name="afiliacion", type="float")
-     */    
-    private $afiliacion = 0;    
-    
+     */
+    private $afiliacion = 0;
+
     /**
      * @ORM\Column(name="administracion", type="float")
-     */    
-    private $administracion = 0;     
+     */
+    private $administracion = 0;
 
-    /**     
+    /**
      * @ORM\Column(name="genera_salud", type="boolean")
-     */    
+     */
     private $genera_salud = false;
 
     /**
      * @ORM\Column(name="porcentaje_salud", type="float")
      */
-    private $porcentajeSalud = 0;    
-    
-    /**     
+    private $porcentajeSalud = 0;
+
+    /**
      * @ORM\Column(name="genera_pension", type="boolean")
-     */    
-    private $genera_pension = false;        
+     */
+    private $genera_pension = false;
 
     /**
      * @ORM\Column(name="porcentaje_pension", type="float")
      */
-    private $porcentajePension = 0;    
-    
-    /**     
+    private $porcentajePension = 0;
+
+    /**
      * @ORM\Column(name="genera_caja", type="boolean")
-     */    
-    private $genera_caja = false;            
-    
+     */
+    private $genera_caja = false;
+
     /**
      * @ORM\Column(name="porcentaje_caja", type="float")
      */
-    private $porcentajeCaja = 0;     
-    
-    /**     
+    private $porcentajeCaja = 0;
+
+    /**
      * @ORM\Column(name="genera_riesgos", type="boolean")
-     */    
-    private $genera_riesgos = false;        
-    
-    /**     
+     */
+    private $genera_riesgos = false;
+
+    /**
      * @ORM\Column(name="genera_sena", type="boolean")
-     */    
-    private $genera_sena = false;     
-    
-    
-    /**     
+     */
+    private $genera_sena = false;
+
+
+    /**
      * @ORM\Column(name="genera_icbf", type="boolean")
-     */    
+     */
     private $genera_icbf = false;
-    
+
     /**
      * @ORM\Column(name="codigo_sucursal", type="string", length=10, nullable=true)
      */
-    private $codigoSucursal;    
-    
+    private $codigoSucursal;
+
     /**
      * @ORM\Column(name="comentarios", type="string", length=200, nullable=true)
-     */    
-    private $comentarios;                            
-    
-    /**     
+     */
+    private $comentarios;
+
+    /**
      * @ORM\Column(name="redondear_cobro", type="boolean")
-     */    
+     */
     private $redondearCobro = true;
 
-    /**     
+    /**
      * @ORM\Column(name="independiente", type="boolean")
-     */    
+     */
     private $independiente = false;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenAsesor", inversedBy="afiClientesAsesorRel")
      * @ORM\JoinColumn(name="codigo_asesor_fk", referencedColumnName="codigo_asesor_pk")
      */
-    protected $asesorRel;    
-    
+    protected $asesorRel;
+
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenFormaPago", inversedBy="afiClientesFormaPagoRel")
      * @ORM\JoinColumn(name="codigo_forma_pago_fk", referencedColumnName="codigo_forma_pago_pk")
      */
-    protected $formaPagoRel;     
-    
+    protected $formaPagoRel;
+
     /**
      * @ORM\ManyToOne(targetEntity="Brasa\GeneralBundle\Entity\GenCiudad", inversedBy="afiClientesCiudadRel")
      * @ORM\JoinColumn(name="codigo_ciudad_fk", referencedColumnName="codigo_ciudad_pk")
      */
-    protected $ciudadRel;             
+    protected $ciudadRel;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\AfiliacionBundle\Entity\AfiRazonSocial", inversedBy="afiClientesRazonSocialRel")
+     * @ORM\JoinColumn(name="codigo_razon_social_fk" , referencedColumnName="codigo_razon_social_pk")
+     */
+    private $razonSocialRel;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional" , inversedBy="afiClientesEntidadRiesgoRel")
+     * @ORM\JoinColumn(name="codigo_entidad_riesgo_fk" ,referencedColumnName="codigo_entidad_riesgo_pk")
+     */
+    private $entidadRiesgoRel;
 
     /**
      * @ORM\OneToMany(targetEntity="AfiEmpleado", mappedBy="clienteRel")
      */
-    protected $empleadosClienteRel;    
-    
+    protected $empleadosClienteRel;
+
     /**
      * @ORM\OneToMany(targetEntity="AfiContrato", mappedBy="clienteRel")
      */
-    protected $contratosClienteRel;     
-    
+    protected $contratosClienteRel;
+
     /**
      * @ORM\OneToMany(targetEntity="AfiPeriodo", mappedBy="clienteRel")
      */
-    protected $periodosClienteRel;    
+    protected $periodosClienteRel;
 
     /**
      * @ORM\OneToMany(targetEntity="AfiFactura", mappedBy="clienteRel")
      */
-    protected $facturasClienteRel;    
+    protected $facturasClienteRel;
 
     /**
      * @ORM\OneToMany(targetEntity="AfiCurso", mappedBy="clienteRel")
      */
-    protected $cursosClienteRel;     
+    protected $cursosClienteRel;
 
     /**
      * @ORM\OneToMany(targetEntity="AfiServicio", mappedBy="clienteRel")
      */
     protected $serviciosClienteRel;
-    
 
-   
-    
-    
+
     /**
      * Constructor
      */
@@ -1327,5 +1346,101 @@ class AfiCliente
     public function getServiciosClienteRel()
     {
         return $this->serviciosClienteRel;
+    }
+
+    /**
+     * Set codigoRazonSocialFk
+     *
+     * @param integer $codigoRazonSocialFk
+     *
+     * @return AfiCliente
+     */
+    public function setCodigoRazonSocialFk($codigoRazonSocialFk)
+    {
+        $this->codigoRazonSocialFk = $codigoRazonSocialFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoRazonSocialFk
+     *
+     * @return integer
+     */
+    public function getCodigoRazonSocialFk()
+    {
+        return $this->codigoRazonSocialFk;
+    }
+
+    /**
+     * Set razonSocialRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiRazonSocial $razonSocialRel
+     *
+     * @return AfiCliente
+     */
+    public function setRazonSocialRel(\Brasa\AfiliacionBundle\Entity\AfiRazonSocial $razonSocialRel = null)
+    {
+        $this->razonSocialRel = $razonSocialRel;
+
+        return $this;
+    }
+
+    /**
+     * Get razonSocialRel
+     *
+     * @return \Brasa\AfiliacionBundle\Entity\AfiRazonSocial
+     */
+    public function getRazonSocialRel()
+    {
+        return $this->razonSocialRel;
+    }
+
+    /**
+     * Set codigoEntidadRiesgoFk
+     *
+     * @param integer $codigoEntidadRiesgoFk
+     *
+     * @return AfiCliente
+     */
+    public function setCodigoEntidadRiesgoFk($codigoEntidadRiesgoFk)
+    {
+        $this->codigoEntidadRiesgoFk = $codigoEntidadRiesgoFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoEntidadRiesgoFk
+     *
+     * @return integer
+     */
+    public function getCodigoEntidadRiesgoFk()
+    {
+        return $this->codigoEntidadRiesgoFk;
+    }
+
+    /**
+     * Set entidadRiesgoRel
+     *
+     * @param \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoRel
+     *
+     * @return AfiCliente
+     */
+    public function setEntidadRiesgoRel(\Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional $entidadRiesgoRel = null)
+    {
+        $this->entidadRiesgoRel = $entidadRiesgoRel;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadRiesgoRel
+     *
+     * @return \Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional
+     */
+    public function getEntidadRiesgoRel()
+    {
+        return $this->entidadRiesgoRel;
     }
 }

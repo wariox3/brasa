@@ -1,4 +1,5 @@
 <?php
+
 namespace Brasa\AfiliacionBundle\Form\Type;
 
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -17,61 +18,85 @@ class AfiClienteType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder                    
+        $builder
             ->add('ciudadRel', EntityType::class, array(
                 'class' => 'BrasaGeneralBundle:GenCiudad',
-                'query_builder' => function (EntityRepository $er)  {
+                'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('c')
-                    ->orderBy('c.nombre', 'ASC');},
+                        ->orderBy('c.nombre', 'ASC');
+                },
                 'choice_label' => 'nombre',
-                'required' => true))                
+                'required' => true))
             ->add('asesorRel', EntityType::class, array(
                 'class' => 'BrasaGeneralBundle:GenAsesor',
-                'query_builder' => function (EntityRepository $er)  {
+                'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('a')
-                    ->where('a.estado = 1')        
-                    ->orderBy('a.nombre', 'ASC');},
+                        ->where('a.estado = 1')
+                        ->orderBy('a.nombre', 'ASC');
+                },
                 'choice_label' => 'nombre',
-                'required' => true))                            
+                'required' => true))
             ->add('formaPagoRel', EntityType::class, array(
                 'class' => 'BrasaGeneralBundle:GenFormaPago',
-                'query_builder' => function (EntityRepository $er)  {
+                'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('fp')
-                    ->orderBy('fp.nombre', 'ASC');},
+                        ->orderBy('fp.nombre', 'ASC');
+                },
                 'choice_label' => 'nombre',
-                'required' => true))                              
-                            
+                'required' => true))
+            ->add('razonSocialRel', EntityType::class, array(
+                'class' => 'Brasa\AfiliacionBundle\Entity\AfiRazonSocial',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('rs')
+                        ->orderBy('rs.nombre');
+                },
+                'data' => '',
+                'placeholder' => 'Seleccione un registro',
+                'choice_label' => 'nombre',
+                'required' => true
+            ))
+            ->add('entidadRiesgoRel', EntityType::class, array(
+                'class' => 'Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('er')
+                        ->orderBy('er.nombre');
+                },
+                'data' => '',
+                'placeholder' => 'Seleccione un registro',
+                'choice_label' => 'nombre',
+                'required' => true
+            ))
             ->add('nit', textType::class, array('required' => true))
-            ->add('digitoVerificacion', textType::class, array('required' => false))  
-            ->add('nombreCorto', textType::class, array('required' => true))              
-            ->add('plazoPago', NumberType::class, array('required' => false)) 
-            ->add('direccion', textType::class, array('required' => false))  
-            ->add('barrio', textType::class, array('required' => false))  
-            ->add('telefono', textType::class, array('required' => false))                              
-            ->add('celular', textType::class, array('required' => false))                              
-            ->add('fax', textType::class, array('required' => false))                              
-            ->add('email', textType::class, array('required' => false))                              
-            ->add('contacto', textType::class, array('required' => false))                  
-            ->add('celularContacto', textType::class, array('required' => false))  
+            ->add('digitoVerificacion', textType::class, array('required' => false))
+            ->add('nombreCorto', textType::class, array('required' => true))
+            ->add('plazoPago', NumberType::class, array('required' => false))
+            ->add('direccion', textType::class, array('required' => false))
+            ->add('barrio', textType::class, array('required' => false))
+            ->add('telefono', textType::class, array('required' => false))
+            ->add('celular', textType::class, array('required' => false))
+            ->add('fax', textType::class, array('required' => false))
+            ->add('email', textType::class, array('required' => false))
+            ->add('contacto', textType::class, array('required' => false))
+            ->add('celularContacto', textType::class, array('required' => false))
             ->add('telefonoContacto', textType::class, array('required' => false))
             ->add('afiliacion', NumberType::class, array('required' => false))
             ->add('administracion', NumberType::class, array('required' => false))
-            ->add('generaPension', CheckboxType::class, array('required'  => false))
-            ->add('generaSalud', CheckboxType::class, array('required'  => false))
-            ->add('generaRiesgos', CheckboxType::class, array('required'  => false))
-            ->add('generaCaja', CheckboxType::class, array('required'  => false))                            
-            ->add('generaSena', CheckboxType::class, array('required'  => false))
-            ->add('generaIcbf', CheckboxType::class, array('required'  => false))
+            ->add('generaPension', CheckboxType::class, array('required' => false))
+            ->add('generaSalud', CheckboxType::class, array('required' => false))
+            ->add('generaRiesgos', CheckboxType::class, array('required' => false))
+            ->add('generaCaja', CheckboxType::class, array('required' => false))
+            ->add('generaSena', CheckboxType::class, array('required' => false))
+            ->add('generaIcbf', CheckboxType::class, array('required' => false))
             ->add('porcentajePension', NumberType::class, array('required' => true))
             ->add('porcentajeSalud', NumberType::class, array('required' => true))
-            ->add('porcentajeCaja', NumberType::class, array('required' => true))  
-            ->add('redondearCobro', CheckboxType::class, array('required'  => false))                            
+            ->add('porcentajeCaja', NumberType::class, array('required' => true))
+            ->add('redondearCobro', CheckboxType::class, array('required' => false))
             ->add('comentarios', TextareaType::class, array('required' => false))
             ->add('codigoSucursal', textType::class, array('required' => false))
-            ->add('independiente', CheckboxType::class, array('required'  => false))
-            ->add('tipoIdentificacion', ChoiceType::class, array('choices'   => array('NI' => 'NIT', 'CC' => 'CEDULA DE CIUDADANIA')))                
+            ->add('independiente', CheckboxType::class, array('required' => false))
+            ->add('tipoIdentificacion', ChoiceType::class, array('choices' => array('NI' => 'NIT', 'CC' => 'CEDULA DE CIUDADANIA')))
             ->add('guardar', SubmitType::class)
-            ->add('guardarnuevo', SubmitType::class, array('label'  => 'Guardar y Nuevo'));
+            ->add('guardarnuevo', SubmitType::class, array('label' => 'Guardar y Nuevo'));
     }
 
     public function getName()

@@ -16,47 +16,52 @@ class RhuEntidadRiesgoProfesional
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $codigoEntidadRiesgoPk;
-    
+
     /**
      * @ORM\Column(name="nombre", type="string", length=120, nullable=true)
-     */    
-    private $nombre;    
-    
+     */
+    private $nombre;
+
     /**
      * @ORM\Column(name="nit", type="string", length=10, nullable=true)
-     */    
-    private $nit;    
-    
+     */
+    private $nit;
+
     /**
      * @ORM\Column(name="direccion", type="string", length=80, nullable=true)
-     */    
-    private $direccion;    
-    
+     */
+    private $direccion;
+
     /**
      * @ORM\Column(name="telefono", type="string", length=15, nullable=true)
-     */    
+     */
     private $telefono;
-    
+
     /**
      * @ORM\Column(name="codigo_interface", type="string", length=10, nullable=true)
-     */    
+     */
     private $codigoInterface;
 
     /**
      * @ORM\OneToMany(targetEntity="RhuConfiguracion", mappedBy="entidadRiesgoProfesionalRel")
      */
     protected $configuracionEntidadRiesgoProfesionalRel;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="RhuAccidenteTrabajo", mappedBy="entidadRiesgoProfesionalRel")
      */
-    protected $accidentesTrabajoEntidadRiesgoRel;   
-   
+    protected $accidentesTrabajoEntidadRiesgoRel;
+
     /**
      * @ORM\OneToMany(targetEntity="RhuSsoAporte", mappedBy="entidadRiesgoProfesionalRel")
      */
-    protected $ssoAportesEntidadRiesgoProfesionalRel;     
-    
+    protected $ssoAportesEntidadRiesgoProfesionalRel;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\AfiliacionBundle\Entity\AfiCliente" , mappedBy="entidadRiesgoRel")
+     */
+    protected $afiClientesEntidadRiesgoRel;
+
     /**
      * Constructor
      */
@@ -296,5 +301,39 @@ class RhuEntidadRiesgoProfesional
     public function getSsoAportesEntidadRiesgoProfesionalRel()
     {
         return $this->ssoAportesEntidadRiesgoProfesionalRel;
+    }
+
+    /**
+     * Add afiClientesEntidadRiesgoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCliente $afiClientesEntidadRiesgoRel
+     *
+     * @return RhuEntidadRiesgoProfesional
+     */
+    public function addAfiClientesEntidadRiesgoRel(\Brasa\AfiliacionBundle\Entity\AfiCliente $afiClientesEntidadRiesgoRel)
+    {
+        $this->afiClientesEntidadRiesgoRel[] = $afiClientesEntidadRiesgoRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove afiClientesEntidadRiesgoRel
+     *
+     * @param \Brasa\AfiliacionBundle\Entity\AfiCliente $afiClientesEntidadRiesgoRel
+     */
+    public function removeAfiClientesEntidadRiesgoRel(\Brasa\AfiliacionBundle\Entity\AfiCliente $afiClientesEntidadRiesgoRel)
+    {
+        $this->afiClientesEntidadRiesgoRel->removeElement($afiClientesEntidadRiesgoRel);
+    }
+
+    /**
+     * Get afiClientesEntidadRiesgoRel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAfiClientesEntidadRiesgoRel()
+    {
+        return $this->afiClientesEntidadRiesgoRel;
     }
 }
