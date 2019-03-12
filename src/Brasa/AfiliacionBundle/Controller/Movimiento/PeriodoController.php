@@ -1021,7 +1021,7 @@ class PeriodoController extends Controller
                 $arEntidadRiesgos = $em->getRepository('BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional')->find($codigoInterfaceRiesgos);
                 $codigoInterfaceRiesgos = $arEntidadRiesgos->getCodigoInterface();
                 $tipo = "E";
-                $tipoDoc = $arPeriodo->getClienteRel()->getTipoIdentificacion();
+                $tipoDoc = $arPeriodo->getClienteRel()->getRazonSocialRel()->getTipoIdentificacion();
                 $formaPresentacion = $form->get('tipo')->getData();
                 $nit = $arPeriodo->getClienteRel()->getRazonSocialRel()->getNit();
                 $dv = $arPeriodo->getClienteRel()->getRazonSocialRel()->getDv();
@@ -1076,7 +1076,7 @@ class PeriodoController extends Controller
             //12	10	249	258	A	Código de la sucursal del Aportante	El registrado en el campo 5 del archivo tipo 1.
             fputs($ar, $this->RellenarNr($codigoSucursal, " ", 10, "D"));
             //13	40	259	298	A	Nombre de la sucursal	El registrado en el campo 6 del archivo tipo 1.
-            fputs($ar, $this->RellenarNr("PAGO CONTADO", " ", 40, "D"));//ESTABA $arPeriodo->getClienteRel()->getNombreCorto()
+            fputs($ar, $this->RellenarNr($arPeriodo->getClienteRel()->getNombreCorto(), " ", 40, "D"));//ESTABA $arPeriodo->getClienteRel()->getNombreCorto()
             //14	6	299	304	A	Código de la ARL a la cual el aportante se encuentra afiliado	Lo suministra el aportante
             fputs($ar, $this->RellenarNr($codigoInterfaceRiesgos, " ", 6, "D"));
             //15	7	305	311	A	Periodo de pago para los sistemas diferentes al de salud	Obligatorio. Formato año y mes (aaaa-mm). Lo calcula el Operador de Información.

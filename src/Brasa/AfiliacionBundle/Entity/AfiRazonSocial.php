@@ -36,6 +36,11 @@ class AfiRazonSocial
     private $dv;
 
     /**
+     * @ORM\Column(name="tipo_identificacion", type="string", length=2, nullable=true)
+     */
+    private $tipoIdentificacion;
+
+    /**
      * @ORM\OneToMany(targetEntity="Brasa\AfiliacionBundle\Entity\AfiCliente" , mappedBy="razonSocialRel")
      */
     private $afiClientesRazonSocialRel;
@@ -121,6 +126,7 @@ class AfiRazonSocial
     {
         return $this->dv;
     }
+
     /**
      * Constructor
      */
@@ -161,5 +167,29 @@ class AfiRazonSocial
     public function getAfiClientesRazonSocialRel()
     {
         return $this->afiClientesRazonSocialRel;
+    }
+
+    /**
+     * Set tipoIdentificacion
+     *
+     * @param string $tipoIdentificacion
+     *
+     * @return AfiRazonSocial
+     */
+    public function setTipoIdentificacion($tipoIdentificacion)
+    {
+        $this->tipoIdentificacion = $tipoIdentificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoIdentificacion
+     *
+     * @return string
+     */
+    public function getTipoIdentificacion()
+    {
+        return $this->tipoIdentificacion;
     }
 }
