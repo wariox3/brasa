@@ -1008,9 +1008,9 @@ class PeriodoController extends Controller
                 $tipo = "I";
                 $tipoDoc = "CC";
                 $formaPresentacion = $form->get('tipo')->getData();
-                $nit = $arPeriodo->getClienteRel()->getNit();
-                $dv = $arPeriodo->getClienteRel()->getDigitoVerificacion();
-                $cliente = $arPeriodo->getClienteRel()->getNombreCorto();
+                $nit = $arPeriodo->getClienteRel()->getRazonSocialRel()->getNit();
+                $dv = $arPeriodo->getClienteRel()->getRazonSocialRel()->getDv();
+                $cliente = $arPeriodo->getClienteRel()->getRazonSocialRel()->getNombre();
                 $sucursal = '';
                 $codigoSucursal = "";
                 $formato = '02';
@@ -1023,9 +1023,9 @@ class PeriodoController extends Controller
                 $tipo = "E";
                 $tipoDoc = $arPeriodo->getClienteRel()->getTipoIdentificacion();
                 $formaPresentacion = $form->get('tipo')->getData();
-                $nit = $arPeriodo->getClienteRel()->getNit();
-                $dv = $arPeriodo->getClienteRel()->getDigitoVerificacion();
-                $cliente = $arPeriodo->getClienteRel()->getNombreCorto();
+                $nit = $arPeriodo->getClienteRel()->getRazonSocialRel()->getNit();
+                $dv = $arPeriodo->getClienteRel()->getRazonSocialRel()->getDv();
+                $cliente = $arPeriodo->getClienteRel()->getRazonSocialRel()->getNombre();
                 $codigoSucursal = $form->get('sucursal')->getData();
                 $sucursal = "";
                 $formato = '01'; //estaba en 2
