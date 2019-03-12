@@ -372,9 +372,7 @@ class PeriodoController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
-        $arPeriodo = new \Brasa\AfiliacionBundle\Entity\AfiPeriodo();
         $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);
-        $objMensaje = new \Brasa\GeneralBundle\MisClases\Mensajes();
         if ($arPeriodo->getFechaPago() != null) {
             $fechaPago = $arPeriodo->getFechaPago();
         } else {
@@ -390,14 +388,14 @@ class PeriodoController extends Controller
             'required' => true,
             'empty_data' => "",
             'empty_value' => "Seleccione...",
-            'data' => ""
+            'data' => $this->container->get('doctrine.orm.entity_manager')->getReference("BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional", $arPeriodo->getClienteRel()->getCodigoEntidadRiesgoFk())
         );
         $form = $this->createFormBuilder()
             ->setAction($this->generateUrl('brs_afi_movimiento_periodo_archivoplano', array('codigoPeriodo' => $codigoPeriodo)))
             ->add('arlIRel', 'entity', $arrayPropiedadesI)
             ->add('tipo', 'choice', array('choices' => array('U' => 'Independiente', 'S' => 'Sucursal'), 'required' => true))
             ->add('entidad', 'choice', array('choices' => array('88' => 'Simple', '89' => 'Enlace operativo'), 'required' => true))
-            ->add('sucursal', 'integer', array('required' => false))
+            ->add('sucursal', 'integer', array('required' => false, 'data' => $arPeriodo->getClienteRel()->getCodigoSucursal()))
             ->getForm();
         $form->handleRequest($request);
 
@@ -1011,8 +1009,7 @@ class PeriodoController extends Controller
                 $nit = $arPeriodo->getClienteRel()->getRazonSocialRel()->getNit();
                 $dv = $arPeriodo->getClienteRel()->getRazonSocialRel()->getDv();
                 $cliente = $arPeriodo->getClienteRel()->getRazonSocialRel()->getNombre();
-                $sucursal = '';
-                $codigoSucursal = "";
+                $codigoSucursal = $arPeriodo->getClienteRel()->getCodigoSucursal();
                 $formato = '02';
                 $entidad = $form->get('entidad')->getData();
             }
@@ -1026,8 +1023,7 @@ class PeriodoController extends Controller
                 $nit = $arPeriodo->getClienteRel()->getRazonSocialRel()->getNit();
                 $dv = $arPeriodo->getClienteRel()->getRazonSocialRel()->getDv();
                 $cliente = $arPeriodo->getClienteRel()->getRazonSocialRel()->getNombre();
-                $codigoSucursal = $form->get('sucursal')->getData();
-                $sucursal = "";
+                $codigoSucursal = $arPeriodo->getClienteRel()->getCodigoSucursal();
                 $formato = '01'; //estaba en 2
                 $entidad = $form->get('entidad')->getData();
             }
@@ -1038,7 +1034,6 @@ class PeriodoController extends Controller
                 $nit = $arConfiguracion->getNitEmpresa();
                 $cliente = $arConfiguracion->getNombreEmpresa();
                 $codigoSucursal = $arPeriodo->getClienteRel()->getCodigoSucursal();
-                $sucursal = "";
                 $dv = $arConfiguracion->getDigitoVerificacionEmpresa();
                 $formato = '01';
                 $entidad = $form->get('entidad')->getData();

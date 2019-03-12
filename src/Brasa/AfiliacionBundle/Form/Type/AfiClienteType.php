@@ -50,7 +50,6 @@ class AfiClienteType extends AbstractType
                     return $er->createQueryBuilder('rs')
                         ->orderBy('rs.nombre');
                 },
-                'data' => '',
                 'placeholder' => 'Seleccione un registro',
                 'choice_label' => 'nombre',
                 'required' => true
@@ -61,7 +60,6 @@ class AfiClienteType extends AbstractType
                     return $er->createQueryBuilder('er')
                         ->orderBy('er.nombre');
                 },
-                'data' => '',
                 'placeholder' => 'Seleccione un registro',
                 'choice_label' => 'nombre',
                 'required' => true
