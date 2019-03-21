@@ -52,7 +52,7 @@ class AfiClienteType extends AbstractType
                 },
                 'placeholder' => 'Seleccione un registro',
                 'choice_label' => 'nombre',
-                'required' => true
+                'required' => false
             ))
             ->add('entidadRiesgoRel', EntityType::class, array(
                 'class' => 'Brasa\RecursoHumanoBundle\Entity\RhuEntidadRiesgoProfesional',
@@ -62,7 +62,7 @@ class AfiClienteType extends AbstractType
                 },
                 'placeholder' => 'Seleccione un registro',
                 'choice_label' => 'nombre',
-                'required' => true
+                'required' => false
             ))
             ->add('nit', textType::class, array('required' => true))
             ->add('digitoVerificacion', textType::class, array('required' => false))
