@@ -388,8 +388,10 @@ class PeriodoController extends Controller
             'required' => true,
             'empty_data' => "",
             'empty_value' => "Seleccione...",
-            'data' => $this->container->get('doctrine.orm.entity_manager')->getReference("BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional", $arPeriodo->getClienteRel()->getCodigoEntidadRiesgoFk())
         );
+        if($arPeriodo->getClienteRel()->getCodigoEntidadRiesgoFk()){
+            $arrayPropiedadesI["data"] = $this->container->get('doctrine.orm.entity_manager')->getReference("BrasaRecursoHumanoBundle:RhuEntidadRiesgoProfesional", $arPeriodo->getClienteRel()->getCodigoEntidadRiesgoFk());
+        }
         $form = $this->createFormBuilder()
             ->setAction($this->generateUrl('brs_afi_movimiento_periodo_archivoplano', array('codigoPeriodo' => $codigoPeriodo)))
             ->add('arlIRel', 'entity', $arrayPropiedadesI)
