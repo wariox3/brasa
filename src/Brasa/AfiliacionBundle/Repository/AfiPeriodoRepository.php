@@ -33,7 +33,7 @@ class AfiPeriodoRepository extends EntityRepository
         if ($boolEstadoFacturado == "0") {
             $dql .= " AND p.estadoFacturado = 0";
         }
-        $dql .= " ORDER BY c.nombreCorto asc";
+        $dql .= " ORDER BY p.codigoPeriodoPk DESC";
         return $dql;
     }
 
@@ -358,7 +358,8 @@ class AfiPeriodoRepository extends EntityRepository
                 $arPeriodoDetallePago->setRetiro('X');
             }
             if ($arPeriodoDetallePago->getIngreso() == 'X' && $arPeriodoDetallePago->getRetiro() == 'X') {
-                $arPeriodoDetallePago->setIngreso(' ');
+                $arPeriodoDetallePago->setIngreso('X');
+//                $arPeriodoDetallePago->setRetiro('X');
             }
             if ($intDiasIncapacidadGeneral > 0) {
                 $arPeriodoDetallePago->setIncapacidadGeneral('X');
@@ -766,7 +767,7 @@ class AfiPeriodoRepository extends EntityRepository
                         $novedadesIngresoRetiro = TRUE;
                     }
                     if ($arPeriodoDetallePagoDetalle->getIngreso() == 'X' && $arPeriodoDetallePagoDetalle->getRetiro() == 'X') {
-                        $arPeriodoDetallePagoDetalle->setIngreso(' ');
+                        $arPeriodoDetallePagoDetalle->setIngreso('X');
                     }
                 }
                 if ($intDiasSuspension > 0) {
@@ -915,7 +916,7 @@ class AfiPeriodoRepository extends EntityRepository
                         $novedadesIngresoRetiro = TRUE;
                     }
                     if ($arPeriodoDetallePagoDetalle->getIngreso() == 'X' && $arPeriodoDetallePagoDetalle->getRetiro() == 'X') {
-                        $arPeriodoDetallePagoDetalle->setIngreso(' ');
+                        $arPeriodoDetallePagoDetalle->setIngreso('X');
                     }
                 }
 
@@ -1124,7 +1125,7 @@ class AfiPeriodoRepository extends EntityRepository
                         $novedadesIngresoRetiro = TRUE;
                     }
                     if ($arPeriodoDetallePagoDetalle->getIngreso() == 'X' && $arPeriodoDetallePagoDetalle->getRetiro() == 'X') {
-                        $arPeriodoDetallePagoDetalle->setIngreso(' ');
+                        $arPeriodoDetallePagoDetalle->setIngreso('X');
                     }
                 }
 
@@ -1334,7 +1335,7 @@ class AfiPeriodoRepository extends EntityRepository
                         $novedadesIngresoRetiro = TRUE;
                     }
                     if ($arPeriodoDetallePagoDetalle->getIngreso() == 'X' && $arPeriodoDetallePagoDetalle->getRetiro() == 'X') {
-                        $arPeriodoDetallePagoDetalle->setIngreso(' ');
+                        $arPeriodoDetallePagoDetalle->setIngreso('X');
                     }
                 }
 
@@ -1550,7 +1551,7 @@ class AfiPeriodoRepository extends EntityRepository
                         $novedadesIngresoRetiro = TRUE;
                     }
                     if ($arPeriodoDetallePagoDetalle->getIngreso() == 'X' && $arPeriodoDetallePagoDetalle->getRetiro() == 'X') {
-                        $arPeriodoDetallePagoDetalle->setIngreso(' ');
+                        $arPeriodoDetallePagoDetalle->setIngreso('X');
                     }
                 }
 
@@ -1758,7 +1759,7 @@ class AfiPeriodoRepository extends EntityRepository
                         $novedadesIngresoRetiro = TRUE;
                     }
                     if ($arPeriodoDetallePagoDetalle->getIngreso() == 'X' && $arPeriodoDetallePagoDetalle->getRetiro() == 'X') {
-                        $arPeriodoDetallePagoDetalle->setIngreso(' ');
+                        $arPeriodoDetallePagoDetalle->setIngreso('X');
                     }
                 }
 
@@ -1967,7 +1968,7 @@ class AfiPeriodoRepository extends EntityRepository
                     $novedadesIngresoRetiro = TRUE;
                 }
                 if ($arPeriodoDetallePagoDetalle->getIngreso() == 'X' && $arPeriodoDetallePagoDetalle->getRetiro() == 'X') {
-                    $arPeriodoDetallePagoDetalle->setIngreso(' ');
+                    $arPeriodoDetallePagoDetalle->setIngreso('X');
                 }
 
 //                $intDiasCotizarPension = $intDiasCotizar - $intDiasLicenciaNoRemunerada - $intDiasSuspension;

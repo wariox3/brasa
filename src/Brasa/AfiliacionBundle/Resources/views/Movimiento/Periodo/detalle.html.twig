@@ -67,6 +67,7 @@
                             <th>{{ knp_pagination_sortable(arPeriodoDetalles, 'CÓDIGO', 'p.codigoPeriodoDetallePk') }}</th>
                             <th>DESDE</th>
                             <th>HASTA</th>
+                            <th>IDENTIFICACION</th>
                             <th>EMPLEADO</th>
                             <th>ING</th>
                             <th>RET</th>
@@ -92,6 +93,7 @@
                                 <td>{{ arPeriodoDetalles.codigoPeriodoDetallePk }}</td>
                                 <td>{{ arPeriodoDetalles.fechaDesde |date('Y/m/d') }}</td>
                                 <td>{{ arPeriodoDetalles.fechaHasta |date('Y/m/d') }}</td>
+                                <td>{{ arPeriodoDetalles.empleadoRel.numeroIdentificacion }}</td>
                                 <td>{{ arPeriodoDetalles.empleadoRel.nombreCorto }}</td>
                                 <td>{% if arPeriodoDetalles.ingreso == 1 %} SI {% else %} NO {% endif %}</td>
                                 <td>{% if arPeriodoDetalles.retiro == 1 %} SI {% else %} NO {% endif %}</td>
