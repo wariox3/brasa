@@ -269,6 +269,8 @@ class FacturaController extends Controller
                 foreach ($arrSeleccionados as $codigoPeriodo) {
                     $arPeriodo = $em->getRepository('BrasaAfiliacionBundle:AfiPeriodo')->find($codigoPeriodo);
                     if($arPeriodo){
+                        $arPeriodo->setEstadoFacturado(1);
+                        $em->persist($arPeriodo);
                         $arFacturaDetalle = new \Brasa\AfiliacionBundle\Entity\AfiFacturaDetalle();
                         $arFacturaDetalle->setFacturaRel($arFactura);
                         $arFacturaDetalle->setPeriodoRel($arPeriodo);
@@ -286,9 +288,7 @@ class FacturaController extends Controller
                         $arFacturaDetalle->setIcbf($arPeriodo->getIcbf());
                         $arFacturaDetalle->setAdministracion($arPeriodo->getAdministracion());
                         $arFacturaDetalle->setInteresMora($arPeriodo->getInteresMora());
-                        $arPeriodo->setEstadoFacturado(1);
                         $em->persist($arFacturaDetalle);
-                        $em->persist($arPeriodo);
                     }
                 }
                 $em->flush();
