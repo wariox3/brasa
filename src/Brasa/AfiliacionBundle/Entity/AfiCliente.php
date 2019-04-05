@@ -10,9 +10,28 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="afi_cliente")
  * @ORM\Entity(repositoryClass="Brasa\AfiliacionBundle\Repository\AfiClienteRepository")
  * @DoctrineAssert\UniqueEntity(fields={"nit"},message="Ya existe este nit")
+ * @ORM\EntityListeners({"Brasa\GeneralBundle\MisClases\EntityListener"})
  */
 class AfiCliente
 {
+    public $infoLog = [
+        "primaryKey" => "codigoClientePk",
+        "camposSeguimiento" => [
+            "nit",
+            "digitoVerificacion",
+            "tipoIdentificacion",
+            "nombreCorto",
+            "codigoAsesorFk" => ["asesorRel", "codigoAsesorPk", "nombre"],
+            "codigoFormaPagoFk" => ["formaPagoRel","codigoFormaPagoPk","nombre"],
+            "plazoPago",
+            "direccion",
+            "barrio",
+            "codigoCiudadFk" => ["ciudadRel","codigoCiudadPk","nombre"],
+            "codigoRazonSocialFk" => ["razonSocialRel","codigoRazonSocialPk","nombre"],
+            "codigoEntidadRiesgoFk" => ["entidadRiesgoRel","codigoEntidadRiesgoPk","nombre"]
+        ],
+    ];
+
     /**
      * @ORM\Id
      * @ORM\Column(name="codigo_cliente_pk", type="integer")
