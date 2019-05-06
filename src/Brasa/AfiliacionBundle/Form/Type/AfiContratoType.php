@@ -1,4 +1,5 @@
 <?php
+
 namespace Brasa\AfiliacionBundle\Form\Type;
 
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -16,33 +17,37 @@ class AfiContratoType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder    
+        $builder
             ->add('clienteRel', EntityType::class, array(
                 'class' => 'BrasaAfiliacionBundle:AfiCliente',
-                'query_builder' => function (EntityRepository $er)  {
+                'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('c')
-                    ->orderBy('c.nombreCorto', 'ASC');},
+                        ->orderBy('c.nombreCorto', 'ASC');
+                },
                 'choice_label' => 'nombreCorto',
-                'required' => true))                                                         
+                'required' => true))
             ->add('sucursalRel', EntityType::class, array(
                 'class' => 'BrasaAfiliacionBundle:AfiSucursal',
-                'query_builder' => function (EntityRepository $er)  {
+                'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('s')
-                    ->orderBy('s.nombre', 'ASC');},
+                        ->orderBy('s.nombre', 'ASC');
+                },
                 'choice_label' => 'nombre',
-                'required' => true))                            
+                'required' => true))
             ->add('cargoRel', EntityType::class, array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuCargo',
-                'query_builder' => function (EntityRepository $er)  {
+                'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('ec')
-                    ->orderBy('ec.nombre', 'ASC');},
+                        ->orderBy('ec.nombre', 'ASC');
+                },
                 'choice_label' => 'nombre',
-                'required' => true)) 
+                'required' => true))
             ->add('entidadSaludRel', EntityType::class, array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEntidadSalud',
-                'query_builder' => function (EntityRepository $er)  {
+                'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('es')
-                    ->orderBy('es.nombre', 'ASC');},
+                        ->orderBy('es.nombre', 'ASC');
+                },
                 'choice_label' => 'nombre',
                 'required' => true))
             ->add('entidadPensionRel', EntityType::class, array(
@@ -51,15 +56,16 @@ class AfiContratoType extends AbstractType
             ))
             ->add('entidadCajaRel', EntityType::class, array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuEntidadCaja',
-                'query_builder' => function (EntityRepository $er)  {
+                'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('ec')
-                    ->orderBy('ec.nombre', 'ASC');},
+                        ->orderBy('ec.nombre', 'ASC');
+                },
                 'choice_label' => 'nombre',
-                'required' => true))  
+                'required' => true))
             ->add('ssoTipoCotizanteRel', EntityType::class, array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuSsoTipoCotizante',
                 'choice_label' => 'nombre',
-            ))                            
+            ))
             ->add('ssoSubtipoCotizanteRel', EntityType::class, array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuSsoSubtipoCotizante',
                 'choice_label' => 'nombre',
@@ -67,18 +73,18 @@ class AfiContratoType extends AbstractType
             ->add('clasificacionRiesgoRel', EntityType::class, array(
                 'class' => 'BrasaRecursoHumanoBundle:RhuClasificacionRiesgo',
                 'choice_label' => 'nombre',
-            ))                  
+            ))
             ->add('numero', TextType::class, array('required' => false))
-            ->add('fechaDesde', DateType::class, array('format' => 'yyyyMMdd'))                            
-            ->add('fechaHasta', DateType::class, array('format' => 'yyyyMMdd'))
-            ->add('indefinido', CheckboxType::class, array('required'  => false))
-            ->add('vrSalario', NumberType::class, array('required' => true))  
-            ->add('generaPension', CheckboxType::class, array('required'  => false))
-            ->add('generaSalud', CheckboxType::class, array('required'  => false))
-            ->add('generaRiesgos', CheckboxType::class, array('required'  => false))
-            ->add('generaCaja', CheckboxType::class, array('required'  => false))                            
-            ->add('generaSena', CheckboxType::class, array('required'  => false))
-            ->add('generaIcbf', CheckboxType::class, array('required'  => false))
+            ->add('fechaDesde', DateType::class, array('format' => 'yyyyMMdd', 'years' => range(1990, intval(date('Y')) + 10)))
+            ->add('fechaHasta', DateType::class, array('format' => 'yyyyMMdd', 'years' => range(1990, intval(date('Y')) + 10)))
+            ->add('indefinido', CheckboxType::class, array('required' => false))
+            ->add('vrSalario', NumberType::class, array('required' => true))
+            ->add('generaPension', CheckboxType::class, array('required' => false))
+            ->add('generaSalud', CheckboxType::class, array('required' => false))
+            ->add('generaRiesgos', CheckboxType::class, array('required' => false))
+            ->add('generaCaja', CheckboxType::class, array('required' => false))
+            ->add('generaSena', CheckboxType::class, array('required' => false))
+            ->add('generaIcbf', CheckboxType::class, array('required' => false))
             ->add('porcentajePension', NumberType::class, array('required' => true))
             ->add('porcentajeSalud', NumberType::class, array('required' => true))
             ->add('porcentajeCaja', NumberType::class, array('required' => true))
