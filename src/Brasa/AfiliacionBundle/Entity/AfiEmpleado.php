@@ -10,9 +10,22 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="afi_empleado")
  * @ORM\Entity(repositoryClass="Brasa\AfiliacionBundle\Repository\AfiEmpleadoRepository")
  * @DoctrineAssert\UniqueEntity(fields={"numeroIdentificacion"},message="Ya existe este número de identificación")
+ * @ORM\EntityListeners({"Brasa\GeneralBundle\MisClases\EntityListener"})
  */
 class AfiEmpleado
 {
+    public $infoLog = [
+        "primaryKey" => "codigoEmpleadoPk",
+        "camposSeguimiento" => [
+            "codigoTipoIdentificacionFk" => ["tipoIdentificacionRel", "codigoTipoIdentificacionPk", "nombre"],
+            "numeroIdentificacion",
+            "nombreCorto",
+            "codigoCiudadFk" => ["ciudadRel","codigoCiudadPk","nombre"],
+            "codigoEstadoCivilFk" => ["estadoCivilRel","codigoEstadoCivilPk","nombre"],
+            "VrSalario"
+        ],
+    ];
+
     /**
      * @ORM\Id
      * @ORM\Column(name="codigo_empleado_pk", type="integer")

@@ -103,7 +103,12 @@ services:
     mensajes_brasa:
         class:        Brasa\GeneralBundle\MisClases\Mensajes   
     funciones_brasa:
-        class:        Brasa\GeneralBundle\MisClases\Funciones           
+        class:        Brasa\GeneralBundle\MisClases\Funciones
+    general.entity.listener:
+        class: Brasa\GeneralBundle\MisClases\GeneralEntityListener
+        tags:
+            - { name: doctrine.event_listener, event: postFlush }
+        arguments: ['@service_container']
     
                
 knp_paginator:

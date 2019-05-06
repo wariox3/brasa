@@ -86,14 +86,19 @@ class User implements UserInterface, \Serializable
     /**
      * @ORM\OneToMany(targetEntity="SegPermisoDocumento", mappedBy="usuarioRel")
      */
-    protected $permisosDocumentosUsuarioRel;    
+    protected $permisosDocumentosUsuarioRel;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Brasa\GeneralBundle\Entity\GenLogExtendido", mappedBy="usuarioRel")
+     */
+    protected $logsUsuarioRel;
     
     public function __construct()
     {
         $this->isActive = true;
         $this->salt = md5(uniqid(null, true));
-    }    
-    
+    }
+
     /**
      * @inheritDoc
      */
@@ -132,13 +137,13 @@ class User implements UserInterface, \Serializable
     public function eraseCredentials()
     {
     }
-    
-    
+
+
     public function isEnabled()
     {
         return $this->isActive;
-    }    
-    
+    }
+
     /**
      * @see \Serializable::serialize()
      */
@@ -146,7 +151,7 @@ class User implements UserInterface, \Serializable
     {
         return serialize(array(
             $this->id,
-            
+
         ));
     }
 
@@ -161,13 +166,13 @@ class User implements UserInterface, \Serializable
     }
 
     public function equals(UserInterface $user) {
-        
+
     }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -217,7 +222,7 @@ class User implements UserInterface, \Serializable
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -237,7 +242,7 @@ class User implements UserInterface, \Serializable
     /**
      * Get isActive
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsActive()
     {
@@ -260,7 +265,7 @@ class User implements UserInterface, \Serializable
     /**
      * Get nombreCorto
      *
-     * @return string 
+     * @return string
      */
     public function getNombreCorto()
     {
@@ -293,7 +298,7 @@ class User implements UserInterface, \Serializable
     /**
      * Get usuariosConfiguracionRel
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getUsuariosConfiguracionRel()
     {
@@ -489,4 +494,21 @@ class User implements UserInterface, \Serializable
     {
         return $this->tareasPendientes;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getLogsUsuarioRel()
+    {
+        return $this->logsUsuarioRel;
+    }
+
+    /**
+     * @param mixed $logsUsuarioRel
+     */
+    public function setLogsUsuarioRel($logsUsuarioRel)
+    {
+        $this->logsUsuarioRel = $logsUsuarioRel;
+    }
+
 }
