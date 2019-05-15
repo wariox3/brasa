@@ -54,69 +54,88 @@ class AfiContratoRepository extends EntityRepository
         set_time_limit(0);
         ini_set("memory_limit", -1);
         $em = $this->getEntityManager();
-        /*$dql   = "SELECT c,e FROM BrasaAfiliacionBundle:AfiContrato c JOIN c.empleadoRel e WHERE c.codigoContratoPk <> 0";
-        if($strEmpleado != '') {
-            $dql .= " AND e.nombreCorto LIKE '%" . $strEmpleado . "%'";
-        }
-        if($codigoCliente != '') {
-            $dql .= " AND e.codigoClienteFk = " . $codigoCliente;
-        } 
-        if($strIdentificacion != '') {
-            $dql .= " AND e.numeroIdentificacion = " . $strIdentificacion;
-        } 
-        if($strDesde != "") {
-            $dql .= " AND c.fechaDesde >='" . $strDesde . "'";
-        }
-        if($strHasta != "") {
-            $dql .= " AND c.fechaDesde <='" . $strHasta . "'";
-        }
-        
-        //$dql .= " ORDER BY pd.codigoPeriodoDetallePk";
-        return $dql;*/
-        $strSql = "SELECT
-                afi_contrato.codigo_contrato_pk as codigoContratoPk,
-                afi_cliente.nombre_corto as cliente,
-                afi_cliente.codigo_asesor_fk as asesor,
-                afi_empleado.numero_identificacion as identificacion,
-                afi_empleado.nombre_corto as empleado,
-                afi_contrato.indefinido as indefinido,
-                afi_contrato.fecha_desde as desde,
-                afi_contrato.fecha_hasta as hasta,
-                afi_contrato.vr_salario as vrSalario
-                FROM
-                afi_empleado
-                INNER JOIN afi_contrato ON afi_contrato.codigo_empleado_fk = afi_empleado.codigo_empleado_pk
-                LEFT JOIN afi_cliente ON afi_empleado.codigo_cliente_fk = afi_cliente.codigo_cliente_pk AND afi_contrato.codigo_cliente_fk = afi_cliente.codigo_cliente_pk
-                WHERE  afi_contrato.codigo_contrato_pk <> 0";
+
+
+        $qb = $em->createQueryBuilder()
+            ->addSelect('c')
+            ->addSelect('e')
+            ->addSelect('ci')
+            ->from('BrasaAfiliacionBundle:AfiContrato', 'c')
+            ->join('c.empleadoRel', 'e')
+            ->join('c.clienteRel', 'ci');
+
         if ($strEmpleado != '') {
-            $strSql .= " AND afi_empleado.nombre_corto LIKE '%" . $strEmpleado . "%'";
+            $qb->andWhere("e.nombreCorto LIKE '%{$strEmpleado}%'");
         }
         if ($codigoCliente != '') {
-            $strSql .= " AND afi_contrato.codigo_cliente_fk = " . $codigoCliente;
+            $qb->andWhere("c.codigoClienteFk = {$codigoCliente}");
         }
         if ($codigoAsesor != '') {
-            $strSql .= " AND afi_cliente.codigo_asesor_fk = " . $codigoAsesor;
+            $qb->andWhere("ci.codigoAsesorFk = {$codigoAsesor}");
         }
         if ($strIdentificacion != '') {
-            $strSql .= " AND afi_empleado.numero_identificacion = " . $strIdentificacion;
+            $qb->andWhere("e.numeroIdentificacion = {$strIdentificacion}");
         }
         if ($strDesde != "") {
-            $strSql .= " AND afi_contrato.fecha_desde >='" . $strDesde . "'";
+            $qb->andWhere("c.fechaDesde >= '{$strDesde}'");
         }
         if ($strHasta != "") {
-            $strSql .= " AND afi_contrato.fecha_hasta <='" . $strHasta . "'";
+            $qb->andWhere("c.fechaHasta<= '{$strHasta}'");
         }
         if ($estado == 1) {
-            $strSql .= " AND afi_contrato.indefinido = 1";
+            $qb->andWhere("c.indefinido = 1");
         }
-        if ($estado == "0") {
-            $strSql .= " AND afi_contrato.indefinido = 0";
+        if ($estado == 0) {
+            $qb->andWhere("c.indefinido = 0");
         }
-        $connection = $em->getConnection();
-        $statement = $connection->prepare($strSql);
-        $statement->execute();
-        $strSql = $statement->fetchAll();
-        return $strSql;
+
+//        $strSql = "SELECT
+//                afi_contrato.codigo_contrato_pk as codigoContratoPk,
+//                afi_cliente.nombre_corto as cliente,
+//                afi_cliente.codigo_asesor_fk as asesor,
+//                afi_empleado.numero_identificacion as identificacion,
+//                afi_empleado.nombre_corto as empleado,
+//                afi_contrato.indefinido as indefinido,
+//                afi_contrato.fecha_desde as desde,
+//                afi_contrato.fecha_hasta as hasta,
+//                afi_contrato.vr_salario as vrSalario
+//                FROM
+//                afi_empleado
+//                INNER JOIN afi_contrato ON afi_contrato.codigo_empleado_fk = afi_empleado.codigo_empleado_pk
+//                LEFT JOIN afi_cliente ON afi_empleado.codigo_cliente_fk = afi_cliente.codigo_cliente_pk AND afi_contrato.codigo_cliente_fk = afi_cliente.codigo_cliente_pk
+//                WHERE  afi_contrato.codigo_contrato_pk <> 0";
+//        if ($strEmpleado != '') {
+//            $strSql .= " AND afi_empleado.nombre_corto LIKE '%" . $strEmpleado . "%'";
+//        }
+//        if ($codigoCliente != '') {
+//            $strSql .= " AND afi_contrato.codigo_cliente_fk = " . $codigoCliente;
+//        }
+//        if ($codigoAsesor != '') {
+//            $strSql .= " AND afi_cliente.codigo_asesor_fk = " . $codigoAsesor;
+//        }
+//        if ($strIdentificacion != '') {
+//            $strSql .= " AND afi_empleado.numero_identificacion = " . $strIdentificacion;
+//        }
+//        if ($strDesde != "") {
+//            $strSql .= " AND afi_contrato.fecha_desde >='" . $strDesde . "'";
+//        }
+//        if ($strHasta != "") {
+//            $strSql .= " AND afi_contrato.fecha_hasta <='" . $strHasta . "'";
+//        }
+//        if ($estado == 1) {
+//            $strSql .= " AND afi_contrato.indefinido = 1";
+//        }
+//        if ($estado == "0") {
+//            $strSql .= " AND afi_contrato.indefinido = 0";
+//        }
+
+//        $connection = $em->getConnection();
+//        $statement = $connection->prepare($strSql);
+//        $statement->execute();
+//        $strSql = $statement->fetchAll();
+
+
+        return $qb->getDQL();
     }
 
     public function listaTerminacionesDql($strEmpleado = '', $codigoCliente = '', $strIdentificacion = '', $strDesde = "", $strHasta = "")
