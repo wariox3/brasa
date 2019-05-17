@@ -1,5 +1,6 @@
 <?php
 namespace Brasa\AfiliacionBundle\Controller\Consulta;
+use Brasa\GeneralBundle\ExtensionesTwig\BrasaTwigExtension;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Doctrine\ORM\EntityRepository;
@@ -162,7 +163,9 @@ class PeriodoDetalleController extends Controller
                     ->setCellValue('K1', 'CAJA')
                     ->setCellValue('L1', 'RIESGO')
                     ->setCellValue('M1', 'ADMON')
-                    ->setCellValue('N1', 'TOTAL');
+                    ->setCellValue('N1', 'TOTAL')
+                    ->setCellValue('O1', 'RECIBO')
+                    ->setCellValue('P1', 'FECHA RECIBO');
 
         $i = 2;
         
@@ -223,6 +226,12 @@ class PeriodoDetalleController extends Controller
                     ->setCellValue('L' . $i, $arPeriodoDetalle->getContratoRel()->getClasificacionRiesgoRel()->getNombre())
                     ->setCellValue('M' . $i, $arPeriodoDetalle->getAdministracion())
                     ->setCellValue('N' . $i, $arPeriodoDetalle->getTotal());
+                    $twigFuncions = new BrasaTwigExtension($em);
+                    $arrRecibo = $twigFuncions->getValidarRecibo($arPeriodoDetalle->getCodigoPeriodoFk());
+            $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('O' . $i, $arrRecibo[0])
+                    ->setCellValue('P' . $i, $arrRecibo[1]);
+
             $douTotalGeneral = $douTotalGeneral + $arPeriodoDetalle->getTotal();
             $douTotal = $douTotal + $arPeriodoDetalle->getTotal();
             $contador++;
@@ -230,7 +239,7 @@ class PeriodoDetalleController extends Controller
             $i++;
         }
         
-        if ($i == ($contador + 3)){
+        if ($i == ($contador + 3)){BrasaTwigExtension::
                 $objPHPExcel->getActiveSheet()->getStyle($i)->getFont()->setBold(true);
                 $objPHPExcel->getActiveSheet()->getStyle($i)->getAlignment()->setHorizontal('right');
                 $objPHPExcel->getActiveSheet()->getStyle($i)->getNumberFormat()->setFormatCode('#,##0');
