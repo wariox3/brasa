@@ -87,7 +87,10 @@
                 <th>RIESGOS</th>
                 <th>ADMON</th>
                 <th>TOTAL</th>                
-                <th>FAC</th>                
+                <th>FAC</th>
+                <th>REC</th>
+                <th>FECHA.REC</th>
+
             </tr>
             {% set cliente = '' %}
             {% set cliente2 = '' %}
@@ -115,6 +118,10 @@
                         <td style="text-align: right"></td>
                         <td style="text-align: right">{{ douTotal | number_format(2, '.', ',') }}</td>
                         <td style="text-align: right"></td>
+                        <td style="text-align: right"></td>
+                        <td style="text-align: right"></td>
+
+
                     </tr>
                     {% set cliente2 =  arPeriodoDetalles.periodoRel.codigoClienteFk %}
                     {% set douTotal = 0 %}
@@ -125,7 +132,11 @@
                         <td id="suptipo" colspan="4">{{ arPeriodoDetalles.periodoRel.clienteRel.nombreCorto }}</td>
                         <td id="suptipo" colspan="1">{{ arPeriodoDetalles.periodoRel.clienteRel.telefono }}</td>
                         <td id="suptipo" colspan="2">{{ arPeriodoDetalles.periodoRel.clienteRel.email }}</td>
-                        <td id="suptipo" colspan="7">{{ arPeriodoDetalles.periodoRel.clienteRel.asesorRel.nombre }}</th>    
+                        <td id="suptipo" colspan="7">{{ arPeriodoDetalles.periodoRel.clienteRel.asesorRel.nombre }}</th>
+                        <td style="text-align: right"></td>
+                        <td style="text-align: right"></td>
+
+
                     </tr>
                 {% set cliente = arPeriodoDetalles.periodoRel.codigoClienteFk %}
                 
@@ -146,6 +157,10 @@
                 <td style="text-align: right">{{ arPeriodoDetalles.total | number_format(0, '.', ',') }}</td>  
                 <td>{% if arPeriodoDetalles.periodoRel.estadoFacturado == 1 %} SI {% else %} NO {% endif %}</td>
                 {% set douTotalGeneral = douTotalGeneral + arPeriodoDetalles.total %}
+                {% set arrRecibo = validarRecibo(arPeriodoDetalles.codigoPeriodoFk) %}
+                <td>{{ arrRecibo[0] }}</td>
+                <td>{{ arrRecibo[1] }}</td>
+
                 {% set douTotal = douTotal + arPeriodoDetalles.total %}
             </tr>
 

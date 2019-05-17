@@ -109,6 +109,12 @@ services:
         tags:
             - { name: doctrine.event_listener, event: postFlush }
         arguments: ['@service_container']
+
+    general.twig.extensions:
+        class: Brasa\GeneralBundle\ExtensionesTwig\BrasaTwigExtension
+        tags:
+            - {name: twig.extension}
+        arguments: [ @doctrine.orm.default_entity_manager, @doctrine.orm.entity_manager, @kernel ]
     
                
 knp_paginator:
