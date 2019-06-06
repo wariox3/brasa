@@ -96,6 +96,16 @@ class AfiFactura
      * @ORM\Column(name="interes_mora", type="float")
      */
     private $interesMora = 0;
+
+    /**
+     * @ORM\Column(name="cantidad", type="integer", nullable=true)
+     */
+    private $cantidad = 0;
+
+    /**
+     * @ORM\Column(name="valor_unitario", type="integer", nullable=true)
+     */
+    private $valorPorEmpleado = 0;
     
     /**
      * @ORM\ManyToOne(targetEntity="AfiCliente", inversedBy="facturasClienteRel")
@@ -130,9 +140,6 @@ class AfiFactura
      */
     protected $facturasDetallesAfiliacionesFacturaRel;
 
-    
-    
-    
     /**
      * Constructor
      */
@@ -721,4 +728,38 @@ class AfiFactura
     {
         return $this->facturasDetallesAfiliacionesFacturaRel;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getCantidad()
+    {
+        return $this->cantidad;
+    }
+
+    /**
+     * @param mixed $cantidad
+     */
+    public function setCantidad($cantidad)
+    {
+        $this->cantidad = $cantidad;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getValorPorEmpleado()
+    {
+        return $this->valorPorEmpleado;
+    }
+
+    /**
+     * @param mixed $valorPorEmpleado
+     */
+    public function setValorPorEmpleado($valorPorEmpleado)
+    {
+        $this->valorPorEmpleado = $valorPorEmpleado;
+    }
+
+
 }

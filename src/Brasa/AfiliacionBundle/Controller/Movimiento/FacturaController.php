@@ -109,12 +109,17 @@ class FacturaController extends Controller
             if($arrControles['txtNit'] != '') {
                 $arCliente = new \Brasa\AfiliacionBundle\Entity\AfiCliente();
                 $arCliente = $em->getRepository('BrasaAfiliacionBundle:AfiCliente')->findOneBy(array('nit' => $arrControles['txtNit']));
-                if(count($arCliente) > 0) {
+                if($arCliente) {
                     $arFactura->setClienteRel($arCliente);
                     $dateFechaVence = $objFunciones->sumarDiasFecha($arFactura->getClienteRel()->getPlazoPago(), $arFactura->getFecha());
                     $arFactura->setFechaVence($dateFechaVence);
                     $arUsuario = $this->getUser();
                     $arFactura->setUsuario($arUsuario->getUserName());
+                    if($form->get('facturaTipoRel')->getData()->getCodigoFacturaTipoPk() == 3){
+                        $total = intval($form->get('valorPorEmpleado')->getData()) * intval($form->get('cantidad')->getData());
+                        $arFactura->setSubTotal($total);
+                        $arFactura->setTotal($total);
+                    }
                     $em->persist($arFactura);
                     $em->flush();
                     if($form->get('guardarnuevo')->isClicked()) {

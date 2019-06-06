@@ -9,6 +9,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+
 
 class AfiFacturaType extends AbstractType
 {
@@ -21,7 +23,9 @@ class AfiFacturaType extends AbstractType
                     return $er->createQueryBuilder('ft')
                     ->orderBy('ft.codigoFacturaTipoPk', 'ASC');},
                 'choice_label' => 'nombre',
-                'required' => true))                 
+                'required' => true))
+            ->add('cantidad', integerType::class,array('required' => false))
+            ->add('valorPorEmpleado', integerType::class,array('required' => false))
             ->add('soporte', textType::class, array('required' => false))
             ->add('comentarios', TextareaType::class, array('required' => false))
             ->add('afiliacion', CheckboxType::class, array('required' => false))

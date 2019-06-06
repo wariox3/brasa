@@ -117,6 +117,11 @@ class CarRecibo
      * @ORM\Column(name="usuario", type="string", length=50, nullable=true)
      */    
     private $usuario;
+
+    /**
+     * @ORM\Column(name="vr_saldo_favor", type="float",  nullable=true)
+     */
+    private $vrSaldoFavor = 0;
     
     /**
      * @ORM\ManyToOne(targetEntity="CarCliente", inversedBy="recibosClienteRel")
@@ -146,14 +151,19 @@ class CarRecibo
      * @ORM\OneToMany(targetEntity="CarReciboDetalle", mappedBy="reciboRel")
      */
     protected $recibosDetallesRecibosRel;
-    
-    
+
+    /**
+     * @ORM\OneToMany(targetEntity="CarSaldoFavor", mappedBy="reciboRel")
+     */
+    protected $saldoFavorReciboRel;
+
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->recibosDetallesRecibosRel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->saldoFavorReciboRel = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -260,6 +270,30 @@ class CarRecibo
     public function getCodigoReciboTipoFk()
     {
         return $this->codigoReciboTipoFk;
+    }
+
+    /**
+     * Set codigoAsesorFk
+     *
+     * @param integer $codigoAsesorFk
+     *
+     * @return CarRecibo
+     */
+    public function setCodigoAsesorFk($codigoAsesorFk)
+    {
+        $this->codigoAsesorFk = $codigoAsesorFk;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoAsesorFk
+     *
+     * @return integer
+     */
+    public function getCodigoAsesorFk()
+    {
+        return $this->codigoAsesorFk;
     }
 
     /**
@@ -455,6 +489,30 @@ class CarRecibo
     }
 
     /**
+     * Set vrTotalPago
+     *
+     * @param float $vrTotalPago
+     *
+     * @return CarRecibo
+     */
+    public function setVrTotalPago($vrTotalPago)
+    {
+        $this->vrTotalPago = $vrTotalPago;
+
+        return $this;
+    }
+
+    /**
+     * Get vrTotalPago
+     *
+     * @return float
+     */
+    public function getVrTotalPago()
+    {
+        return $this->vrTotalPago;
+    }
+
+    /**
      * Set estadoImpreso
      *
      * @param boolean $estadoImpreso
@@ -599,6 +657,30 @@ class CarRecibo
     }
 
     /**
+     * Set vrSaldoFavor
+     *
+     * @param float $vrSaldoFavor
+     *
+     * @return CarRecibo
+     */
+    public function setVrSaldoFavor($vrSaldoFavor)
+    {
+        $this->vrSaldoFavor = $vrSaldoFavor;
+
+        return $this;
+    }
+
+    /**
+     * Get vrSaldoFavor
+     *
+     * @return float
+     */
+    public function getVrSaldoFavor()
+    {
+        return $this->vrSaldoFavor;
+    }
+
+    /**
      * Set clienteRel
      *
      * @param \Brasa\CarteraBundle\Entity\CarCliente $clienteRel
@@ -671,6 +753,30 @@ class CarRecibo
     }
 
     /**
+     * Set asesorRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenAsesor $asesorRel
+     *
+     * @return CarRecibo
+     */
+    public function setAsesorRel(\Brasa\GeneralBundle\Entity\GenAsesor $asesorRel = null)
+    {
+        $this->asesorRel = $asesorRel;
+
+        return $this;
+    }
+
+    /**
+     * Get asesorRel
+     *
+     * @return \Brasa\GeneralBundle\Entity\GenAsesor
+     */
+    public function getAsesorRel()
+    {
+        return $this->asesorRel;
+    }
+
+    /**
      * Add recibosDetallesRecibosRel
      *
      * @param \Brasa\CarteraBundle\Entity\CarReciboDetalle $recibosDetallesRecibosRel
@@ -705,74 +811,36 @@ class CarRecibo
     }
 
     /**
-     * Set vrTotalPago
+     * Add saldoFavorReciboRel
      *
-     * @param float $vrTotalPago
+     * @param \Brasa\CarteraBundle\Entity\CarSaldoFavor $saldoFavorReciboRel
      *
      * @return CarRecibo
      */
-    public function setVrTotalPago($vrTotalPago)
+    public function addSaldoFavorReciboRel(\Brasa\CarteraBundle\Entity\CarSaldoFavor $saldoFavorReciboRel)
     {
-        $this->vrTotalPago = $vrTotalPago;
+        $this->saldoFavorReciboRel[] = $saldoFavorReciboRel;
 
         return $this;
     }
 
     /**
-     * Get vrTotalPago
+     * Remove saldoFavorReciboRel
      *
-     * @return float
+     * @param \Brasa\CarteraBundle\Entity\CarSaldoFavor $saldoFavorReciboRel
      */
-    public function getVrTotalPago()
+    public function removeSaldoFavorReciboRel(\Brasa\CarteraBundle\Entity\CarSaldoFavor $saldoFavorReciboRel)
     {
-        return $this->vrTotalPago;
+        $this->saldoFavorReciboRel->removeElement($saldoFavorReciboRel);
     }
 
     /**
-     * Set codigoAsesorFk
+     * Get saldoFavorReciboRel
      *
-     * @param integer $codigoAsesorFk
-     *
-     * @return CarRecibo
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function setCodigoAsesorFk($codigoAsesorFk)
+    public function getSaldoFavorReciboRel()
     {
-        $this->codigoAsesorFk = $codigoAsesorFk;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoAsesorFk
-     *
-     * @return integer
-     */
-    public function getCodigoAsesorFk()
-    {
-        return $this->codigoAsesorFk;
-    }
-
-    /**
-     * Set asesorRel
-     *
-     * @param \Brasa\GeneralBundle\Entity\GenAsesor $asesorRel
-     *
-     * @return CarRecibo
-     */
-    public function setAsesorRel(\Brasa\GeneralBundle\Entity\GenAsesor $asesorRel = null)
-    {
-        $this->asesorRel = $asesorRel;
-
-        return $this;
-    }
-
-    /**
-     * Get asesorRel
-     *
-     * @return \Brasa\GeneralBundle\Entity\GenAsesor
-     */
-    public function getAsesorRel()
-    {
-        return $this->asesorRel;
+        return $this->saldoFavorReciboRel;
     }
 }

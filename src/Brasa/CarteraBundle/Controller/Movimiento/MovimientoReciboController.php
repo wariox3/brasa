@@ -2,6 +2,7 @@
 
 namespace Brasa\CarteraBundle\Controller\Movimiento;
 
+use Brasa\CarteraBundle\Entity\CarSaldoFavor;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\ORM\EntityRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -83,7 +84,7 @@ class MovimientoReciboController extends Controller {
             $arCliente = new \Brasa\CarteraBundle\Entity\CarCliente();
             if ($arrControles['txtNit'] != '') {
                 $arCliente = $em->getRepository('BrasaCarteraBundle:CarCliente')->findOneBy(array('nit' => $arrControles['txtNit']));
-                if (count($arCliente) > 0) {
+                if ($arCliente) {
                     $arRecibo->setClienteRel($arCliente);
                     $arRecibo->setAsesorRel($arCliente->getAsesorRel());
                 }
@@ -153,13 +154,37 @@ class MovimientoReciboController extends Controller {
                         if ($arRecibo->getEstadoAutorizado() == 0) {
                             if ($em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->numeroRegistros($codigoRecibo) > 0) {
                                 $arRecibo->setEstadoAutorizado(1);
+                                if($arRecibo->getVrSaldoFavor() > 0){
+                                    $arSaldoFavor = $em->getRepository("BrasaCarteraBundle:CarSaldoFavor")->findBy(array('codigoReciboFk' => $codigoRecibo));
+                                    if($arSaldoFavor){
+                                        $arSaldoFavor->setValor($arRecibo->getVrSaldoFavor());
+                                        $arSaldoFavor->setSaldo($arRecibo->getVrSaldoFavor());
+                                        $em->persist($arSaldoFavor);
+                                    }else{
+                                    $arSaldoFavor = new CarSaldoFavor();
+                                    $arSaldoFavor->setReciboRel($arRecibo);
+                                    $arSaldoFavor->setValor($arRecibo->getVrSaldoFavor());
+                                    $arSaldoFavor->setSaldo($arRecibo->getVrSaldoFavor());
+                                    $arSaldoFavor->setAbono(0);
+
+                                        $em->persist($arSaldoFavor);
+                                    }
+                                }
                                 $arDetallesRecibo = $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->findBy(array('codigoReciboFk' => $codigoRecibo));
                                 foreach ($arDetallesRecibo AS $arDetalleRecibo) {
-                                    $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
-                                    $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($arDetalleRecibo->getCodigoCuentaCobrarFk());
-                                    $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() - $arDetalleRecibo->getVrPagoDetalle() - $arDetalleRecibo->getVrDescuento() - $arDetalleRecibo->getvrAjustePeso());
-                                    $arCuentaCobrar->setAbono($arCuentaCobrar->getAbono() + $arDetalleRecibo->getVrPagoDetalle());
-                                    $em->persist($arCuentaCobrar);
+                                    if($arDetalleRecibo->getCodigoCuentaCobrarFk()){
+                                        $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
+                                        $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($arDetalleRecibo->getCodigoCuentaCobrarFk());
+                                        $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() - $arDetalleRecibo->getVrPagoDetalle() - $arDetalleRecibo->getVrDescuento() - $arDetalleRecibo->getvrAjustePeso());
+                                        $arCuentaCobrar->setAbono($arCuentaCobrar->getAbono() + $arDetalleRecibo->getVrPagoDetalle());
+                                        $em->persist($arCuentaCobrar);
+                                    }else{
+                                        $arSaldoFavor = new CarSaldoFavor();
+                                        $arSaldoFavor = $em->getRepository("BrasaCarteraBundle:CarSaldoFavor")->find($arDetalleRecibo->getNumeroFactura());
+                                        $arSaldoFavor->setSaldo($arSaldoFavor->getSaldo() - $arDetalleRecibo->getVrPagoDetalle() - $arDetalleRecibo->getVrDescuento() - $arDetalleRecibo->getvrAjustePeso());
+                                        $arSaldoFavor->setAbono($arSaldoFavor->getAbono() + $arDetalleRecibo->getVrPagoDetalle());
+                                        $em->persist($arSaldoFavor);
+                                    }
                                 }
                                 $em->persist($arRecibo);
                                 $em->flush();
@@ -180,18 +205,37 @@ class MovimientoReciboController extends Controller {
                     return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));
                 }
                 if ($arRecibo->getEstadoAutorizado() == 1 && $arRecibo->getEstadoImpreso() == 0) {
+
+
+
+
+
                     $arRecibo->setEstadoAutorizado(0);
                     $arDetallesRecibo = $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->findBy(array('codigoReciboFk' => $codigoRecibo));
                     foreach ($arDetallesRecibo AS $arDetalleRecibo) {
-                        $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
-                        $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($arDetalleRecibo->getCodigoCuentaCobrarFk());
-                        $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() + $arDetalleRecibo->getVrPagoDetalle() + $arDetalleRecibo->getVrDescuento() + $arDetalleRecibo->getvrAjustePeso());
-                        $arCuentaCobrar->setAbono($arCuentaCobrar->getAbono() - $arDetalleRecibo->getVrPagoDetalle());
-                        $em->persist($arCuentaCobrar);
+                        if($arDetalleRecibo->getCuentaCobrarRel()){
+                            $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
+                            $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($arDetalleRecibo->getCodigoCuentaCobrarFk());
+                            $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() + $arDetalleRecibo->getVrPagoDetalle() + $arDetalleRecibo->getVrDescuento() + $arDetalleRecibo->getvrAjustePeso());
+                            $arCuentaCobrar->setAbono($arCuentaCobrar->getAbono() - $arDetalleRecibo->getVrPagoDetalle());
+                            $em->persist($arCuentaCobrar);
+                        }else{
+                            $arSaldoFavor = new \Brasa\CarteraBundle\Entity\CarSaldoFavor();
+                            $arSaldoFavor = $em->getRepository("BrasaCarteraBundle:CarSaldoFavor")->find($arDetalleRecibo->getNumeroFactura());
+                            $arSaldoFavor->setSaldo($arSaldoFavor->getSaldo() + $arDetalleRecibo->getVrPagoDetalle() + $arDetalleRecibo->getVrDescuento() + $arDetalleRecibo->getvrAjustePeso());
+                            $arSaldoFavor->setAbono($arSaldoFavor->getAbono() - $arDetalleRecibo->getVrPagoDetalle());
+                            $em->persist($arSaldoFavor);
+                        }
+                    }
+                    if($arRecibo->getVrSaldoFavor() && $arRecibo->getVrSaldoFavor() > 0){
+                        $arSaldoFavor = $em->getRepository("BrasaCarteraBundle:CarSaldoFavor")->findOneBy(array('codigoReciboFk' => $codigoRecibo));
+                        $em->remove($arSaldoFavor);
                     }
                     $em->persist($arRecibo);
                     $em->flush();
                     return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_detalle', array('codigoRecibo' => $codigoRecibo)));
+
+
                 } else {
                     $objMensaje->Mensaje('error', "El recibo debe estar autorizado y no puede estar impreso", $this);
                 }
@@ -211,9 +255,15 @@ class MovimientoReciboController extends Controller {
                     $arDetallesRecibo = $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->findBy(array('codigoReciboFk' => $codigoRecibo));
                     foreach ($arDetallesRecibo AS $arDetalleRecibo) {
                         $arCuentaCobrar = new \Brasa\CarteraBundle\Entity\CarCuentaCobrar();
-                        $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($arDetalleRecibo->getCodigoCuentaCobrarFk());
-                        $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() + $arDetalleRecibo->getVrPagoDetalle());
-                        $arCuentaCobrar->setAbono($arCuentaCobrar->getAbono() - $arDetalleRecibo->getVrPagoDetalle());
+                        if($arDetalleRecibo->getCuentaCobrarRel()){
+                            $arCuentaCobrar = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrar')->find($arDetalleRecibo->getCodigoCuentaCobrarFk());
+                            $arCuentaCobrar->setSaldo($arCuentaCobrar->getSaldo() + $arDetalleRecibo->getVrPagoDetalle());
+                            $arCuentaCobrar->setAbono($arCuentaCobrar->getAbono() - $arDetalleRecibo->getVrPagoDetalle());
+                        }else{
+                            $arSaldoFavor = $em->getRepository("BrasaCarteraBundle:CarSaldoFavor")->find($arDetalleRecibo->getNumeroFactura());
+                            $arSaldoFavor->setSaldo($arSaldoFavor->getSaldo() + $arDetalleRecibo->getVrPagoDetalle());
+                            $arSaldoFavor->setAbono($arSaldoFavor->getAbono() - $arDetalleRecibo->getVrPagoDetalle());
+                        }
                         $arDetalleReciboAnulado = new \Brasa\CarteraBundle\Entity\CarReciboDetalle();
                         $arDetalleReciboAnulado = $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->find($arDetalleRecibo->getCodigoReciboDetallePk());
                         $arDetalleReciboAnulado->setVrDescuento(0);
@@ -226,7 +276,20 @@ class MovimientoReciboController extends Controller {
                         $em->persist($arDetalleReciboAnulado);
                     }
                     $em->persist($arRecibo);
-                    $em->flush();
+
+                    if($arRecibo->getVrSaldoFavor() > 0){
+                        $arSaldoFavor = $em->getRepository("BrasaCarteraBundle:CarSaldoFavor")->findOneBy(array('codigoReciboFk' => $arRecibo->getCodigoReciboPk()));
+                        if($arSaldoFavor){
+                            $arDetallesRecibo = $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->findOneBy(array('codigoCuentaCobrarFk' => null,'numeroFactura' => $arSaldoFavor->getCodigoSaldoFavorPk()));
+                            if($arDetallesRecibo && !$arDetallesRecibo->getReciboRel()->getEstadoAnulado()){
+                                $objMensaje->Mensaje("error","El recibo no puede eliminar, tiene un saldo a favor referenciado en otro recibo.",$this);
+                            }else{
+                                $em->flush();
+                            }
+                        }
+                    }else{
+                        $em->flush();
+                    }
                     return $this->redirect($this->generateUrl('brs_cartera_movimiento_recibo_detalle', array('codigoRecibo' => $codigoRecibo)));
                 }
             }
@@ -325,6 +388,77 @@ class MovimientoReciboController extends Controller {
                     'arRecibo' => $arRecibo,
                     'form' => $form->createView()));
     }
+
+    /**
+     * @Route("/cartera/movimiento/recibo/detalle/agregar/saldo/favor/{codigoRecibo}", name="brs_cartera_movimiento_recibo_detalle_agregar_saldo_favor")
+     */
+    public function nuevoSaldoFavorAction(Request $request,$codigoRecibo){
+        $em = $this->getDoctrine()->getManager();
+        $form = $this->createFormBuilder()
+            ->add('vrSaldoFavor', 'integer', array('label'  => 'Saldo a favor',))
+            ->add('BtnGuardar', 'submit', array('label'  => 'Guardar'))
+            ->getForm();
+        $form->handleRequest($request);
+        $arRecibo = $em->getRepository("BrasaCarteraBundle:CarRecibo")->find($codigoRecibo);
+        if($form->isSubmitted()){
+            if ($form->isValid()){
+             if($form->get("BtnGuardar")->isClicked()){
+                 $vrSaldoFavor = $form->get("vrSaldoFavor")->getData();
+                 if($vrSaldoFavor >= 0){
+                     $arRecibo->setVrSaldoFavor($vrSaldoFavor);
+                     $em->persist($arRecibo);
+                     $em->flush();
+                     echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+                 }
+             }
+            }
+        }
+        return $this->render('BrasaCarteraBundle:Movimientos/Recibo:agregarSaldo.html.twig',array(
+            'form' => $form->createView()
+        ));
+    }
+
+    /**
+     * @Route("/cartera/movimiento/recibo/detalle/nuevo/saldo/favor/{codigoRecibo}", name="brs_cartera_movimiento_recibo_detalle_nuevo_saldo_favor")
+     */
+    public function nuevoDesdeSaldo(Request $request,$codigoRecibo){
+        $em = $this->getDoctrine()->getManager();
+        $form = $this->createFormBuilder()
+            ->add('BtnGuardar', 'submit', array('label' => 'Guardar',))
+            ->getForm();
+        $form->handleRequest($request);
+        $arUsuario = $this->get('security.context')->getToken()->getUser();
+        $arRecibo = $em->getRepository("BrasaCarteraBundle:CarRecibo")->find($codigoRecibo);
+        $arSaldosFavor = $em->getRepository("BrasaCarteraBundle:CarSaldoFavor")->listarSaldosClientes($arRecibo->getClienteRel()->getCodigoClientePk());
+        if ($form->isValid()) {
+            if($form->get("BtnGuardar")->isclicked()){
+                $arrSeleccionados = $request->request->get('ChkSeleccionar');
+                $arrControles = $request->request->All();
+                if ($arrSeleccionados) {
+                    foreach ($arrSeleccionados AS $codigoSaldoFavor) {
+                            $arSaldosFavor = $em->getRepository("BrasaCarteraBundle:CarSaldoFavor")->find($codigoSaldoFavor);
+                            $arReciboDetalle = new \Brasa\CarteraBundle\Entity\CarReciboDetalle();
+                            $arReciboDetalle->setReciboRel($arRecibo);
+//                            $arReciboDetalle->setCuentaCobrarRel($arCuentaCobrar);
+                            $arReciboDetalle->setValor($arSaldosFavor->getSaldo());
+                            $arReciboDetalle->setUsuario($arUsuario->getUserName());
+                            $arReciboDetalle->setNumeroFactura($arSaldosFavor->getCodigoSaldoFavorPk());
+                            $em->persist($arReciboDetalle);
+                    }
+                    $em->flush();
+                }
+                $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->liquidar($codigoRecibo);
+            }
+            echo "<script languaje='javascript' type='text/javascript'>window.close();window.opener.location.reload();</script>";
+
+        }
+        return $this->render('BrasaCarteraBundle:Movimientos/Recibo:nuevoSaldoFavor.html.twig',array(
+            'arSaldosFavor' => $arSaldosFavor,
+            'form' => $form->createView()
+        ));
+    }
+
+
 
     private function lista() {
         $em = $this->getDoctrine()->getManager();
@@ -519,7 +653,15 @@ class MovimientoReciboController extends Controller {
             foreach ($arrControles['LblCodigo'] as $intCodigo) {
                 $arReciboDetalle = new \Brasa\CarteraBundle\Entity\CarReciboDetalle();
                 $arReciboDetalle = $em->getRepository('BrasaCarteraBundle:CarReciboDetalle')->find($intCodigo);
-                $floSaldo = $arReciboDetalle->getCuentaCobrarRel()->getSaldo();
+                $floSaldo = 0;
+                if(!$arReciboDetalle->getCuentaCobrarRel()){
+                    $arReciboDetalle->getNumeroFactura();
+                    $arSaldoFavor = $em->getRepository("BrasaCarteraBundle:CarSaldoFavor")->find($arReciboDetalle->getNumeroFactura());
+                    $floSaldo = $arSaldoFavor->getSaldo();
+                }else{
+                    $floSaldo = $arReciboDetalle->getCuentaCobrarRel()->getSaldo();
+                }
+
                 $floSaldoAfectar = $arrControles['TxtValor' . $intCodigo] + ($arrControles['TxtVrReteIca' . $intCodigo] + $arrControles['TxtVrReteIva' . $intCodigo] + $arrControles['TxtVrReteFuente' . $intCodigo] - $arrControles['TxtVrDescuento' . $intCodigo] - $arrControles['TxtVrAjustePeso' . $intCodigo]);
                 if ($floSaldo < $floSaldoAfectar) {
                     $arReciboDetalle->setEstadoInconsistencia(1);

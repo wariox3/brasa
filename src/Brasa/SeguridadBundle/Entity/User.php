@@ -6,13 +6,15 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+
 
 /**
  *
  * @ORM\Table(name="users")
  * @ORM\Entity(repositoryClass="Brasa\SeguridadBundle\Entity\UserRepository")
  */
-class User implements UserInterface, \Serializable
+class User implements AdvancedUserInterface, \Serializable
 {
     /**
      * @ORM\Id
@@ -139,6 +141,21 @@ class User implements UserInterface, \Serializable
     }
 
 
+    public function isAccountNonExpired()
+    {
+        return true;
+    }
+
+    public function isAccountNonLocked()
+    {
+        return true;
+    }
+
+    public function isCredentialsNonExpired()
+    {
+        return true;
+    }
+
     public function isEnabled()
     {
         return $this->isActive;
@@ -151,7 +168,7 @@ class User implements UserInterface, \Serializable
     {
         return serialize(array(
             $this->id,
-
+            $this->isActive,
         ));
     }
 
@@ -162,7 +179,8 @@ class User implements UserInterface, \Serializable
     {
         list (
             $this->id,
-        ) = unserialize($serialized);
+            $this->isActive,
+            ) = unserialize($serialized);
     }
 
     public function equals(UserInterface $user) {
@@ -511,4 +529,28 @@ class User implements UserInterface, \Serializable
         $this->logsUsuarioRel = $logsUsuarioRel;
     }
 
+
+    /**
+     * Add logsUsuarioRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenLogExtendido $logsUsuarioRel
+     *
+     * @return User
+     */
+    public function addLogsUsuarioRel(\Brasa\GeneralBundle\Entity\GenLogExtendido $logsUsuarioRel)
+    {
+        $this->logsUsuarioRel[] = $logsUsuarioRel;
+
+        return $this;
+    }
+
+    /**
+     * Remove logsUsuarioRel
+     *
+     * @param \Brasa\GeneralBundle\Entity\GenLogExtendido $logsUsuarioRel
+     */
+    public function removeLogsUsuarioRel(\Brasa\GeneralBundle\Entity\GenLogExtendido $logsUsuarioRel)
+    {
+        $this->logsUsuarioRel->removeElement($logsUsuarioRel);
+    }
 }

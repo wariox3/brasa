@@ -72,24 +72,24 @@
                     <tr>
                         <td class="titulo">ASESOR:</td>
                         <td class="td-in-well">{{ arRecibo.asesorRel.nombre |default('') }}</td>
-                        <td class="titulo"></td>
-                        <td class="td-in-well"></td>
+                        <td class="titulo">IMPRESO:</td>
+                        <td class="td-in-well">{% if arRecibo.estadoImpreso == 1 %}SI{% else %}NO{% endif %}</td>
                         <td class="titulo" align="right">TOTAL RETE FUENTE:</td>
                         <td align="right">{{ arRecibo.vrTotalReteFuente | number_format(2, '.', ',')}}</td>
                     </tr>
                     <tr>
                         <td class="titulo">ANULADO:</td>
                         <td class="td-in-well">{% if arRecibo.estadoAnulado == 1 %}SI{% else %}NO{% endif %}</td>
-                        <td class="titulo">IMPRESO:</td>
-                        <td class="td-in-well">{% if arRecibo.estadoImpreso == 1 %}SI{% else %}NO{% endif %}</td>
+                        <td class="titulo">AUTORIZADO:</td>
+                        <td class="td-in-well">{% if arRecibo.estadoAutorizado == 1 %}SI{% else %}NO{% endif %}</td>
                         <td class="titulo" align="right">VALOR:</td>
                         <td align="right">{{ arRecibo.vrTotal | number_format(2, '.', ',')}}</td>
                     </tr>
                     <tr>
                         <td class="titulo">EXPORTADO:</td>
                         <td class="td-in-well">{% if arRecibo.estadoExportado == 1 %}SI{% else %}NO{% endif %}</td>
-                        <td class="titulo">AUTORIZADO:</td>
-                        <td class="td-in-well">{% if arRecibo.estadoAutorizado == 1 %}SI{% else %}NO{% endif %}</td>
+                        <td class="titulo" align="right">SALDO A FAVOR:</td>
+                        <td align="right">{{ arRecibo.vrSaldoFavor | number_format(2, '.', ',')}}</td>
                         <td class="titulo" align="right">TOTAL PAGO:</td>
                         <td align="right">{{ arRecibo.vrTotalPago | number_format(2, '.', ',')}}</td>
                     </tr>                    
@@ -120,7 +120,7 @@
                 <tr class="{{ class }}">
                     <td>{{ arReciboDetalle.codigoReciboDetallePk  }}<input type="hidden" name="LblCodigo[]" value="{{ arReciboDetalle.codigoReciboDetallePk }}"></td>                                                    
                     <td>{{ arReciboDetalle.numeroFactura  }}</td>
-                    <td>{{ arReciboDetalle.cuentaCobrarTipoRel.nombre |default('')  }}</td>
+                    <td>{{ arReciboDetalle.cuentaCobrarTipoRel.nombre |default('SALDO A FAVOR')  }}</td>
                     {% if arRecibo.estadoAutorizado == 0 %}
                         {% if rol == 'ROLE_ADMIN'%}
                             <td style="text-align: right"><input style="text-align: right" class="input-grid" type="text" name="TxtVrDescuento{{ arReciboDetalle.codigoReciboDetallePk }}" value="{{ arReciboDetalle.vrDescuento  }}" size="8" style="width:65px" onkeypress="return validarNumeros(event)" onclick="this.select()"/></td>                        
@@ -148,6 +148,12 @@
         </table>
             <div class="btn-toolbar" style="float: right">
                 {% if arRecibo.estadoAutorizado == 0 %}
+                    <div class="btn-group">
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_cartera_movimiento_recibo_detalle_agregar_saldo_favor', {'codigoRecibo': arRecibo.codigoReciboPk}) }}', 'AgregarNuevoSaldo', 600, 900)">Agregar saldo</a>
+                    </div>
+                    <div class="btn-group">
+                        <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_cartera_movimiento_recibo_detalle_nuevo_saldo_favor', {'codigoRecibo': arRecibo.codigoReciboPk}) }}', 'AgregarNuevoSaldo', 600, 900)">Nuevo desde saldo</a>
+                    </div>
                     <div class="btn-group">
                         <a class="btn btn-default btn-sm" href="javascript:abrirVentana3('{{ path('brs_cartera_movimiento_recibo_detalle_nuevo', {'codigoRecibo': arRecibo.codigoReciboPk, 'codigoReciboDetalle': 0 }) }}', 'AgregarNuevoDetalle', 600, 900)">Nuevo</a>
                     </div>

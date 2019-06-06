@@ -72,9 +72,17 @@ class CarReciboDetalleRepository extends EntityRepository {
             $floReteIca += $arReciboDetalle->getVrReteIca();
             $floReteIva += $arReciboDetalle->getVrReteIva();
             $floReteFuente += $arReciboDetalle->getVrReteFuente();
+            if($arReciboDetalle->getCuentaCobrarRel()){
             $floValor += $arReciboDetalle->getValor();
             $floValorPago += $arReciboDetalle->getVrPagoDetalle();
-        }                 
+            }else{
+                $floValorPago -= $arReciboDetalle->getVrPagoDetalle();
+            }
+
+        }
+        if($arRecibo->getVrSaldoFavor() > 0){
+            $floValorPago = $floValorPago + $arRecibo->getVrSaldoFavor();
+        }
         $arRecibo->setVrTotal($floValor);
         $arRecibo->setVrTotalPago($floValorPago);
         $arRecibo->setVrTotalDescuento($floDescuento);

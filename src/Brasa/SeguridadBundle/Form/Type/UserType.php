@@ -21,7 +21,8 @@ class UserType extends AbstractType
             ->add('username', 'text', array('required' => true))                
             ->add('email', 'text', array('required' => true))                
             ->add('password', 'text', array('required' => true))            
-            ->add('guardar', 'submit', array('label' => 'Guardar'));
+            ->add('guardar', 'submit', array('label' => 'Guardar'))
+            ->add('isActive', 'choice', array('label' => 'Estado', 'choices' => array( 1 => 'SI' ,  0 => 'NO')));
     }
 
     public function getName()

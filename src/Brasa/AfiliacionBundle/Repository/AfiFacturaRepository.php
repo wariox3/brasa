@@ -192,13 +192,13 @@ class AfiFacturaRepository extends EntityRepository {
         $arFactura = $em->getRepository('BrasaAfiliacionBundle:AfiFactura')->find($codigoFactura);            
         $strResultado = "";        
         if($arFactura->getEstadoAutorizado() == 0) {            
-            $facturaDetalles = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalle')->findBy(array('codigoFacturaFk' => $codigoFactura)); 
+            $facturaDetalles = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalle')->findBy(array('codigoFacturaFk' => $codigoFactura));
             $facturaDetallesCursos = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalleCurso')->findBy(array('codigoFacturaFk' => $codigoFactura)); 
             $facturaDetallesAfiliaciones = $em->getRepository('BrasaAfiliacionBundle:AfiFacturaDetalleAfiliacion')->findBy(array('codigoFacturaFk' => $codigoFactura)); 
             if ($facturaDetalles != null && $facturaDetallesCursos != null && $facturaDetallesAfiliaciones != null){
                 $strResultado = 'No pueden haber detalles de seguridad social, cursos y afiliaciones';
             }
-            if ($facturaDetalles == null && $facturaDetallesCursos == null && $facturaDetallesAfiliaciones == null){
+            if ($facturaDetalles == null && $facturaDetallesCursos == null && $facturaDetallesAfiliaciones == null && $arFactura->getFacturaTipoRel()->getCodigoFacturaTipoPk() != 3){
                $strResultado = 'La factura no tiene detalles' ;
             } else {
                 if($strResultado == '') {
@@ -241,7 +241,11 @@ class AfiFacturaRepository extends EntityRepository {
                 if($arFactura->getCodigoFacturaTipoFk() == 2) {
                     $intNumero = $em->getRepository('BrasaAfiliacionBundle:AfiConsecutivo')->consecutivo(3);
                     $arCuentaCobrarTipo = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrarTipo')->find(4);
-                }    
+                }
+                if($arFactura->getCodigoFacturaTipoFk() == 3){
+                    $intNumero = $em->getRepository('BrasaAfiliacionBundle:AfiConsecutivo')->consecutivo(5);
+                    $arCuentaCobrarTipo = $em->getRepository('BrasaCarteraBundle:CarCuentaCobrarTipo')->find(5);
+                }
                 $arFactura->setNumero($intNumero);
                 
                 $arClienteAfiliacion = new \Brasa\AfiliacionBundle\Entity\AfiCliente();

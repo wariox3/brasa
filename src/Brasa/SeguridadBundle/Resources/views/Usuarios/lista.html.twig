@@ -29,6 +29,7 @@
                 <th>NOMBRE</th>
                 <th>CORREO</th>
                 <th>ROL</th>
+                <th>ESTADO</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -41,6 +42,7 @@
                 <td>{{ arUsuarios.nombreCorto  }}</td>
                 <td>{{ arUsuarios.email }}</td>
                 <td>{{ arUsuarios.rolRel.nombre }}</td>
+                <td>{{ arUsuarios.isActive == 1 ?'SI':'NO' }}</td>
                 <td style="text-align: center"><a class="btn btn-default btn-xs" id="{{ path('brs_seg_admin_usuario_cambiar_clave', { 'codigoUsuario': arUsuarios.id}) }}" style="float:left">Cambiar clave</a></td>                                                
                 <td style="text-align: center"><a href="{{ path('brs_seg_admin_usuario_nuevo',{'codigoUsuario': arUsuarios.id})}}"><img src="{{ asset('imagenes/bootstrap/glyphicons_151_edit.png') }}" width=20 height=20 title="Editar el registro"></a></td>                
                 <td style="text-align: center"><a href="{{ path('brs_seg_admin_usuario_detalle', { 'codigoUsuario': arUsuarios.id }) }}"><img src="{{ asset('imagenes/bootstrap/glyphicons_152_new_window.png') }}" width=22 height=22></a></td>

@@ -38,7 +38,24 @@
                 <div class="col-sm-9">
                     {{ form_widget(form.afiliacion) }}                      
                 </div>                
-            </div>    
+            </div>
+
+            <div id="campos_anticipo">
+                <div class="form-group form-group-sm">
+                    <label for="" class="col-sm-3 control-label">Cantidad:</label>
+                    <div class="col-sm-9">
+                        {{ form_widget(form.cantidad, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                </div>
+
+                <div class="form-group form-group-sm">
+                    <label for="" class="col-sm-3 control-label">Valor por empleado:</label>
+                    <div class="col-sm-9">
+                        {{ form_widget(form.valorPorEmpleado, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                </div>
+            </div>
+
             <div class="form-group form-group-sm">
                 <label for="form_soporte" class="col-sm-3 control-label">Soporte:</label>
                 <div class="col-sm-9">
@@ -60,4 +77,19 @@
     </div>
     {{ form_end(form) }}
 </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function() {
+            $('#campos_anticipo').hide();
+            $( '#form_facturaTipoRel' ).change(function() {
+                if($('#form_facturaTipoRel').val() == 3){
+                    $('#campos_anticipo').show();
+                }else {
+                    $('#campos_anticipo').hide();
+                }
+             });
+        });
+    </script>
 {% endblock %}
