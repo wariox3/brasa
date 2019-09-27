@@ -2,6 +2,7 @@
 
 namespace Brasa\GeneralBundle\Controller\Base;
 
+use Brasa\GeneralBundle\MisClases\Mensajes;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,6 +17,7 @@ class AsesorController extends Controller
      */
     public function listaAction() {
         $em = $this->getDoctrine()->getManager();
+        $objMensajes = new Mensajes();
         $request = $this->getRequest(); // captura o recupera datos del formulario
         if(!$em->getRepository('BrasaSeguridadBundle:SegPermisoDocumento')->permiso($this->getUser(), 100, 1)) {
             return $this->redirect($this->generateUrl('brs_seg_error_permiso_especial'));            
@@ -30,12 +32,17 @@ class AsesorController extends Controller
         if($form->isValid()) {
             $arrSeleccionados = $request->request->get('ChkSeleccionar');
             if(count($arrSeleccionados) > 0) {
-                foreach ($arrSeleccionados AS $codigoAsesor) {
-                    $arAsesor = new \Brasa\GeneralBundle\Entity\GenAsesor();
-                    $arAsesor = $em->getRepository('BrasaGeneralBundle:GenAsesor')->find($codigoAsesor);
-                    $em->remove($arAsesor);
+                try{
+                    foreach ($arrSeleccionados AS $codigoAsesor) {
+                        $arAsesor = new \Brasa\GeneralBundle\Entity\GenAsesor();
+                        $arAsesor = $em->getRepository('BrasaGeneralBundle:GenAsesor')->find($codigoAsesor);
+                        $em->remove($arAsesor);
+                    }
                     $em->flush();
+                }catch (\Exception $exception){
+                    $objMensajes->Mensaje("error","No se puede eliminar, el dato se encuentra en uso en el sistema.",$this);
                 }
+
             }
             if($form->get('BtnExcel')->isClicked()) {
                 $objPHPExcel = new \PHPExcel();
